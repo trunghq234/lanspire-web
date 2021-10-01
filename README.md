@@ -1,5 +1,5 @@
 # Lanspire
 
 <p align="center">
-![](https://github.com/akaijs/Lanspire/blob/main/src/assets/images/logo.png)
+  <img src="https://github.com/akaijs/Lanspire/blob/main/src/assets/images/logo.png" alt="logo" />
 </p>

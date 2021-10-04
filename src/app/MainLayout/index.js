@@ -1,14 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Redirect, Route, Switch, NavLink } from 'react-router-dom';
-import { Layout, Menu, Breadcrumb, message, Avatar } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
 import styles from './main.module.less';
-import ProLayout, { DefaultFooter } from '@ant-design/pro-layout';
+import ProLayout from '@ant-design/pro-layout';
 import logo from 'assets/images/logo.png';
-import { menuItems } from 'routes/AdminRoutes';
 import AppFooter from 'components/layout/Footer';
+import RightContent from 'components/layout/RightContent';
 
 const MainLayout = props => {
+  const [pathname, setPathname] = useState(window.location.pathname);
+
+  const showRoutes = routes => {
+    var result = null;
+    if (routes.length > 0) {
+      result = routes.map((route, index) => {
+        return <Route key={index} path={route.path} exact={route.exact} component={route.page} />;
+      });
+    }
+    return result;
+  };
+
   return (
     <ProLayout
       title="Lanspire"
@@ -18,26 +28,26 @@ const MainLayout = props => {
       layout="mix"
       contentWidth="Fluid"
       navTheme="dark"
-      {...menuItems}
-      onMenuHeaderClick={e => console.log('route to /')}
-      // menuItemRender={(item, dom) => (
-      //   <a
-      //     onClick={e => {
-      //       console.log(e);
-      //     }}>
-      //     aassd
-      //   </a>
-      // )}
-
-      rightContentRender={() => (
-        <div>
-          <Avatar shape="square" size="small" icon={<UserOutlined />} />
-        </div>
+      route={props.menuItems}
+      location={{
+        pathname,
+      }}
+      onPageChange={param => {
+        setPathname(param.pathname || '/');
+        console.log(pathname);
+      }}
+      onTopMixMenuHeaderClick={e => console.log(e)}
+      onMenuHeaderClick={e => console.log(e)}
+      menuItemRender={(item, dom) => (
+        <NavLink to={item.path} onClick={() => setPathname(item.path || '/')}>
+          {dom}
+        </NavLink>
       )}
-      footerRender={() => <DefaultFooter links={[]} copyright="QBAT" />}>
+      rightContentRender={() => <RightContent />}
+      footerRender={() => <AppFooter />}>
       <div className={styles.container}>
         <Switch>
-          {props.routes}
+          {showRoutes(props.routes)}
           <Route>
             <Redirect to={{ pathname: '/' }} />
           </Route>

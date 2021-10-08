@@ -34,7 +34,6 @@ const MainLayout = props => {
       }}
       onPageChange={param => {
         setPathname(param.pathname || '/');
-        console.log(pathname);
       }}
       onTopMixMenuHeaderClick={e => console.log(e)}
       onMenuHeaderClick={e => console.log(e)}

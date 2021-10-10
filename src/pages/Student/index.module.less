@@ -1,0 +1,51 @@
+@Width-filter: 150px;
+@Width-search: 300px;
+@gap: 10px;
+.container {
+  .controller {
+    margin: @gap 0 40px 0;
+    .search_name {
+      width: @Width-search;
+    }
+    .filter {
+      width: @Width-filter;
+      margin-left: @gap;
+    }
+    .add_student {
+      background-color: #40a9ff;
+      color: white;
+      position: absolute;
+      right: 0;
+    }
+  }
+  .actions {
+    display: flex;
+    justify-content: space-around;
+    font-size: 16px;
+    font-weight: bold;
+    .btn_Edit {
+      width: 25px;
+      height: 25px;
+      line-height: 25px;
+      border: 2px #1890ff solid;
+      border-radius: 4px;
+      color: #1890ff;
+      &:hover {
+        color: darken(#1890ff, 20);
+        border: 2px darken(#1890ff, 20) solid;
+      }
+    }
+    .btn_Delete {
+      width: 25px;
+      height: 25px;
+      line-height: 25px;
+      border: 2px #ee5253 solid;
+      border-radius: 4px;
+      color: #ee5253;
+      &:hover {
+        color: darken(#ee5253, 20);
+        border: 2px darken(#ee5253, 20) solid;
+      }
+    }
+  }
+}

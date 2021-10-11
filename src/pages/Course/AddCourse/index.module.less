@@ -1,0 +1,55 @@
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  text-size-adjust: 100%;
+  box-sizing: border-box;
+  .title {
+    margin-right: 1rem;
+    margin-bottom: 0;
+    margin-top: 0;
+    font-weight: 500;
+    font-size: 21px;
+  }
+  .breadcrumb {
+    color: #455560;
+  }
+  .btn-discard {
+    margin-left: 16px;
+    background: white;
+    border-color: #1890ff;
+    color: #1890ff;
+  }
+}
+.maxwidth {
+  min-width: 100%;
+}
+
+@media (max-width: 767px) {
+  @margin: 24px;
+  .col-6 {
+    width: 100%;
+  }
+  .btn-add {
+    position: fixed;
+    bottom: 0;
+    left: 24px;
+    z-index: 1;
+    margin-bottom: 8px;
+    width: calc((100% - 48px) / 2);
+  }
+  .btn-discard {
+    position: fixed;
+    bottom: 0;
+    right: 24px;
+    z-index: 1;
+    margin-bottom: 8px;
+    width: calc((100% - 48px) / 2);
+  }
+}
+
+.space {
+  width: 100%;
+}

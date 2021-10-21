@@ -1,5 +1,25 @@
+@import url('../assets//css/_mixin.less');
 @import '~antd/dist/antd.less';
 
-@primary-color: #1da57a;
-@link-color: #1da57a;
-@border-radius-base: 2px;
+.ant-card {
+  .border();
+}
+
+.ant-tag {
+  border-radius: 2px;
+}
+
+.ant-form-item-label {
+  font-weight: 500;
+}
+
+.flex {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.heading {
+  font-size: 22px;
+  font-weight: 700;
+}

@@ -1,6 +1,9 @@
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Button, Card, Input, Select, Table, Tag } from 'antd';
 import React from 'react';
-import { Button, Card, Input, Select, Table, Tag, Tooltip } from 'antd';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { createPost } from 'redux/actions/posts';
+import { postState$ } from 'redux/selectors';
 import styles from './index.module.less';
 
 const { Option } = Select;
@@ -168,9 +171,21 @@ const handleEditBtn = editable => {
 };
 
 const Employee = () => {
-  const onSearch = () => {};
+  const dispatch = useDispatch();
+  const posts = useSelector(postState$);
 
+  console.log({ posts });
+
+  const onSearch = () => {};
   const handleChange = () => {};
+  const handleAddEmployee = () => {
+    let post = {
+      title: 'new employee',
+      description: 'new employee',
+    };
+
+    dispatch(createPost.createPostRequest(post));
+  };
 
   return (
     <div>
@@ -196,7 +211,7 @@ const Employee = () => {
               <Option value="unemployed">Unemployed</Option>
             </Select>
           </div>
-          <Button className={styles.btn} size="large" type="primary">
+          <Button className={styles.btn} size="large" type="primary" onClick={handleAddEmployee}>
             Add employee
           </Button>
         </div>

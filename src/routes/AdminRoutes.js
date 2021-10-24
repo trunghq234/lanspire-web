@@ -4,6 +4,8 @@ import Dashboard from 'pages/Dashboard';
 import lecturerIcon from 'assets/svg/lecturer.svg';
 import Lecturer from 'pages/Lecturer';
 import AddLecturer from 'pages/Lecturer/AddLecturer';
+import Employee from 'pages/Employee';
+import AddEmployee from 'pages/Employee/AddEmployee';
 
 const adminRoutes = [
   {
@@ -20,6 +22,16 @@ const adminRoutes = [
     path: '/lecturer/add',
     exact: true,
     page: () => <AddLecturer />,
+  },
+  {
+    path: '/employee/',
+    exact: true,
+    page: () => <Employee />,
+  },
+  {
+    path: '/employee/add',
+    exact: true,
+    page: () => <AddEmployee />,
   },
 ];
 
@@ -45,6 +57,22 @@ const adminMenuItems = {
           path: '/lecturer/add',
           name: 'Add Lecturer',
           component: <AddLecturer />,
+        },
+      ],
+    },
+    {
+      name: 'Employee',
+      icon: lecturerIcon,
+      routes: [
+        {
+          path: '/employee/',
+          name: 'Employee list',
+          component: <Employee />,
+        },
+        {
+          path: '/employee/add',
+          name: 'Add Employee',
+          component: <AddEmployee />,
         },
       ],
     },

@@ -3,7 +3,14 @@ const INIT_STATE = {
     data: [],
     isLoading: false,
   },
-
+  users: {
+    data: [],
+    isLoading: false,
+  },
+  user: {
+    data: '',
+    isLoading: false,
+  },
   employes: {
     data: [],
     isLoading: false,

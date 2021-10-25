@@ -117,7 +117,8 @@ const Lecturer = () => {
               className={styles.select}
               size="large"
               defaultValue="all"
-              onChange={handleChange}>
+              onChange={handleChange}
+            >
               <Option value="all">All</Option>
               <Option value="working">Working</Option>
               <Option value="unemployed">Unemployed</Option>

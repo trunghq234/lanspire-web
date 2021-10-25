@@ -8,6 +8,9 @@ const INIT_STATE = {
     data: [],
     isLoading: false,
   },
+  courses: {
+    data: [],
+  },
 };
 
 export default INIT_STATE;

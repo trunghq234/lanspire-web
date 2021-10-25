@@ -42,7 +42,8 @@ const TypingSelect = props => {
         option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
       }
       disabled={props.disabled || false}
-      defaultValue={props.defaultValue}>
+      defaultValue={props.defaultValue}
+    >
       {optionRendered}
     </Select>
   );

@@ -2,14 +2,26 @@ import { getConfirmLocale } from 'antd/lib/modal/locale';
 import axiosClient from './axiosClient';
 
 const studentApi = {
-  getAll() {
-    const url = '/students';
-    return axiosClient.get(url);
+  getAll: async () => {
+    const res = await axiosClient.get('/students');
+    return res.data;
   },
-  get(id) {},
-  create(data) {},
-  update(data) {},
-  remove(id) {},
+  getById: async id => {
+    const res = await axiosClient.get(`/students/${id}`);
+    return res.data;
+  },
+  create: async data => {
+    const res = await axiosClient.post('/students', data);
+    return res.data;
+  },
+  update: async data => {
+    const res = await axiosClient.patch('/students', data);
+    return res.data;
+  },
+  remove: async id => {
+    const res = await axiosClient.delete(`/students/${id}`);
+    return res.data;
+  },
 };
 
 export default studentApi;

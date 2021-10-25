@@ -4,6 +4,9 @@ import { Table, Input, Button, Select, Tooltip, Tag, Col, Row } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import styles from './index.module.less';
 import studentApi from 'api/studentApi';
+import { studentState$ } from 'redux/selectors/index';
+import { useSelector, useDispatch } from 'react-redux';
+import { getStudents } from 'redux/actions/students';
 
 const { Search } = Input;
 const { Option } = Select;
@@ -87,23 +90,12 @@ const columns = [
 ];
 
 const Student = () => {
+  const dispatch = useDispatch();
+  const students = useSelector(studentState$);
   const [data, setData] = useState([]);
-  useEffect(async () => {
-    const studentList = await studentApi.getAll();
-    var students = [];
-    studentList.data.forEach((student, index) => {
-      const tmp = {
-        key: index + 1,
-        name: student.User.displayName,
-        gender: student.User.gender == 0 ? 'Male' : 'Female',
-        phoneNumber: student.User.phoneNumber,
-        level: 'IELTS 6.0',
-        currentCourses: ['Beginner'],
-        address: student.User.address,
-      };
-      students.push(tmp);
-    });
-    setData(students);
+  dispatch(getStudents.getStudentsRequest());
+  useEffect(() => {
+    console.log(students);
   }, []);
 
   const history = useHistory();

@@ -4,8 +4,17 @@ import Admin from './Admin';
 import { adminRoutes, adminMenuItems } from 'routes/AdminRoutes';
 import { ConfigProvider } from 'antd';
 import enUS from 'antd/lib/locale/en_US';
+import React from 'react';
+
+import { useDispatch } from 'react-redux';
+import { getPosts } from 'redux/actions/posts';
 
 function App() {
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    dispatch(getPosts.getPostsRequest());
+  }, [dispatch]);
+
   return (
     <ConfigProvider locale={enUS}>
       <Router>

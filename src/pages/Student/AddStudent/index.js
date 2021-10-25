@@ -1,10 +1,24 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
-import './index.module.less';
+import PersonalInfo from 'components/Lecturer/PersonalInfo';
+import { Button, Row, Col } from 'antd';
+import style from './index.module.less';
 const AddStudent = () => {
   return (
     <div>
-      <h1>Add new student</h1>
+      <Row gutter={10} justify="end" className={style.actions}>
+        <Col>
+          <Button className={style['btn-discard']} size="large">
+            Discard
+          </Button>
+        </Col>
+        <Col>
+          <Button className={style['btn-add']} size="large">
+            Add
+          </Button>
+        </Col>
+      </Row>
+      <PersonalInfo></PersonalInfo>
     </div>
   );
 };

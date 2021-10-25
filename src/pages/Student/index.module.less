@@ -2,28 +2,27 @@
 @Width-search: 300px;
 @gap: 10px;
 .container {
-  .controller {
+  .actions-for-list {
     margin: @gap 0 40px 0;
-    .search_name {
-      width: @Width-search;
-    }
     .filter {
-      width: @Width-filter;
-      margin-left: @gap;
+      width: 100%;
     }
-    .add_student {
-      background-color: #40a9ff;
+    .add-student {
+      width: 100%;
+      background-color: #1890ff;
       color: white;
-      position: absolute;
-      right: 0;
+      // margin-left: @gap;
+      &:hover {
+        background-color: darken(#1890ff, 10);
+      }
     }
   }
-  .actions {
+  .actions-for-item {
     display: flex;
     justify-content: space-around;
     font-size: 16px;
     font-weight: bold;
-    .btn_Edit {
+    .btn-edit {
       width: 25px;
       height: 25px;
       line-height: 25px;
@@ -35,7 +34,7 @@
         border: 2px darken(#1890ff, 20) solid;
       }
     }
-    .btn_Delete {
+    .btn-delete {
       width: 25px;
       height: 25px;
       line-height: 25px;

@@ -1,5 +1,5 @@
 import React from 'react';
-import Icon, { AppstoreOutlined } from '@ant-design/icons';
+import { AppstoreOutlined } from '@ant-design/icons';
 import Dashboard from 'pages/Dashboard';
 import lecturerIcon from 'assets/svg/lecturer.svg';
 import Lecturer from 'pages/Lecturer';
@@ -7,6 +7,7 @@ import Student from 'pages/Student';
 import AddStudent from 'pages/Student/AddStudent';
 
 const PandaIcon = props => <Icon component={svg} {...props} />;
+import AddLecturer from 'pages/Lecturer/AddLecturer';
 
 const adminRoutes = [
   {
@@ -15,9 +16,14 @@ const adminRoutes = [
     page: () => <Dashboard />,
   },
   {
-    path: '/lecturer',
+    path: '/lecturer/',
     exact: true,
     page: () => <Lecturer />,
+  },
+  {
+    path: '/lecturer/add',
+    exact: true,
+    page: () => <AddLecturer />,
   },
   {
     path: '/student/list',
@@ -41,10 +47,20 @@ const adminMenuItems = {
       component: <Dashboard />,
     },
     {
-      path: '/lecturer',
       name: 'Lecturer',
       icon: lecturerIcon,
-      component: <Lecturer />,
+      routes: [
+        {
+          path: '/lecturer/',
+          name: 'Lecturer list',
+          component: <Lecturer />,
+        },
+        {
+          path: '/lecturer/add',
+          name: 'Add Lecturer',
+          component: <AddLecturer />,
+        },
+      ],
     },
     {
       name: 'Student',

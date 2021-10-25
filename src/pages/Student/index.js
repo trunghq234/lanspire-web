@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useHistory } from 'react-router';
-import { Table, Input, Button, Select, Tooltip } from 'antd';
+import { Table, Input, Button, Select, Tooltip, Tag, Col, Row } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import styles from './index.module.less';
+import studentApi from 'api/studentApi';
 
 const { Search } = Input;
 const { Option } = Select;
@@ -15,6 +16,7 @@ const columns = [
     width: '100px',
     align: 'center',
     render: (text, row, index) => <span>{index + 1}</span>,
+    responsive: ['md'],
   },
   {
     title: 'Name',
@@ -27,108 +29,92 @@ const columns = [
     title: 'Gender',
     dataIndex: 'gender',
     key: 'gender',
+    align: 'center',
+    responsive: ['xl'],
   },
   {
     title: 'Phone number',
     dataIndex: 'phoneNumber',
     key: 'phoneNumber',
     align: 'center',
+    responsive: ['lg'],
   },
   {
     title: 'Level',
     dataIndex: 'level',
     key: 'level',
     align: 'center',
+    responsive: ['md'],
   },
   {
-    title: 'Current course',
-    dataIndex: 'currentCourse',
-    key: 'currentCourse',
+    title: 'Current courses',
+    dataIndex: 'currentCourses',
+    key: 'currentCourses',
+    render: currentCourses => (
+      <>
+        {currentCourses.map(currentCourse => {
+          let color = 'blue';
+          return (
+            <Tag color={color} key={currentCourse}>
+              {currentCourse.toUpperCase()}
+            </Tag>
+          );
+        })}
+      </>
+    ),
+    responsive: ['sm'],
   },
   {
     title: 'Address',
     dataIndex: 'address',
     key: 'address',
     ellipsis: true,
+    responsive: ['xl'],
   },
+
   {
     key: 'actions',
     width: '100px',
     render: () => {
       return (
-        <div className={styles.actions}>
-          <EditOutlined className={styles.btn_Edit} />
-          <DeleteOutlined className={styles.btn_Delete} />
+        <div className={styles['actions-for-item']}>
+          <EditOutlined className={styles['btn-edit']} />
+          <DeleteOutlined className={styles['btn-delete']} />
         </div>
       );
     },
   },
 ];
 
-var data = [
-  {
-    key: 1,
-    name: 'John Brown',
-    gender: 'Male',
-    phoneNumber: '0123456789',
-    level: 'IELTS 6.0',
-    currentCourse: 'Beginner',
-    address: 'New York No. 1 Lake Park',
-  },
-  {
-    key: 2,
-    name: 'John Wich',
-    gender: 'Male',
-    phoneNumber: '0123456789',
-    level: 'IELTS 5.0',
-    currentCourse: 'Communications, Writing',
-    address: 'London No. 1 Lake Park',
-  },
-  {
-    key: 3,
-    name: 'Joe Black',
-    gender: 'Male',
-    phoneNumber: '0123456789',
-    level: 'IELTS 7.5',
-    currentCourse: 'Writing, Listening',
-    address: 'Sidney No. 1 Lake Park',
-  },
-  {
-    key: 4,
-    name: 'Jim Red',
-    gender: 'Male',
-    phoneNumber: '0123456789',
-    level: 'TOEIC 800',
-    currentCourse: 'IELTS Advantage',
-    address: 'London No. 2 Lake Park',
-  },
-];
-
-for (var i = 5; i <= 20; i++) {
-  const tmp = {
-    key: i,
-    name: `Student ${i}`,
-    gender: 'Female',
-    phoneNumber: '0123456789',
-    level: `TOEIC ${i * 5 + 450}`,
-    currentCourse: 'TOEIC 450+',
-    address: 'London No. 2 Lake Park',
-  };
-  data.push(tmp);
-}
-
 const Student = () => {
+  const [data, setData] = useState([]);
+  useEffect(async () => {
+    const studentList = await studentApi.getAll();
+    var students = [];
+    studentList.data.forEach((student, index) => {
+      const tmp = {
+        key: index + 1,
+        name: student.User.displayName,
+        gender: student.User.gender == 0 ? 'Male' : 'Female',
+        phoneNumber: student.User.phoneNumber,
+        level: 'IELTS 6.0',
+        currentCourses: ['Beginner'],
+        address: student.User.address,
+      };
+      students.push(tmp);
+    });
+    setData(students);
+  }, []);
+
   const history = useHistory();
 
-  const [data1, setData1] = useState(data);
-
   const handleFilterLevel = (value, index) => {
-    if (value === 'All') {
-      setData1(data);
-      return;
-    }
-    const dataTmp = data.filter(x => x.level.split(' ')[0] === value);
-    setData1(dataTmp);
+    // if (value === 'All') {
+    //   setData1(data);
+    //   return;
+    // }
+    // const dataTmp = data.filter(x => x.level.split(' ')[0] === value);
+    // setData1(dataTmp);
   };
 
   const handleClickAddNewStudent = () => {
@@ -136,29 +122,44 @@ const Student = () => {
   };
   return (
     <div className={styles.container}>
-      <div className={styles.controller}>
-        <Search
-          className={styles.search_name}
-          placeholder="Enter name ..."
-          enterButton
-          size="large"
-        />
-        <Select
-          className={styles.filter}
-          defaultValue="All"
-          size="large"
-          onChange={handleFilterLevel}>
-          <Option value="All">All levels</Option>
-          <Option value="IELTS">IELTS</Option>
-          <Option value="TOEIC">TOEIC</Option>
-        </Select>
-        <Button className={styles.add_student} size="large" onClick={handleClickAddNewStudent}>
-          Add student
-        </Button>
-      </div>
-      <Table columns={columns} dataSource={data1} />
+      <Row
+        gutter={[
+          { xs: 0, sm: 0, md: 10, lg: 10 },
+          { xs: 5, sm: 5, md: 0, lg: 0 },
+        ]}
+        className={styles['actions-for-list']}>
+        <Col xs={24} sm={24} md={8} lg={10} xl={8}>
+          <Search
+            className={styles['search-name']}
+            placeholder="Enter name ..."
+            enterButton
+            size="large"
+          />
+        </Col>
+        <Col xs={24} sm={24} md={5} lg={4} xl={3}>
+          <Select
+            className={styles.filter}
+            defaultValue="All"
+            size="large"
+            onChange={handleFilterLevel}>
+            <Option value="All">All levels</Option>
+            <Option value="IELTS">IELTS</Option>
+            <Option value="TOEIC">TOEIC</Option>
+          </Select>
+        </Col>
+        <Col
+          xs={24}
+          sm={24}
+          md={{ span: 5, offset: 6 }}
+          lg={{ span: 4, offset: 6 }}
+          xl={{ span: 3, offset: 10 }}>
+          <Button className={styles['add-student']} size="large" onClick={handleClickAddNewStudent}>
+            Add student
+          </Button>
+        </Col>
+      </Row>
+      <Table columns={columns} dataSource={data} />
     </div>
   );
 };
-
 export default Student;

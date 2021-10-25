@@ -1,10 +1,10 @@
 import Icon, { LockTwoTone, UserOutlined } from '@ant-design/icons';
 import { Alert, Button, Card, Col, Divider, Form, Input, Row } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
-import { getUser } from 'redux/actions/users';
-import { userState$ } from 'redux/selectors';
+import { getAuth } from 'redux/actions/auth';
+import { authState$ } from 'redux/selectors';
 import background_image from '../../assets/images/login_background.jpg';
 import logo from '../../assets/images/logo.png';
 import facebook from '../../assets/svg/facebook.svg';
@@ -13,21 +13,31 @@ import styles from './index.module.less';
 const Login = () => {
   let history = useHistory();
   const dispatch = useDispatch();
+  const auth = useSelector(authState$);
+
   const login = values => {
     setLoading(true);
     let data = {
       username: values.username,
       password: values.password,
     };
-    dispatch(getUser.getUserRequest(data));
-    const user = useSelector(userState$);
-    if (user.accessToken) {
-      setLoading(false);
-      history.replace('/admin');
-    } else {
-      setFailedMessage(user.message);
-    }
+    dispatch(getAuth.getAuthRequest(data));
   };
+  useEffect(() => {
+    if (auth) {
+      if (auth.data) {
+        if (auth.data.accessToken) {
+          localStorage.setItem('accessToken', auth.data.accessToken);
+          localStorage.setItem('idUser', auth.data.idUser);
+          history.push('/admin');
+        } else {
+          setLoading(false);
+          setFailedMessage(auth.data.message);
+          handleFailed();
+        }
+      }
+    }
+  }, [auth]);
 
   let noticeFailed = () => {
     setFailedMessage('Input not be filled');
@@ -42,7 +52,6 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [isFailed, setIsFailed] = useState('0');
   const [failedMessage, setFailedMessage] = useState('');
-  const [form] = Form.useForm();
   return (
     <div
       style={{
@@ -75,7 +84,6 @@ const Login = () => {
                     <Form
                       id="login-form"
                       layout="vertical"
-                      form={form}
                       onFinish={login}
                       onFinishFailed={noticeFailed}
                       initialValues={{

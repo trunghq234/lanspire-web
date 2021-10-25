@@ -1,6 +1,5 @@
 import { call, put } from 'redux-saga/effects';
-// import userApi from '../../api/userApi';
-import { loginAccount } from '../../services/auth.service';
+import userApi from '../../api/userApi';
 import * as userActions from '../actions/users';
 
 export function* fetchUsersSaga(action) {
@@ -14,7 +13,7 @@ export function* fetchUsersSaga(action) {
 }
 export function* fetchUserSaga(action) {
   try {
-    const user = yield call(loginAccount, action.payload);
+    const user = yield call(userApi.getUserById, action.payload);
 
     yield put(userActions.getUser.getUserSuccess(user));
   } catch (error) {

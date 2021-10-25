@@ -15,14 +15,14 @@ function App() {
   React.useEffect(() => {
     dispatch(getPosts.getPostsRequest());
   }, [dispatch]);
-  const user = useSelector(userState$);
+
   return (
     <ConfigProvider locale={enUS}>
       <Router>
         <Route
           path="/"
           render={() => {
-            return user.accessToken ? (
+            return localStorage.getItem('accessToken') ? (
               <Admin routes={adminRoutes} menuItems={adminMenuItems} />
             ) : (
               <Guest routes={guestRoutes} />

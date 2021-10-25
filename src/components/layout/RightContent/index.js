@@ -11,18 +11,14 @@ const RightContent = () => {
   const user = useSelector(userState$);
   return (
     <div>
-      <Popover
-        placement="bottomRight"
-        content={<Content />}
-        title={<Title user={user} />}
-        trigger="hover">
+      <Popover placement="bottomRight" content={<Content />} title={<Title />} trigger="hover">
         <Badge dot>
           <Avatar
             src={
-              !user.user.imageUrl ? (
+              !user.imageUrl ? (
                 <Image src="https://joeschmoe.io/api/v1/random" style={{ width: 32 }} />
               ) : (
-                <Image src={user.user.imageUrl} style={{ width: 32 }} />
+                <Image src={user.imageUrl} style={{ width: 32 }} />
               )
             }
           />

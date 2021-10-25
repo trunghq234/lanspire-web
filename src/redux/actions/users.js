@@ -1,5 +1,4 @@
 import { createActions } from 'redux-actions';
-import { RESET_STORE } from './actionTypes';
 export const getType = reduxAction => {
   return reduxAction().type;
 };
@@ -33,9 +32,3 @@ export const deleteUser = createActions({
   deleteUserSuccess: payload => payload,
   deleteUserFailure: error => error,
 });
-
-export const resetStore = () => {
-  return {
-    type: RESET_STORE,
-  };
-};

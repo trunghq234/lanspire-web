@@ -8,7 +8,11 @@ const INIT_STATE = {
     isLoading: false,
   },
   user: {
-    data: '',
+    data: {},
+    isLoading: false,
+  },
+  auth: {
+    data: {},
     isLoading: false,
   },
   employes: {

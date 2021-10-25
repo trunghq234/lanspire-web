@@ -1,19 +1,24 @@
-import { Image, Menu, Space } from 'antd';
-import { useHistory } from 'react-router';
-import { LogoutOutlined, EditOutlined } from '@ant-design/icons';
-import { useDispatch, useSelector } from 'react-redux';
-import { resetStore } from 'redux/actions/users';
-
+import { EditOutlined, LogoutOutlined } from '@ant-design/icons';
+import { Menu } from 'antd';
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
+import { RESET_ACTION } from 'redux/actions/actionTypes';
+import store from 'redux/store';
 
 const Content = props => {
-  const dispatch = useDispatch();
   let history = useHistory();
+  let dispatch = useDispatch();
   let logout = () => {
-    dispatch(resetStore);
-    history.replace('/login');
+    if (localStorage.getItem('accessToken')) {
+      dispatch(RESET_ACTION);
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('idUser');
+      history.replace('/login');
+    }
   };
   let editProfile = () => {};
+
   const contents = [
     {
       key: '1',

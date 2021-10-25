@@ -1,7 +1,8 @@
-import { takeLatest } from 'redux-saga/effects';
+import { takeLatest, takeEvery } from 'redux-saga/effects';
 
 import * as postActions from '../actions/posts';
 import * as userActions from '../actions/users';
+import * as authActions from '../actions/auth';
 import { fetchPostsSaga, updatePostSaga, deletePostSaga, createPostSaga } from './posts';
 import {
   fetchUsersSaga,
@@ -10,7 +11,7 @@ import {
   deleteUserSaga,
   createUserSaga,
 } from './users';
-
+import { fetchAuthSaga } from './auth';
 export default function* mySaga() {
   // posts
   yield takeLatest(postActions.getPosts.getPostsRequest, fetchPostsSaga);
@@ -23,4 +24,6 @@ export default function* mySaga() {
   yield takeLatest(userActions.createUser.createUserRequest, createUserSaga);
   yield takeLatest(userActions.updateUser.updateUserRequest, updateUserSaga);
   yield takeLatest(userActions.deleteUser.deleteUserRequest, deleteUserSaga);
+  //auth
+  yield takeLatest(authActions.getAuth.getAuthRequest, fetchAuthSaga);
 }

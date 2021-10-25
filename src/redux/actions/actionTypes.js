@@ -1,1 +1,3 @@
-export const RESET_STORE = 'RESET_STORE';
+export const RESET_ACTION = {
+  type: 'RESET',
+};

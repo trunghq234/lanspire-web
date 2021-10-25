@@ -19,13 +19,13 @@ const AddLecturer = () => {
       </Breadcrumb>
       <h3 className="heading">Add new lecturer</h3>
       <Row gutter={[20, 20]}>
-        <Col span={18}>
+        <Col xs={24} xl={18}>
           <Space size={20} direction="vertical">
             <PersonalInfo />
             <LevelInfo />
           </Space>
         </Col>
-        <Col span={6}>
+        <Col xs={24} sm={12} xl={6}>
           <Card>
             <Uploader />
           </Card>

@@ -11,6 +11,8 @@ import TypeOfCourse from 'pages/Course/TypeOfCourse';
 import AddTypeOfCourse from 'pages/Course/AddTypeOfCourse';
 
 const PandaIcon = props => <Icon component={svg} {...props} />;
+import Employee from 'pages/Employee';
+import AddEmployee from 'pages/Employee/AddEmployee';
 
 const adminRoutes = [
   {
@@ -45,6 +47,16 @@ const adminRoutes = [
     path: '/course/addtypeofcourse',
     exact: true,
     page: () => <AddTypeOfCourse />,
+  },
+  {
+    path: '/employee/',
+    exact: true,
+    page: () => <Employee />,
+  },
+  {
+    path: '/employee/add',
+    exact: true,
+    page: () => <AddEmployee />,
   },
 ];
 
@@ -97,6 +109,18 @@ const adminMenuItems = {
           name: 'Add Type Of Course',
           exact: true,
           component: <AddTypeOfCourse />,
+      name: 'Employee',
+      icon: lecturerIcon,
+      routes: [
+        {
+          path: '/employee/',
+          name: 'Employee list',
+          component: <Employee />,
+        },
+        {
+          path: '/employee/add',
+          name: 'Add Employee',
+          component: <AddEmployee />,
         },
       ],
     },

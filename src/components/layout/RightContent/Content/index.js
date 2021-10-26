@@ -12,8 +12,7 @@ const Content = props => {
   let logout = () => {
     if (localStorage.getItem('accessToken')) {
       dispatch(RESET_ACTION);
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('idUser');
+      localStorage.clear();
       history.replace('/login');
     }
   };

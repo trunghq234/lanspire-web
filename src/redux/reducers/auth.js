@@ -1,7 +1,7 @@
 import INIT_STATE from '../constant';
 import { getType } from '../actions/auth';
 import * as authActions from '../actions/auth';
-
+import { REFRESH_TOKEN } from '../actions/actionTypes';
 export default function authReducer(state = INIT_STATE.auth, action) {
   switch (action.type) {
     // get User

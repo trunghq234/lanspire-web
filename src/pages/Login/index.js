@@ -28,6 +28,7 @@ const Login = () => {
       if (auth.data) {
         if (auth.data.accessToken) {
           localStorage.setItem('accessToken', auth.data.accessToken);
+          localStorage.setItem('refreshToken', auth.data.refreshToken);
           localStorage.setItem('idUser', auth.data.idUser);
           history.push('/admin');
         } else {
@@ -40,7 +41,7 @@ const Login = () => {
   }, [auth]);
 
   let noticeFailed = () => {
-    setFailedMessage('Input not be filled');
+    setFailedMessage('Please handle error');
     handleFailed();
   };
   const handleFailed = () => {
@@ -52,6 +53,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [isFailed, setIsFailed] = useState('0');
   const [failedMessage, setFailedMessage] = useState('');
+  const [form] = Form.useForm();
   return (
     <div
       style={{
@@ -86,15 +88,25 @@ const Login = () => {
                       layout="vertical"
                       onFinish={login}
                       onFinishFailed={noticeFailed}
+                      form={form}
                       initialValues={{
                         remember: true,
                       }}>
-                      <Form.Item label="Username" name="username" rules={[{ required: true }]}>
+                      <Form.Item
+                        label="Username"
+                        name="username"
+                        rules={[{ required: true, message: 'Please input your username!' }]}>
                         <Input
                           placeholder="Username"
                           prefix={<UserOutlined style={{ color: '#3e79f7' }} />}></Input>
                       </Form.Item>
-                      <Form.Item label="Password" name="password" rules={[{ required: true }]}>
+                      <Form.Item
+                        label="Password"
+                        name="password"
+                        rules={[
+                          { required: true, message: 'Please input your password!' },
+                          { min: 6, message: 'Password must be minimum 6 characters.' },
+                        ]}>
                         <Input.Password
                           placeholder="Password"
                           prefix={<LockTwoTone />}></Input.Password>

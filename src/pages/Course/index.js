@@ -1,190 +1,140 @@
-import { SearchOutlined } from '@ant-design/icons';
-import { Breadcrumb, Button, Card, Input, Select, Table, Tag } from 'antd';
-import courseApi from 'api/courseApi';
-import MoreButton from 'components/common/MoreButton';
+import { Breadcrumb, Button, Card, Input, Select, Table, Tag, Row, Col, Tooltip } from 'antd';
 import React, { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { courseState$ } from 'redux/selectors';
-import styles from './index.module.less';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCourses } from 'redux/actions/courses';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import styles from './index.module.less';
+
+const { Option } = Select;
+const { Search } = Input;
 
 const Course = () => {
   const columns = [
     {
-      title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
+      title: 'Course name',
+      dataIndex: 'courseName',
     },
     {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
+      title: 'Level',
+      dataIndex: 'level',
+      align: 'center',
+      width: '15%',
     },
     {
-      title: 'Category',
-      dataIndex: 'category',
-      key: 'category',
-      filters: [
-        { text: 'Toeic', value: 'toeic' },
-        { text: 'Ielts', value: 'ielts' },
-      ],
+      title: 'Fee',
+      dataIndex: 'fee',
+      align: 'center',
+      width: '15%',
+      render: text => <div>{text.toLocaleString()}</div>,
     },
     {
-      title: 'Number Of Classes',
-      dataIndex: 'classes',
-      key: 'classes',
-      sorter: {
-        compare: (a, b) => a.math - b.math,
-      },
-    },
-    {
-      title: 'Number Of Students',
-      dataIndex: 'students',
-      key: 'students',
-      sorter: {
-        compare: (a, b) => a.english - b.english,
-      },
-    },
-    {
-      title: 'Tags',
-      key: 'tags',
-      dataIndex: 'tags',
-      render: tags => (
-        <span>
-          {tags.map(tag => {
-            let color = tag.length > 5 ? 'geekblue' : 'green';
-            if (tag === 'ending' || tag === 'bad') {
-              color = 'volcano';
-            }
-            return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
-              </Tag>
-            );
-          })}
-        </span>
-      ),
+      title: 'Description',
+      dataIndex: 'description',
     },
     {
       title: '',
-      dataIndex: '',
-      key: 'x',
-      render: () => <MoreButton></MoreButton>,
+      dataIndex: 'idCourse',
+      align: 'center',
+      width: '10%',
+      render: idCourse => {
+        return (
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
+            <Tooltip title="Edit information">
+              <Button type="primary" ghost icon={<EditOutlined />} />
+            </Tooltip>
+            <Tooltip title="Delete">
+              <Button danger icon={<DeleteOutlined />} />
+            </Tooltip>
+          </div>
+        );
+      },
     },
   ];
 
   const data = [
     {
-      id: '1',
-      key: '1',
-      name: 'John Brown',
-      category: 'Toeic',
-      classes: 3,
-      students: 70,
-      tags: ['ending', 'good'],
+      idCourse: '1',
+      courseName: 'Luyen thi',
+      level: 'IELTS 6.0',
+      fee: 20000,
+      description: 'lorem ispum',
     },
     {
-      id: '2',
-      key: '2',
-      name: 'Jim Green',
-      category: 'Ielts',
-      classes: 4,
-      students: 90,
-      tags: ['opening', 'bad'],
-    },
-    {
-      id: '3',
-      key: '3',
-      name: 'Joe Black',
-      category: 'Ielts',
-      classes: 2,
-      students: 50,
-      tags: ['opening', 'good'],
+      idCourse: '2',
+      courseName: 'Luyen thi',
+      level: 'IELTS 6.0',
+      fee: 20000,
+      description: 'lorem ispum',
     },
   ];
-  const rowSelection = {
-    onChange: (selectedRowKeys, selectedRows) => {
-      // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-    },
-    onSelect: (record, selected, selectedRows) => {},
-    onSelectAll: (selected, selectedRows, changeRows) => {},
-  };
-  function onChange(pagination, filters, sorter, extra) {
-    console.log('params', pagination, filters, sorter, extra);
-  }
 
+  const onSearch = value => console.log(value);
   const dispatch = useDispatch();
   const courses = useSelector(courseState$);
 
   useEffect(() => {
-    // const fetchCourses = async () => {
-    //   const courseList = await courseApi.getAll();
-    //   console.log(courseList);
-    // };
-    // fetchCourses();
-
     dispatch(getCourses.getCoursesRequest());
-    console.log({ courses });
-  }, [dispatch]);
+  }, []);
 
+  useEffect(() => {
+    console.log(courses);
+  }, [courses]);
   return (
-    <div className={styles.content}>
-      <div className={styles.header}>
-        <h3 className={styles.title}>Course</h3>
-        <Breadcrumb className={styles.breadcrumb}>
-          <Breadcrumb.Item>
-            <a href="../">Dashboard</a>
-          </Breadcrumb.Item>
-          <Breadcrumb.Item>Courses</Breadcrumb.Item>
-        </Breadcrumb>
-      </div>
-      <div className={styles.body}>
-        <div className={styles['cart-border']}>
-          <div className={styles['cart-body']}>
-            <Card className={styles['ant-cart-body']}>
-              <div className={styles['cart-item']}>
-                <div className={styles['cart-item-search']}>
-                  <div className={styles['search-box']}>
-                    <Input placeholder="Search" prefix={<SearchOutlined />} size="large"></Input>
-                  </div>
-                  <div className={styles['filter-box']}>
-                    <Select
-                      className={styles['input-filter']}
-                      defaultValue="Option1-1"
-                      size="large">
-                      <Select.Option value="Option1-1">All</Select.Option>
-                      <Select.Option value="Option1-2">Option1-2</Select.Option>
-                    </Select>
-                  </div>
-                </div>
-                <NavLink to="/course/add">
-                  <Button className={styles['btn-add']} type="primary" size="large">
-                    Add course
-                  </Button>
-                </NavLink>
-              </div>
-              <div className={styles['cart-item']}>
-                <Table
-                  bordered
-                  className={styles['table-course']}
-                  columns={columns}
-                  rowSelection={{ ...rowSelection }}
-                  dataSource={data}
-                  onChange={onChange}
-                  showSorterTooltip={{ title: 'Click to sort' }}
-                  pagination={{
-                    defaultPageSize: 10,
-                    showSizeChanger: true,
-                    pageSizeOptions: ['10', '15', '20'],
-                  }}
-                />
-              </div>
-            </Card>
-          </div>
-        </div>
-      </div>
-    </div>
+    <>
+      <Breadcrumb>
+        <Breadcrumb.Item>
+          <NavLink to="/">Dashboard</NavLink>
+        </Breadcrumb.Item>
+        <Breadcrumb.Item>Courses</Breadcrumb.Item>
+      </Breadcrumb>
+      <h3 className="heading">Course</h3>
+      <Card>
+        <Row gutter={[20, 20]} align="top">
+          <Col xs={24} sm={16} md={10} lg={8} xl={8}>
+            <Search
+              className={styles.search}
+              size="large"
+              placeholder="Search"
+              allowClear
+              enterButton
+              onSearch={onSearch}
+            />
+          </Col>
+          <Col xs={24} sm={8} md={6} lg={6} xl={4}>
+            <Select
+              className={styles.select}
+              size="large"
+              defaultValue="all"
+              onChange={e => console.log(e)}>
+              <Option value="all">All</Option>
+              <Option value="working">Working</Option>
+              <Option value="unemployed">Unemployed</Option>
+            </Select>
+          </Col>
+          <Col xs={0} md={2} lg={4} xl={8} flex="auto" />
+          <Col xs={24} sm={24} md={6} lg={6} xl={4}>
+            <Button className={styles.btn} size="large" type="primary">
+              <NavLink to="/course/add">Add course</NavLink>
+            </Button>
+          </Col>
+          <Col span={24}>
+            <Table
+              bordered
+              columns={columns}
+              dataSource={data}
+              rowKey={row => row.idCourse}
+              pagination={{
+                defaultPageSize: 10,
+                showSizeChanger: true,
+                pageSizeOptions: ['10', '15', '20'],
+              }}
+            />
+          </Col>
+        </Row>
+      </Card>
+    </>
   );
 };
 

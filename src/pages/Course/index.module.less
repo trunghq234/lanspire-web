@@ -1,90 +1,13 @@
-@line-height: 1.5;
-
-div {
-  display: block;
-}
 .content {
   background-color: f0f2f5;
 }
 
-.header {
-  display: flex;
-  flex-wrap: wrap;
-  margin-bottom: 1rem;
-  align-items: center;
-  text-size-adjust: 100%;
-  line-height: @line-height;
-  box-sizing: border-box;
-  .title {
-    margin-right: 1rem;
-    margin-bottom: 0;
-    margin-top: 0;
-    font-weight: 500;
-    font-size: 21px;
-    font-family: inherit;
-  }
-  .breadcrumb {
-    color: #455560;
-  }
+.select {
+  width: 100%;
 }
 
-.body {
-  .cart-border {
-    background-color: rgb(255, 255, 255);
-    .cart-body {
-      width: 100%;
-      .ant-cart-body {
-        border-radius: 0.625rem;
-        .cart-item {
-          display: flex;
-          flex-wrap: wrap;
-          align-items: center;
-          flex-direction: row;
-          justify-content: space-between;
-          .cart-item-search {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            flex-direction: row;
-            justify-content: space-between;
-            .search-box {
-              margin-right: 1rem;
-              margin-bottom: 1rem;
-            }
-            .filter-box {
-              margin-bottom: 1rem;
-              .input-filter {
-                min-width: 180px;
-                width: 100%;
-                line-height: @line-height;
-              }
-            }
-          }
-          .table-course {
-            width: 100%;
-            clear: both;
-          }
-        }
-      }
-    }
-  }
-}
-@media (max-width: 767px) {
-  .cart-item-search {
-    width: 100%;
-  }
-  .search-box {
-    width: 100%;
-    margin-right: 0 !important;
-  }
-  .filter-box {
-    width: 100%;
-  }
-  .btn-add {
-    width: calc(100% - 48px);
-    position: fixed;
-    left: 24px;
-    bottom: 12px;
-    z-index: 1;
-  }
+.btn {
+  font-weight: 600;
+  height: 40px;
+  width: 100%;
 }

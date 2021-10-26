@@ -90,7 +90,7 @@ const data = [
 const Lecturer = () => {
   return (
     <>
-      <Breadcrumb style={{ marginBottom: '20px' }}>
+      <Breadcrumb>
         <Breadcrumb.Item>Home</Breadcrumb.Item>
         <Breadcrumb.Item>
           <a href="">Application Center</a>
@@ -117,8 +117,7 @@ const Lecturer = () => {
               className={styles.select}
               size="large"
               defaultValue="all"
-              onChange={handleChange}
-            >
+              onChange={handleChange}>
               <Option value="all">All</Option>
               <Option value="working">Working</Option>
               <Option value="unemployed">Unemployed</Option>

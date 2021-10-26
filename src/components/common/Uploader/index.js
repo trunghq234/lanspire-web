@@ -1,5 +1,5 @@
 import React from 'react';
-import { Upload, message } from 'antd';
+import { Upload, message, Card } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 
 const { Dragger } = Upload;
@@ -26,12 +26,14 @@ const props = {
 
 const Uploader = () => {
   return (
-    <Dragger height="200px" {...props}>
-      <p className="ant-upload-drag-icon">
-        <InboxOutlined />
-      </p>
-      <p className="ant-upload-hint">Click or drag file to this area to upload</p>
-    </Dragger>
+    <Card>
+      <Dragger height="200px" {...props}>
+        <p className="ant-upload-drag-icon">
+          <InboxOutlined />
+        </p>
+        <p className="ant-upload-hint">Click or drag file to this area to upload</p>
+      </Dragger>
+    </Card>
   );
 };
 

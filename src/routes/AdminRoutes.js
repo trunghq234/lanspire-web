@@ -4,8 +4,7 @@ import Lecturer from 'pages/Lecturer';
 import AddLecturer from 'pages/Lecturer/AddLecturer';
 import Course from 'pages/Course';
 import AddCourse from 'pages/Course/AddCourse';
-import TypeOfCourse from 'pages/Course/TypeOfCourse';
-import AddTypeOfCourse from 'pages/Course/AddTypeOfCourse';
+import CourseType from 'pages/Course/CourseType';
 import Employee from 'pages/Employee';
 import Icon from '@ant-design/icons';
 import AddEmployee from 'pages/Employee/AddEmployee';
@@ -46,12 +45,7 @@ const adminRoutes = [
   {
     path: '/coursetype/',
     exact: true,
-    page: () => <TypeOfCourse />,
-  },
-  {
-    path: '/coursetype/add',
-    exact: true,
-    page: () => <AddTypeOfCourse />,
+    page: () => <CourseType />,
   },
   {
     path: '/employee/',
@@ -107,13 +101,7 @@ const adminMenuItems = {
         {
           path: '/coursetype/',
           name: 'Course type',
-          component: <TypeOfCourse />,
-        },
-        {
-          path: '/coursetype/add',
-          name: 'Add Course type',
-          exact: true,
-          component: <AddTypeOfCourse />,
+          component: <CourseType />,
         },
       ],
     },

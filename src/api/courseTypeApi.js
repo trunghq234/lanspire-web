@@ -1,8 +1,8 @@
 import axiosClient from './axiosClient';
 
-const url = '/courses/';
+const url = '/coursetypes/';
 
-const courseApi = {
+const courseTypeApi = {
   getAll: async () => {
     const res = await axiosClient.get(url);
     return res.data;
@@ -13,13 +13,13 @@ const courseApi = {
     return res.data;
   },
 
-  create: async course => {
-    const res = await axiosClient.post(url, course);
+  create: async courseType => {
+    const res = await axiosClient.post(url, courseType);
     return res.data;
   },
 
-  update: async course => {
-    const res = await axiosClient.patch(`${url}${course.id}`, course);
+  update: async courseType => {
+    const res = await axiosClient.patch(`${url}${courseType.id}`, courseType);
     return res.data;
   },
 
@@ -29,4 +29,4 @@ const courseApi = {
   },
 };
 
-export default courseApi;
+export default courseTypeApi;

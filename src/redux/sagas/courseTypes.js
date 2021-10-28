@@ -1,6 +1,6 @@
 import { call, put } from 'redux-saga/effects';
 import courseTypeApi from 'api/courseTypeApi';
-import * as courseTypeActions from 'redux/actions/coursesType';
+import * as courseTypeActions from 'redux/actions/courseTypes';
 
 export function* fetchCourseTypes(action) {
   try {

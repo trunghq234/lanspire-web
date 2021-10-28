@@ -1,47 +1,41 @@
 import React, { useEffect } from 'react';
-import {
-  Breadcrumb,
-  Button,
-  Tooltip,
-  Card,
-  Input,
-  Row,
-  Col,
-  Table,
-  notification,
-  Modal,
-} from 'antd';
+import { Breadcrumb, Button, Tooltip, Card, Input, Row, Col, Table, notification } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import AddCourseType from '../AddCourseType';
-import { useDispatch, useSelector } from 'react-redux';
-import { courseTypeState$ } from 'redux/selectors';
-import { deleteCourseType, getCourseTypes } from 'redux/actions/courseTypes';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
+import AddLevel from '../AddLevel';
+import { useDispatch, useSelector } from 'react-redux';
+import { levelState$ } from 'redux/selectors';
+import { getLevels, deleteLevel } from 'redux/actions/levels';
+import { Modal } from 'antd';
 
 const { confirm } = Modal;
 const { Search } = Input;
 
-const CourseType = () => {
+const Level = () => {
   const columns = [
     {
-      title: 'Type name',
-      dataIndex: 'typeName',
+      title: 'Level name',
+      dataIndex: 'levelName',
     },
     {
-      title: 'Description',
-      dataIndex: 'description',
+      title: 'Point',
+      dataIndex: 'point',
       align: 'center',
-      width: '40%',
+    },
+    {
+      title: 'Language',
+      dataIndex: 'language',
+      align: 'center',
     },
     {
       title: '',
-      dataIndex: 'idCourseType',
+      dataIndex: 'idLevel',
       align: 'center',
       width: '10%',
       render: id => {
         return (
           <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
-            <Tooltip title="Edit information">
+            <Tooltip title="Edit level">
               <Button type="primary" ghost icon={<EditOutlined />} />
             </Tooltip>
             <Tooltip title="Delete">
@@ -54,32 +48,29 @@ const CourseType = () => {
   ];
 
   const dispatch = useDispatch();
-  const { data, isLoading, isSuccess } = useSelector(courseTypeState$);
+  const { data, isLoading, isSuccess } = useSelector(levelState$);
   useEffect(() => {
-    dispatch(getCourseTypes.getCourseTypesRequest());
+    dispatch(getLevels.getLevelsRequest());
   }, []);
 
   const handleDelete = id => {
     confirm({
-      title: 'Do you want to delete this course type?',
+      title: 'Do you want to delete this level?',
       icon: <ExclamationCircleOutlined />,
       content: '',
       onOk() {
-        dispatch(deleteCourseType.deleteCourseTypeRequest(id));
+        dispatch(deleteLevel.deleteLevelRequest(id));
 
         isSuccess
           ? notification['success']({
               message: 'Successfully',
-              description:
-                'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+              description: 'This is the content of the notification.',
             })
           : notification['error']({
               message: 'Notification Title',
-              description:
-                'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+              description: 'This is the content of the notification.',
             });
       },
-      onCancel() {},
     });
   };
 
@@ -89,9 +80,9 @@ const CourseType = () => {
         <Breadcrumb.Item>
           <a href="/">Dashboard</a>
         </Breadcrumb.Item>
-        <Breadcrumb.Item>Course type</Breadcrumb.Item>
+        <Breadcrumb.Item>Level</Breadcrumb.Item>
       </Breadcrumb>
-      <h3>Course type</h3>
+      <h3>Level</h3>
       <Row gutter={[20, 20]}>
         <Col xs={{ order: 1 }} sm={{ order: 1 }} lg={{ order: 0 }} span={24} xl={16}>
           <Card>
@@ -111,7 +102,7 @@ const CourseType = () => {
                   loading={isLoading}
                   columns={columns}
                   dataSource={data}
-                  rowKey={row => row.idCourseType}
+                  rowKey={row => row.idLevel}
                   pagination={{
                     defaultPageSize: 10,
                     showSizeChanger: true,
@@ -124,7 +115,7 @@ const CourseType = () => {
         </Col>
         <Col lg={{ order: 1 }} span={24} xl={8}>
           <Card>
-            <AddCourseType />
+            <AddLevel />
           </Card>
         </Col>
       </Row>
@@ -132,4 +123,4 @@ const CourseType = () => {
   );
 };
 
-export default CourseType;
+export default Level;

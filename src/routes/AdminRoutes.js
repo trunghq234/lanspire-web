@@ -8,6 +8,7 @@ import CourseType from 'pages/Course/CourseType';
 import Employee from 'pages/Employee';
 import Icon from '@ant-design/icons';
 import AddEmployee from 'pages/Employee/AddEmployee';
+import Level from 'pages/Course/Level';
 
 import { dashboardSvg, lecturerSvg, courseSvg, employeeSvg } from 'utils/iconsvg';
 
@@ -43,9 +44,19 @@ const adminRoutes = [
     page: () => <AddCourse />,
   },
   {
+    path: '/course/add/:idCourse',
+    exact: true,
+    page: () => <AddCourse />,
+  },
+  {
     path: '/coursetype/',
     exact: true,
     page: () => <CourseType />,
+  },
+  {
+    path: '/level/',
+    exact: true,
+    page: () => <Level />,
   },
   {
     path: '/employee/',
@@ -102,6 +113,11 @@ const adminMenuItems = {
           path: '/coursetype/',
           name: 'Course type',
           component: <CourseType />,
+        },
+        {
+          path: '/level/',
+          name: 'Level',
+          component: <Level />,
         },
       ],
     },

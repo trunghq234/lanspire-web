@@ -1,42 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import { Button, Col, Form, Input, Row, message } from 'antd';
-import TypingSelect from 'components/common/TypingSelect';
-import languages from 'constant/languages.json';
-import styles from './index.module.less';
+import React from 'react';
+import { Button, Col, Form, Input, Row, notification } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { courseTypeState$ } from 'redux/selectors';
-import { createCourseType } from 'redux/actions/coursesType';
+import { createCourseType } from 'redux/actions/courseTypes';
+import { validateMessages } from 'constant/validationMessage';
 
-const AddCourseType = () => {
-  const validateMessages = {
-    required: '${label} is required!',
-    types: {
-      email: '${label} is not validate email!',
-      number: '${label} is not a validate number!',
-    },
-    number: {
-      range: '${label} must be between ${min} and ${max}',
-    },
-  };
-  const [fLanguage, setFLanguage] = useState();
-  const languageList = [];
-  for (let language of Object.values(languages)) {
-    languageList.push(language);
-  }
+const { TextArea } = Input;
+
+const AddCourseType = props => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const { isSuccess } = useSelector(courseTypeState$);
 
   const handleSubmit = () => {
-    const { typeName, language } = form.getFieldValue();
-    if (typeName && language) {
+    const { typeName, description } = form.getFieldValue();
+    if (typeName && description) {
       dispatch(
         createCourseType.createCourseTypeRequest({
           typeName: typeName,
-          language: language,
+          description: description,
         })
       );
-      isSuccess ? message.success('Successfully add course type', 2) : message.error('Error', 2);
+      isSuccess
+        ? notification['success']({
+            message: 'Successfully',
+            description: 'This is the content of the notification.',
+          })
+        : notification['error']({
+            message: 'Notification Title',
+            description: 'This is the content of the notification.',
+          });
     }
     form.resetFields();
   };
@@ -52,14 +45,12 @@ const AddCourseType = () => {
             </Form.Item>
           </Col>
           <Col span={24}>
-            <Form.Item label="Language" name="language" rules={[{ required: true }]}>
-              <TypingSelect
-                value={fLanguage}
-                options={languageList}
-                disabled={languageList.length === 0}
-                optionName="name"
-                optionKey="name"
-                placeholder="Language"
+            <Form.Item label="Description" name="description">
+              <TextArea
+                allowClear
+                maxLength="255"
+                placeholder="Description about the course type"
+                autoSize={{ minRows: 3, maxRows: 6 }}
               />
             </Form.Item>
           </Col>
@@ -82,21 +73,3 @@ const AddCourseType = () => {
 };
 
 export default AddCourseType;
-
-{
-  /* <Col span={12}>
-    <Form.Item label="Tags" name="tag" rules={[{ required: true }]}>
-      <MultipleSelect
-        value={tags}
-          options={tagList}
-          disabled={tagList.length === 0}
-          optionName="type"
-          optionKey="type"
-          placeholder="Tags"
-          callbackSelection={val => {
-            setTags(val);
-          }}
-        />
-      </Form.Item>
-    </Col> */
-}

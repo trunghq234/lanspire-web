@@ -1,14 +1,27 @@
-import { Breadcrumb, Button, Card, Input, Select, Table, Tag, Row, Col, Tooltip } from 'antd';
-import React, { useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, NavLink } from 'react-router-dom';
+import {
+  Breadcrumb,
+  Button,
+  Card,
+  Input,
+  Select,
+  Table,
+  Row,
+  Col,
+  Tooltip,
+  notification,
+  Modal,
+} from 'antd';
+import { EditOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { courseState$ } from 'redux/selectors';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCourses } from 'redux/actions/courses';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { deleteCourse, getCourses } from 'redux/actions/courses';
 import styles from './index.module.less';
 
 const { Option } = Select;
 const { Search } = Input;
+const { confirm } = Modal;
 
 const Course = () => {
   const columns = [
@@ -20,13 +33,16 @@ const Course = () => {
       title: 'Level',
       dataIndex: 'level',
       align: 'center',
-      width: '15%',
+    },
+    {
+      title: 'Type',
+      dataIndex: 'courseType',
+      align: 'center',
     },
     {
       title: 'Fee',
       dataIndex: 'fee',
       align: 'center',
-      width: '15%',
       render: text => <div>{text.toLocaleString()}</div>,
     },
     {
@@ -42,10 +58,12 @@ const Course = () => {
         return (
           <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
             <Tooltip title="Edit information">
-              <Button type="primary" ghost icon={<EditOutlined />} />
+              <Link to={`/course/add/${idCourse}`}>
+                <Button type="primary" ghost icon={<EditOutlined />}></Button>
+              </Link>
             </Tooltip>
             <Tooltip title="Delete">
-              <Button danger icon={<DeleteOutlined />} />
+              <Button danger icon={<DeleteOutlined />} onClick={() => handleDelete(idCourse)} />
             </Tooltip>
           </div>
         );
@@ -53,34 +71,59 @@ const Course = () => {
     },
   ];
 
-  const data = [
-    {
-      idCourse: '1',
-      courseName: 'Luyen thi',
-      level: 'IELTS 6.0',
-      fee: 20000,
-      description: 'lorem ispum',
-    },
-    {
-      idCourse: '2',
-      courseName: 'Luyen thi',
-      level: 'IELTS 6.0',
-      fee: 20000,
-      description: 'lorem ispum',
-    },
-  ];
-
   const onSearch = value => console.log(value);
   const dispatch = useDispatch();
-  const courses = useSelector(courseState$);
+  const { data, isLoading, isSuccess } = useSelector(courseState$);
+  const [dataSource, setDataSource] = useState([]);
 
   useEffect(() => {
     dispatch(getCourses.getCoursesRequest());
   }, []);
 
+  const mappingDatasource = dataInput => {
+    const res = [];
+    dataInput.map(course => {
+      const { levelName, point } = course.Level;
+      const { typeName } = course.CourseType;
+      res.push({
+        idCourse: course.idCourse,
+        courseName: course.courseName,
+        fee: parseInt(course.fee),
+        description: course.description,
+        level: `${levelName} (${point})`,
+        courseType: typeName,
+      });
+    });
+    setDataSource(res);
+  };
+
+  const handleDelete = idCourse => {
+    confirm({
+      title: 'Do you want to delete this course?',
+      icon: <ExclamationCircleOutlined />,
+      content: '',
+      onOk() {
+        dispatch(deleteCourse.deleteCourseRequest(idCourse));
+
+        isSuccess
+          ? notification['success']({
+              message: 'Successfully',
+              description:
+                'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+            })
+          : notification['error']({
+              message: 'Notification Title',
+              description:
+                'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+            });
+      },
+      onCancel() {},
+    });
+  };
+
   useEffect(() => {
-    console.log(courses);
-  }, [courses]);
+    mappingDatasource(data);
+  }, [data]);
   return (
     <>
       <Breadcrumb>
@@ -122,8 +165,9 @@ const Course = () => {
           <Col span={24}>
             <Table
               bordered
+              loading={isLoading}
               columns={columns}
-              dataSource={data}
+              dataSource={dataSource}
               rowKey={row => row.idCourse}
               pagination={{
                 defaultPageSize: 10,

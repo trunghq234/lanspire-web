@@ -8,8 +8,8 @@ const courseApi = {
     return res.data;
   },
 
-  getById: async id => {
-    const res = await axiosClient.get(`${url}${id}`);
+  getById: async idCourse => {
+    const res = await axiosClient.get(`${url}${idCourse}`);
     return res.data;
   },
 
@@ -19,12 +19,12 @@ const courseApi = {
   },
 
   update: async course => {
-    const res = await axiosClient.patch(`${url}${course.id}`, course);
+    const res = await axiosClient.patch(`${url}${course.idCourse}`, course);
     return res.data;
   },
 
-  delete: async id => {
-    const res = await axiosClient.delete(`${url}${id}`);
+  delete: async idCourse => {
+    const res = await axiosClient.delete(`${url}${idCourse}`);
     return res.data;
   },
 };

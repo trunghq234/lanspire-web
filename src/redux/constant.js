@@ -17,6 +17,11 @@ const INIT_STATE = {
     isLoading: false,
     isSuccess: false,
   },
+  levels: {
+    data: [],
+    isLoading: false,
+    isSuccess: false,
+  },
 };
 
 export default INIT_STATE;

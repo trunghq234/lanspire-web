@@ -12,6 +12,7 @@
     "craco-antd": "^1.19.0",
     "craco-less": "^1.20.0",
     "less-loader": "^10.0.1",
+    "moment": "^2.29.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-icons": "^4.2.0",

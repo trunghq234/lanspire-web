@@ -38,6 +38,11 @@ const adminRoutes = [
     page: () => <AddStudent />,
   },
   {
+    path: '/student/edit/:idStudent',
+    exact: true,
+    page: () => <AddStudent />,
+  },
+  {
     path: '/employee/',
     exact: true,
     page: () => <Employee />,

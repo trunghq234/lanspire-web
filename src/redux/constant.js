@@ -10,6 +10,20 @@ const INIT_STATE = {
   },
   students: {
     data: [],
+    isLoading: false,
+  },
+  studentById: {
+    //Student is get with id
+    data: [],
+    isLoading: false,
+  },
+  levels: {
+    data: [],
+    isLoading: false,
+  },
+  courseTypes: {
+    data: [],
+    isLoading: false,
   },
 };
 

@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux';
-import postsReducer from './posts';
+import coursesReducer from './courses';
 import employesReducer from './employes';
+import lecturersReducer from './lecturers';
 
 export default combineReducers({
-  posts: postsReducer,
   employes: employesReducer,
+  courses: coursesReducer,
+  lecturers: lecturersReducer,
 });

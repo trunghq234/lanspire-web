@@ -1,22 +1,22 @@
 import INIT_STATE from '../constant';
-import { getType } from '../actions/employes';
-import * as employeeActions from '../actions/employes';
+import { getType } from '../actions/employees';
+import * as employeeActions from '../actions/employees';
 
-export default function employesReducer(state = INIT_STATE.employes, action) {
+export default function employesReducer(state = INIT_STATE.employees, action) {
   switch (action.type) {
     // get Employee
-    case getType(employeeActions.getEmployes.getEmployesRequest):
+    case getType(employeeActions.getEmployees.getEmployeesRequest):
       return {
         ...state,
         isLoading: true,
       };
-    case getType(employeeActions.getEmployes.getEmployesSuccess):
+    case getType(employeeActions.getEmployees.getEmployeesSuccess):
       return {
         ...state,
         data: action.payload,
         isLoading: false,
       };
-    case getType(employeeActions.getEmployes.getEmployesFailure):
+    case getType(employeeActions.getEmployees.getEmployeesFailure):
       return {
         ...state,
         isLoading: false,
@@ -32,7 +32,7 @@ export default function employesReducer(state = INIT_STATE.employes, action) {
       return {
         ...state,
         data: state.data.map(employee =>
-          employee._id === action.payload._id ? action.payload : employee
+          employee.idEmployee === action.payload.idEmployee ? action.payload : employee
         ),
       };
     case getType(employeeActions.updateEmployee.updateEmployeeFailure):
@@ -67,7 +67,7 @@ export default function employesReducer(state = INIT_STATE.employes, action) {
     case getType(employeeActions.deleteEmployee.deleteEmployeeSuccess):
       return {
         ...state,
-        data: state.data.filter(employee => employee._id !== action.payload),
+        data: state.data.filter(employee => employee.idEmployee !== action.payload),
       };
     case getType(employeeActions.deleteEmployee.deleteEmployeeFailure):
       return {

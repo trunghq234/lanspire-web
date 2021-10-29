@@ -24,12 +24,22 @@ const adminRoutes = [
     page: () => <AddLecturer />,
   },
   {
+    path: '/lecturer/edit/:id',
+    exact: true,
+    page: () => <AddLecturer />,
+  },
+  {
     path: '/employee/',
     exact: true,
     page: () => <Employee />,
   },
   {
     path: '/employee/add',
+    exact: true,
+    page: () => <AddEmployee />,
+  },
+  {
+    path: '/employee/edit/:id',
     exact: true,
     page: () => <AddEmployee />,
   },

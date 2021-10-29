@@ -4,7 +4,16 @@ const INIT_STATE = {
     isLoading: false,
   },
 
-  employes: {
+  employees: {
+    data: [],
+    isLoading: false,
+  },
+
+  courses: {
+    data: [],
+  },
+
+  lecturers: {
     data: [],
     isLoading: false,
   },

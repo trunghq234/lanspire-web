@@ -1,92 +1,125 @@
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Breadcrumb, Button, Card, Input, Select, Table, Tag } from 'antd';
+import moment from 'moment';
 import React from 'react';
-import { Button, Card, Input, Select, Table, Tag, Tooltip, Breadcrumb } from 'antd';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import * as lecturerActions from 'redux/actions/lecturers';
+import { lectureState$ } from 'redux/selectors';
 import styles from './index.module.less';
 
 const { Option } = Select;
 const { Search } = Input;
 
-function handleChange(value) {
-  console.log(`selected ${value}`);
-}
-const onSearch = value => console.log(value);
-
-const columns = [
-  {
-    title: 'ID',
-    dataIndex: 'id',
-    align: 'center',
-  },
-  {
-    title: 'Full name',
-    dataIndex: 'name',
-  },
-  {
-    title: 'Phone number',
-    dataIndex: 'phoneNumber',
-    align: 'center',
-  },
-  {
-    title: 'Level',
-    dataIndex: 'level',
-    align: 'center',
-  },
-  {
-    title: 'Status',
-    dataIndex: 'status',
-    align: 'center',
-    render: status => (
-      <span>
-        {status ? <Tag color="success">Working</Tag> : <Tag color="orange">Unemployed</Tag>}
-      </span>
-    ),
-  },
-  {
-    title: '',
-    dataIndex: 'editable',
-    align: 'center',
-    render: editable => {
-      return (
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
-          <Tooltip title="Edit information">
-            <Button
-              type="primary"
-              ghost
-              disabled={editable ? true : false}
-              icon={<EditOutlined />}
-            />
-          </Tooltip>
-          <Tooltip title="Delete">
-            <Button danger icon={<DeleteOutlined />} />
-          </Tooltip>
-        </div>
-      );
-    },
-  },
-];
-
-const data = [
-  {
-    key: '1',
-    id: '1',
-    name: 'Nguyen Van A',
-    phoneNumber: '123',
-    level: 'IELTS 6.0',
-    status: false,
-    editable: true,
-  },
-  {
-    key: '2',
-    id: '2',
-    name: 'Nguyen Van B',
-    phoneNumber: '123',
-    level: 'IELTS 8.0',
-    status: true,
-    editable: false,
-  },
-];
+const mapToDataSource = array => {
+  return array.map(item => {
+    return {
+      key: item.idLecturer,
+      idLecturer: item.idLecturer,
+      username: item.username === null ? 'null' : item.username,
+      displayName: item.displayName,
+      gender: item.gender,
+      phoneNumber: item.phoneNumber,
+      address: item.address,
+      birthday: moment(new Date()).format('DD/MM/YYYY'),
+      isActivated: item.isActivated,
+    };
+  });
+};
 
 const Lecturer = () => {
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const lecturers = useSelector(lectureState$);
+  const dataSource = mapToDataSource(lecturers);
+  const columns = [
+    {
+      title: 'ID',
+      dataIndex: 'idLecturer',
+      align: 'center',
+      ellipsis: true,
+    },
+    {
+      title: 'Username',
+      dataIndex: 'username',
+      align: 'center',
+    },
+    {
+      title: 'Full name',
+      dataIndex: 'displayName',
+      ellipsis: true,
+    },
+    {
+      title: 'Gender',
+      dataIndex: 'gender',
+      align: 'center',
+    },
+    {
+      title: 'Phone number',
+      dataIndex: 'phoneNumber',
+      align: 'center',
+    },
+    {
+      title: 'Address',
+      dataIndex: 'address',
+      align: 'center',
+    },
+    {
+      title: 'Birthday',
+      dataIndex: 'birthday',
+      align: 'center',
+    },
+    {
+      title: 'Status',
+      dataIndex: 'isActivated',
+      align: 'center',
+      render: isActivated => (
+        <span>
+          {isActivated ? <Tag color="success">Working</Tag> : <Tag color="orange">Unemployed</Tag>}
+        </span>
+      ),
+    },
+    {
+      title: '',
+      dataIndex: 'idLecturer',
+      align: 'center',
+      render: idLecturer => (
+        // <Link to={'/employee/' + idLecturer}>
+        <div style={{ display: 'flex', justifyContent: 'center', columnGap: '20px' }}>
+          <Button
+            onClick={() => handleEditLecturer(idLecturer)}
+            type="primary"
+            ghost
+            icon={<EditOutlined />}
+          />
+          <Button
+            onClick={() => handleDeleteLecturer(idLecturer)}
+            danger
+            icon={<DeleteOutlined />}
+          />
+        </div>
+        // </Link>
+      ),
+    },
+  ];
+
+  React.useEffect(() => {
+    dispatch(lecturerActions.getLecturers.getLecturersRequest());
+  }, [dispatch]);
+
+  const handleChange = value => {
+    console.log(`selected ${value}`);
+  };
+  const onSearch = value => console.log(value);
+  const handleEditLecturer = idLecturer => {
+    history.push(`/lecturer/edit/${idLecturer}`);
+  };
+  const handleDeleteLecturer = idLecturer => {
+    dispatch(lecturerActions.deleteLecturer.deleteLecturerRequest(idLecturer));
+  };
+
+  console.log({ dataSource });
+
   return (
     <div>
       <Breadcrumb style={{ marginBottom: '20px' }}>
@@ -124,7 +157,7 @@ const Lecturer = () => {
             Add lecturer
           </Button>
         </div>
-        <Table columns={columns} dataSource={data} />
+        <Table columns={columns} dataSource={dataSource} rowKey={row => row.idLecturer} />
       </Card>
     </div>
   );

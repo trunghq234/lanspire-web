@@ -1,20 +1,12 @@
-import './App.less';
-import { BrowserRouter as Router } from 'react-router-dom';
-import Admin from './Admin';
-import { adminRoutes, adminMenuItems } from 'routes/AdminRoutes';
 import { ConfigProvider } from 'antd';
 import enUS from 'antd/lib/locale/en_US';
 import React from 'react';
-
-import { useDispatch } from 'react-redux';
-import { getPosts } from 'redux/actions/posts';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { adminMenuItems, adminRoutes } from 'routes/AdminRoutes';
+import Admin from './Admin';
+import './App.less';
 
 function App() {
-  const dispatch = useDispatch();
-  React.useEffect(() => {
-    dispatch(getPosts.getPostsRequest());
-  }, [dispatch]);
-
   return (
     <ConfigProvider locale={enUS}>
       <Router>

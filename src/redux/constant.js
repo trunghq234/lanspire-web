@@ -11,6 +11,7 @@ const INIT_STATE = {
   courses: {
     data: [],
     isLoading: false,
+    isSuccess: false,
   },
   courseTypes: {
     data: [],

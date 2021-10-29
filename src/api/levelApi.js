@@ -8,8 +8,8 @@ const levelApi = {
     return res.data;
   },
 
-  getById: async id => {
-    const res = await axiosClient.get(`${url}${id}`);
+  getById: async idLevel => {
+    const res = await axiosClient.get(`${url}${idLevel}`);
     return res.data;
   },
 
@@ -19,12 +19,12 @@ const levelApi = {
   },
 
   update: async level => {
-    const res = await axiosClient.patch(`${url}${level.id}`, level);
+    const res = await axiosClient.put(`${url}${level.idLevel}`, level);
     return res.data;
   },
 
-  delete: async id => {
-    const res = await axiosClient.delete(`${url}${id}`);
+  delete: async idLevel => {
+    const res = await axiosClient.delete(`${url}${idLevel}`);
     return res.data;
   },
 };

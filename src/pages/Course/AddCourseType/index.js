@@ -1,39 +1,62 @@
-import React from 'react';
-import { Button, Col, Form, Input, Row, notification } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { useHistory, useParams } from 'react-router';
+import { Button, Col, Form, Input, Row, message } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { courseTypeState$ } from 'redux/selectors';
-import { createCourseType } from 'redux/actions/courseTypes';
+import { createCourseType, updateCourseType } from 'redux/actions/courseTypes';
 import { validateMessages } from 'constant/validationMessage';
 
 const { TextArea } = Input;
 
-const AddCourseType = props => {
+const AddCourseType = ({ trigger }) => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
-  const { isSuccess } = useSelector(courseTypeState$);
+  const { data: courseTypes, isSuccess } = useSelector(courseTypeState$);
+  const { idCourseType } = useParams();
+  const [isEdit, setIsEdit] = useState(false);
+  const history = useHistory();
+
+  useEffect(() => {
+    if (idCourseType) {
+      setIsEdit(true);
+      const courseType = courseTypes.find(courseType => courseType.idCourseType === idCourseType);
+      form.setFieldsValue({
+        typeName: courseType.typeName,
+        description: courseType.description,
+      });
+    }
+  }, [idCourseType, trigger]);
 
   const handleSubmit = () => {
     const { typeName, description } = form.getFieldValue();
-    if (typeName && description) {
-      dispatch(
-        createCourseType.createCourseTypeRequest({
-          typeName: typeName,
-          description: description,
-        })
-      );
-      isSuccess
-        ? notification['success']({
-            message: 'Successfully',
-            description: 'This is the content of the notification.',
+    if (typeName) {
+      if (isEdit) {
+        dispatch(
+          updateCourseType.updateCourseTypeRequest({
+            idCourseType: idCourseType,
+            typeName: typeName,
+            description: description,
           })
-        : notification['error']({
-            message: 'Notification Title',
-            description: 'This is the content of the notification.',
+        );
+        history.push('/coursetype/');
+      } else {
+        dispatch(
+          createCourseType.createCourseTypeRequest({
+            typeName: typeName,
+            description: description,
+          })
+        );
+        form.resetFields();
+      }
+      isSuccess
+        ? message.success({
+            content: isEdit ? 'Updated successfully' : 'Add course type successfully',
+          })
+        : message.error({
+            content: 'This is an error',
           });
     }
-    form.resetFields();
   };
-
   return (
     <>
       <h3>Add course type</h3>
@@ -62,7 +85,7 @@ const AddCourseType = props => {
                 style={{ width: '100%' }}
                 type="primary"
                 size="large">
-                Add
+                {isEdit ? 'Update' : 'Add'}
               </Button>
             </Form.Item>
           </Col>

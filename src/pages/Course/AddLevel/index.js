@@ -1,17 +1,34 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Col, Form, Input, Row, notification, InputNumber } from 'antd';
+import TypingSelect from 'components/common/TypingSelect';
 import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router';
 import { levelState$ } from 'redux/selectors';
-import { createLevel } from 'redux/actions/levels';
+import { createLevel, getLevels } from 'redux/actions/levels';
 import { validateMessages } from 'constant/validationMessage';
 import languages from 'constant/languages.json';
-import TypingSelect from 'components/common/TypingSelect';
 
 const AddLevel = props => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
-  const { isSuccess } = useSelector(levelState$);
-  const fLanguage = '';
+  const { data: levelList, isSuccess } = useSelector(levelState$);
+  const [fLanguage, setLanguage] = useState('');
+  const [level, setLevel] = useState({});
+
+  const { idLevel } = useParams();
+  useEffect(() => {
+    if (idLevel) {
+      dispatch(getLevels.getLevelsRequest());
+      const res = levelList.find(level => level.idLevel === idLevel);
+      setLevel(res);
+      form.setFieldsValue({
+        levelName: res.levelName,
+        point: res.point,
+        language: res.language,
+      });
+      setLanguage(res.language);
+    }
+  }, [idLevel]);
 
   const handleSubmit = () => {
     const { levelName, point, language } = form.getFieldValue();
@@ -54,6 +71,7 @@ const AddLevel = props => {
           <Col span={24}>
             <Form.Item label="Language" name="language" rules={[{ required: true }]}>
               <TypingSelect
+                defaultValue={fLanguage}
                 value={fLanguage}
                 options={languages}
                 disabled={languages.length === 0}

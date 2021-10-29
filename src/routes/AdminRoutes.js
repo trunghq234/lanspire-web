@@ -54,7 +54,17 @@ const adminRoutes = [
     page: () => <CourseType />,
   },
   {
+    path: '/coursetype/:idCourseType',
+    exact: true,
+    page: () => <CourseType />,
+  },
+  {
     path: '/level/',
+    exact: true,
+    page: () => <Level />,
+  },
+  {
+    path: '/level/:idLevel',
     exact: true,
     page: () => <Level />,
   },

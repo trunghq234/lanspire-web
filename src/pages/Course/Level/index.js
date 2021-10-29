@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Breadcrumb, Button, Tooltip, Card, Input, Row, Col, Table, notification } from 'antd';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { Modal } from 'antd';
+import { EditOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import AddLevel from '../AddLevel';
 import { useDispatch, useSelector } from 'react-redux';
 import { levelState$ } from 'redux/selectors';
 import { getLevels, deleteLevel } from 'redux/actions/levels';
-import { Modal } from 'antd';
 
 const { confirm } = Modal;
 const { Search } = Input;
@@ -32,14 +32,16 @@ const Level = () => {
       dataIndex: 'idLevel',
       align: 'center',
       width: '10%',
-      render: id => {
+      render: idLevel => {
         return (
           <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
             <Tooltip title="Edit level">
-              <Button type="primary" ghost icon={<EditOutlined />} />
+              <Link to={`/level/${idLevel}`}>
+                <Button type="primary" ghost icon={<EditOutlined />} />
+              </Link>
             </Tooltip>
             <Tooltip title="Delete">
-              <Button onClick={() => handleDelete(id)} danger icon={<DeleteOutlined />} />
+              <Button onClick={() => handleDelete(idLevel)} danger icon={<DeleteOutlined />} />
             </Tooltip>
           </div>
         );

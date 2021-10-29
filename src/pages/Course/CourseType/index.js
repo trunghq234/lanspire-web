@@ -1,22 +1,11 @@
-import React, { useEffect } from 'react';
-import {
-  Breadcrumb,
-  Button,
-  Tooltip,
-  Card,
-  Input,
-  Row,
-  Col,
-  Table,
-  notification,
-  Modal,
-} from 'antd';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Breadcrumb, Button, Tooltip, Card, Input, Row, Col, Table, message, Modal } from 'antd';
+import { EditOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import AddCourseType from '../AddCourseType';
 import { useDispatch, useSelector } from 'react-redux';
 import { courseTypeState$ } from 'redux/selectors';
 import { deleteCourseType, getCourseTypes } from 'redux/actions/courseTypes';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
 
 const { confirm } = Modal;
 const { Search } = Input;
@@ -38,14 +27,21 @@ const CourseType = () => {
       dataIndex: 'idCourseType',
       align: 'center',
       width: '10%',
-      render: id => {
+      render: idCourseType => {
         return (
           <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
             <Tooltip title="Edit information">
-              <Button type="primary" ghost icon={<EditOutlined />} />
+              <Link to={`/coursetype/${idCourseType}`}>
+                <Button
+                  onClick={() => setTrigger(!trigger)}
+                  type="primary"
+                  ghost
+                  icon={<EditOutlined />}
+                />
+              </Link>
             </Tooltip>
             <Tooltip title="Delete">
-              <Button onClick={() => handleDelete(id)} danger icon={<DeleteOutlined />} />
+              <Button onClick={() => handleDelete(idCourseType)} danger icon={<DeleteOutlined />} />
             </Tooltip>
           </div>
         );
@@ -53,6 +49,7 @@ const CourseType = () => {
     },
   ];
 
+  const [trigger, setTrigger] = useState(false);
   const dispatch = useDispatch();
   const { data, isLoading, isSuccess } = useSelector(courseTypeState$);
   useEffect(() => {
@@ -68,15 +65,17 @@ const CourseType = () => {
         dispatch(deleteCourseType.deleteCourseTypeRequest(id));
 
         isSuccess
-          ? notification['success']({
-              message: 'Successfully',
-              description:
-                'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+          ? message['success']({
+              content: 'Deleted successfully',
+              style: {
+                marginTop: '20vh',
+              },
             })
-          : notification['error']({
-              message: 'Notification Title',
-              description:
-                'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+          : message['error']({
+              content: 'Error',
+              style: {
+                marginTop: '20vh',
+              },
             });
       },
       onCancel() {},
@@ -124,7 +123,7 @@ const CourseType = () => {
         </Col>
         <Col lg={{ order: 1 }} span={24} xl={8}>
           <Card>
-            <AddCourseType />
+            <AddCourseType trigger={trigger} />
           </Card>
         </Col>
       </Row>

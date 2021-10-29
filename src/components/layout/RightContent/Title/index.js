@@ -1,18 +1,14 @@
-import React from 'react';
-import { Avatar, Badge, Popover, Image } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
-import { useHistory } from 'react-router';
-import Title from './Title/index.js';
-import Content from './Content/index.js';
+import { Avatar, Col, Row, Image } from 'antd';
+import React from 'react';
 import { userState$ } from 'redux/selectors';
 import { useDispatch, useSelector } from 'react-redux';
-
-const RightContent = () => {
+const Title = () => {
   const user = useSelector(userState$);
   return (
     <div>
-      <Popover placement="bottomRight" content={<Content />} title={<Title />} trigger="hover">
-        <Badge dot>
+      <Row style={{ alignItems: 'center', justifyContent: 'center' }}>
+        <Col span={7}>
           <Avatar
             src={
               !user.imageUrl ? (
@@ -22,10 +18,16 @@ const RightContent = () => {
               )
             }
           />
-        </Badge>
-      </Popover>
+        </Col>
+        <Col span={17}>
+          <p style={{ fontSize: '17px', marginBottom: '0' }}>{user.displayName}</p>
+          <p style={{ color: 'rgba(114,132,154,.7)', fontSize: '14px', marginBottom: '0' }}>
+            {user.Role.name}
+          </p>
+        </Col>
+      </Row>
     </div>
   );
 };
 
-export default RightContent;
+export default Title;

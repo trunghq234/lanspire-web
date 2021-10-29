@@ -38,16 +38,6 @@ const AddCourseType = ({ trigger }) => {
             description: description,
           })
         );
-        if (isSuccess) {
-          message.success({
-            content: 'Updated successfully',
-          });
-          history.push('/coursetype/');
-        } else {
-          message.error({
-            content: 'This is an error',
-          });
-        }
       } else {
         dispatch(
           createCourseType.createCourseTypeRequest({
@@ -55,15 +45,18 @@ const AddCourseType = ({ trigger }) => {
             description: description,
           })
         );
-        isSuccess
-          ? message.success({
-              content: 'Add course successfully',
-            })
-          : message.error({
-              content: 'This is an error',
-            });
-        form.resetFields();
       }
+      if (isSuccess) {
+        message.success({
+          content: isEdit ? 'Updated successfully' : 'Add course type successfully',
+        });
+        isEdit ? history.push('/coursetype/') : '';
+      } else {
+        message.error({
+          content: 'Error',
+        });
+      }
+      form.resetFields();
     }
   };
   return (

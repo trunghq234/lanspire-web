@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Breadcrumb, Button, Tooltip, Card, Input, Row, Col, Table, notification } from 'antd';
+import { Breadcrumb, Button, Tooltip, Card, Input, Row, Col, Table, message } from 'antd';
 import { Modal } from 'antd';
 import { EditOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import AddLevel from '../AddLevel';
@@ -60,17 +60,16 @@ const Level = () => {
       title: 'Do you want to delete this level?',
       icon: <ExclamationCircleOutlined />,
       content: '',
+      centered: true,
       onOk() {
         dispatch(deleteLevel.deleteLevelRequest(id));
 
         isSuccess
-          ? notification['success']({
-              message: 'Successfully',
-              description: 'This is the content of the notification.',
+          ? message.success({
+              content: 'Deleted successfully',
             })
-          : notification['error']({
-              message: 'Notification Title',
-              description: 'This is the content of the notification.',
+          : message.error({
+              content: 'Error',
             });
       },
     });

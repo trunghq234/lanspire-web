@@ -9,6 +9,8 @@ export default function StudentsReducer(state = INIT_STATE.students, action) {
       return {
         ...state,
         isLoading: true,
+        error: '',
+        isSuccess: false,
       };
     case getType(studentActions.getStudents.getStudentsSuccess):
       return {
@@ -25,24 +27,31 @@ export default function StudentsReducer(state = INIT_STATE.students, action) {
     case getType(studentActions.createStudents.createStudentsRequest):
       return {
         ...state,
+        error: '',
         isLoading: true,
+        isSuccess: false,
       };
     case getType(studentActions.createStudents.createStudentsSuccess):
       return {
         ...state,
         data: [...state.data, action.payload],
         isLoading: false,
+        isSuccess: true,
       };
     case getType(studentActions.createStudents.createStudentsFailure):
       return {
         ...state,
+        error: action.message,
+        isLoading: false,
       };
 
     // update Student
     case getType(studentActions.updateStudents.updateStudentsRequest):
       return {
         ...state,
+        error: '',
         isLoading: true,
+        isSuccess: false,
       };
     case getType(studentActions.updateStudents.updateStudentsSuccess):
       return {
@@ -51,10 +60,12 @@ export default function StudentsReducer(state = INIT_STATE.students, action) {
           student.idStudent === action.payload.idStudent ? action.payload : student
         ),
         isLoading: false,
+        isSuccess: true,
       };
     case getType(studentActions.updateStudents.updateStudentsFailure):
       return {
         ...state,
+        error: action.message,
         isLoading: false,
       };
 
@@ -63,16 +74,27 @@ export default function StudentsReducer(state = INIT_STATE.students, action) {
       return {
         ...state,
         isLoading: true,
+        isSuccess: false,
+        error: '',
       };
     case getType(studentActions.deleteStudents.deleteStudentsSuccess):
       return {
         ...state,
         isLoading: false,
-        data: state.data.filter(student => student.idStudent !== action.payload),
+        isSuccess: true,
+        data: state.data.map(student => {
+          if (student.idStudent === action.payload) {
+            return {
+              ...student,
+              isDeleted: true,
+            };
+          } else return student;
+        }),
       };
     case getType(studentActions.deleteStudents.deleteStudentsFailure):
       return {
         ...state,
+        error: action.message,
         isLoading: false,
       };
     default:

@@ -11,6 +11,8 @@ const INIT_STATE = {
   students: {
     data: [],
     isLoading: false,
+    isSuccess: false,
+    error: '',
   },
   studentById: {
     //Student is get with id

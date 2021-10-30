@@ -1,5 +1,5 @@
 import React, { createRef, useEffect, useState } from 'react';
-import { Button, Row, Col, Card, Form, Select, DatePicker, Input } from 'antd';
+import { Button, Row, Col, Card, Form, Select, DatePicker, Input, notification } from 'antd';
 import style from './index.module.less';
 import { createStudents, getById, updateStudents } from 'redux/actions/students';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,10 +7,10 @@ import ProvincePicker from 'components/common/ProvincePicker';
 import { useHistory, useParams } from 'react-router-dom';
 import { studentByIdState$, studentState$ } from 'redux/selectors';
 import moment from 'moment';
-import studentApi from 'api/studentApi';
 
 const AddStudent = () => {
   const [address, setAddress] = useState({});
+  const [isSubmit, setIsSubmit] = useState(false);
   const dateFormat = 'DD/MM/YYYY';
   const dispatch = useDispatch();
   const history = useHistory();
@@ -25,29 +25,20 @@ const AddStudent = () => {
   };
   const handleSubmit = () => {
     const { phoneNumber, gender, dob, email, fullName } = form.getFieldsValue();
-    var gd = 1;
-    switch (gender) {
-      case 'male':
-        gd = 1;
-        break;
-      case 'female':
-        gd = 0;
-        break;
-      default:
-        gd = 2;
-    }
     if (address.city && address.district) {
       const newUser = {
         displayName: fullName,
-        gender: gd,
+        gender: gender === 'female' ? 0 : gender === 'male' ? 1 : 2,
         phoneNumber,
         email,
         address: address.city,
         dob: dob.format('DD/MM/YYYY'),
       };
       if (!idStudent) {
+        //Create
         dispatch(createStudents.createStudentsRequest(newUser));
       } else {
+        //update
         const studentUpdate = {
           idStudent: studentById.data.idStudent,
           idUser: studentById.data.idUser,
@@ -59,13 +50,34 @@ const AddStudent = () => {
         };
         dispatch(updateStudents.updateStudentsRequest(studentUpdate));
       }
+      setIsSubmit(true);
     }
   };
+  useEffect(() => {
+    if (isSubmit && students.isSuccess) {
+      notification.success({
+        message: idStudent ? 'Update successfully' : 'Create successfully',
+        style: {
+          width: 300,
+        },
+      });
+      history.push('/student/list');
+    } else if (isSubmit && !students.isSuccess && students.error.length > 0) {
+      notification.error({
+        message: students.error,
+        style: {
+          width: 300,
+        },
+      });
+    }
+  }, [students.isLoading]);
   useEffect(() => {
     if (idStudent) {
       dispatch(getById.getByIdRequest(idStudent));
     }
   }, []);
+
+  //Load data to UI when edit
   useEffect(() => {
     if (idStudent && studentById.data.length !== 0 && students.data.length === 0) {
       //Reload page
@@ -92,17 +104,13 @@ const AddStudent = () => {
     // setAddress(addressValue);
   }, [studentById]);
   const loadFieldsValue = () => {
+    const userById = studentById.data.User;
     const fieldsValue = {
-      fullName: studentById.data.User.displayName,
-      email: studentById.data.User.email,
-      phoneNumber: studentById.data.User.phoneNumber,
-      gender:
-        studentById.data.User.gender === 1
-          ? 'male'
-          : studentById.data.User.gender === 0
-          ? 'female'
-          : 'others',
-      dob: moment(studentById.data.User.dob),
+      fullName: userById.displayName,
+      email: userById.email,
+      phoneNumber: userById.phoneNumber,
+      gender: userById.gender === 1 ? 'male' : userById.gender === 0 ? 'female' : 'others',
+      dob: moment(userById.dob),
     };
 
     form.setFieldsValue(fieldsValue);

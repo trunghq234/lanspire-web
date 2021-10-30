@@ -14,7 +14,7 @@ const studentApi = {
     return res.data;
   },
   update: async data => {
-    const res = await axiosClient.put(`/students/${data.idStudent}`, data);
+    const res = await axiosClient.patch(`/students/${data.idStudent}`, data);
     return res.data;
   },
   remove: async id => {

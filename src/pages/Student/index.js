@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
-import { Table, Input, Button, Tag, Col, Row, Modal } from 'antd';
+import { Table, Input, Button, Tag, Col, Row, Modal, notification } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import styles from './index.module.less';
 import { studentState$ } from 'redux/selectors/index';
@@ -100,6 +100,7 @@ const Student = () => {
   const students = useSelector(studentState$);
   const [data, setData] = useState([]); //Data ban đầu
   const [dataSearch, setDataSearch] = useState([]); //Data sau khi search
+  const [isDeleted, setIsDeleted] = useState(false);
   const [visibleModal, setVisibleModal] = useState(false);
   const [idStudent, setIdStudent] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -140,10 +141,30 @@ const Student = () => {
   const handleDeleteStudent = () => {
     dispatch(deleteStudents.deleteStudentsRequest(idStudent));
     setVisibleModal(false);
+    setIsDeleted(true);
   };
   const handleEditStudent = id => {
     history.push(`/student/edit/${id}`);
   };
+
+  useEffect(() => {
+    if (isDeleted && students.isSuccess) {
+      notification.success({
+        message: 'Delete successfully',
+        style: {
+          width: 300,
+        },
+      });
+    } else if (isDeleted && students.isSuccess && students.error.length > 0) {
+      notification.error();
+      ({
+        message: students.error,
+        style: {
+          width: 300,
+        },
+      });
+    }
+  }, [students.isLoading]);
   return (
     <div className={styles.container}>
       <Modal

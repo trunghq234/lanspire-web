@@ -62,8 +62,9 @@ const AddStudent = () => {
         },
       });
       history.push('/student/list');
-    } else if (isSubmit && !students.isSuccess && students.error.length > 0) {
+    } else if (isSubmit && !students.isSuccess && !students.error) {
       notification.error({
+        title: 'Error',
         message: students.error,
         style: {
           width: 300,

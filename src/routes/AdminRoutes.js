@@ -115,11 +115,6 @@ const adminMenuItems = {
           component: <Course />,
         },
         {
-          path: '/course/add',
-          name: 'Add course',
-          component: <AddCourse />,
-        },
-        {
           path: '/coursetype/',
           name: 'Course type',
           component: <CourseType />,

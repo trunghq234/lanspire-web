@@ -91,7 +91,7 @@ const AddLevel = props => {
               <Button
                 htmlType="submit"
                 // onClick={handleSubmit}
-                style={{ width: '100%' }}
+                block
                 type="primary"
                 size="large">
                 Add

@@ -81,12 +81,7 @@ const AddCourseType = ({ trigger }) => {
           </Col>
           <Col span={24}>
             <Form.Item>
-              <Button
-                htmlType="submit"
-                onClick={handleSubmit}
-                style={{ width: '100%' }}
-                type="primary"
-                size="large">
+              <Button htmlType="submit" onClick={handleSubmit} block type="primary" size="large">
                 {isEdit ? 'Update' : 'Add'}
               </Button>
             </Form.Item>

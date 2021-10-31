@@ -10,7 +10,7 @@ import {
   Row,
   Col,
   Tooltip,
-  notification,
+  message,
   Modal,
 } from 'antd';
 import { EditOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
@@ -101,20 +101,17 @@ const Course = () => {
     confirm({
       title: 'Do you want to delete this course?',
       icon: <ExclamationCircleOutlined />,
+      centered: true,
       content: '',
       onOk() {
         dispatch(deleteCourse.deleteCourseRequest(idCourse));
 
         isSuccess
-          ? notification['success']({
-              message: 'Successfully',
-              description:
-                'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+          ? message.success({
+              content: 'Deleted successfully',
             })
-          : notification['error']({
-              message: 'Notification Title',
-              description:
-                'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+          : message.error({
+              content: 'Error',
             });
       },
       onCancel() {},

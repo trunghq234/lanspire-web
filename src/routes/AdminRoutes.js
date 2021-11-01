@@ -16,6 +16,8 @@ const DashboardIcon = props => <Icon component={dashboardSvg} {...props} />;
 const LecturerIcon = props => <Icon component={lecturerSvg} {...props} />;
 const CourseIcon = props => <Icon component={courseSvg} {...props} />;
 const EmployeeIcon = props => <Icon component={employeeSvg} {...props} />;
+import Class from 'pages/Class';
+import AddClass from 'pages/Class/AddClass';
 
 const adminRoutes = [
   {
@@ -77,6 +79,21 @@ const adminRoutes = [
     path: '/employee/add',
     exact: true,
     page: () => <AddEmployee />,
+  },
+  {
+    path: '/class/',
+    exact: true,
+    page: () => <Class />,
+  },
+  {
+    path: '/class/add',
+    exact: true,
+    page: () => <AddClass />,
+  },
+  {
+    path: '/class/add/:idClass',
+    exact: true,
+    page: () => <AddClass />,
   },
 ];
 
@@ -144,6 +161,22 @@ const adminMenuItems = {
           path: '/employee/add',
           name: 'Add Employee',
           component: <AddEmployee />,
+        },
+      ],
+    },
+    {
+      name: 'Class',
+      icon: <EmployeeIcon />,
+      routes: [
+        {
+          path: '/class/',
+          name: 'Class list',
+          component: <Class />,
+        },
+        {
+          path: '/class/add',
+          name: 'Add Class',
+          component: <AddClass />,
         },
       ],
     },

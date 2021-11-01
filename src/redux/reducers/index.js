@@ -7,6 +7,7 @@ import authReducer from './auth';
 import coursesReducer from 'redux/reducers/courses';
 import courseTypesReducer from 'redux/reducers/courseType';
 import levelsReducer from './level';
+import classesReducer from './classes';
 const appReducer = combineReducers({
   posts: postsReducer,
   employes: employesReducer,
@@ -17,6 +18,7 @@ const appReducer = combineReducers({
   courses: coursesReducer,
   courseTypes: courseTypesReducer,
   levels: levelsReducer,
+  classes: classesReducer,
 });
 const rootReducer = (state, action) => {
   if (action.type === 'RESET') {

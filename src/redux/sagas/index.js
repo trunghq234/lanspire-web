@@ -3,7 +3,9 @@ import { takeLatest, takeEvery } from 'redux-saga/effects';
 import * as postActions from '../actions/posts';
 import * as userActions from '../actions/users';
 import * as authActions from '../actions/auth';
+import * as classActions from '../actions/classes';
 import { fetchPostsSaga, updatePostSaga, deletePostSaga, createPostSaga } from './posts';
+import { fetchClasses, updateClass, deleteClass, createClass } from './classes';
 import {
   fetchUsersSaga,
   fetchUserSaga,
@@ -12,12 +14,9 @@ import {
   createUserSaga,
 } from './users';
 import { fetchAuthSaga } from './auth';
-import { takeLatest } from 'redux-saga/effects';
-import * as postActions from 'redux/actions/posts';
 import * as courseActions from 'redux/actions/courses';
 import * as courseTypeActions from 'redux/actions/courseTypes';
 import * as levelActions from 'redux/actions/levels';
-import { fetchPostsSaga, updatePostSaga, deletePostSaga, createPostSaga } from 'redux/sagas/posts';
 import { fetchCourses, createCourse, updateCourse, deleteCourse } from 'redux/sagas/courses';
 import {
   fetchCourseTypes,
@@ -59,4 +58,9 @@ export default function* mySaga() {
   yield takeLatest(userActions.deleteUser.deleteUserRequest, deleteUserSaga);
   //auth
   yield takeLatest(authActions.getAuth.getAuthRequest, fetchAuthSaga);
+  //classes
+  yield takeLatest(classActions.getClasses.getClassesRequest, fetchClasses);
+  yield takeLatest(classActions.createClass.createClassRequest, createClass);
+  yield takeLatest(classActions.updateClass.updateClassRequest, updateClass);
+  yield takeLatest(classActions.deleteClass.deleteClassRequest, deleteClass);
 }

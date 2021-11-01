@@ -1,11 +1,21 @@
 import React from 'react';
-import { AppstoreOutlined } from '@ant-design/icons';
 import Dashboard from 'pages/Dashboard';
-import lecturerIcon from 'assets/svg/lecturer.svg';
 import Lecturer from 'pages/Lecturer';
 import AddLecturer from 'pages/Lecturer/AddLecturer';
+import Course from 'pages/Course';
+import AddCourse from 'pages/Course/AddCourse';
+import CourseType from 'pages/Course/CourseType';
 import Employee from 'pages/Employee';
+import Icon from '@ant-design/icons';
 import AddEmployee from 'pages/Employee/AddEmployee';
+import Level from 'pages/Course/Level';
+
+import { dashboardSvg, lecturerSvg, courseSvg, employeeSvg } from 'utils/iconsvg';
+
+const DashboardIcon = props => <Icon component={dashboardSvg} {...props} />;
+const LecturerIcon = props => <Icon component={lecturerSvg} {...props} />;
+const CourseIcon = props => <Icon component={courseSvg} {...props} />;
+const EmployeeIcon = props => <Icon component={employeeSvg} {...props} />;
 
 const adminRoutes = [
   {
@@ -22,6 +32,41 @@ const adminRoutes = [
     path: '/lecturer/add',
     exact: true,
     page: () => <AddLecturer />,
+  },
+  {
+    path: '/course/',
+    exact: true,
+    page: () => <Course />,
+  },
+  {
+    path: '/course/add',
+    exact: true,
+    page: () => <AddCourse />,
+  },
+  {
+    path: '/course/add/:idCourse',
+    exact: true,
+    page: () => <AddCourse />,
+  },
+  {
+    path: '/coursetype/',
+    exact: true,
+    page: () => <CourseType />,
+  },
+  {
+    path: '/coursetype/:idCourseType',
+    exact: true,
+    page: () => <CourseType />,
+  },
+  {
+    path: '/level/',
+    exact: true,
+    page: () => <Level />,
+  },
+  {
+    path: '/level/:idLevel',
+    exact: true,
+    page: () => <Level />,
   },
   {
     path: '/employee/',
@@ -41,12 +86,12 @@ const adminMenuItems = {
     {
       path: '/',
       name: 'Dashboard',
-      icon: <AppstoreOutlined />,
+      icon: <DashboardIcon />,
       component: <Dashboard />,
     },
     {
       name: 'Lecturer',
-      icon: lecturerIcon,
+      icon: <LecturerIcon />,
       routes: [
         {
           path: '/lecturer/',
@@ -55,14 +100,40 @@ const adminMenuItems = {
         },
         {
           path: '/lecturer/add',
-          name: 'Add Lecturer',
+          name: 'Add lecturer',
           component: <AddLecturer />,
         },
       ],
     },
     {
+      name: 'Course',
+      icon: <CourseIcon />,
+      routes: [
+        {
+          path: '/course/',
+          name: 'Course list',
+          component: <Course />,
+        },
+        {
+          path: '/course/add',
+          name: 'Add course',
+          component: <AddCourse />,
+        },
+        {
+          path: '/coursetype/',
+          name: 'Course type',
+          component: <CourseType />,
+        },
+        {
+          path: '/level/',
+          name: 'Level',
+          component: <Level />,
+        },
+      ],
+    },
+    {
       name: 'Employee',
-      icon: lecturerIcon,
+      icon: <EmployeeIcon />,
       routes: [
         {
           path: '/employee/',

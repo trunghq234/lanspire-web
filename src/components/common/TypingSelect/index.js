@@ -3,12 +3,12 @@ import { Select } from 'antd';
 
 const { Option } = Select;
 
-const TypingSelect = props => {
-  function onChange(value) {
-    props.callbackSelection(value);
-  }
-  function onBlur() {}
-  function onFocus() {}
+const TypingSelect = ({ value, onChange, ...props }) => {
+  const handleChange = value => {
+    if (onChange) {
+      onChange(value);
+    }
+  };
   function onSearch() {}
 
   const renderOptions = () => {
@@ -34,9 +34,7 @@ const TypingSelect = props => {
       style={{ width: props.width || '100%' }}
       placeholder={props.placeholder}
       optionFilterProp="children"
-      onChange={onChange}
-      onFocus={onFocus}
-      onBlur={onBlur}
+      onChange={handleChange}
       onSearch={onSearch}
       filterOption={(input, option) =>
         option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0

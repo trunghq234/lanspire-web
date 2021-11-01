@@ -90,7 +90,7 @@ const data = [
 const Lecturer = () => {
   return (
     <>
-      <Breadcrumb style={{ marginBottom: '20px' }}>
+      <Breadcrumb>
         <Breadcrumb.Item>Home</Breadcrumb.Item>
         <Breadcrumb.Item>
           <a href="">Application Center</a>

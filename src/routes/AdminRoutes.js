@@ -173,11 +173,6 @@ const adminMenuItems = {
           name: 'Class list',
           component: <Class />,
         },
-        {
-          path: '/class/add',
-          name: 'Add Class',
-          component: <AddClass />,
-        },
       ],
     },
   ],

@@ -4,7 +4,7 @@ import {
   Card,
   Col,
   Row,
-  Select,
+  Space,
   Table,
   Input,
   Modal,
@@ -12,6 +12,8 @@ import {
   notification,
   Progress,
 } from 'antd';
+import Highlighter from 'react-highlight-words';
+
 import React, { useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -19,22 +21,74 @@ import styles from './index.module.less';
 import { deleteClass, getClasses } from 'redux/actions/classes';
 import { getCourses } from 'redux/actions/courses';
 import { classState$, courseState$ } from 'redux/selectors';
-import { EditOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import {
+  EditOutlined,
+  DeleteOutlined,
+  ExclamationCircleOutlined,
+  SearchOutlined,
+} from '@ant-design/icons';
 import moment from 'moment';
 const { Search } = Input;
 const { confirm } = Modal;
 const Class = () => {
-  const max = 20;
   const dispatch = useDispatch();
   const { data, isLoading, isSuccess } = useSelector(classState$);
   const { data: courses } = useSelector(courseState$);
-
+  const [searchText, setSearchText] = useState('');
   const [dataSource, setDataSource] = useState([]);
   const [dataFilter, setDataFilter] = useState([]);
   const columns = [
     {
       title: 'Class name',
       dataIndex: 'className',
+      filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder={`Search class name`}
+            value={selectedKeys[0]}
+            onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+            onPressEnter={() => handleSearch(selectedKeys, confirm)}
+            style={{ marginBottom: 8, display: 'block' }}
+          />
+          <Space>
+            <Button
+              type="primary"
+              onClick={() => handleSearch(selectedKeys, confirm)}
+              icon={<SearchOutlined />}
+              size="medium"
+              style={{ width: 100 }}>
+              Search
+            </Button>
+            <Button onClick={() => handleReset(clearFilters)} size="medium" style={{ width: 90 }}>
+              Reset
+            </Button>
+            <Button
+              type="link"
+              size="medium"
+              onClick={() => {
+                confirm({ closeDropdown: false });
+                setSearchText(selectedKeys[0]);
+              }}>
+              Filter
+            </Button>
+          </Space>
+        </div>
+      ),
+      filterIcon: filtered => (
+        <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />
+      ),
+      onFilter: (value, record) =>
+        record.className
+          ? record.className.toString().toLowerCase().includes(value.toLowerCase())
+          : '',
+      render: text => (
+        <Highlighter
+          highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ''}
+        />
+      ),
     },
     {
       title: 'Course',
@@ -97,14 +151,24 @@ const Class = () => {
       },
     },
   ];
-  const onSearch = value => console.log(value);
+  const handleSearch = (selectedKeys, confirm) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+  };
+
+  const handleReset = clearFilters => {
+    clearFilters();
+    setSearchText('');
+  };
   const mappingDatasource = dataInput => {
     const res = [];
     dataInput.map(classRoom => {
       const course = classRoom.Course;
       let courseName = '';
+      let max = 0;
       if (course) {
         courseName = course.courseName;
+        max = course.max;
       }
       const learnings = classRoom.Learnings;
       let students = [];
@@ -184,16 +248,7 @@ const Class = () => {
       <h3 className="heading">Class</h3>
       <Card>
         <Row gutter={[20, 20]} align="top">
-          <Col xs={24} sm={16} md={10} lg={8} xl={8}>
-            <Search
-              className={styles.search}
-              size="large"
-              placeholder="Search"
-              allowClear
-              enterButton
-              onSearch={onSearch}
-            />
-          </Col>
+          <Col xs={24} sm={16} md={10} lg={8} xl={8}></Col>
           <Col xs={0} md={8} lg={10} xl={12} flex="auto" />
           <Col xs={24} sm={24} md={6} lg={6} xl={4}>
             <Button className={styles.btn} size="large" type="primary">

@@ -1,33 +1,33 @@
 import {
+  DeleteOutlined,
+  EditOutlined,
+  ExclamationCircleOutlined,
+  SearchOutlined,
+} from '@ant-design/icons';
+import {
   Breadcrumb,
   Button,
   Card,
   Col,
+  Input,
+  Modal,
+  notification,
+  Progress,
   Row,
   Space,
   Table,
-  Input,
-  Modal,
   Tooltip,
-  notification,
-  Progress,
 } from 'antd';
-import Highlighter from 'react-highlight-words';
-
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import Highlighter from 'react-highlight-words';
 import { useDispatch, useSelector } from 'react-redux';
-import styles from './index.module.less';
+import { Link, NavLink } from 'react-router-dom';
 import { deleteClass, getClasses } from 'redux/actions/classes';
 import { getCourses } from 'redux/actions/courses';
 import { classState$, courseState$ } from 'redux/selectors';
-import {
-  EditOutlined,
-  DeleteOutlined,
-  ExclamationCircleOutlined,
-  SearchOutlined,
-} from '@ant-design/icons';
-import moment from 'moment';
+import styles from './index.module.less';
+
 const { Search } = Input;
 const { confirm } = Modal;
 const Class = () => {

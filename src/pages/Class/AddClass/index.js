@@ -1,25 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useParams, useHistory } from 'react-router-dom';
 import {
   Breadcrumb,
   Button,
-  Col,
-  Row,
   Card,
+  Col,
+  DatePicker,
   Form,
   Input,
-  InputNumber,
-  Select,
   notification,
-  DatePicker,
+  Row,
+  Select,
 } from 'antd';
+import React, { useEffect, useState } from 'react';
 // import { validateMessages } from 'constant/validationMessage';
 import { useDispatch, useSelector } from 'react-redux';
-import { courseState$, classState$, userState$ } from 'redux/selectors';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import { createClass, updateClass } from 'redux/actions/classes';
+import { getCourses } from 'redux/actions/courses';
+import { classState$, courseState$ } from 'redux/selectors';
 import styles from './index.module.less';
-import { deleteCourse, getCourses } from 'redux/actions/courses';
-import create from '@ant-design/icons/lib/components/IconFont';
 
 const { TextArea } = Input;
 const { Option } = Select;

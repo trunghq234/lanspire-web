@@ -1,24 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
 import {
   Breadcrumb,
   Button,
-  Col,
-  Row,
   Card,
+  Col,
   Form,
   Input,
   InputNumber,
-  Select,
   notification,
+  Row,
+  Select,
 } from 'antd';
 import { validateMessages } from 'constant/validationMessage';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { courseState$, courseTypeState$, levelState$ } from 'redux/selectors';
+import { Link, useParams } from 'react-router-dom';
+import { createCourse } from 'redux/actions/courses';
 import { getCourseTypes } from 'redux/actions/courseTypes';
 import { getLevels } from 'redux/actions/levels';
-import { createCourse } from 'redux/actions/courses';
-import styles from './index.module.less';
+import { courseState$, courseTypeState$, levelState$ } from 'redux/selectors';
 
 const { TextArea } = Input;
 const { Option } = Select;

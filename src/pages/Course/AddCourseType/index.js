@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { useHistory, useParams } from 'react-router';
-import { Button, Col, Form, Input, Row, message } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
-import { courseTypeState$ } from 'redux/selectors';
-import { createCourseType, updateCourseType } from 'redux/actions/courseTypes';
+import { Button, Col, Form, Input, message, Row } from 'antd';
 import { validateMessages } from 'constant/validationMessage';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useParams } from 'react-router';
+import { createCourseType, updateCourseType } from 'redux/actions/courseTypes';
+import { courseTypeState$ } from 'redux/selectors';
 
 const { TextArea } = Input;
 

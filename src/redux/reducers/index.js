@@ -4,12 +4,14 @@ import employesReducer from './employes';
 import usersReducer from './users';
 import userReducer from './user';
 import authReducer from './auth';
+import timeFrameReducer from './timeFrames';
 const appReducer = combineReducers({
   posts: postsReducer,
   employes: employesReducer,
   users: usersReducer,
   user: userReducer,
   auth: authReducer,
+  timeFrames: timeFrameReducer,
 });
 const rootReducer = (state, action) => {
   if (action.type === 'RESET') {

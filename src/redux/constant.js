@@ -19,6 +19,12 @@ const INIT_STATE = {
     data: [],
     isLoading: false,
   },
+  timeFrames: {
+    data: [],
+    isLoading: false,
+    isSuccess: false,
+    error: '',
+  },
 };
 
 export default INIT_STATE;

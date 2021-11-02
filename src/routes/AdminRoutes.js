@@ -6,6 +6,7 @@ import Lecturer from 'pages/Lecturer';
 import AddLecturer from 'pages/Lecturer/AddLecturer';
 import Employee from 'pages/Employee';
 import AddEmployee from 'pages/Employee/AddEmployee';
+import TimeFrame from 'pages/TimeFrame';
 
 const adminRoutes = [
   {
@@ -32,6 +33,11 @@ const adminRoutes = [
     path: '/employee/add',
     exact: true,
     page: () => <AddEmployee />,
+  },
+  {
+    path: '/time-frame',
+    exact: true,
+    page: () => <TimeFrame />,
   },
 ];
 
@@ -75,6 +81,12 @@ const adminMenuItems = {
           component: <AddEmployee />,
         },
       ],
+    },
+    {
+      path: '/time-frame',
+      name: 'Time Frame',
+      icon: lecturerIcon,
+      component: <TimeFrame />,
     },
   ],
 };

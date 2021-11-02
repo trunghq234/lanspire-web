@@ -13,6 +13,8 @@ import {
   updateLecturerSaga,
   deleteLecturerSaga,
 } from './lecturers';
+import * as userActions from '../actions/users';
+import { fetchUsersSaga, createUserSaga, updateUserSaga, deleteUserSaga } from './users';
 
 export default function* mySaga() {
   // employees
@@ -21,9 +23,15 @@ export default function* mySaga() {
   yield takeLatest(employeeActions.updateEmployee.updateEmployeeRequest, updateEmployeeSaga);
   yield takeLatest(employeeActions.deleteEmployee.deleteEmployeeRequest, deleteEmployeeSaga);
 
-  // lecturer
+  // lecturers
   yield takeLatest(lecturerActions.getLecturers.getLecturersRequest, fetchLecturersSaga);
   yield takeLatest(lecturerActions.createLecturer.createLecturerRequest, createLecturerSaga);
   yield takeLatest(lecturerActions.updateLecturer.updateLecturerRequest, updateLecturerSaga);
   yield takeLatest(lecturerActions.deleteLecturer.deleteLecturerRequest, deleteLecturerSaga);
+
+  // users
+  yield takeLatest(userActions.getUsers.getUsersRequest, fetchUsersSaga);
+  yield takeLatest(userActions.createUser.createUserRequest, createUserSaga);
+  yield takeLatest(userActions.updateUser.updateUserRequest, updateUserSaga);
+  yield takeLatest(userActions.deleteUser.deleteUserRequest, deleteUserSaga);
 }

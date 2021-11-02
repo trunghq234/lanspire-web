@@ -63,11 +63,6 @@ const adminMenuItems = {
           name: 'Lecturer list',
           component: <Lecturer />,
         },
-        {
-          path: '/lecturer/add',
-          name: 'Add Lecturer',
-          component: <AddLecturer />,
-        },
       ],
     },
     {
@@ -78,11 +73,6 @@ const adminMenuItems = {
           path: '/employee/',
           name: 'Employee list',
           component: <Employee />,
-        },
-        {
-          path: '/employee/add',
-          name: 'Add Employee',
-          component: <AddEmployee />,
         },
       ],
     },

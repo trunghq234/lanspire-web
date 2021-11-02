@@ -1,12 +1,8 @@
 const INIT_STATE = {
-  posts: {
-    data: [],
-    isLoading: false,
-  },
-
   employees: {
     data: [],
     isLoading: false,
+    isSuccess: false,
   },
 
   courses: {
@@ -16,6 +12,13 @@ const INIT_STATE = {
   lecturers: {
     data: [],
     isLoading: false,
+    isSuccess: false,
+  },
+
+  users: {
+    data: [],
+    isLoading: false,
+    isSuccess: false,
   },
 };
 

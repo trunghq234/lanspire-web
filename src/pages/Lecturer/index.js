@@ -1,5 +1,5 @@
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Breadcrumb, Button, Card, Input, Select, Table, Tag } from 'antd';
+import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { Breadcrumb, Button, Card, Input, Select, Table, Tag, Modal, notification } from 'antd';
 import moment from 'moment';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,6 +10,7 @@ import styles from './index.module.less';
 
 const { Option } = Select;
 const { Search } = Input;
+const { confirm } = Modal;
 
 const mapToDataSource = array => {
   return array.map(item => {
@@ -18,10 +19,11 @@ const mapToDataSource = array => {
       idLecturer: item.idLecturer,
       username: item.username === null ? 'null' : item.username,
       displayName: item.displayName,
-      gender: item.gender,
+      email: item.email,
+      gender: item.gender === 0 ? 'Male' : item.gender === 1 ? 'Female' : 'Others',
       phoneNumber: item.phoneNumber,
       address: item.address,
-      birthday: moment(new Date()).format('DD/MM/YYYY'),
+      birthday: moment(item.dob).format('DD/MM/YYYY'),
       isActivated: item.isActivated,
     };
   });
@@ -31,7 +33,7 @@ const Lecturer = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const lecturers = useSelector(lectureState$);
-  const dataSource = mapToDataSource(lecturers);
+  const dataSource = mapToDataSource(lecturers.data);
   const columns = [
     {
       title: 'ID',
@@ -43,10 +45,16 @@ const Lecturer = () => {
       title: 'Username',
       dataIndex: 'username',
       align: 'center',
+      ellipsis: true,
     },
     {
       title: 'Full name',
       dataIndex: 'displayName',
+      ellipsis: true,
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
       ellipsis: true,
     },
     {
@@ -57,17 +65,18 @@ const Lecturer = () => {
     {
       title: 'Phone number',
       dataIndex: 'phoneNumber',
-      align: 'center',
+      ellipsis: true,
     },
     {
       title: 'Address',
       dataIndex: 'address',
-      align: 'center',
+      ellipsis: true,
     },
     {
       title: 'Birthday',
       dataIndex: 'birthday',
       align: 'center',
+      ellipsis: true,
     },
     {
       title: 'Status',
@@ -111,11 +120,32 @@ const Lecturer = () => {
     console.log(`selected ${value}`);
   };
   const onSearch = value => console.log(value);
+  const handleAddLecturerClick = () => {
+    history.push('/lecturer/add');
+  };
   const handleEditLecturer = idLecturer => {
     history.push(`/lecturer/edit/${idLecturer}`);
   };
   const handleDeleteLecturer = idLecturer => {
-    dispatch(lecturerActions.deleteLecturer.deleteLecturerRequest(idLecturer));
+    confirm({
+      title: 'Do you want to delete this employee?',
+      icon: <ExclamationCircleOutlined />,
+      content: '',
+      onOk() {
+        dispatch(lecturerActions.deleteLecturer.deleteLecturerRequest(idLecturer));
+
+        lecturers.isSuccess
+          ? notification['success']({
+              message: 'Successfully',
+              description: 'Delete employee success',
+            })
+          : notification['error']({
+              message: 'Notification Title',
+              description: 'That employee is activating',
+            });
+      },
+      onCancel() {},
+    });
   };
 
   console.log({ dataSource });
@@ -153,11 +183,20 @@ const Lecturer = () => {
               <Option value="unemployed">Unemployed</Option>
             </Select>
           </div>
-          <Button className={styles.btn} size="large" type="primary">
+          <Button
+            onClick={handleAddLecturerClick}
+            className={styles.btn}
+            size="large"
+            type="primary">
             Add lecturer
           </Button>
         </div>
-        <Table columns={columns} dataSource={dataSource} rowKey={row => row.idLecturer} />
+        <Table
+          loading={lecturers.isLoading}
+          columns={columns}
+          dataSource={dataSource}
+          rowKey={row => row.idLecturer}
+        />
       </Card>
     </div>
   );

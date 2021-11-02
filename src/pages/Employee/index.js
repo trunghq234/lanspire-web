@@ -1,5 +1,5 @@
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Button, Card, Input, Select, Table, Tag } from 'antd';
+import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { Button, Card, Input, Select, Table, Tag, Modal, notification } from 'antd';
 import moment from 'moment';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,6 +10,7 @@ import styles from './index.module.less';
 
 const { Option } = Select;
 const { Search } = Input;
+const { confirm } = Modal;
 
 const mapToDataSource = array => {
   return array.map(item => {
@@ -18,10 +19,11 @@ const mapToDataSource = array => {
       idEmployee: item.idEmployee,
       username: item.username === null ? 'null' : item.username,
       displayName: item.displayName,
-      gender: item.gender,
+      email: item.email,
+      gender: item.gender === 0 ? 'Male' : item.gender === 1 ? 'Female' : 'Others',
       phoneNumber: item.phoneNumber,
       address: item.address,
-      birthday: moment(new Date()).format('DD/MM/YYYY'),
+      birthday: moment(item.dob).format('DD/MM/YYYY'),
       isActivated: item.isActivated,
     };
   });
@@ -31,7 +33,7 @@ const Employee = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const employees = useSelector(employeeState$);
-  const dataSource = mapToDataSource(employees);
+  const dataSource = mapToDataSource(employees.data);
   const columns = [
     {
       title: 'ID',
@@ -42,11 +44,16 @@ const Employee = () => {
     {
       title: 'Username',
       dataIndex: 'username',
-      align: 'center',
+      ellipsis: true,
     },
     {
       title: 'Full name',
       dataIndex: 'displayName',
+      ellipsis: true,
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
       ellipsis: true,
     },
     {
@@ -57,12 +64,12 @@ const Employee = () => {
     {
       title: 'Phone number',
       dataIndex: 'phoneNumber',
-      align: 'center',
+      ellipsis: true,
     },
     {
       title: 'Address',
       dataIndex: 'address',
-      align: 'center',
+      ellipsis: true,
     },
     {
       title: 'Birthday',
@@ -109,11 +116,29 @@ const Employee = () => {
 
   const onSearch = () => {};
   const handleChange = () => {};
-  const handleAddEmployee = () => {
+  const handleAddEmployeeClick = () => {
     history.push('/employee/add');
   };
   const handleDeleteEmployee = idEmployee => {
-    dispatch(employeeActions.deleteEmployee.deleteEmployeeRequest(idEmployee));
+    confirm({
+      title: 'Do you want to delete this employee?',
+      icon: <ExclamationCircleOutlined />,
+      content: '',
+      onOk() {
+        dispatch(employeeActions.deleteEmployee.deleteEmployeeRequest(idEmployee));
+
+        employees.isSuccess
+          ? notification['success']({
+              message: 'Successfully',
+              description: 'Delete employee success',
+            })
+          : notification['error']({
+              message: 'Notification Title',
+              description: 'That employee is activating',
+            });
+      },
+      onCancel() {},
+    });
   };
   const handleEditEmployee = idEmployee => {
     history.push(`/employee/edit/${idEmployee}`);
@@ -145,11 +170,20 @@ const Employee = () => {
               <Option value="unemployed">Unemployed</Option>
             </Select>
           </div>
-          <Button className={styles.btn} size="large" type="primary" onClick={handleAddEmployee}>
+          <Button
+            className={styles.btn}
+            size="large"
+            type="primary"
+            onClick={handleAddEmployeeClick}>
             Add employee
           </Button>
         </div>
-        <Table columns={columns} dataSource={dataSource} rowKey={row => row.idEmployee} />
+        <Table
+          columns={columns}
+          loading={employees.isLoading}
+          dataSource={dataSource}
+          rowKey={row => row.idEmployee}
+        />
       </Card>
     </div>
   );

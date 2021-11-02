@@ -27,6 +27,7 @@ export default function employesReducer(state = INIT_STATE.employees, action) {
       return {
         ...state,
         isLoading: true,
+        isSuccess: false,
       };
     case getType(employeeActions.updateEmployee.updateEmployeeSuccess):
       return {
@@ -34,11 +35,14 @@ export default function employesReducer(state = INIT_STATE.employees, action) {
         data: state.data.map(employee =>
           employee.idEmployee === action.payload.idEmployee ? action.payload : employee
         ),
+        isLoading: false,
+        isSuccess: true,
       };
     case getType(employeeActions.updateEmployee.updateEmployeeFailure):
       return {
         ...state,
         isLoading: false,
+        isSuccess: false,
       };
 
     // create Employee
@@ -46,16 +50,20 @@ export default function employesReducer(state = INIT_STATE.employees, action) {
       return {
         ...state,
         isLoading: true,
+        isSuccess: false,
       };
     case getType(employeeActions.createEmployee.createEmployeeSuccess):
       return {
         ...state,
         data: [...state.data, action.payload],
+        isLoading: false,
+        isSuccess: true,
       };
     case getType(employeeActions.createEmployee.createEmployeeFailure):
       return {
         ...state,
         isLoading: false,
+        isSuccess: false,
       };
 
     // delete Employee
@@ -63,16 +71,20 @@ export default function employesReducer(state = INIT_STATE.employees, action) {
       return {
         ...state,
         isLoading: true,
+        isSuccess: false,
       };
     case getType(employeeActions.deleteEmployee.deleteEmployeeSuccess):
       return {
         ...state,
         data: state.data.filter(employee => employee.idEmployee !== action.payload),
+        isLoading: false,
+        isSuccess: true,
       };
     case getType(employeeActions.deleteEmployee.deleteEmployeeFailure):
       return {
         ...state,
         isLoading: false,
+        isSuccess: false,
       };
     default:
       return state;

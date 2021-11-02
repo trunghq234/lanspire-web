@@ -15,14 +15,12 @@ const AddLecturer = () => {
           <a href="">Application Center</a>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <a href="">Application List</a>
+          <a href="http://localhost:3000/lecturer/">Application List</a>
         </Breadcrumb.Item>
       </Breadcrumb>
-      {id ? (
-        <h3 className="heading">Edited lecturer</h3>
-      ) : (
-        <h3 className="heading">Add new lecturer</h3>
-      )}
+
+      {id ? <h3>Edited lecturer</h3> : <h3>Add new lecturer</h3>}
+
       <Row gutter={[20, 20]}>
         <Col span={18}>
           <Space size={20} direction="vertical">

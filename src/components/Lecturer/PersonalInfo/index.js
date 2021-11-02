@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
-import { Button, Card, DatePicker, Form, Input, Select, Row, Col, InputNumber } from 'antd';
+import { message, Button, Card, DatePicker, Form, Input, Select, Row, Col, Modal } from 'antd';
+import { PlusCircleOutlined } from '@ant-design/icons';
 import ProvincePicker from 'components/common/ProvincePicker';
 import styles from './index.module.less';
 import { useDispatch, useSelector } from 'react-redux';
-import { lectureState$ } from 'redux/selectors';
+import { lectureState$, userState$ } from 'redux/selectors';
 import * as lecturerActions from 'redux/actions/lecturers';
 import moment from 'moment';
-import { useParams } from 'react-router';
+import isEmpty from 'lodash/isEmpty';
+import { useParams, useHistory } from 'react-router';
+import { getUsers } from 'redux/actions/users';
+import CreateAccountModal from 'components/common/CreateAccountModal/createAccountModal';
 
 const { Option } = Select;
 
@@ -14,8 +18,13 @@ const idRoleLecturer = '386af797-fdf6-42dc-8bab-d5b42561b5fb';
 
 const PersonalInfo = props => {
   const dispatch = useDispatch();
-  const lecturers = useSelector(lectureState$);
+  const history = useHistory();
+  const [isSubmit, setIsSubmit] = useState(false);
   const [fAddress, setFAddress] = useState({});
+  const [account, setAccount] = useState({ username: null, password: null });
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const lecturers = useSelector(lectureState$);
+  const users = useSelector(userState$);
   const validateMessages = {
     required: '${label} is required!',
     types: {
@@ -27,34 +36,49 @@ const PersonalInfo = props => {
     },
   };
   const [form] = Form.useForm();
+  const [modalForm] = Form.useForm();
   const { typeSubmit } = props;
   const { id } = useParams();
-  const editLecturer = lecturers.find(lecturer => lecturer.idLecturer === id);
+  const editLecturer = lecturers.data.find(lecturer => lecturer.idLecturer === id);
   const dateFormat = 'DD/MM/YYYY';
 
   const handleSubmit = () => {
     const data = form.getFieldValue();
+    const { displayName, gender, dob, phoneNumber, email, address } = data;
+    const { username, password } = account;
+
+    // if (moment().diff(dob.format('DD/MM/YYYY')) <= 18) {
+    //   message.error('Date of birth must be over 18 years old!');
+    // }
 
     // create lecturer
-    if (typeSubmit === 'create') {
-      const createdLecturer = {
-        ...data,
-        dob: moment(new Date()).format('DD/MM/YYYY').split('/').reverse().join('-'),
-        gender: data.gender == 'male' ? 0 : data.gender == 'female' ? 1 : 2,
-        idRole: idRoleLecturer,
-        imageUrl: 'test',
-        username: null,
-        password: null,
-        isActivated: true,
-      };
-      dispatch(lecturerActions.createLecturer.createLecturerRequest(createdLecturer));
+    if (displayName && gender && dob && phoneNumber && email && username && password && address) {
+      if (typeSubmit === 'create') {
+        const createdLecturer = {
+          displayName,
+          gender: data.gender == 'male' ? 0 : data.gender == 'female' ? 1 : 2,
+          dob: moment(data.dob).format('DD/MM/YYYY').split('/').reverse().join('-'),
+          phoneNumber,
+          email,
+          address,
+          idRole: idRoleLecturer,
+          imageUrl: 'test',
+          username,
+          password,
+          isActivated: true,
+        };
+        console.log({ createdLecturer });
+        dispatch(lecturerActions.createLecturer.createLecturerRequest(createdLecturer));
+        setIsSubmit(true);
+      }
     }
+
     // edit lecturer
-    else {
+    if (typeSubmit === 'edit') {
       const editedLecturer = {
         ...data,
         gender: data.gender == 'male' ? 0 : data.gender == 'female' ? 1 : 2,
-        dob: moment(new Date()).format('DD/MM/YYYY').split('/').reverse().join('-'),
+        dob: moment(data.dob).format('DD/MM/YYYY').split('/').reverse().join('-'),
         idLecturer: id,
         idUser: editLecturer.idUser,
         username: editLecturer.username,
@@ -64,26 +88,79 @@ const PersonalInfo = props => {
         imageUrl: editLecturer.imageUrl,
         idRole: idRoleLecturer,
       };
-      console.log({ editedLecturer });
       dispatch(lecturerActions.updateLecturer.updateLecturerRequest(editedLecturer));
+      setIsSubmit(true);
     }
   };
 
+  const showModalCreateUser = () => {
+    setIsModalVisible(true);
+  };
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    modalForm.resetFields();
+  };
+  const handleOk = () => {
+    const data = modalForm.getFieldValue();
+
+    // check username is exist
+    const isUsernameExist = users.data.find(user => user.username === data.username);
+    console.log({ isUsernameExist });
+    if (!isEmpty(data)) {
+      if (isEmpty(isUsernameExist)) {
+        if (data.password === data.confirmPassword) {
+          setAccount({ ...account, username: data.username, password: data.password });
+          setIsModalVisible(false);
+          modalForm.resetFields();
+        }
+      } else {
+        message.error('Username is exist');
+      }
+    }
+  };
+
+  // Load information lecturer to form
   React.useEffect(() => {
     if (id) {
-      const editedLecturer = {
-        displayName: editLecturer.displayName,
-        gender:
-          editLecturer.gender === 0 ? 'male' : editLecturer.gender === 1 ? 'female' : 'others',
-        dob: moment(editLecturer.dob),
-        phoneNumber: editLecturer.phoneNumber,
-        address: editLecturer.address,
-      };
+      const lecturer =
+        lecturers.data && lecturers.data.find(lecturer => lecturer.idLecturer === id);
 
-      form.setFieldsValue(editedLecturer);
+      if (lecturer) {
+        const editedLecturer = {
+          displayName: lecturer.displayName,
+          gender: lecturer.gender === 0 ? 'male' : lecturer.gender === 1 ? 'female' : 'others',
+          dob: moment(lecturer.dob),
+          phoneNumber: lecturer.phoneNumber,
+          address: lecturer.address,
+          email: lecturer.email,
+          // username: lecturer.username,
+        };
+        form.setFieldsValue(editedLecturer);
+        setAccount({
+          ...account,
+          username: lecturer.username,
+          password: lecturer.password,
+        });
+      }
     }
-  }, [id]);
-  console.log({ lecturers });
+  }, [id, lecturers]);
+
+  // Redirect to lecturer list
+  React.useEffect(() => {
+    if (lecturers.isSuccess && isSubmit) {
+      id
+        ? message.success('Update lecturer success!')
+        : message.success('Create lecturer success!');
+
+      form.resetFields();
+      setAccount({ username: null, password: null });
+    }
+  }, [lecturers]);
+
+  React.useEffect(() => {
+    dispatch(lecturerActions.getLecturers.getLecturersRequest());
+    dispatch(getUsers.getUsersRequest());
+  }, [dispatch]);
 
   return (
     <Card>
@@ -120,6 +197,19 @@ const PersonalInfo = props => {
                 <Input placeholder="Email" />
               </Form.Item>
             </Col>
+            <Col span={8}>
+              <Form.Item label="Username" name="username" rules={[{ required: true }]}>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <Input placeholder="Username" value={account.username} />
+                  {!id && (
+                    <PlusCircleOutlined
+                      style={{ marginLeft: '10px', fontSize: '1.2rem', cursor: 'pointer' }}
+                      onClick={showModalCreateUser}
+                    />
+                  )}
+                </div>
+              </Form.Item>
+            </Col>
           </Row>
         </Input.Group>
         <ProvincePicker address={fAddress} callbackChanges={setFAddress} />
@@ -129,6 +219,14 @@ const PersonalInfo = props => {
           </Button>
         </Form.Item>
       </Form>
+
+      <CreateAccountModal
+        isModalVisible={isModalVisible}
+        handleOk={handleOk}
+        handleCancel={handleCancel}
+        modalForm={modalForm}
+        validateMessages={validateMessages}
+      />
     </Card>
   );
 };

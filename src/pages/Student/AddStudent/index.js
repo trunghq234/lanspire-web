@@ -7,6 +7,7 @@ import ProvincePicker from 'components/common/ProvincePicker';
 import { useHistory, useParams } from 'react-router-dom';
 import { studentByIdState$, studentState$ } from 'redux/selectors';
 import moment from 'moment';
+import UserInfo from 'components/Student/UserInfo';
 
 const AddStudent = () => {
   const [address, setAddress] = useState({});
@@ -133,6 +134,7 @@ const AddStudent = () => {
   };
   return (
     <Form
+      className={style.form}
       layout="vertical"
       validateMessages={validateMessages}
       ref={formRef}
@@ -159,44 +161,7 @@ const AddStudent = () => {
           </Col>
         </Row>
       </Form.Item>
-      <Card>
-        <Row gutter={20}>
-          <Col span={16}>
-            <Form.Item label="Full name" name="fullName" rules={[{ required: true }]}>
-              <Input />
-            </Form.Item>
-          </Col>
-
-          <Col span={4}>
-            <Form.Item label="Gender" name="gender" rules={[{ required: true }]}>
-              <Select>
-                <Option value="male">Male</Option>
-                <Option value="female">Female</Option>
-                <Option value="others">Others</Option>
-              </Select>
-            </Form.Item>
-          </Col>
-
-          <Col span={4}>
-            <Form.Item label="DOB" name="dob" rules={[{ required: true }]}>
-              <DatePicker format={dateFormat} />
-            </Form.Item>
-          </Col>
-
-          <Col span={4}>
-            <Form.Item label="Phone number" name="phoneNumber" rules={[{ required: true }]}>
-              <Input />
-            </Form.Item>
-          </Col>
-
-          <Col span={8}>
-            <Form.Item label="Email" name="email" rules={[{ required: true, type: 'email' }]}>
-              <Input />
-            </Form.Item>
-          </Col>
-        </Row>
-        <ProvincePicker address={address} callbackChanges={setAddress}></ProvincePicker>
-      </Card>
+      <UserInfo />
     </Form>
   );
 };

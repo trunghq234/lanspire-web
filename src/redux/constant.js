@@ -5,10 +5,6 @@ const INIT_STATE = {
     isSuccess: false,
   },
 
-  courses: {
-    data: [],
-  },
-
   lecturers: {
     data: [],
     isLoading: false,

@@ -2390,7 +2390,7 @@ ansi-styles@^4.0.0, ansi-styles@^4.1.0:
   dependencies:
     color-convert "^2.0.1"
 
-antd@^4.17.0:
+antd@4.17.0-alpha.9:
   version "4.17.0-alpha.9"
   resolved "https://registry.yarnpkg.com/antd/-/antd-4.17.0-alpha.9.tgz#a2e07bc0d1b99ffacd5056756f7c187afa6d6372"
   integrity sha512-EJ8mSRGPKSOBszwPJUKNv7TZBXFt9Sy3P2KEps0f/73dMlzTkHhS8TXBXKY0hlV4FQQT01QJ5o/AniiTfhyPTA==

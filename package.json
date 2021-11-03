@@ -6,7 +6,7 @@
     "@ant-design/icons": "^4.7.0",
     "@ant-design/pro-layout": "^6.26.0",
     "@craco/craco": "^6.3.0",
-    "antd": "^4.17.0",
+    "antd": "4.17.0-alpha.9",
     "axios": "^0.21.4",
     "classnames": "^2.3.1",
     "craco-antd": "^1.19.0",

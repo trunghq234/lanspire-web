@@ -1,16 +1,13 @@
-import React, { useState } from 'react';
-import { message, Button, Card, DatePicker, Form, Input, Select, Row, Col, Modal } from 'antd';
-import { PlusCircleOutlined } from '@ant-design/icons';
+import { Button, Card, Col, DatePicker, Form, Input, message, Row, Select } from 'antd';
 import ProvincePicker from 'components/common/ProvincePicker';
-import styles from './index.module.less';
-import { useDispatch, useSelector } from 'react-redux';
-import { lectureState$, userState$ } from 'redux/selectors';
-import * as lecturerActions from 'redux/actions/lecturers';
 import moment from 'moment';
-import isEmpty from 'lodash/isEmpty';
-import { useParams, useHistory } from 'react-router';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useParams } from 'react-router';
+import * as lecturerActions from 'redux/actions/lecturers';
 import { getUsers } from 'redux/actions/users';
-import CreateAccountModal from 'components/common/CreateAccountModal/createAccountModal';
+import { lectureState$, userState$ } from 'redux/selectors';
+import styles from './index.module.less';
 
 const { Option } = Select;
 
@@ -21,8 +18,6 @@ const PersonalInfo = props => {
   const history = useHistory();
   const [isSubmit, setIsSubmit] = useState(false);
   const [fAddress, setFAddress] = useState({});
-  const [account, setAccount] = useState({ username: null, password: null });
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const lecturers = useSelector(lectureState$);
   const users = useSelector(userState$);
   const validateMessages = {
@@ -36,7 +31,6 @@ const PersonalInfo = props => {
     },
   };
   const [form] = Form.useForm();
-  const [modalForm] = Form.useForm();
   const { typeSubmit } = props;
   const { id } = useParams();
   const editLecturer = lecturers.data.find(lecturer => lecturer.idLecturer === id);
@@ -44,13 +38,12 @@ const PersonalInfo = props => {
 
   const handleSubmit = () => {
     const data = form.getFieldValue();
-    const { displayName, gender, dob, phoneNumber, email, address } = data;
-    const { username, password } = account;
+    const { displayName, gender, dob, phoneNumber, email, address, username, password } = data;
 
     // if (moment().diff(dob.format('DD/MM/YYYY')) <= 18) {
     //   message.error('Date of birth must be over 18 years old!');
     // }
-
+    console.log({ data });
     // create lecturer
     if (displayName && gender && dob && phoneNumber && email && username && password && address) {
       if (typeSubmit === 'create') {
@@ -93,32 +86,6 @@ const PersonalInfo = props => {
     }
   };
 
-  const showModalCreateUser = () => {
-    setIsModalVisible(true);
-  };
-  const handleCancel = () => {
-    setIsModalVisible(false);
-    modalForm.resetFields();
-  };
-  const handleOk = () => {
-    const data = modalForm.getFieldValue();
-
-    // check username is exist
-    const isUsernameExist = users.data.find(user => user.username === data.username);
-    console.log({ isUsernameExist });
-    if (!isEmpty(data)) {
-      if (isEmpty(isUsernameExist)) {
-        if (data.password === data.confirmPassword) {
-          setAccount({ ...account, username: data.username, password: data.password });
-          setIsModalVisible(false);
-          modalForm.resetFields();
-        }
-      } else {
-        message.error('Username is exist');
-      }
-    }
-  };
-
   // Load information lecturer to form
   React.useEffect(() => {
     if (id) {
@@ -136,11 +103,6 @@ const PersonalInfo = props => {
           // username: lecturer.username,
         };
         form.setFieldsValue(editedLecturer);
-        setAccount({
-          ...account,
-          username: lecturer.username,
-          password: lecturer.password,
-        });
       }
     }
   }, [id, lecturers]);
@@ -153,7 +115,6 @@ const PersonalInfo = props => {
         : message.success('Create lecturer success!');
 
       form.resetFields();
-      setAccount({ username: null, password: null });
     }
   }, [lecturers]);
 
@@ -197,36 +158,39 @@ const PersonalInfo = props => {
                 <Input placeholder="Email" />
               </Form.Item>
             </Col>
+          </Row>
+        </Input.Group>
+        <ProvincePicker address={fAddress} callbackChanges={setFAddress} />
+
+        <Input.Group>
+          <Row gutter={20}>
             <Col span={8}>
               <Form.Item label="Username" name="username" rules={[{ required: true }]}>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <Input placeholder="Username" value={account.username} />
-                  {!id && (
-                    <PlusCircleOutlined
-                      style={{ marginLeft: '10px', fontSize: '1.2rem', cursor: 'pointer' }}
-                      onClick={showModalCreateUser}
-                    />
-                  )}
-                </div>
+                <Input placeholder="Username" maxLength="10" />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Password" name="password" rules={[{ required: true }]}>
+                <Input placeholder="Password" maxLength="10" />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item
+                label="Confirm password"
+                name="confirmPassword"
+                rules={[{ required: true }]}>
+                <Input placeholder="Confirm password" maxLength="10" />
               </Form.Item>
             </Col>
           </Row>
         </Input.Group>
-        <ProvincePicker address={fAddress} callbackChanges={setFAddress} />
+
         <Form.Item>
           <Button onClick={handleSubmit} type="primary" htmlType="submit">
             Submit
           </Button>
         </Form.Item>
       </Form>
-
-      <CreateAccountModal
-        isModalVisible={isModalVisible}
-        handleOk={handleOk}
-        handleCancel={handleCancel}
-        modalForm={modalForm}
-        validateMessages={validateMessages}
-      />
     </Card>
   );
 };

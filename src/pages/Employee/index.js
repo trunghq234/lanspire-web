@@ -1,4 +1,9 @@
-import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import {
+  DeleteOutlined,
+  EditOutlined,
+  ExclamationCircleOutlined,
+  SearchOutlined,
+} from '@ant-design/icons';
 import { Button, Card, Input, Select, Table, Tag, Modal, notification } from 'antd';
 import moment from 'moment';
 import React from 'react';
@@ -49,7 +54,12 @@ const Employee = () => {
     {
       title: 'Full name',
       dataIndex: 'displayName',
-      ellipsis: true,
+      filterDropdown: () => {
+        return <Input placeholder="Type text here" />;
+      },
+      filterIcon: () => {
+        return <SearchOutlined />;
+      },
     },
     {
       title: 'Email',

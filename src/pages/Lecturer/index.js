@@ -1,5 +1,21 @@
-import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
-import { Breadcrumb, Button, Card, Input, Select, Table, Tag, Modal, notification } from 'antd';
+import {
+  DeleteOutlined,
+  EditOutlined,
+  ExclamationCircleOutlined,
+  SearchOutlined,
+} from '@ant-design/icons';
+import {
+  Space,
+  Breadcrumb,
+  Button,
+  Card,
+  Input,
+  Select,
+  Table,
+  Tag,
+  Modal,
+  notification,
+} from 'antd';
 import moment from 'moment';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,8 +24,6 @@ import * as lecturerActions from 'redux/actions/lecturers';
 import { lectureState$ } from 'redux/selectors';
 import styles from './index.module.less';
 
-const { Option } = Select;
-const { Search } = Input;
 const { confirm } = Modal;
 
 const mapToDataSource = array => {
@@ -35,12 +49,12 @@ const Lecturer = () => {
   const lecturers = useSelector(lectureState$);
   const dataSource = mapToDataSource(lecturers.data);
   const columns = [
-    {
-      title: 'ID',
-      dataIndex: 'idLecturer',
-      align: 'center',
-      ellipsis: true,
-    },
+    // {
+    //   title: 'ID',
+    //   dataIndex: 'idLecturer',
+    //   align: 'center',
+    //   ellipsis: true,
+    // },
     {
       title: 'Username',
       dataIndex: 'username',
@@ -51,6 +65,55 @@ const Lecturer = () => {
       title: 'Full name',
       dataIndex: 'displayName',
       ellipsis: true,
+
+      filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => {
+        return (
+          <div style={{ padding: 8 }}>
+            <Input
+              autoFocus
+              placeholder="Type text here"
+              style={{ marginBottom: 8, display: 'block', fontSize: '14px' }}
+              value={selectedKeys[0]}
+              onChange={event => {
+                setSelectedKeys(event.target.value ? [event.target.value] : []);
+              }}
+              onPressEnter={() => {
+                confirm();
+              }}
+              onBlur={() => {
+                confirm();
+              }}
+            />
+
+            <Space>
+              <Button
+                type="primary"
+                style={{ width: 90, fontSize: '12px' }}
+                onClick={() => {
+                  confirm();
+                }}
+                icon={<SearchOutlined />}
+                size="small">
+                Search
+              </Button>
+              <Button
+                style={{ width: 90, fontSize: '12px' }}
+                onClick={() => {
+                  clearFilters();
+                }}
+                size="small">
+                Reset
+              </Button>
+            </Space>
+          </div>
+        );
+      },
+      filterIcon: () => {
+        return <SearchOutlined />;
+      },
+      onFilter: (value, record) => {
+        return record.displayName.toLowerCase().includes(value.toLowerCase());
+      },
     },
     {
       title: 'Email',
@@ -93,7 +156,6 @@ const Lecturer = () => {
       dataIndex: 'idLecturer',
       align: 'center',
       render: idLecturer => (
-        // <Link to={'/employee/' + idLecturer}>
         <div style={{ display: 'flex', justifyContent: 'center', columnGap: '20px' }}>
           <Button
             onClick={() => handleEditLecturer(idLecturer)}
@@ -107,7 +169,6 @@ const Lecturer = () => {
             icon={<DeleteOutlined />}
           />
         </div>
-        // </Link>
       ),
     },
   ];
@@ -116,10 +177,6 @@ const Lecturer = () => {
     dispatch(lecturerActions.getLecturers.getLecturersRequest());
   }, [dispatch]);
 
-  const handleChange = value => {
-    console.log(`selected ${value}`);
-  };
-  const onSearch = value => console.log(value);
   const handleAddLecturerClick = () => {
     history.push('/lecturer/add');
   };
@@ -164,25 +221,6 @@ const Lecturer = () => {
       <h3 className="heading">Lecturer list</h3>
       <Card>
         <div className={styles.wrapper}>
-          <div>
-            <Search
-              className={styles.search}
-              size="large"
-              placeholder="Search"
-              allowClear
-              enterButton
-              onSearch={onSearch}
-            />
-            <Select
-              className={styles.select}
-              size="large"
-              defaultValue="all"
-              onChange={handleChange}>
-              <Option value="all">All</Option>
-              <Option value="working">Working</Option>
-              <Option value="unemployed">Unemployed</Option>
-            </Select>
-          </div>
           <Button
             onClick={handleAddLecturerClick}
             className={styles.btn}

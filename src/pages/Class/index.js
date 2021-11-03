@@ -59,10 +59,16 @@ const Class = () => {
               style={{ width: 100 }}>
               Search
             </Button>
-            <Button onClick={() => handleReset(clearFilters)} size="medium" style={{ width: 90 }}>
+            <Button
+              onClick={() => {
+                handleReset(clearFilters);
+                confirm({ closeDropdown: false });
+              }}
+              size="medium"
+              style={{ width: 90 }}>
               Reset
             </Button>
-            <Button
+            {/* <Button
               type="link"
               size="medium"
               onClick={() => {
@@ -70,7 +76,7 @@ const Class = () => {
                 setSearchText(selectedKeys[0]);
               }}>
               Filter
-            </Button>
+            </Button> */}
           </Space>
         </div>
       ),
@@ -106,13 +112,15 @@ const Class = () => {
       title: 'Start Date',
       dataIndex: 'startDate',
       align: 'center',
-      sorter: (a, b) => moment(a.startDate).unix() - moment(b.startDate).unix(),
+      sorter: (a, b) =>
+        moment(a.startDate, 'DD/MM/YYYY').unix() - moment(b.startDate, 'DD/MM/YYYY').unix(),
     },
     {
       title: 'End Date',
       dataIndex: 'endDate',
       align: 'center',
-      sorter: (a, b) => moment(a.endDate).unix() - moment(b.endDate).unix(),
+      sorter: (a, b) =>
+        moment(a.endDate, 'DD/MM/YYYY').unix() - moment(b.endDate, 'DD/MM/YYYY').unix(),
     },
     {
       title: 'Students',
@@ -139,7 +147,7 @@ const Class = () => {
         return (
           <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
             <Tooltip title="Edit information">
-              <Link to={`/class/add/${idClass}`}>
+              <Link to={`/class/update/${idClass}`}>
                 <Button type="primary" ghost icon={<EditOutlined />}></Button>
               </Link>
             </Tooltip>
@@ -182,8 +190,8 @@ const Class = () => {
         idClass: classRoom.idClass,
         className: classRoom.className,
         room: classRoom.room,
-        startDate: new Date(classRoom.startDate).toLocaleDateString('en-US'),
-        endDate: new Date(classRoom.endDate).toLocaleDateString('en-US'),
+        startDate: new Date(classRoom.startDate).toLocaleDateString('en-GB'),
+        endDate: new Date(classRoom.endDate).toLocaleDateString('en-GB'),
         course: courseName,
         student: [students.length, max],
       });

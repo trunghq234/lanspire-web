@@ -95,6 +95,11 @@ const adminRoutes = [
     exact: true,
     page: () => <AddClass />,
   },
+  {
+    path: '/class/update/:idClass',
+    exact: true,
+    page: () => <AddClass />,
+  },
 ];
 
 const adminMenuItems = {

@@ -1,4 +1,4 @@
-export const employeeState$ = state => state.employes;
+export const employeeState$ = state => state.employees;
 
 export const lectureState$ = state => state.lecturers;
 

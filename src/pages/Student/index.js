@@ -113,12 +113,13 @@ const Student = () => {
   //Custom data
   useEffect(() => {
     const tmpData = students.data.map((student, index) => {
+      const address = `${student.User.address[0]}, ${student.User.address[1]}, ${student.User.address[2]}`;
       return {
         idStudent: student.idStudent,
         name: student.User.displayName,
         email: student.User.email,
         phoneNumber: student.User.phoneNumber,
-        address: student.User.address,
+        address: address,
         status: !student.isDeleted,
       };
     });

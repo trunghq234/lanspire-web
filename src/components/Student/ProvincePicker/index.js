@@ -19,10 +19,9 @@ const ProvincePicker = props => {
     }
     return result;
   };
-
   useEffect(() => {
     for (let city of Object.values(LocationVN)) {
-      if (city.name === selectedCity) {
+      if (city.name === selectedCity || city.name === props.city) {
         setDistrictInSelectedCity(mapDistrictToArray(city.districts));
         return true;
       }
@@ -33,7 +32,7 @@ const ProvincePicker = props => {
     if (dataList.length) {
       return dataList.map(data => {
         return (
-          <Option key={data['city']} value={data['city']}>
+          <Option key={data['name']} value={data['name']}>
             {data['name']}
           </Option>
         );
@@ -44,48 +43,38 @@ const ProvincePicker = props => {
   const optionCityRendered = renderOptions(cityOptions);
   const optionDistrictRendered = renderOptions(districtInSelectedCity);
   return (
-    <Form.Item label="Address" name="address" rules={[{ required: true }]}>
-      <Row gutter={20}>
-        <Col span={8}>
-          <Input
-            placeholder="Address"
-            style={{ width: '100%' }}
-            onChange={val =>
-              props.callbackChanges({
-                ...props.address,
-                detailsAddress: val.target.value,
-              })
-            }
-          />
-        </Col>
-        <Col span={8}>
+    <Row gutter={20}>
+      <Col span={8}>
+        <Form.Item label="Address" name="detailsAddress" rules={[{ required: true }]}>
+          <Input placeholder="Address" style={{ width: '100%' }} />
+        </Form.Item>
+      </Col>
+      <Col span={8}>
+        <Form.Item label="City" name="city" rules={[{ required: true }]}>
           <Select
             value={selectedCity}
             placeholder="Tỉnh/Thành phố"
-            onChange={val =>
-              props.callbackChanges({
-                ...props.address,
-                city: val,
-              })
-            }>
+            onChange={val => {
+              setSelectedDistrict(null);
+              setSelectedCity(val);
+            }}>
             {optionCityRendered}
           </Select>
-        </Col>
-        <Col span={8}>
+        </Form.Item>
+      </Col>
+      <Col span={8}>
+        <Form.Item label="District" name="district" rules={[{ required: true }]}>
           <Select
             value={selectedDistrict}
             placeholder="Huyện/Quận"
-            onChange={val =>
-              props.callbackChanges({
-                ...props.address,
-                district: val,
-              })
-            }>
+            onChange={val => {
+              setSelectedDistrict(val);
+            }}>
             {optionDistrictRendered}
           </Select>
-        </Col>
-      </Row>
-    </Form.Item>
+        </Form.Item>
+      </Col>
+    </Row>
   );
 };
 

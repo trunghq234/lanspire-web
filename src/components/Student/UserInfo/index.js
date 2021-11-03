@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, Col, Input, Row, Form, Select, DatePicker } from 'antd';
 import ProvincePicker from '../ProvincePicker';
 
-const UserInfo = () => {
+const UserInfo = props => {
   const dateFormat = 'DD/MM/yyyy';
   return (
     <Card>
@@ -42,7 +42,7 @@ const UserInfo = () => {
           </Form.Item>
         </Col>
       </Row>
-      <ProvincePicker />
+      <ProvincePicker city={props.city} />
     </Card>
   );
 };

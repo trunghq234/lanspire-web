@@ -1,9 +1,10 @@
 import { Button, Card, Col, DatePicker, Form, Input, message, Row, Select } from 'antd';
 import ProvincePicker from 'components/common/ProvincePicker';
+import { isEmpty } from 'lodash';
 import moment from 'moment';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import * as lecturerActions from 'redux/actions/lecturers';
 import { getUsers } from 'redux/actions/users';
 import { lectureState$, userState$ } from 'redux/selectors';
@@ -15,9 +16,7 @@ const idRoleLecturer = '386af797-fdf6-42dc-8bab-d5b42561b5fb';
 
 const PersonalInfo = props => {
   const dispatch = useDispatch();
-  const history = useHistory();
   const [isSubmit, setIsSubmit] = useState(false);
-  const [fAddress, setFAddress] = useState({});
   const lecturers = useSelector(lectureState$);
   const users = useSelector(userState$);
   const validateMessages = {
@@ -33,57 +32,96 @@ const PersonalInfo = props => {
   const [form] = Form.useForm();
   const { typeSubmit } = props;
   const { id } = useParams();
-  const editLecturer = lecturers.data.find(lecturer => lecturer.idLecturer === id);
   const dateFormat = 'DD/MM/YYYY';
 
   const handleSubmit = () => {
     const data = form.getFieldValue();
-    const { displayName, gender, dob, phoneNumber, email, address, username, password } = data;
+    const {
+      displayName,
+      gender,
+      dob,
+      phoneNumber,
+      email,
+      detailsAddress,
+      district,
+      city,
+      username,
+      password,
+      confirmPassword,
+    } = data;
 
-    // if (moment().diff(dob.format('DD/MM/YYYY')) <= 18) {
-    //   message.error('Date of birth must be over 18 years old!');
-    // }
-    console.log({ data });
-    // create lecturer
-    if (displayName && gender && dob && phoneNumber && email && username && password && address) {
+    // require all input not empty
+    if (
+      displayName &&
+      gender &&
+      dob &&
+      phoneNumber &&
+      email &&
+      username &&
+      password &&
+      confirmPassword &&
+      detailsAddress &&
+      district &&
+      city
+    ) {
       if (typeSubmit === 'create') {
-        const createdLecturer = {
-          displayName,
-          gender: data.gender == 'male' ? 0 : data.gender == 'female' ? 1 : 2,
-          dob: moment(data.dob).format('DD/MM/YYYY').split('/').reverse().join('-'),
-          phoneNumber,
-          email,
-          address,
-          idRole: idRoleLecturer,
-          imageUrl: 'test',
-          username,
-          password,
-          isActivated: true,
-        };
-        console.log({ createdLecturer });
-        dispatch(lecturerActions.createLecturer.createLecturerRequest(createdLecturer));
-        setIsSubmit(true);
+        if (!checkUsernameIsExist(username)) {
+          if (confirmPassword !== password) {
+            setIsSubmit(true);
+            message.error('Confirm password does not match!');
+          } else {
+            const createdLecturer = {
+              displayName,
+              gender: data.gender == 'male' ? 0 : data.gender == 'female' ? 1 : 2,
+              dob: moment(data.dob).format('DD/MM/YYYY').split('/').reverse().join('-'),
+              phoneNumber,
+              email,
+              address: [detailsAddress, district, city],
+              idRole: idRoleLecturer,
+              imageUrl: 'test',
+              username,
+              password,
+              isActivated: true,
+            };
+            console.log({ createdLecturer });
+            dispatch(lecturerActions.createLecturer.createLecturerRequest(createdLecturer));
+            setIsSubmit(true);
+          }
+        } else {
+          setIsSubmit(true);
+          isSubmit === true ? message.error('Username is exist!') : '';
+        }
       }
     }
 
     // edit lecturer
     if (typeSubmit === 'edit') {
+      const lecturer = lecturers.data.find(lecturer => lecturer.idLecturer === id);
+
       const editedLecturer = {
-        ...data,
+        displayName,
         gender: data.gender == 'male' ? 0 : data.gender == 'female' ? 1 : 2,
         dob: moment(data.dob).format('DD/MM/YYYY').split('/').reverse().join('-'),
         idLecturer: id,
-        idUser: editLecturer.idUser,
-        username: editLecturer.username,
-        password: editLecturer.password,
-        isDeleted: editLecturer.isDeleted,
-        isActivated: editLecturer.isActivated,
-        imageUrl: editLecturer.imageUrl,
+        address: [detailsAddress, district, city],
+        idUser: lecturer.idUser,
+        username: lecturer.username,
+        password: lecturer.password,
+        isDeleted: lecturer.isDeleted,
+        isActivated: lecturer.isActivated,
+        imageUrl: lecturer.imageUrl,
         idRole: idRoleLecturer,
       };
+      console.log({ editedLecturer });
       dispatch(lecturerActions.updateLecturer.updateLecturerRequest(editedLecturer));
       setIsSubmit(true);
     }
+  };
+
+  const checkUsernameIsExist = username => {
+    const result = users.data.find(user => user.username === username);
+    // result === empty => checkUsernameIsExist: false
+    return !isEmpty(result);
   };
 
   // Load information lecturer to form
@@ -98,16 +136,18 @@ const PersonalInfo = props => {
           gender: lecturer.gender === 0 ? 'male' : lecturer.gender === 1 ? 'female' : 'others',
           dob: moment(lecturer.dob),
           phoneNumber: lecturer.phoneNumber,
-          address: lecturer.address,
           email: lecturer.email,
-          // username: lecturer.username,
+          username: lecturer.username,
+          detailsAddress: lecturer.address[0],
+          district: lecturer.address[1],
+          city: lecturer.address[2],
         };
         form.setFieldsValue(editedLecturer);
       }
     }
   }, [id, lecturers]);
 
-  // Redirect to lecturer list
+  // Notifies when create or update lecturer success
   React.useEffect(() => {
     if (lecturers.isSuccess && isSubmit) {
       id
@@ -160,30 +200,32 @@ const PersonalInfo = props => {
             </Col>
           </Row>
         </Input.Group>
-        <ProvincePicker address={fAddress} callbackChanges={setFAddress} />
+        <ProvincePicker />
 
-        <Input.Group>
-          <Row gutter={20}>
-            <Col span={8}>
-              <Form.Item label="Username" name="username" rules={[{ required: true }]}>
-                <Input placeholder="Username" maxLength="10" />
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item label="Password" name="password" rules={[{ required: true }]}>
-                <Input placeholder="Password" maxLength="10" />
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item
-                label="Confirm password"
-                name="confirmPassword"
-                rules={[{ required: true }]}>
-                <Input placeholder="Confirm password" maxLength="10" />
-              </Form.Item>
-            </Col>
-          </Row>
-        </Input.Group>
+        {!id && (
+          <Input.Group>
+            <Row gutter={20}>
+              <Col span={8}>
+                <Form.Item label="Username" name="username" rules={[{ required: true }]}>
+                  <Input placeholder="Username" maxLength="10" />
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item label="Password" name="password" rules={[{ required: true }]}>
+                  <Input.Password placeholder="Password" maxLength="10" />
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item
+                  label="Confirm password"
+                  name="confirmPassword"
+                  rules={[{ required: true }]}>
+                  <Input.Password placeholder="Confirm password" maxLength="10" />
+                </Form.Item>
+              </Col>
+            </Row>
+          </Input.Group>
+        )}
 
         <Form.Item>
           <Button onClick={handleSubmit} type="primary" htmlType="submit">

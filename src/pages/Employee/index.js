@@ -4,17 +4,16 @@ import {
   ExclamationCircleOutlined,
   SearchOutlined,
 } from '@ant-design/icons';
-import { Button, Card, Input, Select, Table, Tag, Modal, notification } from 'antd';
+import { Button, Card, Input, Modal, notification, Space, Table, Tag } from 'antd';
 import moment from 'moment';
 import React from 'react';
+import Highlighter from 'react-highlight-words';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import * as employeeActions from 'redux/actions/employees';
 import { employeeState$ } from 'redux/selectors';
 import styles from './index.module.less';
 
-const { Option } = Select;
-const { Search } = Input;
 const { confirm } = Modal;
 
 const mapToDataSource = array => {
@@ -35,6 +34,7 @@ const mapToDataSource = array => {
 };
 
 const Employee = () => {
+  const [searchText, setSearchText] = React.useState('');
   const dispatch = useDispatch();
   const history = useHistory();
   const employees = useSelector(employeeState$);
@@ -54,12 +54,60 @@ const Employee = () => {
     {
       title: 'Full name',
       dataIndex: 'displayName',
-      filterDropdown: () => {
-        return <Input placeholder="Type text here" />;
+      ellipsis: true,
+      filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => {
+        return (
+          <div style={{ padding: 8 }}>
+            <Input
+              autoFocus
+              placeholder="Type text here"
+              style={{ marginBottom: 8, display: 'block', fontSize: '14px' }}
+              value={selectedKeys[0]}
+              onChange={event => {
+                setSelectedKeys(event.target.value ? [event.target.value] : []);
+              }}
+              onPressEnter={() => {
+                handleSearch(selectedKeys, confirm);
+              }}
+            />
+
+            <Space>
+              <Button
+                type="primary"
+                style={{ width: 90, fontSize: '12px' }}
+                onClick={() => {
+                  handleSearch(selectedKeys, confirm);
+                }}
+                icon={<SearchOutlined />}
+                size="small">
+                Search
+              </Button>
+              <Button
+                style={{ width: 90, fontSize: '12px' }}
+                onClick={() => {
+                  handleReset(clearFilters);
+                }}
+                size="small">
+                Reset
+              </Button>
+            </Space>
+          </div>
+        );
       },
       filterIcon: () => {
         return <SearchOutlined />;
       },
+      onFilter: (value, record) => {
+        return record.displayName.toLowerCase().includes(value.toLowerCase());
+      },
+      render: text => (
+        <Highlighter
+          highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ''}
+        />
+      ),
     },
     {
       title: 'Email',
@@ -101,7 +149,6 @@ const Employee = () => {
       dataIndex: 'idEmployee',
       align: 'center',
       render: idEmployee => (
-        // <Link to={'/employee/' + idEmployee}>
         <div style={{ display: 'flex', justifyContent: 'center', columnGap: '20px' }}>
           <Button
             type="primary"
@@ -115,7 +162,6 @@ const Employee = () => {
             icon={<DeleteOutlined />}
           />
         </div>
-        // </Link>
       ),
     },
   ];
@@ -124,8 +170,15 @@ const Employee = () => {
     dispatch(employeeActions.getEmployees.getEmployeesRequest());
   }, [dispatch]);
 
-  const onSearch = () => {};
-  const handleChange = () => {};
+  const handleSearch = (selectedKeys, confirm) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+  };
+
+  const handleReset = clearFilters => {
+    clearFilters();
+    setSearchText('');
+  };
   const handleAddEmployeeClick = () => {
     history.push('/employee/add');
   };
@@ -161,25 +214,6 @@ const Employee = () => {
       <h3>Employee List</h3>
       <Card>
         <div className={styles.wrapper}>
-          <div>
-            <Search
-              className={styles.search}
-              size="large"
-              placeholder="Search"
-              allowClear
-              enterButton
-              onSearch={onSearch}
-            />
-            <Select
-              className={styles.select}
-              size="large"
-              defaultValue="all"
-              onClick={handleChange}>
-              <Option value="all">All</Option>
-              <Option value="working">Working</Option>
-              <Option value="unemployed">Unemployed</Option>
-            </Select>
-          </div>
           <Button
             className={styles.btn}
             size="large"

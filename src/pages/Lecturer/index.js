@@ -4,20 +4,10 @@ import {
   ExclamationCircleOutlined,
   SearchOutlined,
 } from '@ant-design/icons';
-import {
-  Space,
-  Breadcrumb,
-  Button,
-  Card,
-  Input,
-  Select,
-  Table,
-  Tag,
-  Modal,
-  notification,
-} from 'antd';
+import { Breadcrumb, Button, Card, Input, Modal, notification, Space, Table, Tag } from 'antd';
 import moment from 'moment';
 import React from 'react';
+import Highlighter from 'react-highlight-words';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import * as lecturerActions from 'redux/actions/lecturers';
@@ -28,6 +18,7 @@ const { confirm } = Modal;
 
 const mapToDataSource = array => {
   return array.map(item => {
+    const address = `${item.address[0]}, ${item.address[1]}, ${item.address[2]}`;
     return {
       key: item.idLecturer,
       idLecturer: item.idLecturer,
@@ -36,7 +27,7 @@ const mapToDataSource = array => {
       email: item.email,
       gender: item.gender === 0 ? 'Male' : item.gender === 1 ? 'Female' : 'Others',
       phoneNumber: item.phoneNumber,
-      address: item.address,
+      address,
       birthday: moment(item.dob).format('DD/MM/YYYY'),
       isActivated: item.isActivated,
     };
@@ -44,17 +35,12 @@ const mapToDataSource = array => {
 };
 
 const Lecturer = () => {
+  const [searchText, setSearchText] = React.useState('');
   const dispatch = useDispatch();
   const history = useHistory();
   const lecturers = useSelector(lectureState$);
   const dataSource = mapToDataSource(lecturers.data);
   const columns = [
-    // {
-    //   title: 'ID',
-    //   dataIndex: 'idLecturer',
-    //   align: 'center',
-    //   ellipsis: true,
-    // },
     {
       title: 'Username',
       dataIndex: 'username',
@@ -65,7 +51,6 @@ const Lecturer = () => {
       title: 'Full name',
       dataIndex: 'displayName',
       ellipsis: true,
-
       filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => {
         return (
           <div style={{ padding: 8 }}>
@@ -78,10 +63,7 @@ const Lecturer = () => {
                 setSelectedKeys(event.target.value ? [event.target.value] : []);
               }}
               onPressEnter={() => {
-                confirm();
-              }}
-              onBlur={() => {
-                confirm();
+                handleSearch(selectedKeys, confirm);
               }}
             />
 
@@ -90,7 +72,7 @@ const Lecturer = () => {
                 type="primary"
                 style={{ width: 90, fontSize: '12px' }}
                 onClick={() => {
-                  confirm();
+                  handleSearch(selectedKeys, confirm);
                 }}
                 icon={<SearchOutlined />}
                 size="small">
@@ -99,7 +81,7 @@ const Lecturer = () => {
               <Button
                 style={{ width: 90, fontSize: '12px' }}
                 onClick={() => {
-                  clearFilters();
+                  handleReset(clearFilters);
                 }}
                 size="small">
                 Reset
@@ -114,6 +96,14 @@ const Lecturer = () => {
       onFilter: (value, record) => {
         return record.displayName.toLowerCase().includes(value.toLowerCase());
       },
+      render: text => (
+        <Highlighter
+          highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ''}
+        />
+      ),
     },
     {
       title: 'Email',
@@ -203,6 +193,15 @@ const Lecturer = () => {
       },
       onCancel() {},
     });
+  };
+  const handleSearch = (selectedKeys, confirm) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+  };
+
+  const handleReset = clearFilters => {
+    clearFilters();
+    setSearchText('');
   };
 
   console.log({ dataSource });

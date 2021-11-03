@@ -15,7 +15,7 @@ const AddLecturer = () => {
           <a href="">Application Center</a>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <a href="http://localhost:3000/lecturer/">Application List</a>
+          <a href="http://localhost:3000/lecturer/">Lecturer List</a>
         </Breadcrumb.Item>
       </Breadcrumb>
 

@@ -45,7 +45,7 @@ const adminRoutes = [
     page: () => <AddCourse />,
   },
   {
-    path: '/course/add/:idCourse',
+    path: '/course/edit/:idCourse',
     exact: true,
     page: () => <AddCourse />,
   },

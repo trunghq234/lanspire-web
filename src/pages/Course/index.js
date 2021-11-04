@@ -46,7 +46,7 @@ const Course = () => {
         return (
           <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
             <Tooltip title="Edit information">
-              <Link to={`/course/add/${idCourse}`}>
+              <Link to={`/course/edit/${idCourse}`}>
                 <Button type="primary" ghost icon={<EditOutlined />}></Button>
               </Link>
             </Tooltip>

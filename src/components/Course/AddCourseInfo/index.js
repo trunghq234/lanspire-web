@@ -35,6 +35,9 @@ const AddCourseInfo = ({ form, goNext, handleSubmitCourse, editCourse }) => {
   }, [levels]);
 
   const handleSelectLevel = e => {
+    if (editCourse) {
+      e = levelNameList.indexOf(editCourse.Level.levelName);
+    }
     const selected = levelNameList[e];
     const res = levels.filter(level => level.levelName == selected);
     setPointList(res);
@@ -65,14 +68,9 @@ const AddCourseInfo = ({ form, goNext, handleSubmitCourse, editCourse }) => {
     });
     goNext();
   };
+
   useEffect(() => {
     if (editCourse) {
-      const levelNameIndex = levelNameList.indexOf(editCourse.Level.levelName);
-      handleSelectLevel(levelNameIndex);
-      // const typeIndex = courseTypeList.findIndex(
-      //   type => type.idCourseType === editCourse.idCourseType
-      // );
-      // const pointIndex = pointList.findIndex(point => point.idLevel === editCourse.idLevel);
       form.setFieldsValue({
         courseName: editCourse.courseName,
         fee: editCourse.fee,
@@ -82,6 +80,7 @@ const AddCourseInfo = ({ form, goNext, handleSubmitCourse, editCourse }) => {
         pointIndex: editCourse.Level.point,
         typeIndex: editCourse.CourseType.typeName,
       });
+      handleSelectLevel(0);
     }
   }, [editCourse]);
   return (

@@ -25,6 +25,26 @@ const INIT_STATE = {
     isSuccess: false,
     error: '',
   },
+  courses: {
+    data: [],
+    isLoading: false,
+    isSuccess: false,
+  },
+  courseTypes: {
+    data: [],
+    isLoading: false,
+    isSuccess: false,
+  },
+  levels: {
+    data: [],
+    isLoading: false,
+    isSuccess: false,
+  },
+  classes: {
+    data: [],
+    isLoading: false,
+    isSuccess: false,
+  },
 };
 
 export default INIT_STATE;

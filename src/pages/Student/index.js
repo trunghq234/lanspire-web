@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
-import { Table, Input, Button, Tag, Col, Row, Modal, notification, Breadcrumb } from 'antd';
+import { Table, Input, Button, Tag, Col, Row, Modal, notification, Breadcrumb, Card } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import styles from './index.module.less';
 import { studentState$ } from 'redux/selectors/index';
@@ -182,46 +182,51 @@ const Student = () => {
         <Breadcrumb.Item>Student</Breadcrumb.Item>
       </Breadcrumb>
       <h2 className={styles.title}>Student list</h2>
-      <Row
-        gutter={[
-          { xs: 0, sm: 0, md: 10, lg: 10 },
-          { xs: 5, sm: 5, md: 0, lg: 0 },
-        ]}
-        className={styles['actions-for-list']}>
-        <Col xs={24} sm={24} md={8} lg={10} xl={8}>
-          <Search
-            className={styles['search-name']}
-            placeholder="Enter name ..."
-            enterButton
-            size="large"
-            onSearch={handleSearch}
-          />
-        </Col>
-        <Col
-          xs={24}
-          sm={24}
-          md={{ span: 5, offset: 11 }}
-          lg={{ span: 4, offset: 10 }}
-          xl={{ span: 3, offset: 13 }}>
-          <Button className={styles['add-student']} size="large" onClick={handleClickAddNewStudent}>
-            Add student
-          </Button>
-        </Col>
-      </Row>
-      <Table
-        columns={columns}
-        rowKey={dataSearch.id}
-        dataSource={dataSearch}
-        pagination={{
-          showSizeChanger: true,
-          current: currentPage,
-          onChange: (page, pageSize) => {
-            setCurrentPage(page);
-            setPageSize(pageSize);
-          },
-        }}
-        loading={students.isLoading}
-      />
+      <Card>
+        <Row
+          gutter={[
+            { xs: 0, sm: 0, md: 10, lg: 10 },
+            { xs: 5, sm: 5, md: 0, lg: 0 },
+          ]}
+          className={styles['actions-for-list']}>
+          <Col xs={24} sm={24} md={8} lg={10} xl={8}>
+            <Search
+              className={styles['search-name']}
+              placeholder="Enter name ..."
+              enterButton
+              size="large"
+              onSearch={handleSearch}
+            />
+          </Col>
+          <Col
+            xs={24}
+            sm={24}
+            md={{ span: 5, offset: 11 }}
+            lg={{ span: 4, offset: 10 }}
+            xl={{ span: 3, offset: 13 }}>
+            <Button
+              className={styles['add-student']}
+              size="large"
+              onClick={handleClickAddNewStudent}>
+              Add student
+            </Button>
+          </Col>
+        </Row>
+        <Table
+          columns={columns}
+          rowKey={dataSearch.id}
+          dataSource={dataSearch}
+          pagination={{
+            showSizeChanger: true,
+            current: currentPage,
+            onChange: (page, pageSize) => {
+              setCurrentPage(page);
+              setPageSize(pageSize);
+            },
+          }}
+          loading={students.isLoading}
+        />
+      </Card>
     </div>
   );
 };

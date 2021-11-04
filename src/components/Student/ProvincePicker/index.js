@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Form, Input, Row, Select } from 'antd';
 import LocationVN from './LocationVN.json';
-import { useSelector } from 'react-redux';
-import { studentState$ } from 'redux/selectors';
 const ProvincePicker = props => {
   let cityOptions = [];
   const [districtInSelectedCity, setDistrictInSelectedCity] = useState([]);
   const [selectedCity, setSelectedCity] = useState();
   const [selectedDistrict, setSelectedDistrict] = useState();
-  const students = useSelector(studentState$);
 
   for (let city of Object.values(LocationVN)) {
     cityOptions.push(city);
   }
 
+  //Set city when open form edit
+  useEffect(() => {
+    setSelectedCity(props.city);
+  }, [props.city]);
+
+  //set district
   const mapDistrictToArray = districts => {
     let result = [];
     for (let district of Object.values(districts)) {
@@ -21,6 +24,8 @@ const ProvincePicker = props => {
     }
     return result;
   };
+
+  //set district when Select city
   useEffect(() => {
     for (let city of Object.values(LocationVN)) {
       if (city.name === selectedCity) {
@@ -30,13 +35,7 @@ const ProvincePicker = props => {
     }
   }, [selectedCity]);
 
-  useEffect(() => {
-    if (students.data.length !== 0 && props.idStudent) {
-      const student = students.data.find(element => element.idStudent === props.idStudent);
-      setSelectedCity(student.User.address[2]);
-    }
-  }, [students.data]);
-
+  //custom options
   const renderOptions = dataList => {
     if (dataList.length) {
       return dataList.map(data => {
@@ -64,7 +63,7 @@ const ProvincePicker = props => {
             value={selectedCity}
             placeholder="Tỉnh/Thành phố"
             onChange={val => {
-              setSelectedDistrict('');
+              props.form.setFieldsValue({ ...props.form.getFieldsValue(), district: '' });
               setSelectedCity(val);
             }}>
             {optionCityRendered}

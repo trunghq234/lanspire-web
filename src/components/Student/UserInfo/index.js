@@ -1,9 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, Col, Input, Row, Form, Select, DatePicker } from 'antd';
 import ProvincePicker from '../ProvincePicker';
 
 const UserInfo = props => {
   const dateFormat = 'DD/MM/yyyy';
+
+  const numberValidator = (rule, value, callback) => {
+    try {
+      if (!Number(value) && value) {
+        callback('Phone number must be number!!!');
+      } else {
+        callback();
+      }
+    } catch {
+      callback();
+    }
+  };
   return (
     <Card>
       <Row gutter={20}>
@@ -31,7 +43,10 @@ const UserInfo = props => {
       </Row>
       <Row gutter={20}>
         <Col span={8}>
-          <Form.Item label="Phone number" name="phoneNumber" rules={[{ required: true }]}>
+          <Form.Item
+            label="Phone number"
+            name="phoneNumber"
+            rules={[{ required: true }, { validator: numberValidator }]}>
             <Input />
           </Form.Item>
         </Col>
@@ -42,7 +57,7 @@ const UserInfo = props => {
           </Form.Item>
         </Col>
       </Row>
-      <ProvincePicker idStudent={props.idStudent} city={props.city} />
+      <ProvincePicker city={props.city} form={props.form} />
     </Card>
   );
 };

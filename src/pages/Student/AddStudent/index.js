@@ -12,7 +12,6 @@ const AddStudent = () => {
   const [isSubmit, setIsSubmit] = useState(false);
   const [studentById, setStudentById] = useState({});
   const [city, setCity] = useState('');
-  const dateFormat = 'DD/MM/YYYY';
   const dispatch = useDispatch();
   const history = useHistory();
   const [form] = Form.useForm();
@@ -24,6 +23,7 @@ const AddStudent = () => {
     btnSave: idStudent ? 'Update' : 'Add',
   };
 
+  //notification
   useEffect(() => {
     if (isSubmit && students.isSuccess) {
       notification.success({
@@ -32,7 +32,9 @@ const AddStudent = () => {
           width: 300,
         },
       });
-      history.push('/student/list');
+      if (idStudent) {
+        history.push('/student/list');
+      }
     } else if (isSubmit && !students.isSuccess && !students.error) {
       notification.error({
         title: 'Error',
@@ -44,6 +46,7 @@ const AddStudent = () => {
     }
   }, [students.isLoading]);
 
+  //get students
   useEffect(() => {
     dispatch(getStudents.getStudentsRequest());
   }, []);
@@ -103,6 +106,7 @@ const AddStudent = () => {
     setIsSubmit(true);
   };
 
+  //discard
   const onReset = () => {
     if (!idStudent) {
       formRef.current.resetFields();
@@ -135,7 +139,7 @@ const AddStudent = () => {
               Discard
             </Button>
           </Col>
-          <Col span={2}>
+          <Col span={3}>
             <Button
               className={style['btn-add']}
               htmlType="submit"
@@ -146,7 +150,7 @@ const AddStudent = () => {
           </Col>
         </Row>
       </Form.Item>
-      <UserInfo idStudent={idStudent} city={city} />
+      <UserInfo city={city} form={form} />
     </Form>
   );
 };

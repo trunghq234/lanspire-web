@@ -1,32 +1,172 @@
-import { Form, Card, Input, Row, Col, Select, DatePicker, Button } from 'antd';
+import { Button, Card, Col, DatePicker, Form, Input, message, Row, Select } from 'antd';
+import { isEmpty } from 'lodash';
+import moment from 'moment';
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router';
+import * as employeeActions from 'redux/actions/employees';
+import { getUsers } from 'redux/actions/users';
+import { employeeState$, userState$ } from 'redux/selectors';
 import ProvincePicker from '../ProvincePicker';
-import styles from './index.module.less';
 
 const { Option } = Select;
+const idRoleEmployee = '386af797-fdf6-42dc-8bab-d5b42561b5fb';
 
-const PersonalInfo = () => {
-  const [address, setAddress] = useState({});
-
+const PersonalInfo = props => {
+  const [isSubmit, setIsSubmit] = useState(false);
+  const dispatch = useDispatch();
+  const employees = useSelector(employeeState$);
+  const users = useSelector(userState$);
+  const [form] = Form.useForm();
+  const { id } = useParams();
   const dateFormat = 'DD/MM/YYYY';
+  const { typeSubmit } = props;
+  const validateMessages = {
+    required: '${label} is required!',
+    types: {
+      email: '${label} is not validate email!',
+      number: '${label} is not a validate number!',
+    },
+    number: {
+      range: '${label} must be between ${min} and ${max}',
+    },
+  };
+
+  const handleSubmit = () => {
+    const data = form.getFieldValue();
+    const {
+      displayName,
+      gender,
+      dob,
+      phoneNumber,
+      email,
+      detailsAddress,
+      district,
+      city,
+      username,
+      password,
+      confirmPassword,
+    } = data;
+
+    // create employee
+    if (
+      displayName &&
+      gender &&
+      dob &&
+      phoneNumber &&
+      email &&
+      username &&
+      password &&
+      confirmPassword &&
+      detailsAddress &&
+      district &&
+      city
+    ) {
+      if (typeSubmit === 'create') {
+        if (!checkUsernameIsExist(username)) {
+          if (confirmPassword !== password) {
+            setIsSubmit(true);
+            message.error('Confirm password does not match!');
+          } else {
+            const createdEmployee = {
+              displayName,
+              gender: data.gender == 'male' ? 0 : data.gender == 'female' ? 1 : 2,
+              dob: moment(data.dob).format('DD/MM/YYYY').split('/').reverse().join('-'),
+              phoneNumber,
+              email,
+              address: [detailsAddress, district, city],
+              idRole: idRoleEmployee,
+              imageUrl: 'test',
+              username,
+              password,
+              isActivated: true,
+            };
+            dispatch(employeeActions.createEmployee.createEmployeeRequest(createdEmployee));
+            setIsSubmit(true);
+          }
+        } else {
+          setIsSubmit(true);
+          isSubmit === true ? message.error('Username is exist!') : '';
+        }
+      }
+    }
+
+    // edit employee
+    if (typeSubmit === 'edit') {
+      const employee = employees.data.find(employee => employee.idEmployee === id);
+
+      const editedEmployee = {
+        displayName,
+        gender: data.gender == 'male' ? 0 : data.gender == 'female' ? 1 : 2,
+        dob: moment(data.dob).format('DD/MM/YYYY').split('/').reverse().join('-'),
+        idEmployee: id,
+        address: [detailsAddress, district, city],
+        idUser: employee.idUser,
+        username: employee.username,
+        password: employee.password,
+        isDeleted: employee.isDeleted,
+        isActivated: employee.isActivated,
+        imageUrl: employee.imageUrl,
+        idRole: idRoleEmployee,
+      };
+      dispatch(employeeActions.updateEmployee.updateEmployeeRequest(editedEmployee));
+      setIsSubmit(true);
+    }
+  };
+
+  const checkUsernameIsExist = username => {
+    const result = users.data.find(user => user.username === username);
+    // result === empty => checkUsernameIsExist: false
+    return !isEmpty(result);
+  };
+
+  // Load information employee to form
+  React.useEffect(() => {
+    if (id) {
+      const employee =
+        employees.data && employees.data.find(employee => employee.idEmployee === id);
+
+      if (employee) {
+        const editedEmployee = {
+          displayName: employee.displayName,
+          gender: employee.gender === 0 ? 'male' : employee.gender === 1 ? 'female' : 'others',
+          dob: moment(employee.dob),
+          phoneNumber: employee.phoneNumber,
+          address: employee.address,
+          email: employee.email,
+          detailsAddress: employee.address[0],
+          district: employee.address[1],
+          city: employee.address[2],
+        };
+        form.setFieldsValue(editedEmployee);
+      }
+    }
+  }, [id, employees]);
+
+  // Redirect to employee list
+  React.useEffect(() => {
+    if (employees.isSuccess && isSubmit) {
+      id
+        ? message.success('Update employee success!')
+        : message.success('Create employee success!');
+
+      form.resetFields();
+    }
+  }, [employees]);
+
+  React.useEffect(() => {
+    dispatch(employeeActions.getEmployees.getEmployeesRequest());
+    dispatch(getUsers.getUsersRequest());
+  }, [dispatch]);
+
   return (
     <Card>
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-        <h3>Personal information</h3>
-        <div>
-          <Button className={styles.btn} size="large" style={{ marginRight: '20px' }}>
-            Discard
-          </Button>
-          <Button className={styles.btn} size="large" type="primary">
-            Add employee
-          </Button>
-        </div>
-      </div>
-      <Form layout="vertical">
+      <h3>Personal information</h3>
+      <Form form={form} layout="vertical" validateMessages={validateMessages}>
         <Row gutter={20}>
           <Col span={16}>
-            <Form.Item label="Full name" name="fullName" rules={[{ required: true }]}>
-              <Input />
+            <Form.Item label="Full name" name="displayName" rules={[{ required: true }]}>
+              <Input placeholder="Full name" />
             </Form.Item>
           </Col>
 
@@ -48,17 +188,48 @@ const PersonalInfo = () => {
 
           <Col span={4}>
             <Form.Item label="Phone number" name="phoneNumber" rules={[{ required: true }]}>
-              <Input />
+              <Input placeholder="Phone number" maxLength="10" />
             </Form.Item>
           </Col>
 
           <Col span={8}>
             <Form.Item label="Email" name="email" rules={[{ required: true }]}>
-              <Input />
+              <Input placeholder="Email" />
             </Form.Item>
           </Col>
         </Row>
-        <ProvincePicker address={address} callbackChanges={setAddress}></ProvincePicker>
+        <ProvincePicker />
+
+        {!id && (
+          <Input.Group>
+            <Row gutter={20}>
+              <Col span={8}>
+                <Form.Item label="Username" name="username" rules={[{ required: true }]}>
+                  <Input placeholder="Username" maxLength="10" />
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item label="Password" name="password" rules={[{ required: true }]}>
+                  <Input.Password placeholder="Password" maxLength="10" />
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item
+                  label="Confirm password"
+                  name="confirmPassword"
+                  rules={[{ required: true }]}>
+                  <Input.Password placeholder="Confirm password" maxLength="10" />
+                </Form.Item>
+              </Col>
+            </Row>
+          </Input.Group>
+        )}
+
+        <Form.Item>
+          <Button onClick={handleSubmit} type="primary" htmlType="submit">
+            Submit
+          </Button>
+        </Form.Item>
       </Form>
     </Card>
   );

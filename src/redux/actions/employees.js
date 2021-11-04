@@ -4,10 +4,10 @@ export const getType = reduxAction => {
   return reduxAction().type;
 };
 
-export const getEmployes = createActions({
-  getEmployesRequest: undefined,
-  getEmployesSuccess: payload => payload,
-  getEmployesFailure: err => err,
+export const getEmployees = createActions({
+  getEmployeesRequest: undefined,
+  getEmployeesSuccess: payload => payload,
+  getEmployeesFailure: err => err,
 });
 
 export const updateEmployee = createActions({

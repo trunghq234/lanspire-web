@@ -32,7 +32,22 @@ import {
   fetchTimeFramesSaga,
   updateTimeFrameSaga,
 } from './timeFrames';
-
+import * as employeeActions from '../actions/employees';
+import {
+  createEmployeeSaga,
+  deleteEmployeeSaga,
+  fetchEmployeesSaga,
+  updateEmployeeSaga,
+} from './employees';
+import * as lecturerActions from '../actions/lecturers';
+import {
+  fetchLecturersSaga,
+  createLecturerSaga,
+  updateLecturerSaga,
+  deleteLecturerSaga,
+} from './lecturers';
+import * as userActions from '../actions/users';
+import { fetchUsersSaga, createUserSaga, updateUserSaga, deleteUserSaga } from './users';
 export default function* mySaga() {
   //level
   yield takeLatest(levelActions.getLevels.getLevelsRequest, fetchLevels);
@@ -76,4 +91,15 @@ export default function* mySaga() {
   yield takeLatest(classActions.createClass.createClassRequest, createClass);
   yield takeLatest(classActions.updateClass.updateClassRequest, updateClass);
   yield takeLatest(classActions.deleteClass.deleteClassRequest, deleteClass);
+  // employees
+  yield takeLatest(employeeActions.getEmployees.getEmployeesRequest, fetchEmployeesSaga);
+  yield takeLatest(employeeActions.createEmployee.createEmployeeRequest, createEmployeeSaga);
+  yield takeLatest(employeeActions.updateEmployee.updateEmployeeRequest, updateEmployeeSaga);
+  yield takeLatest(employeeActions.deleteEmployee.deleteEmployeeRequest, deleteEmployeeSaga);
+
+  // lecturers
+  yield takeLatest(lecturerActions.getLecturers.getLecturersRequest, fetchLecturersSaga);
+  yield takeLatest(lecturerActions.createLecturer.createLecturerRequest, createLecturerSaga);
+  yield takeLatest(lecturerActions.updateLecturer.updateLecturerRequest, updateLecturerSaga);
+  yield takeLatest(lecturerActions.deleteLecturer.deleteLecturerRequest, deleteLecturerSaga);
 }

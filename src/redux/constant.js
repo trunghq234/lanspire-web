@@ -1,7 +1,8 @@
 const INIT_STATE = {
-  posts: {
+  employees: {
     data: [],
     isLoading: false,
+    isSuccess: false,
   },
   users: {
     data: [],
@@ -16,8 +17,17 @@ const INIT_STATE = {
     isLoading: false,
   },
   employes: {
+
+  lecturers: {
     data: [],
     isLoading: false,
+    isSuccess: false,
+  },
+
+  users: {
+    data: [],
+    isLoading: false,
+    isSuccess: false,
   },
   timeFrames: {
     data: [],

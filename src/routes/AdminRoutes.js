@@ -78,6 +78,9 @@ const adminRoutes = [
     path: '/level/:idLevel',
     exact: true,
     page: () => <Level />,
+    path: '/lecturer/edit/:id',
+    exact: true,
+    page: () => <AddLecturer />,
   },
   {
     path: '/employee/',
@@ -113,6 +116,9 @@ const adminRoutes = [
     path: '/class/update/:idClass',
     exact: true,
     page: () => <AddClass />,
+    path: '/employee/edit/:id',
+    exact: true,
+    page: () => <AddEmployee />,
   },
 ];
 
@@ -133,11 +139,6 @@ const adminMenuItems = {
           path: '/lecturer/',
           name: 'Lecturer list',
           component: <Lecturer />,
-        },
-        {
-          path: '/lecturer/add',
-          name: 'Add lecturer',
-          component: <AddLecturer />,
         },
       ],
     },
@@ -175,11 +176,6 @@ const adminMenuItems = {
           path: '/employee/',
           name: 'Employee list',
           component: <Employee />,
-        },
-        {
-          path: '/employee/add',
-          name: 'Add Employee',
-          component: <AddEmployee />,
         },
       ],
     },

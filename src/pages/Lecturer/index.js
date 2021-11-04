@@ -1,93 +1,224 @@
+import {
+  DeleteOutlined,
+  EditOutlined,
+  ExclamationCircleOutlined,
+  SearchOutlined,
+} from '@ant-design/icons';
+import {
+  Breadcrumb,
+  Button,
+  Card,
+  Col,
+  Input,
+  Modal,
+  notification,
+  Row,
+  Select,
+  Space,
+  Table,
+  Tag,
+} from 'antd';
+import moment from 'moment';
 import React from 'react';
-import { Button, Card, Input, Select, Table, Tag, Tooltip, Breadcrumb, Row, Col } from 'antd';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import Highlighter from 'react-highlight-words';
+import { useDispatch, useSelector } from 'react-redux';
+import { NavLink, useHistory } from 'react-router-dom';
+import * as lecturerActions from 'redux/actions/lecturers';
+import { lectureState$ } from 'redux/selectors';
 import styles from './index.module.less';
-import { NavLink } from 'react-router-dom';
 
-const { Option } = Select;
-const { Search } = Input;
+const { confirm } = Modal;
 
-function handleChange(value) {
-  console.log(`selected ${value}`);
-}
-const onSearch = value => console.log(value);
-
-const columns = [
-  {
-    title: 'ID',
-    dataIndex: 'id',
-    align: 'center',
-  },
-  {
-    title: 'Full name',
-    dataIndex: 'name',
-  },
-  {
-    title: 'Phone number',
-    dataIndex: 'phoneNumber',
-    align: 'center',
-  },
-  {
-    title: 'Level',
-    dataIndex: 'level',
-    align: 'center',
-  },
-  {
-    title: 'Status',
-    dataIndex: 'status',
-    align: 'center',
-    render: status => (
-      <span>
-        {status ? <Tag color="success">Working</Tag> : <Tag color="orange">Unemployed</Tag>}
-      </span>
-    ),
-  },
-  {
-    title: '',
-    dataIndex: 'editable',
-    align: 'center',
-    render: editable => {
-      return (
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
-          <Tooltip title="Edit information">
-            <Button
-              type="primary"
-              ghost
-              disabled={editable ? true : false}
-              icon={<EditOutlined />}
-            />
-          </Tooltip>
-          <Tooltip title="Delete">
-            <Button danger icon={<DeleteOutlined />} />
-          </Tooltip>
-        </div>
-      );
-    },
-  },
-];
-
-const data = [
-  {
-    key: '1',
-    id: '1',
-    name: 'Nguyen Van A',
-    phoneNumber: '123',
-    level: 'IELTS 6.0',
-    status: false,
-    editable: true,
-  },
-  {
-    key: '2',
-    id: '2',
-    name: 'Nguyen Van B',
-    phoneNumber: '123',
-    level: 'IELTS 8.0',
-    status: true,
-    editable: false,
-  },
-];
+const mapToDataSource = array => {
+  return array.map(item => {
+    const address = `${item.address[0]}, ${item.address[1]}, ${item.address[2]}`;
+    return {
+      key: item.idLecturer,
+      idLecturer: item.idLecturer,
+      username: item.username === null ? 'null' : item.username,
+      displayName: item.displayName,
+      email: item.email,
+      gender: item.gender === 0 ? 'Male' : item.gender === 1 ? 'Female' : 'Others',
+      phoneNumber: item.phoneNumber,
+      address,
+      birthday: moment(item.dob).format('DD/MM/YYYY'),
+      isActivated: item.isActivated,
+    };
+  });
+};
 
 const Lecturer = () => {
+  const [searchText, setSearchText] = React.useState('');
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const lecturers = useSelector(lectureState$);
+  const dataSource = mapToDataSource(lecturers.data);
+  const columns = [
+    {
+      title: 'Username',
+      dataIndex: 'username',
+      align: 'center',
+      ellipsis: true,
+    },
+    {
+      title: 'Full name',
+      dataIndex: 'displayName',
+      ellipsis: true,
+      filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => {
+        return (
+          <div style={{ padding: 8 }}>
+            <Input
+              autoFocus
+              placeholder="Type text here"
+              style={{ marginBottom: 8, display: 'block', fontSize: '14px' }}
+              value={selectedKeys[0]}
+              onChange={event => {
+                setSelectedKeys(event.target.value ? [event.target.value] : []);
+              }}
+              onPressEnter={() => {
+                handleSearch(selectedKeys, confirm);
+              }}
+            />
+
+            <Space>
+              <Button
+                type="primary"
+                style={{ width: 90, fontSize: '12px' }}
+                onClick={() => {
+                  handleSearch(selectedKeys, confirm);
+                }}
+                icon={<SearchOutlined />}
+                size="small">
+                Search
+              </Button>
+              <Button
+                style={{ width: 90, fontSize: '12px' }}
+                onClick={() => {
+                  handleReset(clearFilters);
+                }}
+                size="small">
+                Reset
+              </Button>
+            </Space>
+          </div>
+        );
+      },
+      filterIcon: () => {
+        return <SearchOutlined />;
+      },
+      onFilter: (value, record) => {
+        return record.displayName.toLowerCase().includes(value.toLowerCase());
+      },
+      render: text => (
+        <Highlighter
+          highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ''}
+        />
+      ),
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      ellipsis: true,
+    },
+    {
+      title: 'Gender',
+      dataIndex: 'gender',
+      align: 'center',
+    },
+    {
+      title: 'Phone number',
+      dataIndex: 'phoneNumber',
+      ellipsis: true,
+    },
+    {
+      title: 'Address',
+      dataIndex: 'address',
+      ellipsis: true,
+    },
+    {
+      title: 'Birthday',
+      dataIndex: 'birthday',
+      align: 'center',
+      ellipsis: true,
+    },
+    {
+      title: 'Status',
+      dataIndex: 'isActivated',
+      align: 'center',
+      render: isActivated => (
+        <span>
+          {isActivated ? <Tag color="success">Working</Tag> : <Tag color="orange">Unemployed</Tag>}
+        </span>
+      ),
+    },
+    {
+      title: '',
+      dataIndex: 'idLecturer',
+      align: 'center',
+      render: idLecturer => (
+        <div style={{ display: 'flex', justifyContent: 'center', columnGap: '20px' }}>
+          <Button
+            onClick={() => handleEditLecturer(idLecturer)}
+            type="primary"
+            ghost
+            icon={<EditOutlined />}
+          />
+          <Button
+            onClick={() => handleDeleteLecturer(idLecturer)}
+            danger
+            icon={<DeleteOutlined />}
+          />
+        </div>
+      ),
+    },
+  ];
+
+  React.useEffect(() => {
+    dispatch(lecturerActions.getLecturers.getLecturersRequest());
+  }, [dispatch]);
+
+  const handleAddLecturerClick = () => {
+    history.push('/lecturer/add');
+  };
+  const handleEditLecturer = idLecturer => {
+    history.push(`/lecturer/edit/${idLecturer}`);
+  };
+  const handleDeleteLecturer = idLecturer => {
+    confirm({
+      title: 'Do you want to delete this employee?',
+      icon: <ExclamationCircleOutlined />,
+      content: '',
+      onOk() {
+        dispatch(lecturerActions.deleteLecturer.deleteLecturerRequest(idLecturer));
+
+        lecturers.isSuccess
+          ? notification['success']({
+              message: 'Successfully',
+              description: 'Delete employee success',
+            })
+          : notification['error']({
+              message: 'Notification Title',
+              description: 'That employee is activating',
+            });
+      },
+      onCancel() {},
+    });
+  };
+  const handleSearch = (selectedKeys, confirm) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+  };
+
+  const handleReset = clearFilters => {
+    clearFilters();
+    setSearchText('');
+  };
+
+  console.log({ dataSource });
+
   return (
     <>
       <Breadcrumb>
@@ -101,38 +232,21 @@ const Lecturer = () => {
       </Breadcrumb>
       <h3 className="heading">Lecturer list</h3>
       <Card>
-        <Row gutter={[20, 20]} align="top">
-          <Col xs={24} sm={16} md={10} lg={8} xl={8}>
-            <Search
-              className={styles.search}
-              size="large"
-              placeholder="Search"
-              allowClear
-              enterButton
-              onSearch={onSearch}
-            />
-          </Col>
-          <Col xs={24} sm={8} md={6} lg={6} xl={4}>
-            <Select
-              className={styles.select}
-              size="large"
-              defaultValue="all"
-              onChange={handleChange}>
-              <Option value="all">All</Option>
-              <Option value="working">Working</Option>
-              <Option value="unemployed">Unemployed</Option>
-            </Select>
-          </Col>
-          <Col xs={0} md={2} lg={4} xl={8} flex="auto" />
-          <Col xs={24} sm={24} md={6} lg={6} xl={4}>
-            <Button className={styles.btn} size="large" type="primary">
-              <NavLink to="/lecturer/add">Add lecturer</NavLink>
-            </Button>
-          </Col>
-          <Col span={24}>
-            <Table bordered columns={columns} dataSource={data} />
-          </Col>
-        </Row>
+        <div className={styles.wrapper}>
+          <Button
+            onClick={handleAddLecturerClick}
+            className={styles.btn}
+            size="large"
+            type="primary">
+            Add lecturer
+          </Button>
+        </div>
+        <Table
+          loading={lecturers.isLoading}
+          columns={columns}
+          dataSource={dataSource}
+          rowKey={row => row.idLecturer}
+        />
       </Card>
     </>
   );

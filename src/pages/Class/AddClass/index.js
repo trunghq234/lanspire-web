@@ -124,7 +124,7 @@ const AddClass = () => {
       form.resetFields();
     }
   };
-  const dateFormat = 'MM/DD/YYYY';
+  const dateFormat = 'DD/MM/YYYY';
   return (
     <>
       <Breadcrumb>

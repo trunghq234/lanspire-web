@@ -1,5 +1,6 @@
 import { ConfigProvider } from 'antd';
 import enUS from 'antd/lib/locale/en_US';
+import viVN from 'antd/lib/locale/vi_VN';
 import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { adminMenuItems, adminRoutes } from 'routes/AdminRoutes';

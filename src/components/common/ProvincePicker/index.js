@@ -38,7 +38,7 @@ const ProvincePicker = props => {
             placeholder="Address"
             style={{ width: '100%' }}
             onChange={val =>
-              props.callbackChanges({
+              props.onChange({
                 ...props.address,
                 detailsAddress: val.target.value,
               })
@@ -54,7 +54,7 @@ const ProvincePicker = props => {
             placeholder="Province"
             callbackSelection={val => {
               setSelectedCity(val);
-              props.callbackChanges({
+              props.onChange({
                 ...props.address,
                 city: val,
                 district: undefined,
@@ -72,7 +72,7 @@ const ProvincePicker = props => {
             placeholder="Distrist"
             callbackSelection={val => {
               setSelectedDistrict(val);
-              props.callbackChanges({
+              props.onChange({
                 ...props.address,
                 district: val,
               });

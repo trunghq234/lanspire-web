@@ -47,7 +47,8 @@ const MainLayout = props => {
         </NavLink>
       )}
       rightContentRender={() => <RightContent />}
-      footerRender={() => <AppFooter />}>
+      footerRender={() => <AppFooter />}
+    >
       <div className={styles.container}>
         <Switch>
           {showRoutes(props.routes)}

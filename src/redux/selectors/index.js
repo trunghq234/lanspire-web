@@ -6,6 +6,7 @@ const courseState$ = state => state.courses;
 const courseTypeState$ = state => state.courseTypes;
 const levelState$ = state => state.levels;
 const classState$ = state => state.classes;
+const timeFrameState$ = state => state.timeFrames;
 
 export {
   usersState$,
@@ -16,4 +17,5 @@ export {
   courseState$,
   courseTypeState$,
   levelState$,
+  timeFrameState$,
 };

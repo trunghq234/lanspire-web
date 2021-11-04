@@ -14,9 +14,10 @@ import * as authActions from '../actions/auth';
 import * as classActions from '../actions/classes';
 import * as postActions from '../actions/posts';
 import * as userActions from '../actions/users';
+import * as timeFrameActions from '../actions/timeFrames';
+import { fetchPostsSaga, updatePostSaga, deletePostSaga, createPostSaga } from './posts';
 import { fetchAuthSaga } from './auth';
 import { createClass, deleteClass, fetchClasses, updateClass } from './classes';
-import { createPostSaga, deletePostSaga, fetchPostsSaga, updatePostSaga } from './posts';
 import {
   createUserSaga,
   deleteUserSaga,
@@ -24,6 +25,13 @@ import {
   fetchUsersSaga,
   updateUserSaga,
 } from './users';
+import {
+  createTimeFrameSaga,
+  deleteTimeFrameSaga,
+  fetchTimeFrameSaga,
+  fetchTimeFramesSaga,
+  updateTimeFrameSaga,
+} from './timeFrames';
 
 export default function* mySaga() {
   //level
@@ -57,6 +65,12 @@ export default function* mySaga() {
   yield takeLatest(userActions.deleteUser.deleteUserRequest, deleteUserSaga);
   //auth
   yield takeLatest(authActions.getAuth.getAuthRequest, fetchAuthSaga);
+  //Time Frame
+  yield takeLatest(timeFrameActions.getAllTimeFrames.getAllTimeFramesRequest, fetchTimeFramesSaga);
+  yield takeLatest(timeFrameActions.getByIdTimeFrame.getByIdTimeFrameRequest, fetchTimeFrameSaga);
+  yield takeLatest(timeFrameActions.createTimeFrame.createTimeFrameRequest, createTimeFrameSaga);
+  yield takeLatest(timeFrameActions.updateTimeFrame.updateTimeFrameRequest, updateTimeFrameSaga);
+  yield takeLatest(timeFrameActions.deleteTimeFrame.deleteTimeFrameRequest, deleteTimeFrameSaga);
   //classes
   yield takeLatest(classActions.getClasses.getClassesRequest, fetchClasses);
   yield takeLatest(classActions.createClass.createClassRequest, createClass);

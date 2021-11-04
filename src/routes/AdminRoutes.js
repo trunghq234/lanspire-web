@@ -8,16 +8,25 @@ import Level from 'pages/Course/Level';
 import Dashboard from 'pages/Dashboard';
 import Employee from 'pages/Employee';
 import AddEmployee from 'pages/Employee/AddEmployee';
+import TimeFrame from 'pages/TimeFrame';
 import Lecturer from 'pages/Lecturer';
 import AddLecturer from 'pages/Lecturer/AddLecturer';
 import React from 'react';
-import { classSvg, courseSvg, dashboardSvg, employeeSvg, lecturerSvg } from 'utils/iconsvg';
+import {
+  classSvg,
+  courseSvg,
+  dashboardSvg,
+  employeeSvg,
+  lecturerSvg,
+  timeSvg,
+} from 'utils/iconsvg';
 
 const DashboardIcon = props => <Icon component={dashboardSvg} {...props} />;
 const LecturerIcon = props => <Icon component={lecturerSvg} {...props} />;
 const CourseIcon = props => <Icon component={courseSvg} {...props} />;
 const EmployeeIcon = props => <Icon component={employeeSvg} {...props} />;
 const ClassIcon = props => <Icon component={classSvg} {...props} />;
+const TimeFrameIcon = props => <Icon component={timeSvg} {...props} />;
 
 const adminRoutes = [
   {
@@ -79,6 +88,11 @@ const adminRoutes = [
     path: '/employee/add',
     exact: true,
     page: () => <AddEmployee />,
+  },
+  {
+    path: '/time-frame',
+    exact: true,
+    page: () => <TimeFrame />,
   },
   {
     path: '/class/',
@@ -168,6 +182,12 @@ const adminMenuItems = {
           component: <AddEmployee />,
         },
       ],
+    },
+    {
+      path: '/time-frame',
+      name: 'Time Frame',
+      icon: <TimeFrameIcon />,
+      component: <TimeFrame />,
     },
     {
       name: 'Class',

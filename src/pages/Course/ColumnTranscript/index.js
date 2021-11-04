@@ -114,7 +114,7 @@ const ColumnTranscript = () => {
               <Col xs={24} sm={16} xl={12}>
                 <Search
                   size="large"
-                  placeholder="Search"
+                  placeholder="Search by name"
                   allowClear
                   enterButton
                   onSearch={handleSearch}

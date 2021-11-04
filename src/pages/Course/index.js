@@ -113,7 +113,7 @@ const Course = () => {
     const dataTmp = data.filter(
       item => item.courseName.toLowerCase().search(value.toLowerCase()) >= 0
     );
-    setDataSource(dataTmp);
+    mappingDatasource(dataTmp);
   };
   return (
     <>
@@ -130,7 +130,7 @@ const Course = () => {
             <Search
               className={styles.search}
               size="large"
-              placeholder="Search"
+              placeholder="Search by name"
               allowClear
               enterButton
               onSearch={handleSearch}

@@ -1,25 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import {
-  Breadcrumb,
-  Button,
-  Card,
-  Input,
-  Select,
-  Table,
-  Row,
-  Col,
-  Tooltip,
-  message,
-  Modal,
-} from 'antd';
+import { Breadcrumb, Button, Card, Input, Table, Row, Col, Tooltip, message, Modal } from 'antd';
 import { EditOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { courseState$ } from 'redux/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteCourse, getCourses } from 'redux/actions/courses';
 import styles from './index.module.less';
 
-const { Option } = Select;
 const { Search } = Input;
 const { confirm } = Modal;
 
@@ -43,6 +30,7 @@ const Course = () => {
       title: 'Fee',
       dataIndex: 'fee',
       align: 'center',
+      sorter: (a, b) => a.fee - b.fee,
       render: text => <div>{text.toLocaleString()}</div>,
     },
     {
@@ -71,7 +59,6 @@ const Course = () => {
     },
   ];
 
-  const onSearch = value => console.log(value);
   const dispatch = useDispatch();
   const { data, isLoading, isSuccess } = useSelector(courseState$);
   const [dataSource, setDataSource] = useState([]);
@@ -121,6 +108,13 @@ const Course = () => {
   useEffect(() => {
     mappingDatasource(data);
   }, [data]);
+
+  const handleSearch = value => {
+    const dataTmp = data.filter(
+      item => item.courseName.toLowerCase().search(value.toLowerCase()) >= 0
+    );
+    setDataSource(dataTmp);
+  };
   return (
     <>
       <Breadcrumb>
@@ -139,21 +133,10 @@ const Course = () => {
               placeholder="Search"
               allowClear
               enterButton
-              onSearch={onSearch}
+              onSearch={handleSearch}
             />
           </Col>
-          <Col xs={24} sm={8} md={6} lg={6} xl={4}>
-            <Select
-              className={styles.select}
-              size="large"
-              defaultValue="all"
-              onChange={e => console.log(e)}>
-              <Option value="all">All</Option>
-              <Option value="working">Working</Option>
-              <Option value="unemployed">Unemployed</Option>
-            </Select>
-          </Col>
-          <Col xs={0} md={2} lg={4} xl={8} flex="auto" />
+          <Col flex="auto" />
           <Col xs={24} sm={24} md={6} lg={6} xl={4}>
             <Button className={styles.btn} size="large" type="primary">
               <NavLink to="/course/add">Add course</NavLink>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Breadcrumb, Button, Tooltip, Card, Input, Row, Col, Table, message, Modal } from 'antd';
 import { EditOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
-import AddCourseType from '../AddCourseType';
+import AddCourseType from '../../../components/Course/AddCourseType';
 import { useDispatch, useSelector } from 'react-redux';
 import { courseTypeState$ } from 'redux/selectors';
 import { deleteCourseType, getCourseTypes } from 'redux/actions/courseTypes';
@@ -60,7 +60,7 @@ const CourseType = () => {
     confirm({
       title: 'Do you want to delete this course type?',
       icon: <ExclamationCircleOutlined />,
-      content: '',
+      centered: true,
       onOk() {
         dispatch(deleteCourseType.deleteCourseTypeRequest(id));
 
@@ -82,6 +82,16 @@ const CourseType = () => {
     });
   };
 
+  const [dataSource, setDataSource] = useState([]);
+  const handleSearch = value => {
+    const dataTmp = data.filter(
+      item => item.typeName.toLowerCase().search(value.toLowerCase()) >= 0
+    );
+    setDataSource(dataTmp);
+  };
+  useEffect(() => {
+    setDataSource(data);
+  }, [data]);
   return (
     <>
       <Breadcrumb>
@@ -101,7 +111,7 @@ const CourseType = () => {
                   placeholder="Search"
                   allowClear
                   enterButton
-                  onSearch={e => console.log(e)}
+                  onSearch={handleSearch}
                 />
               </Col>
               <Col span={24}>
@@ -109,7 +119,7 @@ const CourseType = () => {
                   bordered
                   loading={isLoading}
                   columns={columns}
-                  dataSource={data}
+                  dataSource={dataSource}
                   rowKey={row => row.idCourseType}
                   pagination={{
                     defaultPageSize: 10,

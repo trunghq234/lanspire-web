@@ -20,11 +20,13 @@ const ColumnTranscript = () => {
       title: 'Min',
       dataIndex: 'min',
       align: 'center',
+      sorter: (a, b) => a.min - b.min,
     },
     {
       title: 'Max',
       dataIndex: 'max',
       align: 'center',
+      sorter: (a, b) => a.max - b.max,
     },
     {
       title: '',
@@ -64,7 +66,7 @@ const ColumnTranscript = () => {
     confirm({
       title: 'Do you want to delete this column?',
       icon: <ExclamationCircleOutlined />,
-      content: '',
+      centered: true,
       onOk() {
         dispatch(deleteColumnTranscript.deleteColumnTranscriptRequest(id));
 
@@ -86,15 +88,25 @@ const ColumnTranscript = () => {
     });
   };
 
+  const [dataSource, setDataSource] = useState([]);
+  const handleSearch = value => {
+    const dataTmp = data.filter(
+      item => item.columnName.toLowerCase().search(value.toLowerCase()) >= 0
+    );
+    setDataSource(dataTmp);
+  };
+  useEffect(() => {
+    setDataSource(data);
+  }, [data]);
   return (
     <>
       <Breadcrumb>
         <Breadcrumb.Item>
           <a href="/">Dashboard</a>
         </Breadcrumb.Item>
-        <Breadcrumb.Item>Column Transcript</Breadcrumb.Item>
+        <Breadcrumb.Item>Column transcript</Breadcrumb.Item>
       </Breadcrumb>
-      <h3>Column Transcript</h3>
+      <h3>Column transcript</h3>
       <Row gutter={[20, 20]}>
         <Col xs={{ order: 1 }} sm={{ order: 1 }} lg={{ order: 0 }} span={24} xl={16}>
           <Card>
@@ -105,7 +117,7 @@ const ColumnTranscript = () => {
                   placeholder="Search"
                   allowClear
                   enterButton
-                  onSearch={e => console.log(e)}
+                  onSearch={handleSearch}
                 />
               </Col>
               <Col span={24}>
@@ -113,7 +125,7 @@ const ColumnTranscript = () => {
                   bordered
                   loading={isLoading}
                   columns={columns}
-                  dataSource={data}
+                  dataSource={dataSource}
                   rowKey={row => row.idColumn}
                   pagination={{
                     defaultPageSize: 10,

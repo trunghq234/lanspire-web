@@ -30,7 +30,6 @@ const AddLevel = props => {
 
   const handleSubmit = () => {
     const { levelName, point, language } = form.getFieldValue();
-    // if (levelName && point && language) {
     if (isEdit) {
       dispatch(
         updateLevel.updateLevelRequest({
@@ -62,9 +61,15 @@ const AddLevel = props => {
     form.resetFields();
   };
 
+  const handleReset = () => {
+    form.resetFields();
+    if (isEdit) {
+      history.push('/level/');
+    }
+  };
   return (
     <>
-      <h3>Add level</h3>
+      <h3>{isEdit ? 'Update level' : 'Add level'}</h3>
       <Form
         onFinish={handleSubmit}
         form={form}
@@ -88,14 +93,14 @@ const AddLevel = props => {
           </Col>
           <Col span={24}>
             <Form.Item>
-              <Button
-                htmlType="submit"
-                // onClick={handleSubmit}
-                block
-                type="primary"
-                size="large">
-                Add
-              </Button>
+              <div className="flex">
+                <Button htmlType="submit" block type="primary" size="large">
+                  {isEdit ? 'Update' : 'Add'}
+                </Button>
+                <Button htmlType="reset" size="large" onClick={handleReset}>
+                  Cancel
+                </Button>
+              </div>
             </Form.Item>
           </Col>
         </Row>

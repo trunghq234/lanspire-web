@@ -66,10 +66,21 @@ const AddColumnTranscript = ({ trigger }) => {
       form.resetFields();
     }
   };
+
+  const handleReset = () => {
+    form.resetFields();
+    if (isEdit) {
+      history.push('/columntranscript/');
+    }
+  };
   return (
     <>
       <h3>{isEdit ? 'Update column' : 'Add column'}</h3>
-      <Form form={form} layout="vertical" validateMessages={validateMessages}>
+      <Form
+        form={form}
+        onFinish={handleSubmit}
+        layout="vertical"
+        validateMessages={validateMessages}>
         <Row gutter={[20, 0]}>
           <Col span={24}>
             <Form.Item label="Column name" name="columnName" rules={[{ required: true }]}>
@@ -99,9 +110,14 @@ const AddColumnTranscript = ({ trigger }) => {
           </Col>
           <Col span={24}>
             <Form.Item>
-              <Button htmlType="submit" onClick={handleSubmit} block type="primary" size="large">
-                {isEdit ? 'Update' : 'Add'}
-              </Button>
+              <div className="flex">
+                <Button htmlType="submit" block type="primary" size="large">
+                  {isEdit ? 'Update' : 'Add'}
+                </Button>
+                <Button htmlType="reset" size="large" onClick={handleReset}>
+                  Cancel
+                </Button>
+              </div>
             </Form.Item>
           </Col>
         </Row>

@@ -6,12 +6,12 @@ import Course from 'pages/Course';
 import AddCourse from 'pages/Course/AddCourse';
 import CourseType from 'pages/Course/CourseType';
 import Employee from 'pages/Employee';
-import Icon from '@ant-design/icons';
 import AddEmployee from 'pages/Employee/AddEmployee';
 import Level from 'pages/Course/Level';
-
-import { dashboardSvg, lecturerSvg, courseSvg, employeeSvg } from 'utils/iconsvg';
 import ColumnTranscript from 'pages/Course/ColumnTranscript';
+
+import Icon from '@ant-design/icons';
+import { dashboardSvg, lecturerSvg, courseSvg, employeeSvg } from 'utils/iconsvg';
 
 const DashboardIcon = props => <Icon component={dashboardSvg} {...props} />;
 const LecturerIcon = props => <Icon component={lecturerSvg} {...props} />;

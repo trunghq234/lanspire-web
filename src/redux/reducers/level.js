@@ -1,77 +1,90 @@
-import INIT_STATE from '../constant';
-import { getType } from '../actions/levels';
-import * as levelActions from '../actions/levels';
+import INIT_STATE from 'redux/constant';
+import { getType } from 'redux/actions/levels';
+import * as levelActions from 'redux/actions/levels';
 
-export default function LevelsReducer(state = INIT_STATE.levels, action) {
+export default function levelsReducer(state = INIT_STATE.levels, action) {
   switch (action.type) {
-    // get Level
+    //get
     case getType(levelActions.getLevels.getLevelsRequest):
       return {
         ...state,
         isLoading: true,
+        isSuccess: false,
       };
     case getType(levelActions.getLevels.getLevelsSuccess):
       return {
         ...state,
         data: action.payload,
         isLoading: false,
+        isSuccess: true,
       };
     case getType(levelActions.getLevels.getLevelsFailure):
       return {
         ...state,
         isLoading: false,
+        isSuccess: false,
       };
-
-    //create Level
-    case getType(levelActions.createLevels.createLevelsRequest):
+    // create
+    case getType(levelActions.createLevel.createLevelRequest):
       return {
         ...state,
         isLoading: true,
+        isSuccess: false,
       };
-    case getType(levelActions.createLevels.createLevelsSuccess):
+    case getType(levelActions.createLevel.createLevelSuccess):
       return {
         ...state,
         data: [...state.data, action.payload],
+        isLoading: false,
+        isSuccess: true,
       };
-    case getType(levelActions.createLevels.createLevelsFailure):
+    case getType(levelActions.createLevel.createLevelFailure):
       return {
         ...state,
+        isLoading: false,
+        isSuccess: false,
       };
-
-    // update Level
-    case getType(levelActions.updateLevels.updateLevelsRequest):
+    //update
+    case getType(levelActions.updateLevel.updateLevelRequest):
       return {
         ...state,
         isLoading: true,
+        isSuccess: false,
       };
-    case getType(levelActions.updateLevels.updateLevelsSuccess):
+    case getType(levelActions.updateLevel.updateLevelSuccess):
       return {
         ...state,
         data: state.data.map(level =>
-          level.idLevel === action.payload.idLevel ? action.payload : Level
+          level.idLevel === action.payload.idLevel ? action.payload : level
         ),
         isLoading: false,
+        isSuccess: true,
       };
-    case getType(levelActions.updateLevels.updateLevelsFailure):
+    case getType(levelActions.updateLevel.updateLevelFailure):
       return {
         ...state,
         isLoading: false,
+        isSuccess: false,
       };
-
-    //delete Level
-    case getType(levelActions.deleteLevels.deleteLevelsRequest):
+    // delete
+    case getType(levelActions.deleteLevel.deleteLevelRequest):
       return {
         ...state,
         isLoading: true,
+        isSuccess: false,
       };
-    case getType(levelActions.deleteLevels.deleteLevelsSuccess):
+    case getType(levelActions.deleteLevel.deleteLevelSuccess):
       return {
         ...state,
         data: state.data.filter(level => level.idLevel !== action.payload),
+        isLoading: false,
+        isSuccess: true,
       };
-    case getType(levelActions.deleteLevels.deleteLevelsFailure):
+    case getType(levelActions.deleteLevel.deleteLevelFailure):
       return {
         ...state,
+        isLoading: false,
+        isSuccess: false,
       };
     default:
       return state;

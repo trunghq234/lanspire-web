@@ -7,23 +7,23 @@ export const getType = reduxAction => {
 export const getLevels = createActions({
   getLevelsRequest: undefined,
   getLevelsSuccess: payload => payload,
-  getLevelsFailure: err => err,
+  getLevelsFailure: error => error,
 });
 
-export const createLevels = createActions({
-  createLevelsRequest: payload => payload,
-  createLevelsSuccess: payload => payload,
-  createLevelsFailure: err => err,
+export const createLevel = createActions({
+  createLevelRequest: payload => payload,
+  createLevelSuccess: payload => payload,
+  createLevelFailure: error => error,
 });
 
-export const updateLevels = createActions({
-  updateLevelsRequest: payload => payload,
-  updateLevelsSuccess: payload => payload,
-  updateLevelsFailure: err => err,
+export const updateLevel = createActions({
+  updateLevelRequest: payload => payload,
+  updateLevelSuccess: payload => payload,
+  updateLevelFailure: error => error,
 });
 
-export const deleteLevels = createActions({
-  deleteLevelsRequest: payload => payload,
-  deleteLevelsSuccess: payload => payload,
-  deleteLevelsFailure: err => err,
+export const deleteLevel = createActions({
+  deleteLevelRequest: payload => payload,
+  deleteLevelSuccess: payload => payload,
+  deleteLevelFailure: error => error,
 });

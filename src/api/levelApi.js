@@ -1,24 +1,30 @@
 import axiosClient from './axiosClient';
 
+const url = '/levels/';
+
 const levelApi = {
   getAll: async () => {
-    const res = await axiosClient.get('/levels');
+    const res = await axiosClient.get(url);
     return res.data;
   },
-  getById: async id => {
-    const res = await axiosClient.get(`/levels/${id}`);
+
+  getById: async idLevel => {
+    const res = await axiosClient.get(`${url}${idLevel}`);
     return res.data;
   },
-  create: async data => {
-    const res = await axiosClient.post('/levels', data);
+
+  create: async level => {
+    const res = await axiosClient.post(url, level);
     return res.data;
   },
-  update: async data => {
-    const res = await axiosClient.patch('/levels', data);
+
+  update: async level => {
+    const res = await axiosClient.put(`${url}${level.idLevel}`, level);
     return res.data;
   },
-  remove: async id => {
-    const res = await axiosClient.delete(`/levels/${id}`);
+
+  delete: async idLevel => {
+    const res = await axiosClient.delete(`${url}${idLevel}`);
     return res.data;
   },
 };

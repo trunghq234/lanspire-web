@@ -171,10 +171,10 @@ const handleEditBtn = editable => {
 };
 
 const Employee = () => {
-  const dispatch = useDispatch();
-  const posts = useSelector(postState$);
+  // const dispatch = useDispatch();
+  // const posts = useSelector(postState$);
 
-  console.log({ posts });
+  // console.log({ posts });
 
   const onSearch = () => {};
   const handleChange = () => {};

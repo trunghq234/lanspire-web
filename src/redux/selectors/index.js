@@ -1,8 +1,23 @@
-export const postState$ = state => state.posts.data;
-export const studentState$ = state => state.students;
-export const levelState$ = state => state.levels;
-export const courseTypeState$ = state => state.courseTypes;
-// export const studentByIdState$ = state => state.studentById;
-export const usersState$ = state => state.users.data;
-export const userState$ = state => state.user.data;
-export const authState$ = state => state.auth.data;
+const usersState$ = state => state.users.data;
+const userState$ = state => state.user.data;
+const authState$ = state => state.auth.data;
+const postState$ = state => state.posts.data;
+const courseState$ = state => state.courses;
+const courseTypeState$ = state => state.courseTypes;
+const levelState$ = state => state.levels;
+const classState$ = state => state.classes;
+const timeFrameState$ = state => state.timeFrames;
+const studentState$ = state => state.students;
+
+export {
+  usersState$,
+  userState$,
+  authState$,
+  classState$,
+  postState$,
+  courseState$,
+  courseTypeState$,
+  levelState$,
+  timeFrameState$,
+  studentState$,
+};

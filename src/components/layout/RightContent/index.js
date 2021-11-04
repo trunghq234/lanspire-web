@@ -1,13 +1,17 @@
-import React from 'react';
-import { Avatar, Badge, Popover, Image } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
-import { useHistory } from 'react-router';
-import Title from './Title/index.js';
-import Content from './Content/index.js';
-import { userState$ } from 'redux/selectors';
+import { Avatar, Badge, Image, Popover } from 'antd';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { getUser } from 'redux/actions/users';
+import { userState$ } from 'redux/selectors';
+import Content from './Content/index.js';
+import Title from './Title/index.js';
 
 const RightContent = () => {
+  const idUser = localStorage.getItem('idUser');
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getUser.getUserRequest(idUser));
+  }, [dispatch]);
   const user = useSelector(userState$);
   return (
     <div>

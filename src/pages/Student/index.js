@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
-import { Table, Input, Button, Tag, Col, Row, Modal, notification } from 'antd';
+import { Table, Input, Button, Tag, Col, Row, Modal, notification, Breadcrumb } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import styles from './index.module.less';
 import { studentState$ } from 'redux/selectors/index';
@@ -175,6 +175,13 @@ const Student = () => {
         onCancel={() => setVisibleModal(false)}>
         Are you sure delete this student?
       </Modal>
+      <Breadcrumb style={{ marginBottom: '10px' }}>
+        <Breadcrumb.Item>
+          <a href="/">Dashboard</a>
+        </Breadcrumb.Item>
+        <Breadcrumb.Item>Student</Breadcrumb.Item>
+      </Breadcrumb>
+      <h2 className={styles.title}>Student list</h2>
       <Row
         gutter={[
           { xs: 0, sm: 0, md: 10, lg: 10 },

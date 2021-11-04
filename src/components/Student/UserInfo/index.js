@@ -42,7 +42,7 @@ const UserInfo = props => {
           </Form.Item>
         </Col>
       </Row>
-      <ProvincePicker city={props.city} />
+      <ProvincePicker idStudent={props.idStudent} city={props.city} />
     </Card>
   );
 };

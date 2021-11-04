@@ -88,11 +88,6 @@ const adminMenuItems = {
           name: 'Student list',
           component: <Student />,
         },
-        {
-          path: '/student/add',
-          name: 'Add student',
-          component: <AddStudent />,
-        },
       ],
     },
     {

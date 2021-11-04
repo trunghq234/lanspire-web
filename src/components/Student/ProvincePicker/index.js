@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Form, Input, Row, Select } from 'antd';
 import LocationVN from './LocationVN.json';
-
+import { useSelector } from 'react-redux';
+import { studentState$ } from 'redux/selectors';
 const ProvincePicker = props => {
   let cityOptions = [];
   const [districtInSelectedCity, setDistrictInSelectedCity] = useState([]);
   const [selectedCity, setSelectedCity] = useState();
   const [selectedDistrict, setSelectedDistrict] = useState();
+  const students = useSelector(studentState$);
 
   for (let city of Object.values(LocationVN)) {
     cityOptions.push(city);
@@ -21,12 +23,19 @@ const ProvincePicker = props => {
   };
   useEffect(() => {
     for (let city of Object.values(LocationVN)) {
-      if (city.name === selectedCity || city.name === props.city) {
+      if (city.name === selectedCity) {
         setDistrictInSelectedCity(mapDistrictToArray(city.districts));
         return true;
       }
     }
   }, [selectedCity]);
+
+  useEffect(() => {
+    if (students.data.length !== 0 && props.idStudent) {
+      const student = students.data.find(element => element.idStudent === props.idStudent);
+      setSelectedCity(student.User.address[2]);
+    }
+  }, [students.data]);
 
   const renderOptions = dataList => {
     if (dataList.length) {
@@ -55,7 +64,7 @@ const ProvincePicker = props => {
             value={selectedCity}
             placeholder="Tỉnh/Thành phố"
             onChange={val => {
-              setSelectedDistrict(null);
+              setSelectedDistrict('');
               setSelectedCity(val);
             }}>
             {optionCityRendered}

@@ -3,6 +3,7 @@ import * as postActions from 'redux/actions/posts';
 import * as courseActions from 'redux/actions/courses';
 import * as courseTypeActions from 'redux/actions/courseTypes';
 import * as levelActions from 'redux/actions/levels';
+import * as columnTranscriptActions from 'redux/actions/columnTranscripts';
 import { fetchPostsSaga, updatePostSaga, deletePostSaga, createPostSaga } from 'redux/sagas/posts';
 import { fetchCourses, createCourse, updateCourse, deleteCourse } from 'redux/sagas/courses';
 import {
@@ -12,8 +13,32 @@ import {
   deleteCourseType,
 } from 'redux/sagas/courseTypes';
 import { fetchLevels, createLevel, updateLevel, deleteLevel } from 'redux/sagas/levels';
+import {
+  fetchColumnTranscripts,
+  createColumnTranscript,
+  updateColumnTranscript,
+  deleteColumnTranscript,
+} from 'redux/sagas/columnTranscripts';
 
 export default function* mySaga() {
+  //column transcript
+  yield takeLatest(
+    columnTranscriptActions.getColumnTranscripts.getColumnTranscriptsRequest,
+    fetchColumnTranscripts
+  );
+  yield takeLatest(
+    columnTranscriptActions.createColumnTranscript.createColumnTranscriptRequest,
+    createColumnTranscript
+  );
+  yield takeLatest(
+    columnTranscriptActions.updateColumnTranscript.updateColumnTranscriptRequest,
+    updateColumnTranscript
+  );
+  yield takeLatest(
+    columnTranscriptActions.deleteColumnTranscript.deleteColumnTranscriptRequest,
+    deleteColumnTranscript
+  );
+
   //level
   yield takeLatest(levelActions.getLevels.getLevelsRequest, fetchLevels);
   yield takeLatest(levelActions.createLevel.createLevelRequest, createLevel);

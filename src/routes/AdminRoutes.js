@@ -11,6 +11,7 @@ import AddEmployee from 'pages/Employee/AddEmployee';
 import Level from 'pages/Course/Level';
 
 import { dashboardSvg, lecturerSvg, courseSvg, employeeSvg } from 'utils/iconsvg';
+import ColumnTranscript from 'pages/Course/ColumnTranscript';
 
 const DashboardIcon = props => <Icon component={dashboardSvg} {...props} />;
 const LecturerIcon = props => <Icon component={lecturerSvg} {...props} />;
@@ -69,6 +70,16 @@ const adminRoutes = [
     page: () => <Level />,
   },
   {
+    path: '/columntranscript',
+    exact: true,
+    page: () => <ColumnTranscript />,
+  },
+  {
+    path: '/columntranscript/:idColumn',
+    exact: true,
+    page: () => <ColumnTranscript />,
+  },
+  {
     path: '/employee/',
     exact: true,
     page: () => <Employee />,
@@ -123,6 +134,11 @@ const adminMenuItems = {
           path: '/level/',
           name: 'Level',
           component: <Level />,
+        },
+        {
+          path: '/columntranscript/',
+          name: 'Column transcript',
+          component: <ColumnTranscript />,
         },
       ],
     },

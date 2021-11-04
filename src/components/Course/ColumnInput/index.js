@@ -1,85 +1,69 @@
-import React, { useState } from 'react';
-import { Form, Input, InputNumber, Space, Button, Row, Col } from 'antd';
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import React, { useState, useEffect } from 'react';
+import { Form, Button, Row, Col, Table } from 'antd';
 import styles from './index.module.less';
+import { useDispatch, useSelector } from 'react-redux';
+import { columnTranscriptState$ } from 'redux/selectors';
+import { getColumnTranscripts } from 'redux/actions/columnTranscripts';
 
-const ColumnInput = props => {
-  const [min, setMin] = useState();
-  const [max, setMax] = useState(Math.max());
+const ColumnInput = ({ editCourse, ...props }) => {
+  const columns = [
+    {
+      title: 'Column name',
+      dataIndex: 'columnName',
+    },
+    {
+      title: 'Min',
+      dataIndex: 'min',
+      align: 'center',
+    },
+    {
+      title: 'Max',
+      dataIndex: 'max',
+      align: 'center',
+    },
+  ];
 
+  const dispatch = useDispatch();
+  const { data, isLoading } = useSelector(columnTranscriptState$);
+  useEffect(() => {
+    dispatch(getColumnTranscripts.getColumnTranscriptsRequest());
+  }, []);
+
+  const [selected, setSelected] = useState([]);
+  useEffect(() => {
+    if (editCourse) {
+      const selectedKey = editCourse.Columns.map(column => column.idColumn);
+      setSelected(selectedKey);
+      props.changeColNum(selectedKey);
+    }
+  }, [editCourse]);
+
+  const rowSelection = {
+    onChange: (selectedRowKeys, selectedRows) => {
+      props.changeColNum(selectedRowKeys);
+      setSelected(selectedRowKeys);
+    },
+  };
   return (
     <Row justify="center" gutter={[20, 10]}>
-      <Form.List name="columns" rules>
-        {(fields, { add, remove }) => (
-          <>
-            {fields.map(({ key, name, fieldKey, ...restField }) => (
-              <Col key={key} span={14}>
-                <Space
-                  className="hide-label"
-                  style={{ width: '100%' }}
-                  size="large"
-                  align="baseline">
-                  <Form.Item
-                    {...restField}
-                    label="Column"
-                    name={[name, 'columnname']}
-                    fieldKey={[fieldKey, 'columnname']}
-                    rules={[{ required: true }]}>
-                    <Input className={styles.input} placeholder="Column name" />
-                  </Form.Item>
-                  <Form.Item
-                    {...restField}
-                    label="Min point"
-                    name={[name, 'min']}
-                    fieldKey={[fieldKey, 'min']}
-                    rules={[{ required: true }]}>
-                    <InputNumber
-                      min={0}
-                      max={max - 1}
-                      className={styles.input}
-                      placeholder="Min"
-                      onChange={e => setMin(e)}
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    {...restField}
-                    label="Max point"
-                    name={[name, 'max']}
-                    fieldKey={[fieldKey, 'max']}
-                    rules={[{ required: true }]}>
-                    <InputNumber
-                      min={0 || min + 1}
-                      className={styles.input}
-                      placeholder="Max"
-                      onChange={e => setMax(e)}
-                    />
-                  </Form.Item>
-                  <MinusCircleOutlined
-                    onClick={() => {
-                      remove(name);
-                      props.decreaseColNum();
-                    }}
-                  />
-                </Space>
-              </Col>
-            ))}
-            <Col span={14}>
-              <Form.Item>
-                <Button
-                  type="dashed"
-                  onClick={() => {
-                    add();
-                    props.increaseColNum();
-                  }}
-                  block
-                  icon={<PlusOutlined />}>
-                  Add field
-                </Button>
-              </Form.Item>
-            </Col>
-          </>
-        )}
-      </Form.List>
+      <Col span={16}>
+        <Table
+          bordered
+          loading={isLoading}
+          columns={columns}
+          dataSource={data}
+          rowKey={row => row.idColumn}
+          rowSelection={{
+            selectedRowKeys: selected,
+            ...rowSelection,
+          }}
+          pagination={{
+            defaultPageSize: 10,
+            showSizeChanger: true,
+            pageSizeOptions: ['10', '50', '100'],
+          }}
+        />
+      </Col>
       <Col span={14}>
         <Form.Item>
           <div className={styles.flex}>
@@ -92,7 +76,7 @@ const ColumnInput = props => {
               Submit
             </Button>
             <Button style={{ width: '50%' }} block size="large" onClick={props.goPrev}>
-              Prev
+              Back
             </Button>
           </div>
         </Form.Item>

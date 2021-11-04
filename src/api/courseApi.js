@@ -19,7 +19,7 @@ const courseApi = {
   },
 
   update: async course => {
-    const res = await axiosClient.put(`${url}${course.idCourse}`, course);
+    const res = await axiosClient.patch(`${url}${course.idCourse}`, course);
     return res.data;
   },
 

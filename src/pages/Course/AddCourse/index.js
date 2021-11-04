@@ -7,7 +7,7 @@ import AddCourseInfo from 'components/Course/AddCourseInfo';
 import ColumnInput from 'components/Course/ColumnInput';
 import { useDispatch, useSelector } from 'react-redux';
 import { courseState$ } from 'redux/selectors';
-import { createCourse, getCourses } from 'redux/actions/courses';
+import { createCourse, getCourses, updateCourse } from 'redux/actions/courses';
 import { validateMessages } from 'constant/validationMessage';
 
 const { Step } = Steps;
@@ -15,32 +15,21 @@ const { Step } = Steps;
 const AddCourse = () => {
   const [isDone, setIsDone] = useState(false);
   const dispatch = useDispatch();
-  const { isSuccess, isLoading } = useSelector(courseState$);
+  const { data: courseList, isSuccess: isDispatchSuccess, isLoading } = useSelector(courseState$);
 
-  const [isBack, setIsBack] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-  const [colNum, setColNum] = useState(0);
+  const [columnKeys, setColumnKeys] = useState([]);
   const [course, setCourse] = useState({});
-  const increaseColNum = () => {
-    const res = colNum + 1;
-    setColNum(res);
-    console.log(res);
-  };
-  const decreaseColNum = () => {
-    const res = colNum - 1;
-    console.log(res);
-    setColNum(res);
-  };
-  const handleSubmitCourse = value => {
-    setCourse(value);
-  };
+  const [editCourse, setEditCourse] = useState();
 
   const { idCourse } = useParams();
   useEffect(() => {
     if (idCourse) {
       setIsEdit(true);
-      // dispatch(getCourses.getCoursesRequest)
-      form.setFieldsValue({});
+      dispatch(getCourses.getCoursesRequest());
+      const tmp = courseList.find(course => course.idCourse === idCourse);
+      setEditCourse(tmp);
     }
   }, [idCourse]);
 
@@ -48,37 +37,40 @@ const AddCourse = () => {
     total: 3,
     defaultCurrent: 0,
     isBackValidate: false,
-    async submit(values) {
-      console.log({ values });
-      if (colNum > 0) {
+    submit(values) {
+      if (columnKeys.length > 0) {
         if (isEdit) {
-          dispatch(updateCourse.updateCourseRequest(course));
+          const tmp = { idCourse: idCourse, ...course, columns: columnKeys };
+          dispatch(updateCourse.updateCourseRequest(tmp));
         } else {
-          dispatch(createCourse.createCourseRequest(course));
-          //create columns
+          const tmp = { ...course, columns: columnKeys };
+          dispatch(createCourse.createCourseRequest(tmp));
         }
-        await new Promise(r => setTimeout(r, 500));
+        setIsSuccess(isDispatchSuccess);
         setIsDone(true);
-        return isSuccess;
+        gotoStep(current + 1);
       } else {
         message.warning('Number of column must higher than 0');
+        setIsDone(false);
       }
     },
   });
   const goNext = () => {
-    setIsBack(false);
     gotoStep(current + 1);
   };
   const goPrev = () => {
-    setIsBack(true);
     gotoStep(current - 1);
   };
   const handleSubmit = () => {
-    submit().then(result => {
-      if (result) {
-        gotoStep(current + 1);
-      }
-    });
+    submit();
+  };
+  useEffect(() => {
+    if (!isDispatchSuccess && !isLoading) {
+      setIsSuccess(false);
+    }
+  }, [isDispatchSuccess, isLoading]);
+  const handleSubmitCourse = value => {
+    setCourse(value);
   };
   const handleAddNew = () => {
     form.resetFields();
@@ -86,13 +78,18 @@ const AddCourse = () => {
     setIsDone(false);
   };
   const formList = [
-    <AddCourseInfo form={form} handleSubmitCourse={handleSubmitCourse} goNext={goNext} />,
+    <AddCourseInfo
+      form={form}
+      handleSubmitCourse={handleSubmitCourse}
+      goNext={goNext}
+      editCourse={editCourse}
+    />,
     <ColumnInput
       formLoading={formLoading}
       handleSubmit={handleSubmit}
       goPrev={goPrev}
-      increaseColNum={increaseColNum}
-      decreaseColNum={decreaseColNum}
+      changeColNum={e => setColumnKeys(e)}
+      editCourse={editCourse}
     />,
   ];
   return (
@@ -120,7 +117,7 @@ const AddCourse = () => {
             <Card>{formList[current]}</Card>
           </Form>
         )}
-        {current === 2 && isSuccess && (
+        {current === 2 && isDone && isSuccess && (
           <Card>
             <Result
               status="success"
@@ -146,7 +143,7 @@ const AddCourse = () => {
             />
           </Card>
         )}
-        {current === 2 && !isSuccess && (
+        {current === 2 && isDone && !isSuccess && (
           <Card>
             <Result
               status="error"
@@ -160,7 +157,8 @@ const AddCourse = () => {
                     <Link to="/course/">Course list</Link>
                   </Button>
                 </>
-              }></Result>
+              }
+            />
           </Card>
         )}
       </div>

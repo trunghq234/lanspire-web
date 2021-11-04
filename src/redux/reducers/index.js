@@ -4,6 +4,7 @@ import employesReducer from './employes';
 import coursesReducer from 'redux/reducers/courses';
 import courseTypesReducer from 'redux/reducers/courseType';
 import levelsReducer from './level';
+import columnTranscriptsReducer from './columnTranscript';
 
 export default combineReducers({
   posts: postsReducer,
@@ -11,4 +12,5 @@ export default combineReducers({
   courses: coursesReducer,
   courseTypes: courseTypesReducer,
   levels: levelsReducer,
+  columnTranscripts: columnTranscriptsReducer,
 });

@@ -102,7 +102,6 @@ const timeFrameReducer = (state = INIT_STATE.timeFrames, action) => {
         error: '',
       };
     case getType(timeFrameActions.deleteTimeFrame.deleteTimeFrameSuccess):
-      console.log(action.payload);
       return {
         ...state,
         data: state.data.filter(timeFrame => timeFrame.idTimeFrame !== action.payload),

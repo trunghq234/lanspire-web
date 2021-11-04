@@ -1,7 +1,7 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import { Form, Button, Space, TimePicker } from 'antd';
-import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import style from './index.module.less';
 import { useSelector } from 'react-redux';
 import { timeFrameState$ } from 'redux/selectors';
@@ -13,7 +13,6 @@ const FormAdd = props => {
   const { getFieldDecorator } = form;
   const format = 'HH:mm';
   const ExistValidator = (rule, value, callback) => {
-    console.log(1);
     if (value) {
       const start = moment(value[0]).format('HH:mm');
       const end = moment(value[1]).format('HH:mm');
@@ -49,7 +48,7 @@ const FormAdd = props => {
                   ]}>
                   <TimePicker.RangePicker format={format} />
                 </Form.Item>
-                <DeleteOutlined style={{ color: 'red' }} onClick={() => remove(name)} />
+                <MinusCircleOutlined className={style['icon-minus']} onClick={() => remove(name)} />
               </Space>
             ))}
             <Form.Item>

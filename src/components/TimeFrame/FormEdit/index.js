@@ -49,11 +49,11 @@ const FormEdit = props => {
       </Form.Item>
       <Form.Item>
         <div className={style.action}>
+          <Button type="primary" htmlType="submit" block className={style.btnSave}>
+            Save
+          </Button>
           <Button className={style.btnCancel} onClick={() => props.onCancel(false)}>
             Cancel
-          </Button>
-          <Button type="primary" htmlType="submit" className={style.btnSave}>
-            Save
           </Button>
         </div>
       </Form.Item>

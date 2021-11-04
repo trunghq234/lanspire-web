@@ -76,7 +76,13 @@ export default function employeesReducer(state = INIT_STATE.employees, action) {
     case getType(employeeActions.deleteEmployee.deleteEmployeeSuccess):
       return {
         ...state,
-        data: state.data.filter(employee => employee.idEmployee !== action.payload),
+        data: state.data.map(employee => {
+          const idEmployee = action.payload.idEmployee;
+          if (employee.idEmployee === idEmployee) {
+            employee.isActivated = false;
+          }
+          return employee;
+        }),
         isLoading: false,
         isSuccess: true,
       };

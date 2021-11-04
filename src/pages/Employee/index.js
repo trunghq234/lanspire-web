@@ -1,13 +1,7 @@
-import {
-  DeleteOutlined,
-  EditOutlined,
-  ExclamationCircleOutlined,
-  SearchOutlined,
-} from '@ant-design/icons';
-import { Button, Card, Input, Modal, notification, Space, Table, Tag } from 'antd';
+import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { Breadcrumb, Button, Card, Input, Modal, notification, Table, Tag } from 'antd';
 import moment from 'moment';
 import React from 'react';
-import Highlighter from 'react-highlight-words';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import * as employeeActions from 'redux/actions/employees';
@@ -15,6 +9,7 @@ import { employeeState$ } from 'redux/selectors';
 import styles from './index.module.less';
 
 const { confirm } = Modal;
+const { Search } = Input;
 
 const mapToDataSource = array => {
   return array.map(item => {
@@ -34,80 +29,16 @@ const mapToDataSource = array => {
 };
 
 const Employee = () => {
-  const [searchText, setSearchText] = React.useState('');
+  const [dataSource, setDataSource] = React.useState([]);
+  const [filteredData, setFilteredData] = React.useState([]);
   const dispatch = useDispatch();
   const history = useHistory();
   const employees = useSelector(employeeState$);
-  const dataSource = mapToDataSource(employees.data);
   const columns = [
-    {
-      title: 'ID',
-      dataIndex: 'idEmployee',
-      align: 'center',
-      ellipsis: true,
-    },
-    {
-      title: 'Username',
-      dataIndex: 'username',
-      ellipsis: true,
-    },
     {
       title: 'Full name',
       dataIndex: 'displayName',
       ellipsis: true,
-      filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => {
-        return (
-          <div style={{ padding: 8 }}>
-            <Input
-              autoFocus
-              placeholder="Type text here"
-              style={{ marginBottom: 8, display: 'block', fontSize: '14px' }}
-              value={selectedKeys[0]}
-              onChange={event => {
-                setSelectedKeys(event.target.value ? [event.target.value] : []);
-              }}
-              onPressEnter={() => {
-                handleSearch(selectedKeys, confirm);
-              }}
-            />
-
-            <Space>
-              <Button
-                type="primary"
-                style={{ width: 90, fontSize: '12px' }}
-                onClick={() => {
-                  handleSearch(selectedKeys, confirm);
-                }}
-                icon={<SearchOutlined />}
-                size="small">
-                Search
-              </Button>
-              <Button
-                style={{ width: 90, fontSize: '12px' }}
-                onClick={() => {
-                  handleReset(clearFilters);
-                }}
-                size="small">
-                Reset
-              </Button>
-            </Space>
-          </div>
-        );
-      },
-      filterIcon: () => {
-        return <SearchOutlined />;
-      },
-      onFilter: (value, record) => {
-        return record.displayName.toLowerCase().includes(value.toLowerCase());
-      },
-      render: text => (
-        <Highlighter
-          highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-          searchWords={[searchText]}
-          autoEscape
-          textToHighlight={text ? text.toString() : ''}
-        />
-      ),
     },
     {
       title: 'Email',
@@ -118,6 +49,13 @@ const Employee = () => {
       title: 'Gender',
       dataIndex: 'gender',
       align: 'center',
+      filters: [
+        { text: 'Male', value: 'Male' },
+        { text: 'Female', value: 'Female' },
+        { text: 'Others', value: 'Others' },
+      ],
+      filterSearch: true,
+      onFilter: (value, record) => record.gender.startsWith(value),
     },
     {
       title: 'Phone number',
@@ -138,6 +76,14 @@ const Employee = () => {
       title: 'Status',
       dataIndex: 'isActivated',
       align: 'center',
+      filters: [
+        { text: 'Working', value: true },
+        { text: 'Unworking', value: false },
+      ],
+      filterSearch: true,
+      onFilter: (value, record) => {
+        if (record.isActivated === value) return true;
+      },
       render: isActivated => (
         <span>
           {isActivated ? <Tag color="success">Working</Tag> : <Tag color="orange">Unemployed</Tag>}
@@ -169,17 +115,13 @@ const Employee = () => {
   React.useEffect(() => {
     dispatch(employeeActions.getEmployees.getEmployeesRequest());
   }, [dispatch]);
+  React.useEffect(() => {
+    const mapEmployeeToData = mapToDataSource(employees.data);
+    setDataSource(mapEmployeeToData);
+    setFilteredData(mapEmployeeToData);
+  }, [employees]);
 
-  const handleSearch = (selectedKeys, confirm) => {
-    confirm();
-    setSearchText(selectedKeys[0]);
-  };
-
-  const handleReset = clearFilters => {
-    clearFilters();
-    setSearchText('');
-  };
-  const handleAddEmployeeClick = () => {
+  const handleAddEmployee = () => {
     history.push('/employee/add');
   };
   const handleDeleteEmployee = idEmployee => {
@@ -188,17 +130,8 @@ const Employee = () => {
       icon: <ExclamationCircleOutlined />,
       content: '',
       onOk() {
-        dispatch(employeeActions.deleteEmployee.deleteEmployeeRequest(idEmployee));
-
-        employees.isSuccess
-          ? notification['success']({
-              message: 'Successfully',
-              description: 'Delete employee success',
-            })
-          : notification['error']({
-              message: 'Notification Title',
-              description: 'That employee is activating',
-            });
+        const employee = employees.data.find(employee => employee.idEmployee === idEmployee);
+        dispatch(employeeActions.deleteEmployee.deleteEmployeeRequest(employee));
       },
       onCancel() {},
     });
@@ -206,26 +139,49 @@ const Employee = () => {
   const handleEditEmployee = idEmployee => {
     history.push(`/employee/edit/${idEmployee}`);
   };
+  const handleSearch = value => {
+    const dataSearch = dataSource.filter(
+      item => item.displayName.toLowerCase().search(value.toLowerCase()) >= 0
+    );
+    setFilteredData(dataSearch);
+  };
 
   console.log({ dataSource });
 
   return (
     <div>
+      <Breadcrumb style={{ marginBottom: '20px' }}>
+        <Breadcrumb.Item>Home</Breadcrumb.Item>
+        <Breadcrumb.Item>
+          <a href="">Application Center</a>
+        </Breadcrumb.Item>
+        <Breadcrumb.Item>
+          <a href="">Application List</a>
+        </Breadcrumb.Item>
+      </Breadcrumb>
+
       <h3>Employee List</h3>
       <Card>
         <div className={styles.wrapper}>
-          <Button
-            className={styles.btn}
-            size="large"
-            type="primary"
-            onClick={handleAddEmployeeClick}>
+          <div>
+            <Search
+              className={styles.search}
+              size="large"
+              placeholder="Search"
+              allowClear
+              enterButton
+              onSearch={handleSearch}
+            />
+          </div>
+          <Button className={styles.btn} size="large" type="primary" onClick={handleAddEmployee}>
             Add employee
           </Button>
         </div>
         <Table
+          bordered={true}
           columns={columns}
           loading={employees.isLoading}
-          dataSource={dataSource}
+          dataSource={filteredData}
           rowKey={row => row.idEmployee}
         />
       </Card>

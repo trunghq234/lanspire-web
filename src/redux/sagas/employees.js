@@ -26,7 +26,6 @@ export function* updateEmployeeSaga(action) {
 export function* deleteEmployeeSaga(action) {
   try {
     yield call(employeeApi.deleteEmployee, action.payload);
-
     yield put(employeeActions.deleteEmployee.deleteEmployeeSuccess(action.payload));
   } catch (error) {
     yield put(employeeActions.deleteEmployee.deleteEmployeeFailure(error));

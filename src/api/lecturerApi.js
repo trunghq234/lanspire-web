@@ -21,8 +21,10 @@ const lecturerApi = {
     return res.data;
   },
 
-  deleteLecturer: async id => {
-    const res = await axiosClient.delete(`/lecturers/${id}`);
+  deleteLecturer: async lecturer => {
+    const idLecturer = lecturer.idLecturer;
+    const idUser = lecturer.idUser;
+    const res = await axiosClient.delete(`/lecturers/${idLecturer}`, { data: { idUser: idUser } });
     return res.data;
   },
 };

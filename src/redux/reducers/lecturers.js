@@ -75,7 +75,13 @@ export default function lecturersReducer(state = INIT_STATE.lecturers, action) {
     case getType(lecturerActions.deleteLecturer.deleteLecturerSuccess):
       return {
         ...state,
-        data: state.data.filter(lecturer => lecturer.idLecturer !== action.payload),
+        data: state.data.map(lecturer => {
+          const idLecturer = action.payload.idLecturer;
+          if (lecturer.idLecturer === idLecturer) {
+            lecturer.isActivated = false;
+          }
+          return lecturer;
+        }),
         isLoading: false,
         isSuccess: true,
       };

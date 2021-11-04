@@ -25,7 +25,6 @@ export function* updateLecturerSaga(action) {
 export function* deleteLecturerSaga(action) {
   try {
     yield call(lecturerApi.deleteLecturer, action.payload);
-
     yield put(lecturerActions.deleteLecturer.deleteLecturerSuccess(action.payload));
   } catch (error) {
     yield put(lecturerActions.deleteLecturer.deleteLecturerFailure(error));
@@ -35,7 +34,6 @@ export function* deleteLecturerSaga(action) {
 export function* createLecturerSaga(action) {
   try {
     const createdLecturer = yield call(lecturerApi.createLecturer, action.payload);
-    // console.log({ createdEmployee });
 
     yield put(lecturerActions.createLecturer.createLecturerSuccess(createdLecturer));
   } catch (error) {

@@ -189,13 +189,21 @@ const PersonalInfo = props => {
               </Form.Item>
             </Col>
             <Col span={4}>
-              <Form.Item label="Phone number" name="phoneNumber" rules={[{ required: true }]}>
-                <Input placeholder="Phone number" maxLength="10" />
+              <Form.Item
+                onKeyPress={event => {
+                  if (!/[0-9]/.test(event.key)) {
+                    event.preventDefault();
+                  }
+                }}
+                label="Phone number"
+                name="phoneNumber"
+                rules={[{ required: true }, { min: 10 }]}>
+                <Input type="text" placeholder="Phone number" maxLength="10" />
               </Form.Item>
             </Col>
             <Col span={8}>
               <Form.Item label="Email" name="email" rules={[{ required: true, type: 'email' }]}>
-                <Input placeholder="Email" />
+                <Input type="email" placeholder="Email" />
               </Form.Item>
             </Col>
           </Row>
@@ -207,20 +215,34 @@ const PersonalInfo = props => {
             <Row gutter={20}>
               <Col span={8}>
                 <Form.Item label="Username" name="username" rules={[{ required: true }]}>
-                  <Input placeholder="Username" maxLength="10" />
+                  <Input placeholder="Username" />
                 </Form.Item>
               </Col>
               <Col span={8}>
-                <Form.Item label="Password" name="password" rules={[{ required: true }]}>
-                  <Input.Password placeholder="Password" maxLength="10" />
+                <Form.Item
+                  label="Password"
+                  name="password"
+                  rules={[{ required: true }, { min: 6 }]}>
+                  <Input.Password placeholder="Password" />
                 </Form.Item>
               </Col>
               <Col span={8}>
                 <Form.Item
                   label="Confirm password"
                   name="confirmPassword"
-                  rules={[{ required: true }]}>
-                  <Input.Password placeholder="Confirm password" maxLength="10" />
+                  rules={[
+                    { required: true },
+                    { min: 6 },
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        if (!value || getFieldValue('password') === value) {
+                          return Promise.resolve();
+                        }
+                        return Promise.reject('Confirm password does not match!');
+                      },
+                    }),
+                  ]}>
+                  <Input.Password placeholder="Confirm password" />
                 </Form.Item>
               </Col>
             </Row>

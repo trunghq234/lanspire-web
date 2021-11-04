@@ -30,6 +30,12 @@ const PersonalInfo = props => {
     number: {
       range: '${label} must be between ${min} and ${max}',
     },
+    string: {
+      len: "'${label}' must be exactly ${len} characters",
+      min: "'${label}' must be at least ${min} characters",
+      max: "'${label}' cannot be longer than ${max} characters",
+      range: "'${label}' must be between ${min} and ${max} characters",
+    },
   };
 
   const handleSubmit = () => {
@@ -64,26 +70,22 @@ const PersonalInfo = props => {
     ) {
       if (typeSubmit === 'create') {
         if (!checkUsernameIsExist(username)) {
-          if (confirmPassword !== password) {
-            setIsSubmit(true);
-            message.error('Confirm password does not match!');
-          } else {
-            const createdEmployee = {
-              displayName,
-              gender: data.gender == 'male' ? 0 : data.gender == 'female' ? 1 : 2,
-              dob: moment(data.dob).format('DD/MM/YYYY').split('/').reverse().join('-'),
-              phoneNumber,
-              email,
-              address: [detailsAddress, district, city],
-              idRole: idRoleEmployee,
-              imageUrl: 'test',
-              username,
-              password,
-              isActivated: true,
-            };
-            dispatch(employeeActions.createEmployee.createEmployeeRequest(createdEmployee));
-            setIsSubmit(true);
-          }
+          const createdEmployee = {
+            displayName,
+            gender: data.gender == 'male' ? 0 : data.gender == 'female' ? 1 : 2,
+            dob: moment(data.dob).format('DD/MM/YYYY').split('/').reverse().join('-'),
+            phoneNumber,
+            email,
+            address: [detailsAddress, district, city],
+            idRole: idRoleEmployee,
+            imageUrl: 'test',
+            username,
+            password,
+            isActivated: true,
+          };
+          console.log({ createdEmployee });
+          // dispatch(employeeActions.createEmployee.createEmployeeRequest(createdEmployee));
+          setIsSubmit(true);
         } else {
           setIsSubmit(true);
           isSubmit === true ? message.error('Username is exist!') : '';
@@ -119,6 +121,9 @@ const PersonalInfo = props => {
     // result === empty => checkUsernameIsExist: false
     return !isEmpty(result);
   };
+  function isVietnamesePhoneNumber(number) {
+    return /(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b/.test(number);
+  }
 
   // Load information employee to form
   React.useEffect(() => {
@@ -187,14 +192,22 @@ const PersonalInfo = props => {
           </Col>
 
           <Col span={4}>
-            <Form.Item label="Phone number" name="phoneNumber" rules={[{ required: true }]}>
-              <Input placeholder="Phone number" maxLength="10" />
+            <Form.Item
+              label="Phone number"
+              name="phoneNumber"
+              onKeyPress={event => {
+                if (!/[0-9]/.test(event.key)) {
+                  event.preventDefault();
+                }
+              }}
+              rules={[{ required: true }, { min: 10 }]}>
+              <Input type="text" placeholder="Phone number" maxLength="10" />
             </Form.Item>
           </Col>
 
           <Col span={8}>
             <Form.Item label="Email" name="email" rules={[{ required: true }]}>
-              <Input placeholder="Email" />
+              <Input type="email" placeholder="Email" />
             </Form.Item>
           </Col>
         </Row>
@@ -205,20 +218,34 @@ const PersonalInfo = props => {
             <Row gutter={20}>
               <Col span={8}>
                 <Form.Item label="Username" name="username" rules={[{ required: true }]}>
-                  <Input placeholder="Username" maxLength="10" />
+                  <Input placeholder="Username" />
                 </Form.Item>
               </Col>
               <Col span={8}>
-                <Form.Item label="Password" name="password" rules={[{ required: true }]}>
-                  <Input.Password placeholder="Password" maxLength="10" />
+                <Form.Item
+                  label="Password"
+                  name="password"
+                  rules={[{ required: true }, { min: 6 }]}>
+                  <Input.Password placeholder="Password" />
                 </Form.Item>
               </Col>
               <Col span={8}>
                 <Form.Item
                   label="Confirm password"
                   name="confirmPassword"
-                  rules={[{ required: true }]}>
-                  <Input.Password placeholder="Confirm password" maxLength="10" />
+                  rules={[
+                    { required: true },
+                    { min: 6 },
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        if (!value || getFieldValue('password') === value) {
+                          return Promise.resolve();
+                        }
+                        return Promise.reject('Confirm password does not match!');
+                      },
+                    }),
+                  ]}>
+                  <Input.Password placeholder="Confirm password" />
                 </Form.Item>
               </Col>
             </Row>

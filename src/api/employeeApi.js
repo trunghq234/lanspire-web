@@ -24,8 +24,10 @@ const employeeApi = {
     return res.data;
   },
 
-  deleteEmployee: async id => {
-    const res = await axiosClient.delete(`/employees/${id}`);
+  deleteEmployee: async employee => {
+    const idEmployee = employee.idEmployee;
+    const idUser = employee.idUser;
+    const res = await axiosClient.delete(`/employees/${idEmployee}`, { data: { idUser: idUser } });
     return res.data;
   },
 };

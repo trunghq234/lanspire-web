@@ -66,6 +66,21 @@ const AddCourseType = ({ trigger }) => {
       history.push('/coursetype/');
     }
   };
+
+  const uniqueValidator = (rule, value, callback) => {
+    try {
+      const { typeName } = form.getFieldsValue();
+      const res = courseTypes.find(type => type.typeName === typeName);
+      if (res) {
+        callback('');
+        message.error('Course type must be unique');
+      } else {
+        callback();
+      }
+    } catch {
+      callback();
+    }
+  };
   return (
     <>
       <h3>Add course type</h3>
@@ -76,7 +91,10 @@ const AddCourseType = ({ trigger }) => {
         validateMessages={validateMessages}>
         <Row gutter={[0, 0]}>
           <Col span={24}>
-            <Form.Item label="Coure type name" name="typeName" rules={[{ required: true }]}>
+            <Form.Item
+              label="Coure type name"
+              name="typeName"
+              rules={[{ required: true }, { validator: uniqueValidator }]}>
               <Input placeholder="Coure type name" maxLength="255" />
             </Form.Item>
           </Col>

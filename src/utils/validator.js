@@ -1,9 +1,10 @@
-import { titleCase } from './stringHelper';
+import { camelToString, titleCase } from './stringHelper';
 
 const numberValidator = (rule, value, callback) => {
   try {
     if (!Number(value) && value) {
-      callback(`${titleCase(rule.field)} must be number!`);
+      const tmp = camelToString(rule.field);
+      callback(`${titleCase(tmp)} must be number!`);
     } else {
       callback();
     }

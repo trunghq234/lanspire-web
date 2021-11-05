@@ -67,6 +67,21 @@ const AddLevel = props => {
       history.push('/level/');
     }
   };
+
+  const uniqueValidator = (rule, value, callback) => {
+    try {
+      const { levelName, point } = form.getFieldsValue();
+      const res = levelList.find(level => level.levelName === levelName && level.point === point);
+      if (res) {
+        callback('');
+        message.error('Level must be unique');
+      } else {
+        callback();
+      }
+    } catch {
+      callback();
+    }
+  };
   return (
     <>
       <h3>{isEdit ? 'Update level' : 'Add level'}</h3>
@@ -77,12 +92,18 @@ const AddLevel = props => {
         validateMessages={validateMessages}>
         <Row gutter={[0, 0]}>
           <Col span={24}>
-            <Form.Item label="Level name" name="levelName" rules={[{ required: true }]}>
+            <Form.Item
+              label="Level name"
+              name="levelName"
+              rules={[{ required: true }, { validator: uniqueValidator }]}>
               <Input placeholder="Level name" maxLength="255" />
             </Form.Item>
           </Col>
           <Col span={24}>
-            <Form.Item label="Point" name="point" rules={[{ required: true }]}>
+            <Form.Item
+              label="Point"
+              name="point"
+              rules={[{ required: true }, { validator: uniqueValidator }]}>
               <InputNumber style={{ width: '100%' }} placeholder="Point" />
             </Form.Item>
           </Col>

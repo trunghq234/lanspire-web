@@ -73,6 +73,23 @@ const AddColumnTranscript = ({ trigger }) => {
       history.push('/columntranscript/');
     }
   };
+
+  const uniqueValidator = (rule, value, callback) => {
+    try {
+      const { columnName, min, max } = form.getFieldsValue();
+      const res = columnTranscripts.find(
+        column => column.columnName === columnName && column.min === min && column.max === max
+      );
+      if (res) {
+        callback('');
+        message.error('Column must be unique');
+      } else {
+        callback();
+      }
+    } catch {
+      callback();
+    }
+  };
   return (
     <>
       <h3>{isEdit ? 'Update column' : 'Add column'}</h3>
@@ -83,12 +100,18 @@ const AddColumnTranscript = ({ trigger }) => {
         validateMessages={validateMessages}>
         <Row gutter={[20, 0]}>
           <Col span={24}>
-            <Form.Item label="Column name" name="columnName" rules={[{ required: true }]}>
+            <Form.Item
+              label="Column name"
+              name="columnName"
+              rules={[{ required: true }, { validator: uniqueValidator }]}>
               <Input placeholder="Column name" maxLength="255" />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item label="Min" name="min" rules={[{ required: true }]}>
+            <Form.Item
+              label="Min"
+              name="min"
+              rules={[{ required: true }, { validator: uniqueValidator }]}>
               <InputNumber
                 min={0}
                 max={max - 1}
@@ -99,7 +122,10 @@ const AddColumnTranscript = ({ trigger }) => {
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item label="Max" name="max" rules={[{ required: true }]}>
+            <Form.Item
+              label="Max"
+              name="max"
+              rules={[{ required: true }, { validator: uniqueValidator }]}>
               <InputNumber
                 min={0 || min + 1}
                 placeholder="Max"

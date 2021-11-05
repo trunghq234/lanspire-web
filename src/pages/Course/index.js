@@ -69,7 +69,7 @@ const Course = () => {
 
   const mappingDatasource = dataInput => {
     const res = [];
-    dataInput.map(course => {
+    dataInput.map((course, index) => {
       const { levelName, point } = course.Level;
       const { typeName } = course.CourseType;
       res.push({

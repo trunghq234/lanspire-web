@@ -9,7 +9,7 @@ import { numberValidator } from 'utils/validator';
 const { TextArea } = Input;
 const { Option } = Select;
 
-const AddCourseInfo = ({ form, goNext, handleSubmitCourse, editCourse }) => {
+const AddCourseInfo = ({ form, goNext, handleSubmitCourse, editCourse, isBack }) => {
   const [isSelected, setIsSelected] = useState(false);
   const [levelNameList, setLevelNameList] = useState([]);
   const [pointList, setPointList] = useState([]);
@@ -31,54 +31,52 @@ const AddCourseInfo = ({ form, goNext, handleSubmitCourse, editCourse }) => {
     }
   }, [levels]);
 
-  const handleSelectLevel = (e, counter = 1) => {
-    if (editCourse && counter === 0) {
-      e = levelNameList.indexOf(editCourse.Level.levelName);
-    }
-    form.setFieldsValue({ ...form.getFieldsValue, pointIndex: null });
-    const selected = levelNameList[e];
-    const res = levels.filter(level => level.levelName == selected);
+  const handleSelect = value => {
+    const res = levels.filter(level => level.levelName == value);
+    form.setFieldsValue({ ...form.getFieldsValue, point: null });
     setPointList(res);
     setIsSelected(true);
   };
 
   const handleNext = () => {
-    const { courseName, fee, description, max, pointIndex, typeIndex } = form.getFieldsValue();
-    const level = pointList[pointIndex];
-    const courseType = courseTypeList[typeIndex];
-    let levelInput, courseTypeInput;
-    if (editCourse) {
-      levelInput = level ? level : editCourse.Level;
-      courseTypeInput = courseType ? courseType : editCourse.CourseType;
-    } else {
-      levelInput = level;
-      courseTypeInput = courseType;
-    }
-    handleSubmitCourse({
-      courseName: courseName,
-      fee: fee,
-      description: description,
-      max: max,
-      idLevel: levelInput.idLevel,
-      idCourseType: courseTypeInput.idCourseType,
-      Level: levelInput,
-      CourseType: courseTypeInput,
-    });
     goNext();
+    const { courseName, fee, description, max, levelName, point, type } = form.getFieldsValue();
+    const Level = pointList.find(level => level.levelName === levelName && level.point == point);
+    const CourseType = courseTypeList.find(element => element.typeName === type);
+    if (courseName && fee && max && Level && CourseType) {
+      handleSubmitCourse({
+        courseName: courseName,
+        fee: fee,
+        description: description,
+        max: max,
+        Level: Level,
+        idLevel: Level.idLevel,
+        CourseType: CourseType,
+        idCourseType: CourseType.idCourseType,
+      });
+    }
   };
 
   useEffect(() => {
+    const { levelName } = form.getFieldsValue();
+    handleSelect(levelName);
+    if (!isBack) {
+      setIsSelected(false);
+    }
+  }, [isBack]);
+
+  useEffect(() => {
     if (editCourse) {
+      handleSelect(editCourse.Level.levelName);
       form.setFieldsValue({
         courseName: editCourse.courseName,
         fee: editCourse.fee,
         description: editCourse.description,
         max: editCourse.max,
-        levelNameIndex: editCourse.Level.levelName,
-        typeIndex: editCourse.CourseType.typeName,
+        levelName: editCourse.Level.levelName,
+        point: editCourse.Level.point,
+        type: editCourse.CourseType.typeName,
       });
-      handleSelectLevel(0, 0);
-      form.setFieldsValue({ ...form.getFieldsValue, pointIndex: editCourse.Level.point });
     }
   }, [editCourse]);
   return (
@@ -104,24 +102,30 @@ const AddCourseInfo = ({ form, goNext, handleSubmitCourse, editCourse }) => {
         </Form.Item>
       </Col>
       <Col span={8}>
-        <Form.Item label="Level name" name="levelNameIndex" rules={[{ required: true }]}>
-          <Select showSearch onChange={e => handleSelectLevel(e)}>
+        <Form.Item label="Level name" name="levelName" rules={[{ required: true }]}>
+          <Select showSearch onSelect={e => handleSelect(e)}>
             {levelNameList.map((level, index) => (
-              <Option key={index}>{level}</Option>
+              <Option key={index} value={level}>
+                {level}
+              </Option>
             ))}
           </Select>
         </Form.Item>
-        <Form.Item label="Point" name="pointIndex" rules={[{ required: true }]}>
+        <Form.Item label="Point" name="point" rules={[{ required: true }]}>
           <Select showSearch disabled={!isSelected}>
             {pointList.map((level, index) => (
-              <Option key={index}>{level.point}</Option>
+              <Option key={index} value={level.point}>
+                {level.point}
+              </Option>
             ))}
           </Select>
         </Form.Item>
-        <Form.Item label="Coure type name" name="typeIndex" rules={[{ required: true }]}>
+        <Form.Item label="Coure type name" name="type" rules={[{ required: true }]}>
           <Select showSearch>
-            {courseTypeList.map((level, index) => (
-              <Option key={index}>{level.typeName}</Option>
+            {courseTypeList.map((type, index) => (
+              <Option key={index} value={type.typeName}>
+                {type.typeName}
+              </Option>
             ))}
           </Select>
         </Form.Item>

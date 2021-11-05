@@ -19,6 +19,7 @@ const AddCourse = () => {
 
   const [isSuccess, setIsSuccess] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
+  const [isBack, setIsBack] = useState(false);
   const [columnKeys, setColumnKeys] = useState([]);
   const [course, setCourse] = useState({});
   const [editCourse, setEditCourse] = useState();
@@ -44,6 +45,7 @@ const AddCourse = () => {
           dispatch(updateCourse.updateCourseRequest(tmp));
         } else {
           const tmp = { ...course, columns: columnKeys };
+          // console.log({ tmp });
           dispatch(createCourse.createCourseRequest(tmp));
         }
         setIsSuccess(isDispatchSuccess);
@@ -56,9 +58,11 @@ const AddCourse = () => {
     },
   });
   const goNext = () => {
+    setIsBack(false);
     gotoStep(current + 1);
   };
   const goPrev = () => {
+    setIsBack(true);
     gotoStep(current - 1);
   };
   const handleSubmit = () => {
@@ -83,6 +87,7 @@ const AddCourse = () => {
       handleSubmitCourse={handleSubmitCourse}
       goNext={goNext}
       editCourse={editCourse}
+      isBack={isBack}
     />,
     <ColumnInput
       formLoading={formLoading}

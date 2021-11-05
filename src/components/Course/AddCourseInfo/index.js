@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { courseTypeState$, levelState$ } from 'redux/selectors';
 import { getCourseTypes } from 'redux/actions/courseTypes';
 import { getLevels } from 'redux/actions/levels';
+import { numberValidator } from 'utils/validator';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -27,17 +28,14 @@ const AddCourseInfo = ({ form, goNext, handleSubmitCourse, editCourse }) => {
       const tmp = levels.map(level => level.levelName);
       const res = [...new Set(tmp)];
       setLevelNameList(res);
-      const { levelNameIndex } = form.getFieldsValue();
-      if (levelNameIndex) {
-        handleSelectLevel(levelNameIndex);
-      }
     }
   }, [levels]);
 
-  const handleSelectLevel = e => {
-    if (editCourse) {
+  const handleSelectLevel = (e, counter = 1) => {
+    if (editCourse && counter === 0) {
       e = levelNameList.indexOf(editCourse.Level.levelName);
     }
+    form.setFieldsValue({ ...form.getFieldsValue, pointIndex: null });
     const selected = levelNameList[e];
     const res = levels.filter(level => level.levelName == selected);
     setPointList(res);
@@ -77,10 +75,10 @@ const AddCourseInfo = ({ form, goNext, handleSubmitCourse, editCourse }) => {
         description: editCourse.description,
         max: editCourse.max,
         levelNameIndex: editCourse.Level.levelName,
-        pointIndex: editCourse.Level.point,
         typeIndex: editCourse.CourseType.typeName,
       });
-      handleSelectLevel(0);
+      handleSelectLevel(0, 0);
+      form.setFieldsValue({ ...form.getFieldsValue, pointIndex: editCourse.Level.point });
     }
   }, [editCourse]);
   return (
@@ -89,14 +87,11 @@ const AddCourseInfo = ({ form, goNext, handleSubmitCourse, editCourse }) => {
         <Form.Item label="Course name" name="courseName" rules={[{ required: true }]}>
           <Input placeholder="Course name" maxLength="255" />
         </Form.Item>
-        <Form.Item label="Fee" name="fee" rules={[{ required: true }]}>
-          <InputNumber
-            style={{ width: '50%' }}
-            min={0}
-            maxLength={18}
-            placeholder="Course fee"
-            formatter={value => value.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-          />
+        <Form.Item
+          label="Fee"
+          name="fee"
+          rules={[{ required: true }, { validator: numberValidator }]}>
+          <Input style={{ width: '50%' }} min={0} maxLength={18} placeholder="Course fee" />
         </Form.Item>
         <Form.Item label="Max number of students" name="max" rules={[{ required: true }]}>
           <InputNumber

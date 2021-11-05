@@ -101,9 +101,7 @@ const AddCourse = () => {
         <Breadcrumb.Item>
           <Link to="/course">Course</Link>
         </Breadcrumb.Item>
-        <Breadcrumb.Item>
-          <Link to="/course/add">Add course</Link>
-        </Breadcrumb.Item>
+        <Breadcrumb.Item>{isEdit ? 'Update course' : 'Add new course'}</Breadcrumb.Item>
       </Breadcrumb>
       <h3>{isEdit ? 'Update course' : 'Add new course'}</h3>
       <Steps {...stepsProps} className={styles.steps} type="navigation" responsive>

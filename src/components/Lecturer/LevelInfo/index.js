@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Col, Form, Input, Row } from 'antd';
 import TypingSelect from 'components/common/TypingSelect';
 
-const LevelInfo = props => {
+const LevelInfo = () => {
   const [levelInfo, setLevelInfo] = useState();
   const levelList = [
     { type: 'IELTS', lang: 'EN' },

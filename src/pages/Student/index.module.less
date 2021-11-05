@@ -1,0 +1,55 @@
+@Width-filter: 150px;
+@Width-search: 300px;
+@gap: 10px;
+.container {
+  .actions-for-list {
+    margin: @gap 0 40px 0;
+    .filter {
+      width: 100%;
+    }
+    .add-student {
+      width: 100%;
+      background-color: #1890ff;
+      color: white;
+      // margin-left: @gap;
+      &:hover {
+        background-color: darken(#1890ff, 10);
+      }
+    }
+  }
+  .actions-for-item {
+    display: flex;
+    justify-content: space-around;
+    font-size: 16px;
+    font-weight: bold;
+    .btn-edit {
+      width: 25px;
+      height: 25px;
+      line-height: 25px;
+      border: 2px #1890ff solid;
+      border-radius: 4px;
+      color: #1890ff;
+      &:hover {
+        color: darken(#1890ff, 20);
+        border: 2px darken(#1890ff, 20) solid;
+      }
+    }
+    .btn-delete {
+      width: 25px;
+      height: 25px;
+      line-height: 25px;
+      border: 2px #ee5253 solid;
+      border-radius: 4px;
+      color: #ee5253;
+      &:hover {
+        color: darken(#ee5253, 20);
+        border: 2px darken(#ee5253, 20) solid;
+      }
+    }
+  }
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 600;
+}

@@ -13,16 +13,25 @@ import { createLevel, deleteLevel, fetchLevels, updateLevel } from 'redux/sagas/
 import * as authActions from '../actions/auth';
 import * as classActions from '../actions/classes';
 import * as postActions from '../actions/posts';
+import * as studentActions from '../actions/students';
+
 import * as userActions from '../actions/users';
 import * as timeFrameActions from '../actions/timeFrames';
 import { fetchPostsSaga, updatePostSaga, deletePostSaga, createPostSaga } from './posts';
 import { fetchAuthSaga } from './auth';
 import { createClass, deleteClass, fetchClasses, updateClass } from './classes';
 import {
+  fetchStudentsSaga,
+  createStudentsSaga,
+  updateStudentsSaga,
+  deleteStudentsSaga,
+  getStudentByIdSaga,
+} from './students';
+import {
+  fetchUsersSaga,
   createUserSaga,
   deleteUserSaga,
   fetchUserSaga,
-  fetchUsersSaga,
   updateUserSaga,
 } from './users';
 import {
@@ -57,6 +66,14 @@ export default function* mySaga() {
   yield takeLatest(postActions.createPost.createPostRequest, createPostSaga);
   yield takeLatest(postActions.updatePost.updatePostRequest, updatePostSaga);
   yield takeLatest(postActions.deletePost.deletePostRequest, deletePostSaga);
+
+  //students
+  yield takeLatest(studentActions.getStudents.getStudentsRequest, fetchStudentsSaga);
+  yield takeLatest(studentActions.createStudents.createStudentsRequest, createStudentsSaga);
+  yield takeLatest(studentActions.updateStudents.updateStudentsRequest, updateStudentsSaga);
+  yield takeLatest(studentActions.deleteStudents.deleteStudentsRequest, deleteStudentsSaga);
+  yield takeLatest(studentActions.getById.getByIdRequest, getStudentByIdSaga);
+
   // users
   yield takeLatest(userActions.getUsers.getUsersRequest, fetchUsersSaga);
   yield takeLatest(userActions.getUser.getUserRequest, fetchUserSaga);

@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux';
 import postsReducer from './posts';
 import employesReducer from './employes';
+import StudentsReducer from './students';
+import StudentByIdReducer from './studentById';
 import usersReducer from './users';
 import userReducer from './user';
 import authReducer from './auth';
@@ -15,6 +17,8 @@ const appReducer = combineReducers({
   users: usersReducer,
   user: userReducer,
   auth: authReducer,
+  students: StudentsReducer,
+  studentById: StudentByIdReducer,
   timeFrames: timeFrameReducer,
   employees: employesReducer,
   courses: coursesReducer,

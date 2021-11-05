@@ -6,11 +6,16 @@ import AddCourse from 'pages/Course/AddCourse';
 import CourseType from 'pages/Course/CourseType';
 import Level from 'pages/Course/Level';
 import Dashboard from 'pages/Dashboard';
+import lecturerIcon from 'assets/svg/lecturer.svg';
+import Lecturer from 'pages/Lecturer';
+import Student from 'pages/Student';
+import AddStudent from 'pages/Student/AddStudent';
+
+const PandaIcon = props => <Icon component={svg} {...props} />;
+import AddLecturer from 'pages/Lecturer/AddLecturer';
 import Employee from 'pages/Employee';
 import AddEmployee from 'pages/Employee/AddEmployee';
 import TimeFrame from 'pages/TimeFrame';
-import Lecturer from 'pages/Lecturer';
-import AddLecturer from 'pages/Lecturer/AddLecturer';
 import React from 'react';
 import {
   classSvg,
@@ -18,6 +23,7 @@ import {
   dashboardSvg,
   employeeSvg,
   lecturerSvg,
+  studentSvg,
   timeSvg,
 } from 'utils/iconsvg';
 
@@ -27,6 +33,7 @@ const CourseIcon = props => <Icon component={courseSvg} {...props} />;
 const EmployeeIcon = props => <Icon component={employeeSvg} {...props} />;
 const ClassIcon = props => <Icon component={classSvg} {...props} />;
 const TimeFrameIcon = props => <Icon component={timeSvg} {...props} />;
+const StudentIcon = props => <Icon component={studentSvg} {...props} />;
 
 const adminRoutes = [
   {
@@ -43,6 +50,21 @@ const adminRoutes = [
     path: '/lecturer/add',
     exact: true,
     page: () => <AddLecturer />,
+  },
+  {
+    path: '/student/list',
+    exact: true,
+    page: () => <Student />,
+  },
+  {
+    path: '/student/add',
+    exact: true,
+    page: () => <AddStudent />,
+  },
+  {
+    path: '/student/edit/:idStudent',
+    exact: true,
+    page: () => <AddStudent />,
   },
   {
     path: '/course/',
@@ -138,6 +160,17 @@ const adminMenuItems = {
           path: '/lecturer/add',
           name: 'Add lecturer',
           component: <AddLecturer />,
+        },
+      ],
+    },
+    {
+      name: 'Student',
+      icon: <StudentIcon />,
+      routes: [
+        {
+          path: '/student/list',
+          name: 'Student list',
+          component: <Student />,
         },
       ],
     },

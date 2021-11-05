@@ -9,9 +9,7 @@ export default function AddEmployee() {
       <h3>Add new employee</h3>
       <Row gutter={[20, 20]}>
         <Col span={18}>
-          <Space>
-            <PersonalInfo />
-          </Space>
+          <Space>{/* <PersonalInfo /> */}</Space>
         </Col>
         <Col span={6}>
           <Uploader />

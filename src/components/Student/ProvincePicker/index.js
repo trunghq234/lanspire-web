@@ -60,6 +60,7 @@ const ProvincePicker = props => {
       <Col span={8}>
         <Form.Item label="City" name="city" rules={[{ required: true }]}>
           <Select
+            showSearch
             value={selectedCity}
             placeholder="Tỉnh/Thành phố"
             onChange={val => {
@@ -73,6 +74,7 @@ const ProvincePicker = props => {
       <Col span={8}>
         <Form.Item label="District" name="district" rules={[{ required: true }]}>
           <Select
+            showSearch
             value={selectedDistrict}
             placeholder="Huyện/Quận"
             onChange={val => {

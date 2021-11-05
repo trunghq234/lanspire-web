@@ -23,6 +23,7 @@ import {
   dashboardSvg,
   employeeSvg,
   lecturerSvg,
+  studentSvg,
   timeSvg,
 } from 'utils/iconsvg';
 
@@ -32,6 +33,7 @@ const CourseIcon = props => <Icon component={courseSvg} {...props} />;
 const EmployeeIcon = props => <Icon component={employeeSvg} {...props} />;
 const ClassIcon = props => <Icon component={classSvg} {...props} />;
 const TimeFrameIcon = props => <Icon component={timeSvg} {...props} />;
+const StudentIcon = props => <Icon component={studentSvg} {...props} />;
 
 const adminRoutes = [
   {
@@ -163,7 +165,7 @@ const adminMenuItems = {
     },
     {
       name: 'Student',
-      icon: <LecturerIcon></LecturerIcon>,
+      icon: <StudentIcon />,
       routes: [
         {
           path: '/student/list',

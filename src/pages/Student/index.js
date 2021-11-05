@@ -216,6 +216,7 @@ const Student = () => {
           columns={columns}
           rowKey={dataSearch.id}
           dataSource={dataSearch}
+          bordered
           pagination={{
             showSizeChanger: true,
             current: currentPage,

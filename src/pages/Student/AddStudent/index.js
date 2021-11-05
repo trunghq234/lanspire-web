@@ -32,6 +32,7 @@ const AddStudent = () => {
           width: 300,
         },
       });
+      formRef.current.resetFields();
       if (idStudent) {
         history.push('/student/list');
       }
@@ -84,7 +85,7 @@ const AddStudent = () => {
       gender: gender === 'female' ? 0 : gender === 'male' ? 1 : 2,
       phoneNumber,
       email,
-      dob: dob.format('DD/MM/YYYY'),
+      dob: dob.format('MM / DD / YYYY'),
       address: [detailsAddress, district, city],
     };
     if (!idStudent) {

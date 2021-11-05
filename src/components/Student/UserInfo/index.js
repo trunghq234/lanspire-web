@@ -16,6 +16,19 @@ const UserInfo = props => {
       callback();
     }
   };
+
+  const dobValidator = (rule, value, callback) => {
+    try {
+      if (value > Date.now()) {
+        callback('Date of birth is not greater than current date');
+      } else {
+        callback();
+      }
+    } catch {
+      callback();
+    }
+  };
+
   return (
     <Card>
       <Row gutter={20}>
@@ -36,7 +49,10 @@ const UserInfo = props => {
         </Col>
 
         <Col span={4}>
-          <Form.Item label="DOB" name="dob" rules={[{ required: true }]}>
+          <Form.Item
+            label="DOB"
+            name="dob"
+            rules={[{ required: true }, { validator: dobValidator }]}>
             <DatePicker format={dateFormat} />
           </Form.Item>
         </Col>

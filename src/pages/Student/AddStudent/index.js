@@ -59,7 +59,7 @@ const AddStudent = () => {
       setStudentById(student);
       loadFieldsValue(student);
     }
-  }, [students]);
+  }, [students.data]);
 
   const loadFieldsValue = student => {
     const record = {
@@ -141,11 +141,7 @@ const AddStudent = () => {
             </Button>
           </Col>
           <Col span={3}>
-            <Button
-              className={style['btn-add']}
-              htmlType="submit"
-              size="large"
-              loading={students.isLoading}>
+            <Button className={style['btn-add']} htmlType="submit" size="large">
               {contentControl.btnSave}
             </Button>
           </Col>

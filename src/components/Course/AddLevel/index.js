@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router';
-import { Button, Col, Form, Input, Row, message, InputNumber } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
-import { levelState$ } from 'redux/selectors';
-import { createLevel, getLevels, updateLevel } from 'redux/actions/levels';
-import { validateMessages } from 'constant/validationMessage';
+import { Button, Col, Form, Input, InputNumber, message, Row } from 'antd';
 import LanguageSelect from 'components/common/LanguageSelect';
+import { validateMessages } from 'constant/validationMessage';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useParams } from 'react-router';
+import { createLevel, getLevels, updateLevel } from 'redux/actions/levels';
+import { levelState$ } from 'redux/selectors';
 
 const AddLevel = props => {
   const [isEdit, setIsEdit] = useState(false);

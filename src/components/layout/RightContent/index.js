@@ -1,11 +1,33 @@
-import React from 'react';
-import { Avatar } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
+import { Avatar, Badge, Image, Popover } from 'antd';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUser } from 'redux/actions/users';
+import { userState$ } from 'redux/selectors';
+import Content from './Content/index.js';
+import Title from './Title/index.js';
 
 const RightContent = () => {
+  const idUser = localStorage.getItem('idUser');
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getUser.getUserRequest(idUser));
+  }, [dispatch]);
+  const user = useSelector(userState$);
   return (
     <div>
-      <Avatar shape="square" size="small" icon={<UserOutlined />} />
+      <Popover placement="bottomRight" content={<Content />} title={<Title />} trigger="hover">
+        <Badge dot>
+          <Avatar
+            src={
+              !user.imageUrl ? (
+                <Image src="https://joeschmoe.io/api/v1/random" style={{ width: 32 }} />
+              ) : (
+                <Image src={user.imageUrl} style={{ width: 32 }} />
+              )
+            }
+          />
+        </Badge>
+      </Popover>
     </div>
   );
 };

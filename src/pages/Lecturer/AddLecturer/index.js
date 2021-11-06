@@ -21,7 +21,7 @@ const AddLecturer = () => {
       <Row gutter={[20, 20]}>
         <Col xs={24} xl={18}>
           <Space size={20} direction="vertical">
-            <PersonalInfo />
+            {/* <PersonalInfo /> */}
             <LevelInfo />
           </Space>
         </Col>

@@ -3,14 +3,17 @@ import Class from 'pages/Class';
 import AddClass from 'pages/Class/AddClass';
 import Course from 'pages/Course';
 import AddCourse from 'pages/Course/AddCourse';
+import ColumnTranscript from 'pages/Course/ColumnTranscript';
 import CourseType from 'pages/Course/CourseType';
 import Level from 'pages/Course/Level';
 import Dashboard from 'pages/Dashboard';
 import Employee from 'pages/Employee';
 import AddEmployee from 'pages/Employee/AddEmployee';
-import TimeFrame from 'pages/TimeFrame';
 import Lecturer from 'pages/Lecturer';
 import AddLecturer from 'pages/Lecturer/AddLecturer';
+import Student from 'pages/Student';
+import AddStudent from 'pages/Student/AddStudent';
+import TimeFrame from 'pages/TimeFrame';
 import React from 'react';
 import {
   classSvg,
@@ -18,6 +21,7 @@ import {
   dashboardSvg,
   employeeSvg,
   lecturerSvg,
+  studentSvg,
   timeSvg,
 } from 'utils/iconsvg';
 
@@ -27,6 +31,7 @@ const CourseIcon = props => <Icon component={courseSvg} {...props} />;
 const EmployeeIcon = props => <Icon component={employeeSvg} {...props} />;
 const ClassIcon = props => <Icon component={classSvg} {...props} />;
 const TimeFrameIcon = props => <Icon component={timeSvg} {...props} />;
+const StudentIcon = props => <Icon component={studentSvg} {...props} />;
 
 const adminRoutes = [
   {
@@ -45,6 +50,21 @@ const adminRoutes = [
     page: () => <AddLecturer />,
   },
   {
+    path: '/student/list',
+    exact: true,
+    page: () => <Student />,
+  },
+  {
+    path: '/student/add',
+    exact: true,
+    page: () => <AddStudent />,
+  },
+  {
+    path: '/student/edit/:idStudent',
+    exact: true,
+    page: () => <AddStudent />,
+  },
+  {
     path: '/course/',
     exact: true,
     page: () => <Course />,
@@ -55,7 +75,7 @@ const adminRoutes = [
     page: () => <AddCourse />,
   },
   {
-    path: '/course/add/:idCourse',
+    path: '/course/edit/:idCourse',
     exact: true,
     page: () => <AddCourse />,
   },
@@ -81,6 +101,16 @@ const adminRoutes = [
     path: '/lecturer/edit/:id',
     exact: true,
     page: () => <AddLecturer />,
+  },
+  {
+    path: '/columntranscript',
+    exact: true,
+    page: () => <ColumnTranscript />,
+  },
+  {
+    path: '/columntranscript/:idColumn',
+    exact: true,
+    page: () => <ColumnTranscript />,
   },
   {
     path: '/employee/',
@@ -143,6 +173,17 @@ const adminMenuItems = {
       ],
     },
     {
+      name: 'Student',
+      icon: <StudentIcon />,
+      routes: [
+        {
+          path: '/student/list',
+          name: 'Student list',
+          component: <Student />,
+        },
+      ],
+    },
+    {
       name: 'Course',
       icon: <CourseIcon />,
       routes: [
@@ -150,11 +191,6 @@ const adminMenuItems = {
           path: '/course/',
           name: 'Course list',
           component: <Course />,
-        },
-        {
-          path: '/course/add',
-          name: 'Add course',
-          component: <AddCourse />,
         },
         {
           path: '/coursetype/',
@@ -165,6 +201,11 @@ const adminMenuItems = {
           path: '/level/',
           name: 'Level',
           component: <Level />,
+        },
+        {
+          path: '/columntranscript/',
+          name: 'Column transcript',
+          component: <ColumnTranscript />,
         },
       ],
     },

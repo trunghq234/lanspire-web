@@ -30,7 +30,6 @@ const AddLevel = props => {
 
   const handleSubmit = () => {
     const { levelName, point, language } = form.getFieldValue();
-    // if (levelName && point && language) {
     if (isEdit) {
       dispatch(
         updateLevel.updateLevelRequest({
@@ -62,9 +61,30 @@ const AddLevel = props => {
     form.resetFields();
   };
 
+  const handleReset = () => {
+    form.resetFields();
+    if (isEdit) {
+      history.push('/level/');
+    }
+  };
+
+  const uniqueValidator = (rule, value, callback) => {
+    try {
+      const { levelName, point } = form.getFieldsValue();
+      const res = levelList.find(level => level.levelName === levelName && level.point === point);
+      if (res) {
+        callback('');
+        message.error('Level must be unique');
+      } else {
+        callback();
+      }
+    } catch {
+      callback();
+    }
+  };
   return (
     <>
-      <h3>Add level</h3>
+      <h3>{isEdit ? 'Update level' : 'Add level'}</h3>
       <Form
         onFinish={handleSubmit}
         form={form}
@@ -72,12 +92,18 @@ const AddLevel = props => {
         validateMessages={validateMessages}>
         <Row gutter={[0, 0]}>
           <Col span={24}>
-            <Form.Item label="Level name" name="levelName" rules={[{ required: true }]}>
+            <Form.Item
+              label="Level name"
+              name="levelName"
+              rules={[{ required: true }, { validator: uniqueValidator }]}>
               <Input placeholder="Level name" maxLength="255" />
             </Form.Item>
           </Col>
           <Col span={24}>
-            <Form.Item label="Point" name="point" rules={[{ required: true }]}>
+            <Form.Item
+              label="Point"
+              name="point"
+              rules={[{ required: true }, { validator: uniqueValidator }]}>
               <InputNumber style={{ width: '100%' }} placeholder="Point" />
             </Form.Item>
           </Col>
@@ -88,14 +114,14 @@ const AddLevel = props => {
           </Col>
           <Col span={24}>
             <Form.Item>
-              <Button
-                htmlType="submit"
-                // onClick={handleSubmit}
-                style={{ width: '100%' }}
-                type="primary"
-                size="large">
-                Add
-              </Button>
+              <div className="flex">
+                <Button htmlType="submit" block type="primary" size="large">
+                  {isEdit ? 'Update' : 'Add'}
+                </Button>
+                <Button htmlType="reset" size="large" onClick={handleReset}>
+                  Cancel
+                </Button>
+              </div>
             </Form.Item>
           </Col>
         </Row>

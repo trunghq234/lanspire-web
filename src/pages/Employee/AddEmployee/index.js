@@ -22,9 +22,7 @@ export default function AddEmployee() {
       {id ? <h3>Edited employee</h3> : <h3>Add new employee</h3>}
       <Row gutter={[20, 20]}>
         <Col span={18}>
-          <Space>
-            {id ? <PersonalInfo typeSubmit="edit" /> : <PersonalInfo typeSubmit="create" />}
-          </Space>
+          <Space>{/* <PersonalInfo /> */}</Space>
         </Col>
         <Col span={6}>
           <Card>

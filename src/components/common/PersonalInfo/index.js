@@ -1,168 +1,24 @@
-import { Button, Card, Col, DatePicker, Form, Input, message, Row, Select } from 'antd';
-import { isEmpty } from 'lodash';
-import moment from 'moment';
+import { Card, Col, DatePicker, Form, Input, Row, Select } from 'antd';
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router';
-import * as employeeActions from 'redux/actions/employees';
-import { getUsers } from 'redux/actions/users';
-import { employeeState$, userState$ } from 'redux/selectors';
 import ProvincePicker from '../ProvincePicker';
 
 const { Option } = Select;
 const idRoleEmployee = '386af797-fdf6-42dc-8bab-d5b42561b5fb';
 
 const PersonalInfo = props => {
-  const [isSubmit, setIsSubmit] = useState(false);
-  const dispatch = useDispatch();
-  const employees = useSelector(employeeState$);
-  const users = useSelector(userState$);
-  const [form] = Form.useForm();
-  const { id } = useParams();
+  const [address, setAddress] = useState({});
   const dateFormat = 'DD/MM/YYYY';
-  const { typeSubmit } = props;
+
   const validateMessages = {
     required: '${label} is required!',
     types: {
       email: '${label} is not validate email!',
-      number: '${label} is not a validate number!',
-    },
-    number: {
-      range: '${label} must be between ${min} and ${max}',
+      number: '${label} is a validate number!',
     },
   };
-
-  const handleSubmit = () => {
-    const data = form.getFieldValue();
-    const {
-      displayName,
-      gender,
-      dob,
-      phoneNumber,
-      email,
-      detailsAddress,
-      district,
-      city,
-      username,
-      password,
-      confirmPassword,
-    } = data;
-
-    // create employee
-    if (
-      displayName &&
-      gender &&
-      dob &&
-      phoneNumber &&
-      email &&
-      username &&
-      password &&
-      confirmPassword &&
-      detailsAddress &&
-      district &&
-      city
-    ) {
-      if (typeSubmit === 'create') {
-        if (!checkUsernameIsExist(username)) {
-          if (confirmPassword !== password) {
-            setIsSubmit(true);
-            message.error('Confirm password does not match!');
-          } else {
-            const createdEmployee = {
-              displayName,
-              gender: data.gender == 'male' ? 0 : data.gender == 'female' ? 1 : 2,
-              dob: moment(data.dob).format('DD/MM/YYYY').split('/').reverse().join('-'),
-              phoneNumber,
-              email,
-              address: [detailsAddress, district, city],
-              idRole: idRoleEmployee,
-              imageUrl: 'test',
-              username,
-              password,
-              isActivated: true,
-            };
-            dispatch(employeeActions.createEmployee.createEmployeeRequest(createdEmployee));
-            setIsSubmit(true);
-          }
-        } else {
-          setIsSubmit(true);
-          isSubmit === true ? message.error('Username is exist!') : '';
-        }
-      }
-    }
-
-    // edit employee
-    if (typeSubmit === 'edit') {
-      const employee = employees.data.find(employee => employee.idEmployee === id);
-
-      const editedEmployee = {
-        displayName,
-        gender: data.gender == 'male' ? 0 : data.gender == 'female' ? 1 : 2,
-        dob: moment(data.dob).format('DD/MM/YYYY').split('/').reverse().join('-'),
-        idEmployee: id,
-        address: [detailsAddress, district, city],
-        idUser: employee.idUser,
-        username: employee.username,
-        password: employee.password,
-        isDeleted: employee.isDeleted,
-        isActivated: employee.isActivated,
-        imageUrl: employee.imageUrl,
-        idRole: idRoleEmployee,
-      };
-      dispatch(employeeActions.updateEmployee.updateEmployeeRequest(editedEmployee));
-      setIsSubmit(true);
-    }
-  };
-
-  const checkUsernameIsExist = username => {
-    const result = users.data.find(user => user.username === username);
-    // result === empty => checkUsernameIsExist: false
-    return !isEmpty(result);
-  };
-
-  // Load information employee to form
-  React.useEffect(() => {
-    if (id) {
-      const employee =
-        employees.data && employees.data.find(employee => employee.idEmployee === id);
-
-      if (employee) {
-        const editedEmployee = {
-          displayName: employee.displayName,
-          gender: employee.gender === 0 ? 'male' : employee.gender === 1 ? 'female' : 'others',
-          dob: moment(employee.dob),
-          phoneNumber: employee.phoneNumber,
-          address: employee.address,
-          email: employee.email,
-          detailsAddress: employee.address[0],
-          district: employee.address[1],
-          city: employee.address[2],
-        };
-        form.setFieldsValue(editedEmployee);
-      }
-    }
-  }, [id, employees]);
-
-  // Redirect to employee list
-  React.useEffect(() => {
-    if (employees.isSuccess && isSubmit) {
-      id
-        ? message.success('Update employee success!')
-        : message.success('Create employee success!');
-
-      form.resetFields();
-    }
-  }, [employees]);
-
-  React.useEffect(() => {
-    dispatch(employeeActions.getEmployees.getEmployeesRequest());
-    dispatch(getUsers.getUsersRequest());
-  }, [dispatch]);
-
   return (
     <Card>
-      <h3>Personal information</h3>
-      <Form form={form} layout="vertical" validateMessages={validateMessages}>
+      <Form layout="vertical" validateMessages={validateMessages}>
         <Row gutter={20}>
           <Col span={16}>
             <Form.Item label="Full name" name="displayName" rules={[{ required: true }]}>
@@ -193,43 +49,15 @@ const PersonalInfo = props => {
           </Col>
 
           <Col span={8}>
-            <Form.Item label="Email" name="email" rules={[{ required: true }]}>
-              <Input placeholder="Email" />
+            <Form.Item label="Email" name="email" rules={[{ required: true, type: 'email' }]}>
+              <Input />
             </Form.Item>
           </Col>
         </Row>
-        <ProvincePicker />
-
-        {!id && (
-          <Input.Group>
-            <Row gutter={20}>
-              <Col span={8}>
-                <Form.Item label="Username" name="username" rules={[{ required: true }]}>
-                  <Input placeholder="Username" maxLength="10" />
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item label="Password" name="password" rules={[{ required: true }]}>
-                  <Input.Password placeholder="Password" maxLength="10" />
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item
-                  label="Confirm password"
-                  name="confirmPassword"
-                  rules={[{ required: true }]}>
-                  <Input.Password placeholder="Confirm password" maxLength="10" />
-                </Form.Item>
-              </Col>
-            </Row>
-          </Input.Group>
-        )}
-
-        <Form.Item>
-          <Button onClick={handleSubmit} type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item>
+        <ProvincePicker
+          address={address}
+          callbackChanges={setAddress}
+          rules={[{ required: true }]}></ProvincePicker>
       </Form>
     </Card>
   );

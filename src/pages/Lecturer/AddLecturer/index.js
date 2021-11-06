@@ -24,7 +24,8 @@ const AddLecturer = () => {
       <Row gutter={[20, 20]}>
         <Col xs={24} xl={18}>
           <Space size={20} direction="vertical">
-            {id ? <PersonalInfo typeSubmit="edit" /> : <PersonalInfo typeSubmit="create" />}
+            {/* <PersonalInfo /> */}
+            <LevelInfo />
           </Space>
         </Col>
         <Col xs={24} sm={12} xl={6}>

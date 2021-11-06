@@ -2,36 +2,42 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Breadcrumb, Button, Tooltip, Card, Input, Row, Col, Table, message, Modal } from 'antd';
 import { EditOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
-import AddCourseType from '../../../components/Course/AddCourseType';
 import { useDispatch, useSelector } from 'react-redux';
-import { courseTypeState$ } from 'redux/selectors';
-import { deleteCourseType, getCourseTypes } from 'redux/actions/courseTypes';
+import { columnTranscriptState$ } from 'redux/selectors';
+import { getColumnTranscripts, deleteColumnTranscript } from 'redux/actions/columnTranscripts';
+import AddColumnTranscript from 'components/Course/AddColumnTranscript';
 
 const { confirm } = Modal;
 const { Search } = Input;
 
-const CourseType = () => {
+const ColumnTranscript = () => {
   const columns = [
     {
-      title: 'Type name',
-      dataIndex: 'typeName',
+      title: 'Column name',
+      dataIndex: 'columnName',
     },
     {
-      title: 'Description',
-      dataIndex: 'description',
+      title: 'Min',
+      dataIndex: 'min',
       align: 'center',
-      width: '40%',
+      sorter: (a, b) => a.min - b.min,
+    },
+    {
+      title: 'Max',
+      dataIndex: 'max',
+      align: 'center',
+      sorter: (a, b) => a.max - b.max,
     },
     {
       title: '',
-      dataIndex: 'idCourseType',
+      dataIndex: 'idColumn',
       align: 'center',
       width: '10%',
-      render: idCourseType => {
+      render: idColumn => {
         return (
           <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
             <Tooltip title="Edit information">
-              <Link to={`/coursetype/${idCourseType}`}>
+              <Link to={`/columntranscript/${idColumn}`}>
                 <Button
                   onClick={() => setTrigger(!trigger)}
                   type="primary"
@@ -41,7 +47,7 @@ const CourseType = () => {
               </Link>
             </Tooltip>
             <Tooltip title="Delete">
-              <Button onClick={() => handleDelete(idCourseType)} danger icon={<DeleteOutlined />} />
+              <Button onClick={() => handleDelete(idColumn)} danger icon={<DeleteOutlined />} />
             </Tooltip>
           </div>
         );
@@ -51,18 +57,18 @@ const CourseType = () => {
 
   const [trigger, setTrigger] = useState(false);
   const dispatch = useDispatch();
-  const { data, isLoading, isSuccess } = useSelector(courseTypeState$);
+  const { data, isLoading, isSuccess } = useSelector(columnTranscriptState$);
   useEffect(() => {
-    dispatch(getCourseTypes.getCourseTypesRequest());
+    dispatch(getColumnTranscripts.getColumnTranscriptsRequest());
   }, []);
 
   const handleDelete = id => {
     confirm({
-      title: 'Do you want to delete this course type?',
+      title: 'Do you want to delete this column?',
       icon: <ExclamationCircleOutlined />,
       centered: true,
       onOk() {
-        dispatch(deleteCourseType.deleteCourseTypeRequest(id));
+        dispatch(deleteColumnTranscript.deleteColumnTranscriptRequest(id));
 
         isSuccess
           ? message['success']({
@@ -85,7 +91,7 @@ const CourseType = () => {
   const [dataSource, setDataSource] = useState([]);
   const handleSearch = value => {
     const dataTmp = data.filter(
-      item => item.typeName.toLowerCase().search(value.toLowerCase()) >= 0
+      item => item.columnName.toLowerCase().search(value.toLowerCase()) >= 0
     );
     setDataSource(dataTmp);
   };
@@ -98,9 +104,9 @@ const CourseType = () => {
         <Breadcrumb.Item>
           <a href="/">Dashboard</a>
         </Breadcrumb.Item>
-        <Breadcrumb.Item>Course type</Breadcrumb.Item>
+        <Breadcrumb.Item>Column transcript</Breadcrumb.Item>
       </Breadcrumb>
-      <h3>Course type</h3>
+      <h3>Column transcript</h3>
       <Row gutter={[20, 20]}>
         <Col xs={{ order: 1 }} sm={{ order: 1 }} lg={{ order: 0 }} span={24} xl={16}>
           <Card>
@@ -120,7 +126,7 @@ const CourseType = () => {
                   loading={isLoading}
                   columns={columns}
                   dataSource={dataSource}
-                  rowKey={row => row.idCourseType}
+                  rowKey={row => row.idColumn}
                   pagination={{
                     defaultPageSize: 10,
                     showSizeChanger: true,
@@ -133,7 +139,7 @@ const CourseType = () => {
         </Col>
         <Col lg={{ order: 1 }} span={24} xl={8}>
           <Card>
-            <AddCourseType trigger={trigger} />
+            <AddColumnTranscript trigger={trigger} />
           </Card>
         </Col>
       </Row>
@@ -141,4 +147,4 @@ const CourseType = () => {
   );
 };
 
-export default CourseType;
+export default ColumnTranscript;

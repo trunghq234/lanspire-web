@@ -232,21 +232,38 @@ const Lecturer = () => {
       </Breadcrumb>
       <h3 className="heading">Lecturer list</h3>
       <Card>
-        <div className={styles.wrapper}>
-          <Button
-            onClick={handleAddLecturerClick}
-            className={styles.btn}
-            size="large"
-            type="primary">
-            Add lecturer
-          </Button>
-        </div>
-        <Table
-          loading={lecturers.isLoading}
-          columns={columns}
-          dataSource={dataSource}
-          rowKey={row => row.idLecturer}
-        />
+        <Row gutter={[20, 20]} align="top">
+          <Col xs={24} sm={16} md={10} lg={8} xl={8}>
+            <Search
+              className={styles.search}
+              size="large"
+              placeholder="Search by name"
+              allowClear
+              enterButton
+              onSearch={onSearch}
+            />
+          </Col>
+          <Col xs={24} sm={8} md={6} lg={6} xl={4}>
+            <Select
+              className={styles.select}
+              size="large"
+              defaultValue="all"
+              onChange={handleChange}>
+              <Option value="all">All</Option>
+              <Option value="working">Working</Option>
+              <Option value="unemployed">Unemployed</Option>
+            </Select>
+          </Col>
+          <Col xs={0} md={2} lg={4} xl={8} flex="auto" />
+          <Col xs={24} sm={24} md={6} lg={6} xl={4}>
+            <Button className={styles.btn} size="large" type="primary">
+              <NavLink to="/lecturer/add">Add lecturer</NavLink>
+            </Button>
+          </Col>
+          <Col span={24}>
+            <Table bordered columns={columns} dataSource={data} />
+          </Col>
+        </Row>
       </Card>
     </>
   );

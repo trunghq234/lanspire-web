@@ -214,11 +214,26 @@ const Employee = () => {
       <h3>Employee List</h3>
       <Card>
         <div className={styles.wrapper}>
-          <Button
-            className={styles.btn}
-            size="large"
-            type="primary"
-            onClick={handleAddEmployeeClick}>
+          <div>
+            <Search
+              className={styles.search}
+              size="large"
+              placeholder="Search by name"
+              allowClear
+              enterButton
+              onSearch={onSearch}
+            />
+            <Select
+              className={styles.select}
+              size="large"
+              defaultValue="all"
+              onClick={handleChange}>
+              <Option value="all">All</Option>
+              <Option value="working">Working</Option>
+              <Option value="unemployed">Unemployed</Option>
+            </Select>
+          </div>
+          <Button className={styles.btn} size="large" type="primary" onClick={handleAddEmployee}>
             Add employee
           </Button>
         </div>

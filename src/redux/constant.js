@@ -60,6 +60,11 @@ const INIT_STATE = {
     isLoading: false,
     isSuccess: false,
   },
+  columnTranscripts: {
+    data: [],
+    isLoading: false,
+    isSuccess: false,
+  },
 };
 
 export default INIT_STATE;

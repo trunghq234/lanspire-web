@@ -106,7 +106,7 @@ const Lecturer = () => {
             <Search
               className={styles.search}
               size="large"
-              placeholder="Search"
+              placeholder="Search by name"
               allowClear
               enterButton
               onSearch={onSearch}

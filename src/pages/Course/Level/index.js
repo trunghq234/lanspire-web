@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Breadcrumb, Button, Tooltip, Card, Input, Row, Col, Table, message } from 'antd';
 import { Modal } from 'antd';
 import { EditOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
-import AddLevel from '../AddLevel';
+import AddLevel from '../../../components/Course/AddLevel';
 import { useDispatch, useSelector } from 'react-redux';
 import { levelState$ } from 'redux/selectors';
 import { getLevels, deleteLevel } from 'redux/actions/levels';
@@ -21,6 +21,7 @@ const Level = () => {
       title: 'Point',
       dataIndex: 'point',
       align: 'center',
+      sorter: (a, b) => a.point - b.point,
     },
     {
       title: 'Language',
@@ -75,6 +76,16 @@ const Level = () => {
     });
   };
 
+  const [dataSource, setDataSource] = useState([]);
+  const handleSearch = value => {
+    const dataTmp = data.filter(
+      item => item.levelName.toLowerCase().search(value.toLowerCase()) >= 0
+    );
+    setDataSource(dataTmp);
+  };
+  useEffect(() => {
+    setDataSource(data);
+  }, [data]);
   return (
     <>
       <Breadcrumb>
@@ -91,10 +102,10 @@ const Level = () => {
               <Col xs={24} sm={16} xl={12}>
                 <Search
                   size="large"
-                  placeholder="Search"
+                  placeholder="Search by name"
                   allowClear
                   enterButton
-                  onSearch={e => console.log(e)}
+                  onSearch={handleSearch}
                 />
               </Col>
               <Col span={24}>
@@ -102,7 +113,7 @@ const Level = () => {
                   bordered
                   loading={isLoading}
                   columns={columns}
-                  dataSource={data}
+                  dataSource={dataSource}
                   rowKey={row => row.idLevel}
                   pagination={{
                     defaultPageSize: 10,

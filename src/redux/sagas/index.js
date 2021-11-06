@@ -1,7 +1,14 @@
 import { takeLatest } from 'redux-saga/effects';
+import * as columnTranscriptActions from 'redux/actions/columnTranscripts';
 import * as courseActions from 'redux/actions/courses';
 import * as courseTypeActions from 'redux/actions/courseTypes';
 import * as levelActions from 'redux/actions/levels';
+import {
+  createColumnTranscript,
+  deleteColumnTranscript,
+  fetchColumnTranscripts,
+  updateColumnTranscript,
+} from 'redux/sagas/columnTranscripts';
 import { createCourse, deleteCourse, fetchCourses, updateCourse } from 'redux/sagas/courses';
 import {
   createCourseType,
@@ -10,30 +17,22 @@ import {
   updateCourseType,
 } from 'redux/sagas/courseTypes';
 import { createLevel, deleteLevel, fetchLevels, updateLevel } from 'redux/sagas/levels';
+import { createPostSaga, deletePostSaga, fetchPostsSaga, updatePostSaga } from 'redux/sagas/posts';
 import * as authActions from '../actions/auth';
 import * as classActions from '../actions/classes';
 import * as postActions from '../actions/posts';
 import * as studentActions from '../actions/students';
-
-import * as userActions from '../actions/users';
 import * as timeFrameActions from '../actions/timeFrames';
-import { fetchPostsSaga, updatePostSaga, deletePostSaga, createPostSaga } from './posts';
+import * as userActions from '../actions/users';
 import { fetchAuthSaga } from './auth';
 import { createClass, deleteClass, fetchClasses, updateClass } from './classes';
 import {
-  fetchStudentsSaga,
   createStudentsSaga,
-  updateStudentsSaga,
   deleteStudentsSaga,
+  fetchStudentsSaga,
   getStudentByIdSaga,
+  updateStudentsSaga,
 } from './students';
-import {
-  fetchUsersSaga,
-  createUserSaga,
-  deleteUserSaga,
-  fetchUserSaga,
-  updateUserSaga,
-} from './users';
 import {
   createTimeFrameSaga,
   deleteTimeFrameSaga,
@@ -41,8 +40,33 @@ import {
   fetchTimeFramesSaga,
   updateTimeFrameSaga,
 } from './timeFrames';
+import {
+  createUserSaga,
+  deleteUserSaga,
+  fetchUserSaga,
+  fetchUsersSaga,
+  updateUserSaga,
+} from './users';
 
 export default function* mySaga() {
+  //column transcript
+  yield takeLatest(
+    columnTranscriptActions.getColumnTranscripts.getColumnTranscriptsRequest,
+    fetchColumnTranscripts
+  );
+  yield takeLatest(
+    columnTranscriptActions.createColumnTranscript.createColumnTranscriptRequest,
+    createColumnTranscript
+  );
+  yield takeLatest(
+    columnTranscriptActions.updateColumnTranscript.updateColumnTranscriptRequest,
+    updateColumnTranscript
+  );
+  yield takeLatest(
+    columnTranscriptActions.deleteColumnTranscript.deleteColumnTranscriptRequest,
+    deleteColumnTranscript
+  );
+
   //level
   yield takeLatest(levelActions.getLevels.getLevelsRequest, fetchLevels);
   yield takeLatest(levelActions.createLevel.createLevelRequest, createLevel);

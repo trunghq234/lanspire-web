@@ -15,6 +15,7 @@ const AddCourseType = ({ trigger }) => {
   const { idCourseType } = useParams();
   const [isEdit, setIsEdit] = useState(false);
   const history = useHistory();
+  const [oldType, setOldType] = useState();
 
   useEffect(() => {
     if (idCourseType) {
@@ -24,6 +25,7 @@ const AddCourseType = ({ trigger }) => {
         typeName: courseType.typeName,
         description: courseType.description,
       });
+      setOldType(courseType.typeName);
     }
   }, [idCourseType, trigger]);
 
@@ -59,13 +61,42 @@ const AddCourseType = ({ trigger }) => {
       form.resetFields();
     }
   };
+
+  const handleReset = () => {
+    form.resetFields();
+    if (isEdit) {
+      history.push('/coursetype/');
+    }
+  };
+
+  const uniqueValidator = (rule, value, callback) => {
+    try {
+      const { typeName } = form.getFieldsValue();
+      const res = courseTypes.find(type => type.typeName === typeName);
+      if (res && typeName !== oldType) {
+        callback('');
+        message.error('Course type must be unique');
+      } else {
+        callback();
+      }
+    } catch {
+      callback();
+    }
+  };
   return (
     <>
-      <h3>Add course type</h3>
-      <Form form={form} layout="vertical" validateMessages={validateMessages}>
+      <h3>{isEdit ? 'Update course type' : 'Add course type'}</h3>
+      <Form
+        form={form}
+        onFinish={handleSubmit}
+        layout="vertical"
+        validateMessages={validateMessages}>
         <Row gutter={[0, 0]}>
           <Col span={24}>
-            <Form.Item label="Coure type name" name="typeName" rules={[{ required: true }]}>
+            <Form.Item
+              label="Coure type name"
+              name="typeName"
+              rules={[{ required: true }, { validator: uniqueValidator }]}>
               <Input placeholder="Coure type name" maxLength="255" />
             </Form.Item>
           </Col>
@@ -81,14 +112,14 @@ const AddCourseType = ({ trigger }) => {
           </Col>
           <Col span={24}>
             <Form.Item>
-              <Button
-                htmlType="submit"
-                onClick={handleSubmit}
-                style={{ width: '100%' }}
-                type="primary"
-                size="large">
-                {isEdit ? 'Update' : 'Add'}
-              </Button>
+              <div className="flex">
+                <Button htmlType="submit" block type="primary" size="large">
+                  {isEdit ? 'Update' : 'Add'}
+                </Button>
+                <Button htmlType="reset" size="large" onClick={handleReset}>
+                  Cancel
+                </Button>
+              </div>
             </Form.Item>
           </Col>
         </Row>

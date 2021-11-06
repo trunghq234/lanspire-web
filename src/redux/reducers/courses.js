@@ -54,7 +54,9 @@ export default function coursesReducer(state = INIT_STATE.courses, action) {
     case getType(courseActions.updateCourse.updateCourseSuccess):
       return {
         ...state,
-        data: state.data.map(course => (course.id === action.payload.id ? action.payload : course)),
+        data: state.data.map(course =>
+          course.idCourse === action.payload.idCourse ? action.payload : course
+        ),
         isLoading: false,
         isSuccess: true,
       };

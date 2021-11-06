@@ -10,8 +10,10 @@ import timeFrameReducer from './timeFrames';
 import coursesReducer from 'redux/reducers/courses';
 import courseTypesReducer from 'redux/reducers/courseType';
 import levelsReducer from './level';
+import columnTranscriptsReducer from './columnTranscript';
 import classesReducer from './classes';
-const appReducer = combineReducers({
+
+export default combineReducers({
   posts: postsReducer,
   employes: employesReducer,
   users: usersReducer,
@@ -24,13 +26,6 @@ const appReducer = combineReducers({
   courses: coursesReducer,
   courseTypes: courseTypesReducer,
   levels: levelsReducer,
+  columnTranscripts: columnTranscriptsReducer,
   classes: classesReducer,
 });
-const rootReducer = (state, action) => {
-  if (action.type === 'RESET') {
-    state = undefined;
-  }
-  return appReducer(state, action);
-};
-
-export default rootReducer;

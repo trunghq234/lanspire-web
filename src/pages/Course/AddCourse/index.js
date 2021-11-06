@@ -1,101 +1,102 @@
-import {
-  Breadcrumb,
-  Button,
-  Card,
-  Col,
-  Form,
-  Input,
-  InputNumber,
-  notification,
-  Row,
-  Select,
-} from 'antd';
-import { validateMessages } from 'constant/validationMessage';
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { createCourse } from 'redux/actions/courses';
-import { getCourseTypes } from 'redux/actions/courseTypes';
-import { getLevels } from 'redux/actions/levels';
-import { courseState$, courseTypeState$, levelState$ } from 'redux/selectors';
+import { Breadcrumb, Steps, Button, Result, Form, Card, message } from 'antd';
+import { useStepsForm } from 'sunflower-antd';
+import styles from './index.module.less';
+import AddCourseInfo from 'components/Course/AddCourseInfo';
+import ColumnInput from 'components/Course/ColumnInput';
+import { useDispatch, useSelector } from 'react-redux';
+import { courseState$ } from 'redux/selectors';
+import { createCourse, getCourses, updateCourse } from 'redux/actions/courses';
+import { validateMessages } from 'constant/validationMessage';
 
-const { TextArea } = Input;
-const { Option } = Select;
+const { Step } = Steps;
 
 const AddCourse = () => {
-  const [form] = Form.useForm();
-  const [pointList, setPointList] = useState([]);
-  const [isSelected, setIsSelected] = useState(false);
-  const [levelList, setLevelList] = useState([]);
+  const [isDone, setIsDone] = useState(false);
+  const dispatch = useDispatch();
+  const { data: courseList, isSuccess: isDispatchSuccess, isLoading } = useSelector(courseState$);
+
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+  const [isBack, setIsBack] = useState(false);
+  const [columnKeys, setColumnKeys] = useState([]);
+  const [course, setCourse] = useState({});
+  const [editCourse, setEditCourse] = useState();
 
   const { idCourse } = useParams();
   useEffect(() => {
-    console.log(idCourse);
+    if (idCourse) {
+      setIsEdit(true);
+      dispatch(getCourses.getCoursesRequest());
+      const tmp = courseList.find(course => course.idCourse === idCourse);
+      setEditCourse(tmp);
+    }
   }, [idCourse]);
-  const dispatch = useDispatch();
-  const { data: courseTypeList } = useSelector(courseTypeState$);
-  const { data: levels } = useSelector(levelState$);
-  const { isSuccess, isLoading } = useSelector(courseState$);
 
-  useEffect(() => {
-    dispatch(getCourseTypes.getCourseTypesRequest());
-    dispatch(getLevels.getLevelsRequest());
-  }, []);
-
-  useEffect(() => {
-    const tmp = levels.map(level => level.levelName);
-    const res = [...new Set(tmp)];
-    setLevelList(res);
-  }, [levels]);
-
-  const handleSelectLevel = e => {
-    const selected = levelList[e];
-    const res = levels.filter(level => level.levelName == selected);
-    setPointList(res);
-    setIsSelected(true);
+  const { form, current, gotoStep, stepsProps, formProps, submit, formLoading } = useStepsForm({
+    total: 3,
+    defaultCurrent: 0,
+    isBackValidate: false,
+    submit(values) {
+      if (columnKeys.length > 0) {
+        if (isEdit) {
+          const tmp = { idCourse: idCourse, ...course, columns: columnKeys };
+          dispatch(updateCourse.updateCourseRequest(tmp));
+        } else {
+          const tmp = { ...course, columns: columnKeys };
+          // console.log({ tmp });
+          dispatch(createCourse.createCourseRequest(tmp));
+        }
+        setIsSuccess(isDispatchSuccess);
+        setIsDone(true);
+        gotoStep(current + 1);
+      } else {
+        message.warning('Number of column must higher than 0');
+        setIsDone(false);
+      }
+    },
+  });
+  const goNext = () => {
+    setIsBack(false);
+    gotoStep(current + 1);
   };
-
-  useEffect(() => {
-    if (isLoading) {
-    }
-  }, [isLoading]);
+  const goPrev = () => {
+    setIsBack(true);
+    gotoStep(current - 1);
+  };
   const handleSubmit = () => {
-    const {
-      courseName,
-      fee,
-      description,
-      point: pointIndex,
-      typeName: typeIndex,
-    } = form.getFieldValue();
-    if (courseName && fee && description && pointIndex && typeIndex) {
-      const level = pointList[pointIndex];
-      const courseType = courseTypeList[typeIndex];
-
-      dispatch(
-        createCourse.createCourseRequest({
-          courseName: courseName,
-          fee: fee,
-          description: description,
-          idLevel: level.idLevel,
-          idCourseType: courseType.idCourseType,
-          Level: level,
-          CourseType: courseType,
-        })
-      );
-
-      isSuccess
-        ? notification['success']({
-            message: 'Successfully',
-            description: 'This is the content of the notification.',
-          })
-        : notification['error']({
-            message: 'Notification Title',
-            description: 'This is the content of the notification.',
-          });
-      form.resetFields();
-    }
+    submit();
   };
-
+  useEffect(() => {
+    if (!isDispatchSuccess && !isLoading) {
+      setIsSuccess(false);
+    }
+  }, [isDispatchSuccess, isLoading]);
+  const handleSubmitCourse = value => {
+    setCourse(value);
+  };
+  const handleAddNew = () => {
+    form.resetFields();
+    gotoStep(0);
+    setIsDone(false);
+  };
+  const formList = [
+    <AddCourseInfo
+      form={form}
+      handleSubmitCourse={handleSubmitCourse}
+      goNext={goNext}
+      editCourse={editCourse}
+      isBack={isBack}
+    />,
+    <ColumnInput
+      formLoading={formLoading}
+      handleSubmit={handleSubmit}
+      goPrev={goPrev}
+      changeColNum={e => setColumnKeys(e)}
+      editCourse={editCourse}
+    />,
+  ];
   return (
     <>
       <Breadcrumb>
@@ -105,75 +106,65 @@ const AddCourse = () => {
         <Breadcrumb.Item>
           <Link to="/course">Course</Link>
         </Breadcrumb.Item>
-        <Breadcrumb.Item>
-          <Link to="/course/add">Add course</Link>
-        </Breadcrumb.Item>
+        <Breadcrumb.Item>{isEdit ? 'Update course' : 'Add new course'}</Breadcrumb.Item>
       </Breadcrumb>
-      <h3>Add new course</h3>
-      <Card>
-        <Form form={form} layout="vertical" validateMessages={validateMessages}>
-          <Row justify="center" gutter={[40, 20]}>
-            <Col span={8}>
-              <Form.Item label="Course name" name="courseName" rules={[{ required: true }]}>
-                <Input placeholder="Course name" maxLength="255" />
-              </Form.Item>
-              <Form.Item label="Fee" name="fee" rules={[{ required: true }]}>
-                <InputNumber
-                  style={{ width: '50%' }}
-                  min={0}
-                  maxLength={18}
-                  placeholder="Course fee"
-                  formatter={value => value.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                />
-              </Form.Item>
-              <Form.Item label="Description" name="description">
-                <TextArea
-                  allowClear
-                  maxLength="255"
-                  placeholder="Description about the course type"
-                  autoSize={{ minRows: 3, maxRows: 6 }}
-                />
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item label="Level name" name="levelName" rules={[{ required: true }]}>
-                <Select onChange={e => handleSelectLevel(e)}>
-                  {levelList.map((level, index) => (
-                    <Option key={index}>{level}</Option>
-                  ))}
-                </Select>
-              </Form.Item>
-              <Form.Item label="Point" name="point" rules={[{ required: true }]}>
-                <Select disabled={!isSelected}>
-                  {pointList.map((level, index) => (
-                    <Option key={index}>{level.point}</Option>
-                  ))}
-                </Select>
-              </Form.Item>
-              <Form.Item label="Coure type name" name="typeName" rules={[{ required: true }]}>
-                <Select>
-                  {courseTypeList.map((level, index) => (
-                    <Option key={index}>{level.typeName}</Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Col>
-            <Col span={16}>
-              <Form.Item>
-                <Button
-                  htmlType="submit"
-                  loading={isLoading}
-                  style={{ width: '100%' }}
-                  onClick={handleSubmit}
-                  type="primary"
-                  size="large">
-                  Add
-                </Button>
-              </Form.Item>
-            </Col>
-          </Row>
-        </Form>
-      </Card>
+      <h3>{isEdit ? 'Update course' : 'Add new course'}</h3>
+      <Steps {...stepsProps} className={styles.steps} type="navigation" responsive>
+        <Step title="Course information" disabled={isDone} />
+        <Step title="Point structure" disabled={isDone} />
+        <Step title="Result" disabled={!isDone} />
+      </Steps>
+      <div className={styles['steps-content']}>
+        {current !== 2 && (
+          <Form {...formProps} layout="vertical" validateMessages={validateMessages}>
+            <Card>{formList[current]}</Card>
+          </Form>
+        )}
+        {current === 2 && isDone && isSuccess && (
+          <Card>
+            <Result
+              status="success"
+              title={isEdit ? 'Updated course successfully' : 'Add new course successfully'}
+              extra={
+                <>
+                  {isEdit ? (
+                    ''
+                  ) : (
+                    <Button
+                      type="primary"
+                      size="large"
+                      className={styles.btn}
+                      onClick={handleAddNew}>
+                      Add new course
+                    </Button>
+                  )}
+                  <Button size="large" className={styles.btn}>
+                    <Link to="/course/">Course list</Link>
+                  </Button>
+                </>
+              }
+            />
+          </Card>
+        )}
+        {current === 2 && isDone && !isSuccess && (
+          <Card>
+            <Result
+              status="error"
+              title="Submission failed"
+              extra={
+                <>
+                  <Button type="primary" size="large" className={styles.btn} onClick={handleAddNew}>
+                    Try again
+                  </Button>
+                  <Button size="large" className={styles.btn}>
+                    <Link to="/course/">Course list</Link>
+                  </Button>
+                </>
+              }
+            />
+          </Card>
+        )}
+      </div>
     </>
   );
 };

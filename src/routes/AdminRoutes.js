@@ -3,18 +3,16 @@ import Class from 'pages/Class';
 import AddClass from 'pages/Class/AddClass';
 import Course from 'pages/Course';
 import AddCourse from 'pages/Course/AddCourse';
+import ColumnTranscript from 'pages/Course/ColumnTranscript';
 import CourseType from 'pages/Course/CourseType';
 import Level from 'pages/Course/Level';
 import Dashboard from 'pages/Dashboard';
-import lecturerIcon from 'assets/svg/lecturer.svg';
-import Lecturer from 'pages/Lecturer';
-import Student from 'pages/Student';
-import AddStudent from 'pages/Student/AddStudent';
-
-const PandaIcon = props => <Icon component={svg} {...props} />;
-import AddLecturer from 'pages/Lecturer/AddLecturer';
 import Employee from 'pages/Employee';
 import AddEmployee from 'pages/Employee/AddEmployee';
+import Lecturer from 'pages/Lecturer';
+import AddLecturer from 'pages/Lecturer/AddLecturer';
+import Student from 'pages/Student';
+import AddStudent from 'pages/Student/AddStudent';
 import TimeFrame from 'pages/TimeFrame';
 import React from 'react';
 import {
@@ -77,7 +75,7 @@ const adminRoutes = [
     page: () => <AddCourse />,
   },
   {
-    path: '/course/add/:idCourse',
+    path: '/course/edit/:idCourse',
     exact: true,
     page: () => <AddCourse />,
   },
@@ -100,6 +98,16 @@ const adminRoutes = [
     path: '/level/:idLevel',
     exact: true,
     page: () => <Level />,
+  },
+  {
+    path: '/columntranscript',
+    exact: true,
+    page: () => <ColumnTranscript />,
+  },
+  {
+    path: '/columntranscript/:idColumn',
+    exact: true,
+    page: () => <ColumnTranscript />,
   },
   {
     path: '/employee/',
@@ -184,11 +192,6 @@ const adminMenuItems = {
           component: <Course />,
         },
         {
-          path: '/course/add',
-          name: 'Add course',
-          component: <AddCourse />,
-        },
-        {
           path: '/coursetype/',
           name: 'Course type',
           component: <CourseType />,
@@ -197,6 +200,11 @@ const adminMenuItems = {
           path: '/level/',
           name: 'Level',
           component: <Level />,
+        },
+        {
+          path: '/columntranscript/',
+          name: 'Column transcript',
+          component: <ColumnTranscript />,
         },
       ],
     },

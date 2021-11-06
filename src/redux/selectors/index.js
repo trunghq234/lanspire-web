@@ -5,6 +5,7 @@ const postState$ = state => state.posts.data;
 const courseState$ = state => state.courses;
 const courseTypeState$ = state => state.courseTypes;
 const levelState$ = state => state.levels;
+const columnTranscriptState$ = state => state.columnTranscripts;
 const classState$ = state => state.classes;
 const timeFrameState$ = state => state.timeFrames;
 const studentState$ = state => state.students;
@@ -14,10 +15,11 @@ export {
   userState$,
   authState$,
   classState$,
-  postState$,
   courseState$,
   courseTypeState$,
   levelState$,
   timeFrameState$,
   studentState$,
+  postState$,
+  columnTranscriptState$,
 };

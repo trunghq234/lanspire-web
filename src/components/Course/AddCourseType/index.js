@@ -15,6 +15,7 @@ const AddCourseType = ({ trigger }) => {
   const { idCourseType } = useParams();
   const [isEdit, setIsEdit] = useState(false);
   const history = useHistory();
+  const [oldType, setOldType] = useState();
 
   useEffect(() => {
     if (idCourseType) {
@@ -24,6 +25,7 @@ const AddCourseType = ({ trigger }) => {
         typeName: courseType.typeName,
         description: courseType.description,
       });
+      setOldType(courseType.typeName);
     }
   }, [idCourseType, trigger]);
 
@@ -71,7 +73,7 @@ const AddCourseType = ({ trigger }) => {
     try {
       const { typeName } = form.getFieldsValue();
       const res = courseTypes.find(type => type.typeName === typeName);
-      if (res) {
+      if (res && typeName !== oldType) {
         callback('');
         message.error('Course type must be unique');
       } else {
@@ -83,7 +85,7 @@ const AddCourseType = ({ trigger }) => {
   };
   return (
     <>
-      <h3>Add course type</h3>
+      <h3>{isEdit ? 'Update course type' : 'Add course type'}</h3>
       <Form
         form={form}
         onFinish={handleSubmit}

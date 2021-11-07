@@ -170,10 +170,10 @@ const AddClass = () => {
     } = form.getFieldValue();
     let data;
     if (timeFrames && timeFrames.length > 0) {
-      const isValid = timeFrames.find(
+      const isValid = timeFrames.filter(
         timeFrame => timeFrame == undefined || !timeFrame.idTimeFrame || !timeFrame.dayOfWeek
       );
-      if (isValid) {
+      if (isValid.length > 0) {
         return;
       } else {
         const updateTimeFrames = timeFrames.map(timeFrame => {

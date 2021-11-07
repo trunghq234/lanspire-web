@@ -25,7 +25,6 @@ const Details = () => {
           <AddAppoint></AddAppoint>
         </TabPane>
         <TabPane tab="Students" key="2">
-          <EditableTable />
           Content of Tab Pane 2
         </TabPane>
         <TabPane tab="Tab 3" key="3">

@@ -5,7 +5,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useHistory } from 'react-router-dom';
 import * as lecturerActions from 'redux/actions/lecturers';
-import { lectureState$ } from 'redux/selectors';
+import { lecturerState$ } from 'redux/selectors';
 import styles from './index.module.less';
 
 const { confirm } = Modal;
@@ -37,7 +37,7 @@ const Lecturer = () => {
   const [filteredData, setFilteredData] = React.useState([]);
   const dispatch = useDispatch();
   const history = useHistory();
-  const lecturers = useSelector(lectureState$);
+  const lecturers = useSelector(lecturerState$);
   const columns = [
     {
       title: 'Full name',

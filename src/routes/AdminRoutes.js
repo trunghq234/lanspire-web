@@ -1,6 +1,8 @@
 import Icon from '@ant-design/icons';
 import Class from 'pages/Class';
 import AddClass from 'pages/Class/AddClass';
+import AppointLecturer from 'pages/Class/AppointLecturer';
+import AddAppoint from 'pages/Class/AddAppoint';
 import Course from 'pages/Course';
 import AddCourse from 'pages/Course/AddCourse';
 import ColumnTranscript from 'pages/Course/ColumnTranscript';
@@ -24,6 +26,7 @@ import {
   studentSvg,
   timeSvg,
 } from 'utils/iconsvg';
+import Details from 'pages/Class/Details';
 
 const DashboardIcon = props => <Icon component={dashboardSvg} {...props} />;
 const LecturerIcon = props => <Icon component={lecturerSvg} {...props} />;
@@ -98,6 +101,8 @@ const adminRoutes = [
     path: '/level/:idLevel',
     exact: true,
     page: () => <Level />,
+  },
+  {
     path: '/lecturer/edit/:id',
     exact: true,
     page: () => <AddLecturer />,
@@ -138,14 +143,16 @@ const adminRoutes = [
     page: () => <AddClass />,
   },
   {
-    path: '/class/add/:idClass',
+    path: '/class/edit/:idClass',
     exact: true,
     page: () => <AddClass />,
   },
   {
-    path: '/class/update/:idClass',
+    path: '/class/details/:idClass',
     exact: true,
-    page: () => <AddClass />,
+    page: () => <Details />,
+  },
+  {
     path: '/employee/edit/:id',
     exact: true,
     page: () => <AddEmployee />,

@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-import postsReducer from './posts';
 import employeesReducer from './employees';
 import StudentsReducer from './students';
 import StudentByIdReducer from './studentById';
@@ -12,9 +11,9 @@ import courseTypesReducer from 'redux/reducers/courseType';
 import levelsReducer from './level';
 import columnTranscriptsReducer from './columnTranscript';
 import classesReducer from './classes';
+import lecturersReducer from './lecturers';
 
 export default combineReducers({
-  posts: postsReducer,
   employees: employeesReducer,
   users: usersReducer,
   user: userReducer,

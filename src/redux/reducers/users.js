@@ -1,6 +1,5 @@
 import INIT_STATE from '../constant';
 import { getType } from '../actions/users';
-import { getType } from '../actions/employees';
 import * as userActions from '../actions/users';
 
 export default function usersReducer(state = INIT_STATE.users, action) {

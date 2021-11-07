@@ -16,8 +16,6 @@ const INIT_STATE = {
     data: {},
     isLoading: false,
   },
-  employes: {
-
   lecturers: {
     data: [],
     isLoading: false,
@@ -69,6 +67,7 @@ const INIT_STATE = {
     data: [],
     isLoading: false,
     isSuccess: false,
+    isTeaching: false,
   },
   columnTranscripts: {
     data: [],

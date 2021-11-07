@@ -30,8 +30,7 @@ const MoreButton = () => {
         className="dropdown-btn"
         onClick={handleButtonClick}
         overlay={menu}
-        icon={<MoreOutlined></MoreOutlined>}
-      ></Dropdown.Button>
+        icon={<MoreOutlined></MoreOutlined>}></Dropdown.Button>
     </div>
   );
 };

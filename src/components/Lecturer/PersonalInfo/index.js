@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import * as lecturerActions from 'redux/actions/lecturers';
 import { getUsers } from 'redux/actions/users';
-import { lectureState$, userState$ } from 'redux/selectors';
+import { lecturerState$, userState$ } from 'redux/selectors';
 import styles from './index.module.less';
 
 const { Option } = Select;

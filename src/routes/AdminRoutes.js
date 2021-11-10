@@ -13,6 +13,7 @@ import Lecturer from 'pages/Lecturer';
 import AddLecturer from 'pages/Lecturer/AddLecturer';
 import Student from 'pages/Student';
 import AddStudent from 'pages/Student/AddStudent';
+import StudentDetails from 'pages/Student/StudentDetails';
 import TimeFrame from 'pages/TimeFrame';
 import React from 'react';
 import {
@@ -63,6 +64,11 @@ const adminRoutes = [
     path: '/student/edit/:idStudent',
     exact: true,
     page: () => <AddStudent />,
+  },
+  {
+    path: '/student/details/:idStudent',
+    exact: true,
+    page: () => <StudentDetails />,
   },
   {
     path: '/course/',

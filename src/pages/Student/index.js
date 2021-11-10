@@ -1,12 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
-import { Table, Input, Button, Tag, Col, Row, Modal, notification, Breadcrumb, Card } from 'antd';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import {
+  Table,
+  Input,
+  Button,
+  Tag,
+  Col,
+  Row,
+  Modal,
+  notification,
+  Breadcrumb,
+  Card,
+  Tooltip,
+  Drawer,
+} from 'antd';
+import { EditOutlined, DeleteOutlined, EyeOutlined } from '@ant-design/icons';
 import styles from './index.module.less';
 import { studentState$ } from 'redux/selectors/index';
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteStudents, getStudents } from 'redux/actions/students';
-
 const { Search } = Input;
 
 const Student = () => {
@@ -35,10 +47,12 @@ const Student = () => {
       ellipsis: true,
     },
     {
+      width: '15%',
       title: 'Phone number',
       dataIndex: 'phoneNumber',
       key: 'phoneNumber',
       align: 'center',
+      ellipsis: 'true',
       responsive: ['md'],
     },
     {
@@ -78,18 +92,28 @@ const Student = () => {
     },
     {
       key: 'actions',
-      width: '100px',
+      width: '150px',
       render: record => {
         return (
           <div className={styles['actions-for-item']}>
-            <EditOutlined
-              className={styles['btn-edit']}
-              onClick={() => handleEditStudent(record.idStudent)}
-            />
-            <DeleteOutlined
-              className={styles['btn-delete']}
-              onClick={() => onDelete(record.idStudent)}
-            />
+            <Tooltip title="More info">
+              <EyeOutlined
+                className={styles['btn-view']}
+                onClick={() => handleClickView(record.idStudent)}
+              />
+            </Tooltip>
+            <Tooltip title="Edit">
+              <EditOutlined
+                className={styles['btn-edit']}
+                onClick={() => handleEditStudent(record.idStudent)}
+              />
+            </Tooltip>
+            <Tooltip title="Delete">
+              <DeleteOutlined
+                className={styles['btn-delete']}
+                onClick={() => onDelete(record.idStudent)}
+              />
+            </Tooltip>
           </div>
         );
       },
@@ -102,10 +126,10 @@ const Student = () => {
   const [dataSearch, setDataSearch] = useState([]); //Data sau khi search
   const [isDeleted, setIsDeleted] = useState(false);
   const [visibleModal, setVisibleModal] = useState(false);
-  const [idStudent, setIdStudent] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const history = useHistory();
+
   useEffect(() => {
     dispatch(getStudents.getStudentsRequest());
   }, []);
@@ -166,6 +190,12 @@ const Student = () => {
       });
     }
   }, [students.isLoading]);
+
+  //click button view
+  const handleClickView = id => {
+    history.push(`/student/details/${id}`);
+  };
+
   return (
     <div className={styles.container}>
       <Modal
@@ -179,7 +209,7 @@ const Student = () => {
         <Breadcrumb.Item>
           <a href="/">Dashboard</a>
         </Breadcrumb.Item>
-        <Breadcrumb.Item>Student</Breadcrumb.Item>
+        <Breadcrumb.Item>Student list</Breadcrumb.Item>
       </Breadcrumb>
       <h2 className={styles.title}>Student list</h2>
       <Card>

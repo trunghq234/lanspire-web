@@ -1,3 +1,4 @@
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import {
   Breadcrumb,
   Button,
@@ -9,7 +10,6 @@ import {
   notification,
   Row,
   Select,
-  Space,
 } from 'antd';
 import React, { useEffect, useState } from 'react';
 // import { validateMessages } from 'constant/validationMessage';
@@ -17,11 +17,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { createClass, updateClass } from 'redux/actions/classes';
 import { getCourses } from 'redux/actions/courses';
+import * as timeFrameActions from 'redux/actions/timeFrames';
 import { classState$, courseState$, timeFrameState$ } from 'redux/selectors';
 import styles from './index.module.less';
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import * as timeFrameActions from 'redux/actions/timeFrames';
-import { render } from 'react-dom';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -43,6 +41,7 @@ const AddClass = () => {
   const history = useHistory();
   const { data: courses } = useSelector(courseState$);
   const { data: timeFrames } = useSelector(timeFrameState$);
+  const format = 'HH:mm';
 
   useEffect(() => {
     setCourseList(courses);
@@ -357,9 +356,9 @@ const AddClass = () => {
                                         width: '100%',
                                         textAlign: 'center',
                                       }}>
-                                      <Col span={10}>{timeFrame.startingTime}</Col>
+                                      <Col span={10}>{timeFrame.startingTime.slice(0, -3)}</Col>
                                       <Col span={4}>-</Col>
-                                      <Col span={10}>{timeFrame.endingTime}</Col>
+                                      <Col span={10}>{timeFrame.endingTime.slice(0, -3)}</Col>
                                     </Row>
                                   </Option>
                                 ))}

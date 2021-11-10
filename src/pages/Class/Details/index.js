@@ -1,8 +1,8 @@
 import React from 'react';
-import { Tabs, Breadcrumb } from 'antd';
+import { Tabs, Breadcrumb, Calendar } from 'antd';
 import { Link, NavLink } from 'react-router-dom';
 import AddAppoint from '../AddAppoint';
-import EditableTable from '../../../components/common/EditableTable';
+import CustomCalendar from '../../../components/Class/CustomCalendar';
 
 const { TabPane } = Tabs;
 const Details = () => {
@@ -24,10 +24,10 @@ const Details = () => {
         <TabPane tab="Appoint Lecturer" key="1">
           <AddAppoint></AddAppoint>
         </TabPane>
-        <TabPane tab="Students" key="2">
-          Content of Tab Pane 2
+        <TabPane tab="Calendar" key="2">
+          <CustomCalendar></CustomCalendar>
         </TabPane>
-        <TabPane tab="Tab 3" key="3">
+        <TabPane tab="Students" key="3">
           Content of Tab Pane 3
         </TabPane>
       </Tabs>

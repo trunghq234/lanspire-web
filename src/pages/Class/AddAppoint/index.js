@@ -3,11 +3,12 @@ import { Button, Col, Form, Image, Modal, notification, Row, Table, Tooltip } fr
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import * as classActions from 'redux/actions/classes';
 import { updateClass } from 'redux/actions/classes';
 import * as lecturerActions from 'redux/actions/lecturers';
-import * as classActions from 'redux/actions/classes';
 import { classState$, lecturerState$ } from 'redux/selectors';
 import styles from './index.module.less';
+const moment = require('moment');
 const { confirm } = Modal;
 
 const AddAppoint = () => {
@@ -53,32 +54,6 @@ const AddAppoint = () => {
       },
     },
   ];
-  const handleDelete = idLecturer => {
-    confirm({
-      title: 'Do you want to dismissal this lecturer?',
-      icon: <ExclamationCircleOutlined />,
-      content: '',
-      onOk() {
-        dispatch(updateClass.updateClassRequest({ idClass: idClass, idLecturer: idLecturer }));
-        if (isSuccessClasses && !isLoadingClasses) {
-          notification['success']({
-            message: 'Successfully',
-            description: 'Delete class success',
-          });
-        } else {
-          notification['error']({
-            message: 'Notification Title',
-            description: 'That class is activating',
-          });
-        }
-      },
-      onCancel() {},
-    });
-  };
-  const handleSubmit = () => {
-    dispatch(updateClass.updateClassRequest({ idClass: idClass, lecturers: selected }));
-    setIsSuccess(true);
-  };
   const dispatch = useDispatch();
   const { data: lecturers, isLoading } = useSelector(lecturerState$);
   const {
@@ -91,6 +66,84 @@ const AddAppoint = () => {
   const [selected, setSelected] = useState([]);
   const { idClass } = useParams();
   const [isSuccess, setIsSuccess] = useState(false);
+  const today = moment();
+  const handleDelete = idLecturer => {
+    const classRoom = classes.find(classRoom => classRoom.idClass == idClass);
+    if (moment(classRoom.endDate) < today) {
+      notification['error']({
+        message: 'Error',
+        description: "Can't appoint lecturer, this class finished",
+      });
+    } else {
+      confirm({
+        title: 'Do you want to dismissal this lecturer?',
+        icon: <ExclamationCircleOutlined />,
+        content: '',
+        onOk() {
+          dispatch(updateClass.updateClassRequest({ idClass: idClass, idLecturer: idLecturer }));
+          if (isSuccessClasses && !isLoadingClasses) {
+            notification['success']({
+              message: 'Successfully',
+              description: 'Dismissal lecturer success',
+            });
+          } else {
+            notification['error']({
+              message: 'Error',
+              description: 'Can not dissmisal lecturer',
+            });
+          }
+        },
+        onCancel() {},
+      });
+    }
+  };
+  const handleSubmit = () => {
+    const classRoom = classes.find(classRoom => classRoom.idClass == idClass);
+    if (moment(classRoom.endDate) < today) {
+      notification['error']({
+        message: 'Error',
+        description: "Can't appoint lecturer, this class finished",
+      });
+    } else {
+      if (!isBusy()) {
+        dispatch(updateClass.updateClassRequest({ idClass: idClass, lecturers: selected }));
+        setIsSuccess(true);
+      }
+    }
+  };
+  const isBusy = () => {
+    let res = false;
+    selected.map(idLecturer => {
+      const lecturer = lecturers.find(lecturer => lecturer.idLecturer == idLecturer);
+      const teachingTimes = lecturer.TeachingTimes;
+      const classRoom = classes.find(classRoom => classRoom.idClass == idClass);
+      teachingTimes.map(teachingTime => {
+        classRoom.ClassTimes.map(classTime => {
+          if (classTime.dayOfWeek == teachingTime.dayOfWeek) {
+            if (
+              !(
+                classTime.TimeFrame.startingTime >= teachingTime.endingTime &&
+                classTime.TimeFrame.endingTime <= teachingTime.startingTime
+              )
+            ) {
+              notification['error']({
+                message: 'Error',
+                description:
+                  lecturer.displayName +
+                  ' is busy in ' +
+                  teachingTime.startingTime +
+                  '-' +
+                  teachingTime.endingTime,
+              });
+              res = true;
+              return;
+            }
+          }
+        });
+      });
+    });
+    return res;
+  };
   useEffect(() => {
     setTimeout(() => {
       dispatch(lecturerActions.getLecturers.getLecturersRequest());

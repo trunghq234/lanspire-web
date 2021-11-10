@@ -26,7 +26,7 @@ const props = {
 
 const Uploader = () => {
   return (
-    <Dragger height="200px" {...props}>
+    <Dragger {...props}>
       <p className="ant-upload-drag-icon">
         <InboxOutlined />
       </p>

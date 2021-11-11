@@ -1,5 +1,5 @@
 import { Row, Col, Space } from 'antd';
-import Uploader from 'components/common/Uploader';
+import ImageUploader from 'components/common/ImageUploader';
 import PersonalInfo from 'components/common/PersonalInfo';
 import React from 'react';
 
@@ -12,7 +12,7 @@ export default function AddEmployee() {
           <Space>{/* <PersonalInfo /> */}</Space>
         </Col>
         <Col span={6}>
-          <Uploader />
+          <ImageUploader />
         </Col>
       </Row>
     </div>

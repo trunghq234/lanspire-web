@@ -4,6 +4,7 @@ import AddClass from 'pages/Class/AddClass';
 import Course from 'pages/Course';
 import AddCourse from 'pages/Course/AddCourse';
 import ColumnTranscript from 'pages/Course/ColumnTranscript';
+import CourseDetails from 'pages/Course/CourseDetails';
 import CourseType from 'pages/Course/CourseType';
 import Level from 'pages/Course/Level';
 import Dashboard from 'pages/Dashboard';
@@ -78,6 +79,11 @@ const adminRoutes = [
     path: '/course/edit/:idCourse',
     exact: true,
     page: () => <AddCourse />,
+  },
+  {
+    path: '/course/details/:idCourse',
+    exact: true,
+    page: () => <CourseDetails />,
   },
   {
     path: '/coursetype/',

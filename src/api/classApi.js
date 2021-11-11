@@ -13,6 +13,10 @@ const classApi = {
     return res.data;
   },
 
+  getByIdCourse: idCoure => {
+    return axiosClient.get(`${url}course/${idCoure}`);
+  },
+
   create: async classRoom => {
     const res = await axiosClient.post(url, classRoom);
     return res.data;

@@ -1,4 +1,4 @@
-import { Badge, Calendar } from 'antd';
+import { Badge, Calendar, Modal, Button, Row, Col } from 'antd';
 import 'antd/dist/antd.css';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
@@ -15,17 +15,38 @@ const AntCalendar = props => {
   const { data: classes } = useSelector(classState$);
   const { idClass } = useParams();
   const [events, setEvents] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(moment().toDate());
+  const [currentEvents, setCurrentEvents] = useState([]);
+  const [visible, setVisible] = useState(false);
+  const [classRoom, setClassRoom] = useState({});
   let listDay;
+  const colors = [
+    'pink',
+    'red',
+    'yellow',
+    'orange',
+    'cyan',
+    'green',
+    'blue',
+    'purple',
+    'geekblue',
+    'magenta',
+    'volcano',
+    'gold',
+    'lime',
+  ];
+
   useEffect(() => {
     dispatch(timeFrameActions.getAllTimeFrames.getAllTimeFramesRequest());
   }, []);
   useEffect(() => {
-    mappingDataSource(classes, timeFrames);
+    if (timeFrames.length != 0) {
+      mappingDataSource(classes, timeFrames);
+    }
   }, [timeFrames]);
   const mappingDataSource = (classes, timeFrames) => {
     const res = [];
     const classRoom = classes.find(classRoom => classRoom.idClass == idClass);
+    setClassRoom(classRoom);
     if (classRoom) {
       const classTimes = classRoom.ClassTimes;
       classTimes.map(classTime => {
@@ -45,23 +66,25 @@ const AntCalendar = props => {
   };
   useEffect(() => {
     const temp = [];
-    timeFrameList.map(timeFrame => {
-      setListDay(timeFrame.dayOfWeek, timeFrame.startClass, timeFrame.endClass);
-      listDay.map(day => {
-        temp.push({
-          day: day,
-          content:
-            timeFrame.room +
-            ': ' +
-            timeFrame.startingTime.slice(0, -3) +
-            '-' +
-            timeFrame.endingTime.slice(0, -3),
-          type: 'error',
+    if (timeFrameList) {
+      timeFrameList.map(timeFrame => {
+        setListDay(timeFrame.dayOfWeek, timeFrame.startClass, timeFrame.endClass);
+        listDay.map(day => {
+          const color = colors[Math.floor(Math.random() * colors.length)];
+          temp.push({
+            day: day,
+            content:
+              timeFrame.room +
+              ': ' +
+              timeFrame.startingTime.slice(0, -3) +
+              '-' +
+              timeFrame.endingTime.slice(0, -3),
+            color: color,
+          });
         });
       });
-    });
-    setEvents(temp);
-    console.log(temp);
+      setEvents(temp);
+    }
   }, [timeFrameList]);
 
   const setListDay = (dayOfWeek, startClass, endClass) => {
@@ -89,7 +112,7 @@ const AntCalendar = props => {
             <ul className={styles['list-event']}>
               {events.map(item => (
                 <li>
-                  <Badge status={item.type} text={item.content} />
+                  <Badge color={item.color} text={item.content} />
                 </li>
               ))}
             </ul>
@@ -99,13 +122,49 @@ const AntCalendar = props => {
     );
   };
   const cellRenderFunc = date => {
-    const d = date.format('D');
     const evs = events.filter(event => event.day.format('DD:MM:YYYY') == date.format('DD:MM:YYYY'));
     return <CalendarCell date={date} events={evs} />;
   };
+  const showDrawer = value => {
+    const evs = events.filter(
+      event => event.day.format('DD:MM:YYYY') == value.format('DD:MM:YYYY')
+    );
+    setCurrentEvents(evs);
+    setVisible(true);
+  };
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setVisible(false);
+  };
   return (
     <div>
-      <Calendar onSelect={null} dateFullCellRender={cellRenderFunc} />
+      <Calendar onSelect={showDrawer} dateFullCellRender={cellRenderFunc} />
+      <Modal
+        title={classRoom.className}
+        placement="right"
+        onCancel={handleCancel}
+        visible={visible}
+        footer={[
+          <Button key="cancel" type="primary" onClick={handleCancel}>
+            Cancel
+          </Button>,
+        ]}>
+        <Row>
+          <Col span={12}>
+            <ul className={styles['list-event']}>
+              {currentEvents.map(item => (
+                <li>
+                  <Badge color={item.color} text={item.content} />
+                </li>
+              ))}
+            </ul>
+          </Col>
+          <Col span={12}></Col>
+        </Row>
+      </Modal>
     </div>
   );
 };

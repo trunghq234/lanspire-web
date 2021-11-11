@@ -7,6 +7,8 @@
     "@ant-design/pro-form": "^1.45.0",
     "@ant-design/pro-layout": "^6.26.0",
     "@craco/craco": "^6.3.0",
+    "@devexpress/dx-react-core": "^2.7.6",
+    "@devexpress/dx-react-scheduler": "^2.7.6",
     "antd": "4.17.0-alpha.9",
     "axios": "^0.21.4",
     "classnames": "^2.3.1",

@@ -1,17 +1,17 @@
-import { Col, Row, DatePicker } from 'antd';
+import { Badge, Calendar } from 'antd';
+import 'antd/dist/antd.css';
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import * as timeFrameActions from 'redux/actions/timeFrames';
 import { classState$, timeFrameState$ } from 'redux/selectors';
-const moment = require('moment');
-const localizer = momentLocalizer(moment);
-const CustomCalendar = () => {
+import styles from './index.module.less';
+
+const AntCalendar = props => {
   const dispatch = useDispatch();
   const [timeFrameList, setTimeFrameList] = useState([]);
-  const { data: timeFrames, isLoading, isSuccess } = useSelector(timeFrameState$);
+  const { data: timeFrames } = useSelector(timeFrameState$);
   const { data: classes } = useSelector(classState$);
   const { idClass } = useParams();
   const [events, setEvents] = useState([]);
@@ -48,16 +48,20 @@ const CustomCalendar = () => {
     timeFrameList.map(timeFrame => {
       setListDay(timeFrame.dayOfWeek, timeFrame.startClass, timeFrame.endClass);
       listDay.map(day => {
-        const currentDay = moment(day);
         temp.push({
-          start: currentDay.add(timeFrame.startingTime).toDate(),
-          title: timeFrame.room,
-          // + ': ' + timeFrame.startingTime + '-' + timeFrame.endingTime,
-          end: day.add(timeFrame.endingTime).toDate(),
+          day: day,
+          content:
+            timeFrame.room +
+            ': ' +
+            timeFrame.startingTime.slice(0, -3) +
+            '-' +
+            timeFrame.endingTime.slice(0, -3),
+          type: 'error',
         });
       });
     });
     setEvents(temp);
+    console.log(temp);
   }, [timeFrameList]);
 
   const setListDay = (dayOfWeek, startClass, endClass) => {
@@ -75,39 +79,35 @@ const CustomCalendar = () => {
       current.add(7, 'd');
     }
   };
-  let formats = {
-    timeGutterFormat: 'HH:mm',
+  const CalendarCell = ({ date, events }) => {
+    const isToday = date.format('DD:MM:YYYY') == moment().format('DD:MM:YYYY');
+    return (
+      <div className={!isToday ? styles.date : styles['date-today']}>
+        <div className={styles['date-title']}>{date.format('D')}</div>
+        <div className={styles.events}>
+          <div>
+            <ul className={styles['list-event']}>
+              {events.map(item => (
+                <li>
+                  <Badge status={item.type} text={item.content} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    );
   };
-  const onChange = (value, dateString) => {
-    console.log('Selected Time: ', value);
-    console.log('Formatted Selected Time: ', dateString);
-    if (value) {
-      setSelectedDate(value.toDate());
-    }
+  const cellRenderFunc = date => {
+    const d = date.format('D');
+    const evs = events.filter(event => event.day.format('DD:MM:YYYY') == date.format('DD:MM:YYYY'));
+    return <CalendarCell date={date} events={evs} />;
   };
   return (
     <div>
-      <Row gutter={20}>
-        <Col span={24}>
-          <Row style={{ alignItems: 'center', flexDirection: 'column' }}>
-            <DatePicker onChange={onChange} picker="month" />
-            <Calendar
-              formats={formats}
-              events={events}
-              startAccessor="start"
-              endAccessor="end"
-              date={selectedDate}
-              localizer={localizer}
-              style={{ height: '500px', width: '100%' }}
-              onNavigate={date => {
-                setSelectedDate(date);
-              }}
-            />
-          </Row>
-        </Col>
-      </Row>
+      <Calendar onSelect={null} dateFullCellRender={cellRenderFunc} />
     </div>
   );
 };
 
-export default CustomCalendar;
+export default AntCalendar;

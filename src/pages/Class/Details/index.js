@@ -3,6 +3,7 @@ import { Tabs, Breadcrumb, Calendar } from 'antd';
 import { Link, NavLink } from 'react-router-dom';
 import AddAppoint from '../AddAppoint';
 import CustomCalendar from '../../../components/Class/CustomCalendar';
+import AntCalendar from 'components/Class/AntCalendar';
 
 const { TabPane } = Tabs;
 const Details = () => {
@@ -24,11 +25,11 @@ const Details = () => {
         <TabPane tab="Appoint Lecturer" key="1">
           <AddAppoint></AddAppoint>
         </TabPane>
-        <TabPane tab="Calendar" key="2">
+        <TabPane tab="Calendar 1" key="2">
           <CustomCalendar></CustomCalendar>
         </TabPane>
-        <TabPane tab="Students" key="3">
-          Content of Tab Pane 3
+        <TabPane tab="Calendar 2" key="3">
+          <AntCalendar></AntCalendar>
         </TabPane>
       </Tabs>
     </div>

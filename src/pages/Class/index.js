@@ -2,6 +2,7 @@ import {
   DeleteOutlined,
   EditOutlined,
   ExclamationCircleOutlined,
+  EyeOutlined,
   SearchOutlined,
 } from '@ant-design/icons';
 import {
@@ -68,15 +69,6 @@ const Class = () => {
               style={{ width: 90 }}>
               Reset
             </Button>
-            {/* <Button
-              type="link"
-              size="medium"
-              onClick={() => {
-                confirm({ closeDropdown: false });
-                setSearchText(selectedKeys[0]);
-              }}>
-              Filter
-            </Button> */}
           </Space>
         </div>
       ),
@@ -147,12 +139,17 @@ const Class = () => {
         return (
           <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
             <Tooltip title="Edit information">
-              <Link to={`/class/update/${idClass}`}>
+              <Link to={`/class/edit/${idClass}`}>
                 <Button type="primary" ghost icon={<EditOutlined />}></Button>
               </Link>
             </Tooltip>
             <Tooltip title="Delete">
               <Button danger icon={<DeleteOutlined />} onClick={() => handleDelete(idClass)} />
+            </Tooltip>
+            <Tooltip title="More information">
+              <Link to={`/class/details/${idClass}`}>
+                <Button type="link" icon={<EyeOutlined />} />
+              </Link>
             </Tooltip>
           </div>
         );
@@ -201,11 +198,6 @@ const Class = () => {
   const mappingFilter = dataInput => {
     let res = [];
     dataInput.map(course => {
-      // const course = classRoom.Course;
-      // let courseName = '';
-      // if (course) {
-      //   courseName = course.courseName;
-      // }
       res.push({
         value: course.courseName,
         text: course.courseName,
@@ -241,10 +233,10 @@ const Class = () => {
   }, [data, courses]);
   useEffect(() => {
     dispatch(getCourses.getCoursesRequest());
-  }, []);
+  }, [dispatch]);
   useEffect(() => {
     dispatch(getClasses.getClassesRequest());
-  }, []);
+  }, [dispatch]);
   return (
     <>
       <Breadcrumb>

@@ -42,9 +42,10 @@ export function* deleteUserSaga(action) {
 
 export function* createUserSaga(action) {
   try {
-    const newUser = yield call(userApi.createUser, action.payload);
-    yield put(userActions.createUser.createUserSuccess(newUser));
+    const createdUser = yield call(userApi.createUser, action.payload);
+
+    yield put(userActions.createUser.createUserSuccess(createdUser));
   } catch (error) {
-    yield put(userActions.deleteUser.createUserFailure(error));
+    yield put(userActions.createUser.createUserFailure(error));
   }
 }

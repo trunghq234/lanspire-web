@@ -1,4 +1,5 @@
 import axiosClient from './axiosClient';
+
 const userApi = {
   getAll: async () => {
     const res = await axiosClient.get('/users');
@@ -11,7 +12,7 @@ const userApi = {
   },
 
   createUser: async user => {
-    const res = await axiosClient.post('/useres', user);
+    const res = await axiosClient.post('/users', user);
     return res.data;
   },
 

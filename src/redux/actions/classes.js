@@ -10,6 +10,12 @@ export const getClasses = createActions({
   getClassesFailure: error => error,
 });
 
+export const getClass = createActions({
+  getClassRequest: payload => payload,
+  getClassSuccess: payload => payload,
+  getClassFailure: error => error,
+});
+
 export const createClass = createActions({
   createClassRequest: payload => payload,
   createClassSuccess: payload => payload,

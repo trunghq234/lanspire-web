@@ -12,6 +12,16 @@ export function* fetchClasses(action) {
   }
 }
 
+export function* fetchClass(action) {
+  try {
+    const classRoom = yield call(classApi.getById, action.payload);
+
+    yield put(classActions.getClasses.getClassSuccess(classRoom));
+  } catch (error) {
+    yield put(classActions.getClasses.getClassFailure(error));
+  }
+}
+
 export function* createClass(action) {
   try {
     const newClass = yield call(classApi.create, action.payload);

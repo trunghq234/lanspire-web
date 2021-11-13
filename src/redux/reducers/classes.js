@@ -4,7 +4,7 @@ import * as classActions from 'redux/actions/classes';
 
 export default function classsReducer(state = INIT_STATE.classes, action) {
   switch (action.type) {
-    //get
+    //get all
     case getType(classActions.getClasses.getClassesRequest):
       return {
         ...state,
@@ -19,6 +19,26 @@ export default function classsReducer(state = INIT_STATE.classes, action) {
         isSuccess: true,
       };
     case getType(classActions.getClasses.getClassesFailure):
+      return {
+        ...state,
+        isLoading: false,
+        isSuccess: false,
+      };
+    // get one
+    case getType(classActions.getClass.getClassRequest):
+      return {
+        ...state,
+        isLoading: true,
+        isSuccess: false,
+      };
+    case getType(classActions.getClass.getClassSuccess):
+      return {
+        ...state,
+        data: action.payload,
+        isLoading: false,
+        isSuccess: true,
+      };
+    case getType(classActions.getClass.getClassFailure):
       return {
         ...state,
         isLoading: false,
@@ -54,9 +74,20 @@ export default function classsReducer(state = INIT_STATE.classes, action) {
     case getType(classActions.updateClass.updateClassSuccess):
       return {
         ...state,
-        data: state.data.map(classroom =>
-          classroom.idClass === action.payload.idClass ? action.payload : classroom
-        ),
+        data: state.data.map(classRoom => {
+          if (classRoom.idClass === action.payload.idClass) {
+            if (action.payload.idLecturer) {
+              classRoom.Lecturers = classRoom.Lecturers.filter(
+                lecturer => lecturer.idLecturer != action.payload.idLecturer
+              );
+              return classRoom;
+            } else {
+              return action.payload;
+            }
+          } else {
+            return classRoom;
+          }
+        }),
         isLoading: false,
         isSuccess: true,
       };

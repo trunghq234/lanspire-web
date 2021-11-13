@@ -1,6 +1,5 @@
 import { combineReducers } from 'redux';
-import postsReducer from './posts';
-import employesReducer from './employes';
+import employeesReducer from './employees';
 import StudentsReducer from './students';
 import StudentByIdReducer from './studentById';
 import usersReducer from './users';
@@ -12,20 +11,20 @@ import courseTypesReducer from 'redux/reducers/courseType';
 import levelsReducer from './level';
 import columnTranscriptsReducer from './columnTranscript';
 import classesReducer from './classes';
+import lecturersReducer from './lecturers';
 
 export default combineReducers({
-  posts: postsReducer,
-  employes: employesReducer,
+  employees: employeesReducer,
   users: usersReducer,
   user: userReducer,
   auth: authReducer,
   students: StudentsReducer,
   studentById: StudentByIdReducer,
   timeFrames: timeFrameReducer,
-  employees: employesReducer,
   courses: coursesReducer,
   courseTypes: courseTypesReducer,
   levels: levelsReducer,
   columnTranscripts: columnTranscriptsReducer,
   classes: classesReducer,
+  lecturers: lecturersReducer,
 });

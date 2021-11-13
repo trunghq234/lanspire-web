@@ -1,11 +1,12 @@
 import { Breadcrumb, Card, Col, Row, Space } from 'antd';
 import Uploader from 'components/common/Uploader';
-import LevelInfo from 'components/Lecturer/LevelInfo';
 import PersonalInfo from 'components/Lecturer/PersonalInfo';
 import React from 'react';
+import { useParams } from 'react-router';
 
 const AddLecturer = () => {
-  const sizes = 48;
+  const { id } = useParams();
+
   return (
     <div>
       <Breadcrumb style={{ marginBottom: '20px' }}>
@@ -14,10 +15,12 @@ const AddLecturer = () => {
           <a href="">Application Center</a>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <a href="">Application List</a>
+          <a href="http://localhost:3000/lecturer/">Lecturer List</a>
         </Breadcrumb.Item>
       </Breadcrumb>
-      <h3 className="heading">Add new lecturer</h3>
+
+      {id ? <h3>Edited lecturer</h3> : <h3>Add new lecturer</h3>}
+
       <Row gutter={[20, 20]}>
         <Col xs={24} xl={18}>
           <Space size={20} direction="vertical">

@@ -1,6 +1,5 @@
 import { ConfigProvider } from 'antd';
 import enUS from 'antd/lib/locale/en_US';
-import viVN from 'antd/lib/locale/vi_VN';
 import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { adminMenuItems, adminRoutes } from 'routes/AdminRoutes';
@@ -8,6 +7,7 @@ import { guestRoutes } from 'routes/GuestRoutes';
 import Admin from './Admin';
 import './App.less';
 import Guest from './Guest';
+
 function App() {
   return (
     <ConfigProvider locale={enUS}>

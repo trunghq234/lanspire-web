@@ -17,15 +17,27 @@ import {
   updateCourseType,
 } from 'redux/sagas/courseTypes';
 import { createLevel, deleteLevel, fetchLevels, updateLevel } from 'redux/sagas/levels';
-import { createPostSaga, deletePostSaga, fetchPostsSaga, updatePostSaga } from 'redux/sagas/posts';
 import * as authActions from '../actions/auth';
 import * as classActions from '../actions/classes';
-import * as postActions from '../actions/posts';
+import * as employeeActions from '../actions/employees';
+import * as lecturerActions from '../actions/lecturers';
 import * as studentActions from '../actions/students';
 import * as timeFrameActions from '../actions/timeFrames';
 import * as userActions from '../actions/users';
 import { fetchAuthSaga } from './auth';
 import { createClass, deleteClass, fetchClasses, updateClass } from './classes';
+import {
+  createEmployeeSaga,
+  deleteEmployeeSaga,
+  fetchEmployeesSaga,
+  updateEmployeeSaga,
+} from './employees';
+import {
+  createLecturerSaga,
+  deleteLecturerSaga,
+  fetchLecturersSaga,
+  updateLecturerSaga,
+} from './lecturers';
 import {
   createStudentsSaga,
   deleteStudentsSaga,
@@ -85,12 +97,6 @@ export default function* mySaga() {
   yield takeLatest(courseActions.updateCourse.updateCourseRequest, updateCourse);
   yield takeLatest(courseActions.deleteCourse.deleteCourseRequest, deleteCourse);
 
-  // posts
-  yield takeLatest(postActions.getPosts.getPostsRequest, fetchPostsSaga);
-  yield takeLatest(postActions.createPost.createPostRequest, createPostSaga);
-  yield takeLatest(postActions.updatePost.updatePostRequest, updatePostSaga);
-  yield takeLatest(postActions.deletePost.deletePostRequest, deletePostSaga);
-
   //students
   yield takeLatest(studentActions.getStudents.getStudentsRequest, fetchStudentsSaga);
   yield takeLatest(studentActions.createStudents.createStudentsRequest, createStudentsSaga);
@@ -117,4 +123,15 @@ export default function* mySaga() {
   yield takeLatest(classActions.createClass.createClassRequest, createClass);
   yield takeLatest(classActions.updateClass.updateClassRequest, updateClass);
   yield takeLatest(classActions.deleteClass.deleteClassRequest, deleteClass);
+  // employees
+  yield takeLatest(employeeActions.getEmployees.getEmployeesRequest, fetchEmployeesSaga);
+  yield takeLatest(employeeActions.createEmployee.createEmployeeRequest, createEmployeeSaga);
+  yield takeLatest(employeeActions.updateEmployee.updateEmployeeRequest, updateEmployeeSaga);
+  yield takeLatest(employeeActions.deleteEmployee.deleteEmployeeRequest, deleteEmployeeSaga);
+
+  // lecturers
+  yield takeLatest(lecturerActions.getLecturers.getLecturersRequest, fetchLecturersSaga);
+  yield takeLatest(lecturerActions.createLecturer.createLecturerRequest, createLecturerSaga);
+  yield takeLatest(lecturerActions.updateLecturer.updateLecturerRequest, updateLecturerSaga);
+  yield takeLatest(lecturerActions.deleteLecturer.deleteLecturerRequest, deleteLecturerSaga);
 }

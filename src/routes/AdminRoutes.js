@@ -1,6 +1,8 @@
 import Icon from '@ant-design/icons';
 import Class from 'pages/Class';
 import AddClass from 'pages/Class/AddClass';
+import AppointLecturer from 'pages/Class/AppointLecturer';
+import AddAppoint from 'pages/Class/AddAppoint';
 import Course from 'pages/Course';
 import AddCourse from 'pages/Course/AddCourse';
 import ColumnTranscript from 'pages/Course/ColumnTranscript';
@@ -26,6 +28,7 @@ import {
   studentSvg,
   timeSvg,
 } from 'utils/iconsvg';
+import Details from 'pages/Class/Details';
 
 const DashboardIcon = props => <Icon component={dashboardSvg} {...props} />;
 const LecturerIcon = props => <Icon component={lecturerSvg} {...props} />;
@@ -112,6 +115,11 @@ const adminRoutes = [
     page: () => <Level />,
   },
   {
+    path: '/lecturer/edit/:id',
+    exact: true,
+    page: () => <AddLecturer />,
+  },
+  {
     path: '/columntranscript',
     exact: true,
     page: () => <ColumnTranscript />,
@@ -147,14 +155,19 @@ const adminRoutes = [
     page: () => <AddClass />,
   },
   {
-    path: '/class/add/:idClass',
+    path: '/class/edit/:idClass',
     exact: true,
     page: () => <AddClass />,
   },
   {
-    path: '/class/update/:idClass',
+    path: '/class/details/:idClass',
     exact: true,
-    page: () => <AddClass />,
+    page: () => <Details />,
+  },
+  {
+    path: '/employee/edit/:id',
+    exact: true,
+    page: () => <AddEmployee />,
   },
 ];
 
@@ -175,11 +188,6 @@ const adminMenuItems = {
           path: '/lecturer/',
           name: 'Lecturer list',
           component: <Lecturer />,
-        },
-        {
-          path: '/lecturer/add',
-          name: 'Add lecturer',
-          component: <AddLecturer />,
         },
       ],
     },
@@ -228,11 +236,6 @@ const adminMenuItems = {
           path: '/employee/',
           name: 'Employee list',
           component: <Employee />,
-        },
-        {
-          path: '/employee/add',
-          name: 'Add Employee',
-          component: <AddEmployee />,
         },
       ],
     },

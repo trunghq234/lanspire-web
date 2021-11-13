@@ -1,194 +1,165 @@
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Button, Card, Input, Select, Table, Tag } from 'antd';
+import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { Breadcrumb, Button, Card, Input, Modal, notification, Table, Tag } from 'antd';
+import moment from 'moment';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { createPost } from 'redux/actions/posts';
-import { postState$ } from 'redux/selectors';
+import { useHistory } from 'react-router-dom';
+import * as employeeActions from 'redux/actions/employees';
+import { employeeState$ } from 'redux/selectors';
 import styles from './index.module.less';
 
-const { Option } = Select;
+const { confirm } = Modal;
 const { Search } = Input;
 
-const columns = [
-  {
-    title: 'ID',
-    dataIndex: 'id',
-    align: 'center',
-  },
-  {
-    title: 'Full name',
-    dataIndex: 'fullName',
-  },
-  {
-    title: 'Gender',
-    dataIndex: 'gender',
-    align: 'center',
-  },
-  {
-    title: 'Phone number',
-    dataIndex: 'phoneNumber',
-    align: 'center',
-  },
-  {
-    title: 'Address',
-    dataIndex: 'address',
-    align: 'center',
-  },
-  {
-    title: 'Birthday',
-    dataIndex: 'birthday',
-    align: 'center',
-  },
-  {
-    title: 'Status',
-    dataIndex: 'status',
-    align: 'center',
-    render: status => (
-      <span>
-        {status ? <Tag color="success">Working</Tag> : <Tag color="orange">Unemployed</Tag>}
-      </span>
-    ),
-  },
-  {
-    title: '',
-    dataIndex: 'editable',
-    align: 'center',
-    render: editable => (
-      <div style={{ display: 'flex', justifyContent: 'center', columnGap: '20px' }}>
-        <Button
-          onClick={() => handleEditBtn(editable)}
-          type="primary"
-          ghost
-          disabled={editable.disable ? true : false}
-          icon={<EditOutlined />}
-        />
-        <Button danger icon={<DeleteOutlined />} />
-      </div>
-    ),
-  },
-];
-
-const dataSource = [
-  {
-    key: '1',
-    id: '1',
-    fullName: 'Nguyen Van A',
-    gender: 'Male',
-    phoneNumber: '123',
-    address: 'Abcd xyz',
-    birthday: '01/01/1999',
-    status: true,
-    editable: {
-      id: '1',
-      fullName: 'Nguyen Van A',
-      gender: 'Male',
-      phoneNumber: '123',
-      address: 'Abcd xyz',
-      birthday: '01/01/1999',
-      disable: false,
-    },
-  },
-  {
-    key: '2',
-    id: '2',
-    fullName: 'Nguyen Van B',
-    gender: 'Female',
-    phoneNumber: '123',
-    address: 'Abcd xyz',
-    birthday: '02/01/1979',
-    status: true,
-    editable: {
-      id: '2',
-      fullName: 'Nguyen Van B',
-      gender: 'Female',
-      phoneNumber: '123',
-      address: 'Abcd xyz',
-      birthday: '02/01/1979',
-      disable: false,
-    },
-  },
-  {
-    key: '3',
-    id: '3',
-    fullName: 'Nguyen Van C',
-    gender: 'Male',
-    phoneNumber: '123',
-    address: 'Abcd xyz',
-    birthday: '01/01/1992',
-    status: true,
-    editable: {
-      id: '3',
-      fullName: 'Nguyen Van C',
-      gender: 'Male',
-      phoneNumber: '123',
-      address: 'Abcd xyz',
-      birthday: '01/01/1992',
-      disable: false,
-    },
-  },
-  {
-    key: '4',
-    id: '4',
-    fullName: 'Nguyen Van D',
-    gender: 'Male',
-    phoneNumber: '123',
-    address: 'Abcd xyz',
-    birthday: '01/01/1929',
-    status: false,
-    editable: {
-      id: '4',
-      fullName: 'Nguyen Van D',
-      gender: 'Male',
-      phoneNumber: '123',
-      address: 'Abcd xyz',
-      birthday: '01/01/1929',
-      disable: false,
-    },
-  },
-  {
-    key: '5',
-    id: '5',
-    fullName: 'Nguyen Van E',
-    gender: 'Male',
-    phoneNumber: '123',
-    address: 'Abcd xyz',
-    birthday: '01/01/1999',
-    status: false,
-    editable: {
-      id: '5',
-      fullName: 'Nguyen Van E',
-      gender: 'Male',
-      phoneNumber: '123',
-      address: 'Abcd xyz',
-      birthday: '01/01/1999',
-      disable: false,
-    },
-  },
-];
-
-const handleEditBtn = editable => {
-  console.log({ editable });
+const mapToDataSource = array => {
+  return array.map(item => {
+    return {
+      key: item.idEmployee,
+      idEmployee: item.idEmployee,
+      username: item.username === null ? 'null' : item.username,
+      displayName: item.displayName,
+      email: item.email,
+      gender: item.gender === 0 ? 'Male' : item.gender === 1 ? 'Female' : 'Others',
+      phoneNumber: item.phoneNumber,
+      address: item.address,
+      birthday: moment(item.dob).format('DD/MM/YYYY'),
+      isActivated: item.isActivated,
+    };
+  });
 };
 
 const Employee = () => {
-  // const dispatch = useDispatch();
-  // const posts = useSelector(postState$);
+  const [dataSource, setDataSource] = React.useState([]);
+  const [filteredData, setFilteredData] = React.useState([]);
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const employees = useSelector(employeeState$);
+  const columns = [
+    {
+      title: 'Full name',
+      dataIndex: 'displayName',
+      ellipsis: true,
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      ellipsis: true,
+    },
+    {
+      title: 'Gender',
+      dataIndex: 'gender',
+      align: 'center',
+      filters: [
+        { text: 'Male', value: 'Male' },
+        { text: 'Female', value: 'Female' },
+        { text: 'Others', value: 'Others' },
+      ],
+      filterSearch: true,
+      onFilter: (value, record) => record.gender.startsWith(value),
+    },
+    {
+      title: 'Phone number',
+      dataIndex: 'phoneNumber',
+      ellipsis: true,
+    },
+    {
+      title: 'Address',
+      dataIndex: 'address',
+      ellipsis: true,
+    },
+    {
+      title: 'Birthday',
+      dataIndex: 'birthday',
+      align: 'center',
+    },
+    {
+      title: 'Status',
+      dataIndex: 'isActivated',
+      align: 'center',
+      filters: [
+        { text: 'Working', value: true },
+        { text: 'Unworking', value: false },
+      ],
+      filterSearch: true,
+      onFilter: (value, record) => {
+        if (record.isActivated === value) return true;
+      },
+      render: isActivated => (
+        <span>
+          {isActivated ? <Tag color="success">Working</Tag> : <Tag color="orange">Unemployed</Tag>}
+        </span>
+      ),
+    },
+    {
+      title: '',
+      dataIndex: 'idEmployee',
+      align: 'center',
+      render: idEmployee => (
+        <div style={{ display: 'flex', justifyContent: 'center', columnGap: '20px' }}>
+          <Button
+            type="primary"
+            onClick={() => handleEditEmployee(idEmployee)}
+            ghost
+            icon={<EditOutlined />}
+          />
+          <Button
+            onClick={() => handleDeleteEmployee(idEmployee)}
+            danger
+            icon={<DeleteOutlined />}
+          />
+        </div>
+      ),
+    },
+  ];
 
-  // console.log({ posts });
+  React.useEffect(() => {
+    dispatch(employeeActions.getEmployees.getEmployeesRequest());
+  }, [dispatch]);
+  React.useEffect(() => {
+    const mapEmployeeToData = mapToDataSource(employees.data);
+    setDataSource(mapEmployeeToData);
+    setFilteredData(mapEmployeeToData);
+  }, [employees]);
 
-  const onSearch = () => {};
-  const handleChange = () => {};
   const handleAddEmployee = () => {
-    let post = {
-      title: 'new employee',
-      description: 'new employee',
-    };
-
-    dispatch(createPost.createPostRequest(post));
+    history.push('/employee/add');
   };
+  const handleDeleteEmployee = idEmployee => {
+    confirm({
+      title: 'Do you want to delete this employee?',
+      icon: <ExclamationCircleOutlined />,
+      content: '',
+      onOk() {
+        const employee = employees.data.find(employee => employee.idEmployee === idEmployee);
+        dispatch(employeeActions.deleteEmployee.deleteEmployeeRequest(employee));
+      },
+      onCancel() {},
+    });
+  };
+  const handleEditEmployee = idEmployee => {
+    history.push(`/employee/edit/${idEmployee}`);
+  };
+  const handleSearch = value => {
+    const dataSearch = dataSource.filter(
+      item => item.displayName.toLowerCase().search(value.toLowerCase()) >= 0
+    );
+    setFilteredData(dataSearch);
+  };
+
+  console.log({ dataSource });
 
   return (
     <div>
+      <Breadcrumb style={{ marginBottom: '20px' }}>
+        <Breadcrumb.Item>Home</Breadcrumb.Item>
+        <Breadcrumb.Item>
+          <a href="">Application Center</a>
+        </Breadcrumb.Item>
+        <Breadcrumb.Item>
+          <a href="">Application List</a>
+        </Breadcrumb.Item>
+      </Breadcrumb>
+
       <h3>Employee List</h3>
       <Card>
         <div className={styles.wrapper}>
@@ -196,26 +167,23 @@ const Employee = () => {
             <Search
               className={styles.search}
               size="large"
-              placeholder="Search by name"
+              placeholder="Search"
               allowClear
               enterButton
-              onSearch={onSearch}
+              onSearch={handleSearch}
             />
-            <Select
-              className={styles.select}
-              size="large"
-              defaultValue="all"
-              onClick={handleChange}>
-              <Option value="all">All</Option>
-              <Option value="working">Working</Option>
-              <Option value="unemployed">Unemployed</Option>
-            </Select>
           </div>
           <Button className={styles.btn} size="large" type="primary" onClick={handleAddEmployee}>
             Add employee
           </Button>
         </div>
-        <Table columns={columns} dataSource={dataSource} />
+        <Table
+          bordered={true}
+          columns={columns}
+          loading={employees.isLoading}
+          dataSource={filteredData}
+          rowKey={row => row.idEmployee}
+        />
       </Card>
     </div>
   );

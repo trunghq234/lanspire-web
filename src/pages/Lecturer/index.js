@@ -1,93 +1,158 @@
+import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { Breadcrumb, Button, Card, Input, Modal, notification, Table, Tag } from 'antd';
+import moment from 'moment';
 import React from 'react';
-import { Button, Card, Input, Select, Table, Tag, Tooltip, Breadcrumb, Row, Col } from 'antd';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { NavLink, useHistory } from 'react-router-dom';
+import * as lecturerActions from 'redux/actions/lecturers';
+import { lecturerState$ } from 'redux/selectors';
 import styles from './index.module.less';
-import { NavLink } from 'react-router-dom';
 
-const { Option } = Select;
+const { confirm } = Modal;
 const { Search } = Input;
 
-function handleChange(value) {
-  console.log(`selected ${value}`);
-}
-const onSearch = value => console.log(value);
-
-const columns = [
-  {
-    title: 'ID',
-    dataIndex: 'id',
-    align: 'center',
-  },
-  {
-    title: 'Full name',
-    dataIndex: 'name',
-  },
-  {
-    title: 'Phone number',
-    dataIndex: 'phoneNumber',
-    align: 'center',
-  },
-  {
-    title: 'Level',
-    dataIndex: 'level',
-    align: 'center',
-  },
-  {
-    title: 'Status',
-    dataIndex: 'status',
-    align: 'center',
-    render: status => (
-      <span>
-        {status ? <Tag color="success">Working</Tag> : <Tag color="orange">Unemployed</Tag>}
-      </span>
-    ),
-  },
-  {
-    title: '',
-    dataIndex: 'editable',
-    align: 'center',
-    render: editable => {
-      return (
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
-          <Tooltip title="Edit information">
-            <Button
-              type="primary"
-              ghost
-              disabled={editable ? true : false}
-              icon={<EditOutlined />}
-            />
-          </Tooltip>
-          <Tooltip title="Delete">
-            <Button danger icon={<DeleteOutlined />} />
-          </Tooltip>
-        </div>
-      );
-    },
-  },
-];
-
-const data = [
-  {
-    key: '1',
-    id: '1',
-    name: 'Nguyen Van A',
-    phoneNumber: '123',
-    level: 'IELTS 6.0',
-    status: false,
-    editable: true,
-  },
-  {
-    key: '2',
-    id: '2',
-    name: 'Nguyen Van B',
-    phoneNumber: '123',
-    level: 'IELTS 8.0',
-    status: true,
-    editable: false,
-  },
-];
+const mapToDataSource = array => {
+  console.log({ array });
+  return array.map(item => {
+    const address = `${item.address[0]}, ${item.address[1]}, ${item.address[2]}`;
+    return {
+      key: item.idLecturer,
+      idLecturer: item.idLecturer,
+      idUser: item.idUser,
+      username: item.username === null ? 'null' : item.username,
+      displayName: item.displayName,
+      email: item.email,
+      gender: item.gender === 0 ? 'Male' : item.gender === 1 ? 'Female' : 'Others',
+      phoneNumber: item.phoneNumber,
+      address,
+      birthday: moment(item.dob).format('DD/MM/YYYY'),
+      isActivated: item.isActivated,
+      isDeleted: item.isDeleted,
+    };
+  });
+};
 
 const Lecturer = () => {
+  const [dataSource, setDataSource] = React.useState([]);
+  const [filteredData, setFilteredData] = React.useState([]);
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const lecturers = useSelector(lecturerState$);
+  const columns = [
+    {
+      title: 'Full name',
+      dataIndex: 'displayName',
+      ellipsis: true,
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      ellipsis: true,
+    },
+    {
+      title: 'Gender',
+      dataIndex: 'gender',
+      align: 'center',
+      filters: [
+        { text: 'Male', value: 'Male' },
+        { text: 'Female', value: 'Female' },
+        { text: 'Others', value: 'Others' },
+      ],
+      filterSearch: true,
+      onFilter: (value, record) => record.gender.startsWith(value),
+    },
+    {
+      title: 'Phone number',
+      dataIndex: 'phoneNumber',
+      ellipsis: true,
+    },
+    {
+      title: 'Address',
+      dataIndex: 'address',
+      ellipsis: true,
+    },
+    {
+      title: 'Birthday',
+      dataIndex: 'birthday',
+      align: 'center',
+      ellipsis: true,
+    },
+    {
+      title: 'Status',
+      dataIndex: 'isActivated',
+      align: 'center',
+      filters: [
+        { text: 'Working', value: true },
+        { text: 'Unworking', value: false },
+      ],
+      filterSearch: true,
+      onFilter: (value, record) => {
+        if (record.isActivated === value) return true;
+      },
+      render: isActivated => (
+        <span>
+          {isActivated ? <Tag color="success">Working</Tag> : <Tag color="orange">Unworking</Tag>}
+        </span>
+      ),
+    },
+    {
+      title: '',
+      dataIndex: 'idLecturer',
+      align: 'center',
+      render: idLecturer => (
+        <div style={{ display: 'flex', justifyContent: 'center', columnGap: '20px' }}>
+          <Button
+            onClick={() => handleEditLecturer(idLecturer)}
+            type="primary"
+            ghost
+            icon={<EditOutlined />}
+          />
+          <Button
+            onClick={() => handleDeleteLecturer(idLecturer)}
+            danger
+            icon={<DeleteOutlined />}
+          />
+        </div>
+      ),
+    },
+  ];
+
+  React.useEffect(() => {
+    dispatch(lecturerActions.getLecturers.getLecturersRequest());
+  }, [dispatch]);
+  React.useEffect(() => {
+    const mapLecturersToData = mapToDataSource(lecturers.data);
+    setDataSource(mapLecturersToData);
+    setFilteredData(mapLecturersToData);
+  }, [lecturers]);
+
+  const handleAddLecturerClick = () => {
+    history.push('/lecturer/add');
+  };
+  const handleEditLecturer = idLecturer => {
+    history.push(`/lecturer/edit/${idLecturer}`);
+  };
+  const handleDeleteLecturer = idLecturer => {
+    confirm({
+      title: 'Do you want to delete this lecturer?',
+      icon: <ExclamationCircleOutlined />,
+      content: '',
+      onOk() {
+        const lecturer = lecturers.data.find(lecturer => lecturer.idLecturer === idLecturer);
+        dispatch(lecturerActions.deleteLecturer.deleteLecturerRequest(lecturer));
+      },
+      onCancel() {},
+    });
+  };
+  const handleSearch = value => {
+    const dataSearch = dataSource.filter(
+      item => item.displayName.toLowerCase().search(value.toLowerCase()) >= 0
+    );
+    setFilteredData(dataSearch);
+  };
+
+  console.log({ dataSource });
+
   return (
     <>
       <Breadcrumb>
@@ -101,38 +166,32 @@ const Lecturer = () => {
       </Breadcrumb>
       <h3 className="heading">Lecturer list</h3>
       <Card>
-        <Row gutter={[20, 20]} align="top">
-          <Col xs={24} sm={16} md={10} lg={8} xl={8}>
+        <div className={styles.wrapper}>
+          <div>
             <Search
               className={styles.search}
               size="large"
-              placeholder="Search by name"
+              placeholder="Search"
               allowClear
               enterButton
-              onSearch={onSearch}
+              onSearch={handleSearch}
             />
-          </Col>
-          <Col xs={24} sm={8} md={6} lg={6} xl={4}>
-            <Select
-              className={styles.select}
-              size="large"
-              defaultValue="all"
-              onChange={handleChange}>
-              <Option value="all">All</Option>
-              <Option value="working">Working</Option>
-              <Option value="unemployed">Unemployed</Option>
-            </Select>
-          </Col>
-          <Col xs={0} md={2} lg={4} xl={8} flex="auto" />
-          <Col xs={24} sm={24} md={6} lg={6} xl={4}>
-            <Button className={styles.btn} size="large" type="primary">
-              <NavLink to="/lecturer/add">Add lecturer</NavLink>
-            </Button>
-          </Col>
-          <Col span={24}>
-            <Table bordered columns={columns} dataSource={data} />
-          </Col>
-        </Row>
+          </div>
+          <Button
+            onClick={handleAddLecturerClick}
+            className={styles.btn}
+            size="large"
+            type="primary">
+            Add lecturer
+          </Button>
+        </div>
+        <Table
+          bordered={true}
+          loading={lecturers.isLoading}
+          columns={columns}
+          dataSource={filteredData}
+          rowKey={row => row.idLecturer}
+        />
       </Card>
     </>
   );

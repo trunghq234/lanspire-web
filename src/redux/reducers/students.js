@@ -21,7 +21,7 @@ export default function StudentsReducer(state = INIT_STATE.students, action) {
     case getType(studentActions.getStudents.getStudentsFailure):
       return {
         ...state,
-        error: action.message,
+        error: action.payload.message,
         isLoading: false,
       };
     //create student
@@ -42,9 +42,8 @@ export default function StudentsReducer(state = INIT_STATE.students, action) {
     case getType(studentActions.createStudents.createStudentsFailure):
       return {
         ...state,
-        error: action.message,
+        error: action.payload.message,
         isLoading: false,
-        error: action.message,
       };
 
     // update Student
@@ -67,7 +66,7 @@ export default function StudentsReducer(state = INIT_STATE.students, action) {
     case getType(studentActions.updateStudents.updateStudentsFailure):
       return {
         ...state,
-        error: action.message,
+        error: action.payload.message,
         isLoading: false,
       };
 
@@ -96,7 +95,7 @@ export default function StudentsReducer(state = INIT_STATE.students, action) {
     case getType(studentActions.deleteStudents.deleteStudentsFailure):
       return {
         ...state,
-        error: action.message,
+        error: action.payload.message,
         isLoading: false,
       };
     default:

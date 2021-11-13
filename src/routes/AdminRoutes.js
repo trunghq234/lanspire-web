@@ -14,6 +14,7 @@ import AddLecturer from 'pages/Lecturer/AddLecturer';
 import Student from 'pages/Student';
 import AddStudent from 'pages/Student/AddStudent';
 import StudentDetails from 'pages/Student/StudentDetails';
+import ArrangeClass from 'pages/Student/StudentDetails/ArrangeClass';
 import TimeFrame from 'pages/TimeFrame';
 import React from 'react';
 import {
@@ -69,6 +70,11 @@ const adminRoutes = [
     path: '/student/details/:idStudent',
     exact: true,
     page: () => <StudentDetails />,
+  },
+  {
+    path: '/student/details/arrange-class/:idStudent',
+    exact: true,
+    page: () => <ArrangeClass />,
   },
   {
     path: '/course/',

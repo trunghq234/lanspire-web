@@ -1,9 +1,9 @@
 import React from 'react';
 import { Tabs, Breadcrumb, Col } from 'antd';
-import ArrangeClass from 'components/Student/ArrangeClass';
-import TimeTable from 'components/Student/TabTimeTable';
+import Timetable from 'components/Student/TabTimetable';
 import PersonalInfo from 'components/Student/TabPersonalInfo';
 import { useParams } from 'react-router-dom';
+import TabArrangeClass from 'components/Student/TabArrangeClass';
 
 const { TabPane } = Tabs;
 
@@ -28,10 +28,10 @@ const StudentDetails = () => {
           <PersonalInfo idStudent={idStudent} />
         </TabPane>
         <TabPane tab="Class" key="2">
-          <ArrangeClass />
+          <TabArrangeClass />
         </TabPane>
-        <TabPane tab="Time Table" key="3">
-          <TimeTable />
+        <TabPane tab="Timetable" key="3">
+          <Timetable />
         </TabPane>
       </Tabs>
     </>

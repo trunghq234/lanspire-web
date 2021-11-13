@@ -19,6 +19,7 @@ import styles from './index.module.less';
 import { studentState$ } from 'redux/selectors/index';
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteStudents, getStudents } from 'redux/actions/students';
+import { formatName } from 'utils/stringHelper';
 const { Search } = Input;
 
 const Student = () => {
@@ -125,6 +126,7 @@ const Student = () => {
   const [data, setData] = useState([]); //Data ban đầu
   const [dataSearch, setDataSearch] = useState([]); //Data sau khi search
   const [isDeleted, setIsDeleted] = useState(false);
+  const [idStudent, setIdStudent] = useState();
   const [visibleModal, setVisibleModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -140,7 +142,7 @@ const Student = () => {
       const address = `${student.User.address[0]}, ${student.User.address[1]}, ${student.User.address[2]}`;
       return {
         idStudent: student.idStudent,
-        name: student.User.displayName,
+        name: formatName(student.User.displayName),
         email: student.User.email,
         phoneNumber: student.User.phoneNumber,
         address: address,
@@ -180,7 +182,7 @@ const Student = () => {
           width: 300,
         },
       });
-    } else if (isDeleted && students.isSuccess && students.error.length > 0) {
+    } else if (isDeleted && !students.isSuccess && students.error.length > 0) {
       notification.error();
       ({
         message: students.error,

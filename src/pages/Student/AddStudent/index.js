@@ -7,6 +7,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { studentState$ } from 'redux/selectors';
 import moment from 'moment';
 import UserInfo from 'components/Student/UserInfo';
+import { formatName } from 'utils/stringHelper';
 
 const AddStudent = () => {
   const [isSubmit, setIsSubmit] = useState(false);
@@ -36,9 +37,8 @@ const AddStudent = () => {
       if (idStudent) {
         history.push('/student/list');
       }
-    } else if (isSubmit && !students.isSuccess && !students.error) {
+    } else if (isSubmit && !students.isSuccess && students.error.length > 0) {
       notification.error({
-        title: 'Error',
         message: students.error,
         style: {
           width: 300,
@@ -63,7 +63,7 @@ const AddStudent = () => {
 
   const loadFieldsValue = student => {
     const record = {
-      fullName: student.User.displayName,
+      fullName: formatName(student.User.displayName),
       email: student.User.email,
       phoneNumber: student.User.phoneNumber,
       gender: student.User.gender === 1 ? 'male' : student.User.gender === 0 ? 'female' : 'others',
@@ -78,10 +78,11 @@ const AddStudent = () => {
 
   //Submit
   const handleSubmit = () => {
+    setIsSubmit(true);
     const { phoneNumber, gender, dob, email, fullName, district, city, detailsAddress } =
       form.getFieldsValue();
     const newUser = {
-      displayName: fullName,
+      displayName: formatName(fullName),
       gender: gender === 'female' ? 0 : gender === 'male' ? 1 : 2,
       phoneNumber,
       email,
@@ -94,17 +95,15 @@ const AddStudent = () => {
     } else {
       //update
       const studentUpdate = {
-        idStudent: studentById.idStudent,
-        idUser: studentById.idUser,
-        isDeleted: studentById.isDeleted,
+        ...studentById,
         User: {
           idUser: studentById.idUser,
           ...newUser,
         },
+        idClasses: studentById.Classes.map(element => element.idClass),
       };
       dispatch(updateStudents.updateStudentsRequest(studentUpdate));
     }
-    setIsSubmit(true);
   };
 
   //discard

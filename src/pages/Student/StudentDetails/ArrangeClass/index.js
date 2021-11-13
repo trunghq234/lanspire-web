@@ -23,7 +23,7 @@ import { getStudents, updateStudents } from 'redux/actions/students';
 import { classState$, courseState$, studentState$, userState$ } from 'redux/selectors';
 import { currentDate } from 'utils/dateTime';
 import { convertCommasToNumber, numberWithCommas } from 'utils/stringHelper';
-import Invoice from '../Invoice';
+import Invoice from 'components/Student/Invoice';
 import styles from './index.module.less';
 const { Search } = Input;
 

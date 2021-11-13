@@ -10,6 +10,7 @@ import {
   notification,
   Row,
   Select,
+  Tooltip,
 } from 'antd';
 import React, { useEffect, useState } from 'react';
 // import { validateMessages } from 'constant/validationMessage';
@@ -33,6 +34,7 @@ const AddClass = () => {
   const [activity, setActivity] = useState('Add');
   const [isEdit, setIsEdit] = useState(false);
   const [isSubmit, setIsSubmit] = useState(false);
+  const [isInProcess, setIsInProcess] = useState(false);
   // const [isDuplicate, setIsDuplicate] = useState(false);
   const { isSuccess, isLoading } = useSelector(classState$);
   const { data: classes } = useSelector(classState$);
@@ -41,7 +43,7 @@ const AddClass = () => {
   const history = useHistory();
   const { data: courses } = useSelector(courseState$);
   const { data: timeFrames } = useSelector(timeFrameState$);
-  const format = 'HH:mm';
+  const format = 'DD:MM:yy';
 
   useEffect(() => {
     setCourseList(courses);
@@ -62,6 +64,9 @@ const AddClass = () => {
       });
       if (classRoom) {
         setClass(classRoom);
+        if (moment(classRoom.startDate).format('DD:MM:YYYY') < moment().format('DD:MM:YYYY')) {
+          setIsInProcess(true);
+        }
         const classTimes = classRoom.ClassTimes;
         form.setFieldsValue({
           className: classRoom.className,
@@ -302,13 +307,21 @@ const AddClass = () => {
                 <Input placeholder="Class name" maxLength="255" />
               </Form.Item>
               <Form.Item label="Start Date" name="startDate" rules={[{ required: true }]}>
-                <DatePicker format={dateFormat} className={styles.maxwidth} />
+                <DatePicker
+                  disabled={isInProcess}
+                  format={dateFormat}
+                  className={styles.maxwidth}
+                />
               </Form.Item>
               <Form.Item label="End Date" name="endDate" rules={[{ required: true }]}>
-                <DatePicker format={dateFormat} className={styles.maxwidth} />
+                <DatePicker
+                  disabled={isInProcess}
+                  format={dateFormat}
+                  className={styles.maxwidth}
+                />
               </Form.Item>
               <Form.Item label="Course" name="course" rules={[{ required: true }]}>
-                <Select>
+                <Select disabled={isInProcess}>
                   {courseList.map((course, index) => (
                     <Option key={index}>{course.courseName}</Option>
                   ))}
@@ -347,7 +360,7 @@ const AddClass = () => {
                               fieldKey={[fieldKey, 'idTimeFrame']}
                               rules={[{ required: true, message: 'Please choose time frame.' }]}
                               style={{ marginBottom: '8px' }}>
-                              <Select>
+                              <Select disabled={isInProcess}>
                                 {timeFrameList.map((timeFrame, index) => (
                                   <Option key={timeFrame.idTimeFrame}>
                                     <Row
@@ -372,7 +385,7 @@ const AddClass = () => {
                               fieldKey={[fieldKey, 'dayOfWeek']}
                               rules={[{ required: true, message: 'Please choose Day Of Week.' }]}
                               style={{ marginBottom: '8px' }}>
-                              <Select>
+                              <Select disabled={isInProcess}>
                                 {dayOfWeeks.map((day, index) => (
                                   <Option key={day.id}>{day.value}</Option>
                                 ))}
@@ -380,11 +393,15 @@ const AddClass = () => {
                             </Form.Item>
                           </Col>
                           <Col span={1}>
-                            <MinusCircleOutlined
-                              // className={style['icon-minus']}
-
-                              onClick={() => remove(name)}
-                            />
+                            <Tooltip title="Remove time slot">
+                              <Button type="link" danger disabled={isInProcess}>
+                                <MinusCircleOutlined
+                                  onClick={() => {
+                                    remove(name);
+                                  }}
+                                />
+                              </Button>
+                            </Tooltip>
                           </Col>
                         </Row>
                       ))}

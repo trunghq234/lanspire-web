@@ -34,7 +34,7 @@ const AntCalendar = props => {
     'gold',
     'lime',
   ];
-
+  let currentMode = 'date';
   useEffect(() => {
     dispatch(timeFrameActions.getAllTimeFrames.getAllTimeFramesRequest());
   }, []);
@@ -126,11 +126,15 @@ const AntCalendar = props => {
     return <CalendarCell date={date} events={evs} />;
   };
   const showDrawer = value => {
-    const evs = events.filter(
-      event => event.day.format('DD:MM:YYYY') == value.format('DD:MM:YYYY')
-    );
-    setCurrentEvents(evs);
-    setVisible(true);
+    console.log(currentMode);
+    if (currentMode == 'date') {
+      const evs = events.filter(
+        event => event.day.format('DD:MM:YYYY') == value.format('DD:MM:YYYY')
+      );
+      setCurrentEvents(evs);
+      setVisible(true);
+    }
+    currentMode = 'date';
   };
   const handleOk = () => {
     setIsModalVisible(false);
@@ -139,9 +143,16 @@ const AntCalendar = props => {
   const handleCancel = () => {
     setVisible(false);
   };
+  const onPanelChange = (value, mode) => {
+    currentMode = mode;
+  };
   return (
     <div>
-      <Calendar onSelect={showDrawer} dateFullCellRender={cellRenderFunc} />
+      <Calendar
+        onPanelChange={onPanelChange}
+        onSelect={showDrawer}
+        dateFullCellRender={cellRenderFunc}
+      />
       <Modal
         title={classRoom.className}
         placement="right"

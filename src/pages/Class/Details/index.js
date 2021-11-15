@@ -1,5 +1,6 @@
 import { Breadcrumb, Card, Tabs } from 'antd';
 import AntCalendar from 'components/Class/AntCalendar';
+import Transcript from 'components/Class/Transcript';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink, useParams } from 'react-router-dom';
@@ -45,6 +46,9 @@ const Details = () => {
           </TabPane>
           <TabPane tab="Calendar 2" key="3">
             <AntCalendar></AntCalendar>
+          </TabPane>
+          <TabPane tab="Students" key="4">
+            <Transcript></Transcript>
           </TabPane>
         </Tabs>
       </Card>

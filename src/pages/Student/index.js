@@ -14,12 +14,14 @@ import {
   Tooltip,
   Drawer,
 } from 'antd';
-import { EditOutlined, DeleteOutlined, EyeOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, EyeOutlined, VideoCameraOutlined } from '@ant-design/icons';
 import styles from './index.module.less';
 import { studentState$ } from 'redux/selectors/index';
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteStudents, getStudents } from 'redux/actions/students';
 import { formatName } from 'utils/stringHelper';
+import { currentDate } from 'utils/dateTime';
+import moment from 'moment';
 const { Search } = Input;
 
 const Student = () => {
@@ -71,20 +73,24 @@ const Student = () => {
       align: 'center',
       filters: [
         {
-          text: 'Studying',
-          value: true,
+          text: 'No study',
+          value: 0,
         },
         {
-          text: 'No study',
-          value: false,
+          text: 'Studying',
+          value: 1,
+        },
+        {
+          text: 'Registered',
+          value: 2,
         },
       ],
       defaultFilteredValue: [true],
       render: (status, index) => {
-        const color = status ? 'blue' : 'gray';
+        const color = status === 0 ? 'gray' : status === 1 ? 'blue' : 'orange';
         return (
           <Tag color={color} key={index}>
-            {status ? 'Studying' : 'No study'}
+            {status === 0 ? 'No study' : status === 1 ? 'Studying' : 'Registered'}
           </Tag>
         );
       },
@@ -140,13 +146,29 @@ const Student = () => {
   useEffect(() => {
     const tmpData = students.data.map((student, index) => {
       const address = `${student.User.address[0]}, ${student.User.address[1]}, ${student.User.address[2]}`;
+      var status = 0;
+      for (let i = 0; i < student.Classes.length; ++i) {
+        const item = student.Classes[i];
+        if (
+          (moment(item.startDate) < currentDate() && moment(item.endDate) > currentDate()) ||
+          moment(item.endDate).format('DD/MM/YYYY') === currentDate().format('DD/MM/YYYY') ||
+          moment(item.startDate).format('DD/MM/YYYY') === currentDate().format('DD/MM/YYYY')
+        ) {
+          status = 1;
+          break;
+        }
+        if (moment(item.startDate) > currentDate()) {
+          status = 2;
+        }
+      }
+
       return {
         idStudent: student.idStudent,
         name: formatName(student.User.displayName),
         email: student.User.email,
         phoneNumber: student.User.phoneNumber,
         address: address,
-        status: !student.isDeleted,
+        status,
       };
     });
     setData(tmpData);
@@ -161,10 +183,12 @@ const Student = () => {
     const dataTmp = data.filter(item => item.name.toLowerCase().search(value.toLowerCase()) >= 0);
     setDataSearch(dataTmp);
   };
+
   const onDelete = id => {
     setVisibleModal(true);
     setIdStudent(id);
   };
+
   const handleDeleteStudent = () => {
     dispatch(deleteStudents.deleteStudentsRequest(idStudent));
     setVisibleModal(false);

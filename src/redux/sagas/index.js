@@ -42,7 +42,6 @@ import {
   createStudentsSaga,
   deleteStudentsSaga,
   fetchStudentsSaga,
-  getStudentByIdSaga,
   updateStudentsSaga,
 } from './students';
 import {
@@ -102,7 +101,6 @@ export default function* mySaga() {
   yield takeLatest(studentActions.createStudents.createStudentsRequest, createStudentsSaga);
   yield takeLatest(studentActions.updateStudents.updateStudentsRequest, updateStudentsSaga);
   yield takeLatest(studentActions.deleteStudents.deleteStudentsRequest, deleteStudentsSaga);
-  yield takeLatest(studentActions.getById.getByIdRequest, getStudentByIdSaga);
 
   // users
   yield takeLatest(userActions.getUsers.getUsersRequest, fetchUsersSaga);

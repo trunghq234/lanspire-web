@@ -1,7 +1,6 @@
 import { combineReducers } from 'redux';
 import employeesReducer from './employees';
 import StudentsReducer from './students';
-import StudentByIdReducer from './studentById';
 import usersReducer from './users';
 import userReducer from './user';
 import authReducer from './auth';
@@ -19,7 +18,6 @@ export default combineReducers({
   user: userReducer,
   auth: authReducer,
   students: StudentsReducer,
-  studentById: StudentByIdReducer,
   timeFrames: timeFrameReducer,
   courses: coursesReducer,
   courseTypes: courseTypesReducer,

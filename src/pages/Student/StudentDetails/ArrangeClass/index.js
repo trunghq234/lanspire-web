@@ -19,12 +19,13 @@ import { useHistory, useParams } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
 import { getClasses } from 'redux/actions/classes';
 import { getCourses } from 'redux/actions/courses';
-import { getStudents, updateStudents } from 'redux/actions/students';
 import { classState$, courseState$, studentState$, userState$ } from 'redux/selectors';
-import { currentDate } from 'utils/dateTime';
+import { currentDate, isConflictTimetable } from 'utils/dateTime';
 import { convertCommasToNumber, numberWithCommas } from 'utils/stringHelper';
 import Invoice from 'components/Student/Invoice';
 import styles from './index.module.less';
+import studentApi from 'api/studentApi';
+import { updateStudents } from 'redux/actions/students';
 const { Search } = Input;
 
 const ArrangeClass = () => {
@@ -32,8 +33,8 @@ const ArrangeClass = () => {
   const [dataSource, setDataSource] = useState();
   const [filters, setFilters] = useState();
   const classes = useSelector(classState$);
-  const courses = useSelector(courseState$);
   const students = useSelector(studentState$);
+  const courses = useSelector(courseState$);
   const user = useSelector(userState$);
   const [total, setTotal] = useState(0);
   const [fullName, setFullName] = useState();
@@ -45,6 +46,7 @@ const ArrangeClass = () => {
   const [selectedClasses, setSelectedClasses] = useState([]);
   const [dataSearch, setDataSearch] = useState([]); //Data sau khi search
   const [visiblePopConfirm, setVisiblePopConfirm] = useState(false);
+  const [student, setStudent] = useState();
   const dispatch = useDispatch();
   const { idStudent } = useParams();
   const history = useHistory();
@@ -52,46 +54,71 @@ const ArrangeClass = () => {
   useEffect(() => {
     dispatch(getClasses.getClassesRequest());
     dispatch(getCourses.getCoursesRequest());
-    dispatch(getStudents.getStudentsRequest());
   }, []);
 
+  //get student by id
+  useEffect(async () => {
+    try {
+      const res = await studentApi.getById(idStudent);
+      setStudent(res.data);
+    } catch (err) {
+      notification.error({
+        message: `${err}`,
+      });
+    }
+  }, []);
   //Custom data for dataSource of table
   useEffect(() => {
-    //Còn kiểm tra thời khóa biểu của lớp đó
+    //studying or register(key)
+    if (student) {
+      const keyClassesRegistered = student.Classes.reduce((pre, curr) => {
+        if (moment(curr.endDate) >= currentDate()) {
+          pre.push(curr.idClass);
+        }
+        return pre;
+      }, []);
+      //studying or register(class)
+      const classTmp = classes.data.filter(element =>
+        keyClassesRegistered.includes(element.idClass)
+      );
 
-    const classRegistered = students.data.find(
-      element =>
-        element.idStudent === idStudent &&
-        element.Classes.length > 0 &&
-        moment(element.Classes.startDate) >= currentDate()
-    );
-    var keyClassesRegistered = [];
-    if (classRegistered) {
-      keyClassesRegistered = classRegistered.Classes.map(element => element.idClass);
+      //studying or register(time)
+      const currentTimetable = [];
+      classTmp.forEach(element => {
+        element.ClassTimes.forEach(item => {
+          currentTimetable.push({
+            dayOfWeek: item.dayOfWeek,
+            startingTime: item.TimeFrame.startingTime,
+            endingTime: item.TimeFrame.endingTime,
+          });
+        });
+      });
+
+      const classList = classes.data.reduce((pre, curr) => {
+        if (
+          moment(curr.startDate) >= currentDate() &&
+          !keyClassesRegistered.includes(curr.idClass) &&
+          !isConflictTimetable(curr.ClassTimes, currentTimetable)
+        ) {
+          pre.push({
+            key: curr.idClass,
+            className: curr.className,
+            course: curr.Course.courseName,
+            startDate: moment(curr.startDate).format('DD/MM/YYYY'),
+            endDate: moment(curr.endDate).format('DD/MM/YYYY'),
+            fee: numberWithCommas(curr.Course.fee),
+          });
+        }
+        return pre;
+      }, []);
+      setDataSource(classList);
+      setDataSearch(classList);
     }
+  }, [student]);
 
-    const classList = classes.data.filter(
-      element =>
-        moment(element.startDate) >= currentDate() &&
-        !keyClassesRegistered.includes(element.idClass)
-    );
-    const tmp = classList.map(element => {
-      return {
-        key: element.idClass,
-        className: element.className,
-        course: element.Course.courseName,
-        startDate: moment(element.startDate).format('DD/MM/YYYY'),
-        endDate: moment(element.endDate).format('DD/MM/YYYY'),
-        fee: numberWithCommas(element.Course.fee),
-      };
-    });
-    setDataSource(tmp);
-    setDataSearch(tmp);
-  }, [classes.data]);
-
+  //set info student
   useEffect(() => {
-    if (students.data.length > 0) {
-      const student = students.data.find(element => element.idStudent === idStudent);
+    if (student) {
       setFullName(student.User.displayName);
       setGender(
         student.User.gender === 1 ? 'Male' : student.User.gender === 0 ? 'Female' : 'Others'
@@ -101,7 +128,7 @@ const ArrangeClass = () => {
         `${student.User.address[0]}, ${student.User.address[1]}, ${student.User.address[2]}`
       );
     }
-  }, [students.data]);
+  }, [student, classes.data]);
 
   //Custom data for filter course
   useEffect(() => {
@@ -191,7 +218,6 @@ const ArrangeClass = () => {
   //handle payment
   const handlePayment = () => {
     if (selectedClasses.length !== 0) {
-      const student = students.data.find(element => element.idStudent === idStudent);
       const idClasses = [...selectedRowKeys];
       student.Classes.forEach(element => {
         idClasses.push(element.idClass);
@@ -235,7 +261,12 @@ const ArrangeClass = () => {
               />
             </Col>
           </Row>
-          <Table columns={columns} dataSource={dataSearch} rowSelection={rowSelection} />
+          <Table
+            columns={columns}
+            dataSource={dataSearch}
+            rowSelection={rowSelection}
+            loading={classes.isLoading}
+          />
         </Card>
       </Col>
       <Col span={8}>

@@ -1,0 +1,112 @@
+@container-min-height: 1520px;
+@timeline-height: 65px;
+@timelineBorderColor: #efefef;
+@lineColor: #c3c3c3;
+@eventColor: #d6c274;
+@eventContentColor: rgba(0, 0, 0, 0.5);
+.container {
+  min-height: @container-min-height;
+  height: calc(100vh - 20px);
+  position: relative;
+}
+
+.box-sizing {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+//timeline
+.timelineContainer {
+  background: #fafafa;
+  padding-top: @timeline-height;
+  color: #bbb;
+  width: 100%;
+  border-right: 1px solid @timelineBorderColor;
+}
+.timeline {
+  &:extend(.container);
+  text-align: center;
+}
+
+.timelineStepsContainer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.timelineStep {
+  height: @timeline-height;
+  &:extend(.box-sizing);
+  position: relative;
+  top: -10px;
+}
+
+//day (column)
+.dayContainer {
+  width: 100%;
+}
+.dayOfWeek {
+  border-right: 1px solid @lineColor;
+}
+.dayOfWeek-title {
+  height: 40px;
+  font-size: 1.25rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+//line
+.eventsBackgroundContainer {
+  width: 100%;
+}
+.eventsBackgroundHour {
+  height: @timeline-height;
+  border-bottom: 1px solid @lineColor;
+  background-color: @timelineBorderColor;
+  &:first-child {
+    background-color: inherit;
+  }
+}
+
+.eventsBackground {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+//event
+.eventContainer {
+  width: 100%;
+  position: absolute !important;
+  font-size: 0.8rem;
+  background-color: @eventColor;
+  text-align: center;
+  border-radius: 4px;
+  left: 2px;
+  line-height: 1rem;
+}
+.event-title {
+  font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* number of lines to show */
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  margin: 0 5px;
+  font-size: 0.9rem;
+  color: @eventContentColor;
+}
+
+.event-room {
+  color: @eventContentColor;
+  font-weight: 600;
+}
+.event-date {
+  font-weight: bold;
+}

@@ -27,9 +27,3 @@ export const deleteStudents = createActions({
   deleteStudentsSuccess: payload => payload,
   deleteStudentsFailure: err => err,
 });
-
-export const getById = createActions({
-  getByIdRequest: payload => payload,
-  getByIdSuccess: payload => payload,
-  getByIdFailure: err => err,
-});

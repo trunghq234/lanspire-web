@@ -1,12 +1,5 @@
-import { Button, Card, Col, DatePicker, Form, Input, message, Row, Select } from 'antd';
-import { isEmpty } from 'lodash';
-import moment from 'moment';
+import { Card, Col, DatePicker, Form, Input, Row, Select } from 'antd';
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router';
-import * as employeeActions from 'redux/actions/employees';
-import { getUsers } from 'redux/actions/users';
-import { employeeState$, userState$ } from 'redux/selectors';
 import ProvincePicker from '../ProvincePicker';
 import styles from './index.module.less';
 
@@ -22,15 +15,12 @@ const PersonalInfo = props => {
   const [form] = Form.useForm();
   const { id } = useParams();
   const dateFormat = 'DD/MM/YYYY';
-  const { typeSubmit } = props;
+
   const validateMessages = {
     required: '${label} is required!',
     types: {
       email: '${label} is not validate email!',
-      number: '${label} is not a validate number!',
-    },
-    number: {
-      range: '${label} must be between ${min} and ${max}',
+      number: '${label} is a validate number!',
     },
     string: {
       len: "'${label}' must be exactly ${len} characters",
@@ -184,8 +174,7 @@ const PersonalInfo = props => {
 
   return (
     <Card>
-      <h3>Personal information</h3>
-      <Form form={form} layout="vertical" validateMessages={validateMessages}>
+      <Form layout="vertical" validateMessages={validateMessages}>
         <Row gutter={20}>
           <Col xs={24} md={24} xl={10} lg={12} xl={12}>
             <Form.Item label="Full name" name="displayName" rules={[{ required: true }]}>

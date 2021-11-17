@@ -11,11 +11,19 @@ export function* fetchUsersSaga(action) {
     yield put(userActions.getUsers.getUsersFailure(error));
   }
 }
+export function* fetchUserSaga(action) {
+  try {
+    const user = yield call(userApi.getUserById, action.payload);
+
+    yield put(userActions.getUser.getUserSuccess(user));
+  } catch (error) {
+    yield put(userActions.getUser.getUserFailure(error));
+  }
+}
 
 export function* updateUserSaga(action) {
   try {
     yield call(userApi.updateUser, action.payload);
-
     yield put(userActions.updateUser.updateUserSuccess(action.payload));
   } catch (error) {
     yield put(userActions.updateUser.updateUserFailure(error));

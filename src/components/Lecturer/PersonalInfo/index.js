@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import * as lecturerActions from 'redux/actions/lecturers';
 import { getUsers } from 'redux/actions/users';
-import { lectureState$, userState$ } from 'redux/selectors';
+import { lecturerState$, userState$ } from 'redux/selectors';
 import styles from './index.module.less';
 
 const { Option } = Select;
@@ -194,9 +194,10 @@ const PersonalInfo = props => {
                 <Input placeholder="Full name" maxLength="255" />
               </Form.Item>
             </Col>
+
             <Col xs={12} md={12} xl={4} lg={6} xl={6}>
               <Form.Item label="Gender" name="gender" rules={[{ required: true }]}>
-                <Select className={styles.maxwidth}>
+                <Select placeholder="Gender" className={styles.maxwidth}>
                   <Option value="male">Male</Option>
                   <Option value="female">Female</Option>
                   <Option value="other">Others</Option>

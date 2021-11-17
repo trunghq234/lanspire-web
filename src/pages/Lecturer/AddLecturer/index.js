@@ -22,12 +22,13 @@ const AddLecturer = () => {
       {id ? <h3>Edited lecturer</h3> : <h3>Add new lecturer</h3>}
 
       <Row gutter={[20, 20]}>
-        <Col xs={18}>
+        <Col xs={24} xl={18}>
           <Space size={20} direction="vertical">
-            {id ? <PersonalInfo typeSubmit="edit" /> : <PersonalInfo typeSubmit="create" />}
+            {/* <PersonalInfo /> */}
+            <LevelInfo />
           </Space>
         </Col>
-        <Col xs={6}>
+        <Col xs={24} sm={12} xl={6}>
           <Card>
             <Uploader />
           </Card>

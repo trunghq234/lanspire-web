@@ -1,10 +1,10 @@
 import INIT_STATE from '../constant';
-import { getType } from '../actions/employees';
+import { getType } from '../actions/users';
 import * as userActions from '../actions/users';
 
 export default function usersReducer(state = INIT_STATE.users, action) {
   switch (action.type) {
-    // get Employee
+    //get Users
     case getType(userActions.getUsers.getUsersRequest):
       return {
         ...state,
@@ -22,7 +22,7 @@ export default function usersReducer(state = INIT_STATE.users, action) {
         isLoading: false,
       };
 
-    // update Employee
+    // update User
     case getType(userActions.updateUser.updateUserRequest):
       return {
         ...state,

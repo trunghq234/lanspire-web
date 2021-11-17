@@ -3,9 +3,9 @@ import { Breadcrumb, Button, Card, Input, Modal, notification, Table, Tag } from
 import moment from 'moment';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 import * as lecturerActions from 'redux/actions/lecturers';
-import { lectureState$ } from 'redux/selectors';
+import { lecturerState$ } from 'redux/selectors';
 import styles from './index.module.less';
 import { CSVLink } from 'react-csv';
 
@@ -38,7 +38,7 @@ const Lecturer = () => {
   const [filteredData, setFilteredData] = React.useState([]);
   const dispatch = useDispatch();
   const history = useHistory();
-  const lecturers = useSelector(lectureState$);
+  const lecturers = useSelector(lecturerState$);
   const columns = [
     {
       title: 'Full name',
@@ -186,8 +186,8 @@ const Lecturer = () => {
   console.log({ dataSource });
 
   return (
-    <div>
-      <Breadcrumb style={{ marginBottom: '20px' }}>
+    <>
+      <Breadcrumb>
         <Breadcrumb.Item>Home</Breadcrumb.Item>
         <Breadcrumb.Item>
           <a href="">Application Center</a>
@@ -237,7 +237,7 @@ const Lecturer = () => {
           rowKey={row => row.idLecturer}
         />
       </Card>
-    </div>
+    </>
   );
 };
 

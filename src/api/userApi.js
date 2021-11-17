@@ -17,7 +17,7 @@ const userApi = {
   },
 
   updateUser: async updatedUser => {
-    const res = await axiosClient.patch(`/users/${updatedUser.id}`, updatedLecturer);
+    const res = await axiosClient.patch(`/users/${updatedUser._id}`, updatedUser);
     return res.data;
   },
 

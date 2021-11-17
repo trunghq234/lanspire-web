@@ -17,6 +17,7 @@ const idRoleLecturer = '386af797-fdf6-42dc-8bab-d5b42561b5fb';
 const PersonalInfo = props => {
   const dispatch = useDispatch();
   const [isSubmit, setIsSubmit] = useState(false);
+  const [city, setCity] = useState('');
   const lecturers = useSelector(lectureState$);
   const users = useSelector(userState$);
   const validateMessages = {
@@ -50,74 +51,92 @@ const PersonalInfo = props => {
       confirmPassword,
     } = data;
 
-    // require all input not empty
-    if (
-      displayName &&
-      gender &&
-      dob &&
-      phoneNumber &&
-      email &&
-      username &&
-      password &&
-      confirmPassword &&
-      detailsAddress &&
-      district &&
-      city
-    ) {
-      if (typeSubmit === 'create') {
-        if (!checkUsernameIsExist(username)) {
-          if (confirmPassword !== password) {
-            setIsSubmit(true);
-            message.error('Confirm password does not match!');
+    const currentDate = moment();
+    if (currentDate < dob) {
+      message.error('Date of birth is not greater than current date');
+    } else {
+      // require all input not empty
+      if (
+        displayName &&
+        gender &&
+        dob &&
+        phoneNumber &&
+        email &&
+        username &&
+        password &&
+        confirmPassword &&
+        detailsAddress &&
+        district &&
+        city
+      ) {
+        if (typeSubmit === 'create') {
+          if (!checkUsernameIsExist(username)) {
+            if (confirmPassword !== password) {
+              setIsSubmit(true);
+              message.error('Confirm password does not match!');
+            } else {
+              const createdLecturer = {
+                displayName,
+                gender: data.gender == 'male' ? 0 : data.gender == 'female' ? 1 : 2,
+                dob: moment(data.dob).format('DD/MM/YYYY').split('/').reverse().join('-'),
+                phoneNumber,
+                email,
+                address: [detailsAddress, district, city],
+                idRole: idRoleLecturer,
+                imageUrl: 'test',
+                username,
+                password,
+                isActivated: true,
+              };
+              console.log({ createdLecturer });
+              dispatch(lecturerActions.createLecturer.createLecturerRequest(createdLecturer));
+              setCity(city);
+              setIsSubmit(true);
+            }
           } else {
-            const createdLecturer = {
-              displayName,
-              gender: data.gender == 'male' ? 0 : data.gender == 'female' ? 1 : 2,
-              dob: moment(data.dob).format('DD/MM/YYYY').split('/').reverse().join('-'),
-              phoneNumber,
-              email,
-              address: [detailsAddress, district, city],
-              idRole: idRoleLecturer,
-              imageUrl: 'test',
-              username,
-              password,
-              isActivated: true,
-            };
-            console.log({ createdLecturer });
-            dispatch(lecturerActions.createLecturer.createLecturerRequest(createdLecturer));
             setIsSubmit(true);
+            isSubmit === true ? message.error('Username is exist!') : '';
           }
-        } else {
-          setIsSubmit(true);
-          isSubmit === true ? message.error('Username is exist!') : '';
         }
       }
-    }
 
-    // edit lecturer
-    if (typeSubmit === 'edit') {
-      const lecturer = lecturers.data.find(lecturer => lecturer.idLecturer === id);
+      // edit lecturer
+      if (typeSubmit === 'edit') {
+        const lecturer = lecturers.data.find(lecturer => lecturer.idLecturer === id);
 
-      const editedLecturer = {
-        displayName,
-        gender: data.gender == 'male' ? 0 : data.gender == 'female' ? 1 : 2,
-        dob: moment(data.dob).format('DD/MM/YYYY').split('/').reverse().join('-'),
-        idLecturer: id,
-        address: [detailsAddress, district, city],
-        idUser: lecturer.idUser,
-        username: lecturer.username,
-        password: lecturer.password,
-        isDeleted: lecturer.isDeleted,
-        isActivated: lecturer.isActivated,
-        imageUrl: lecturer.imageUrl,
-        idRole: idRoleLecturer,
-      };
-      console.log({ editedLecturer });
-      dispatch(lecturerActions.updateLecturer.updateLecturerRequest(editedLecturer));
-      setIsSubmit(true);
+        const editedLecturer = {
+          displayName,
+          gender: data.gender == 'male' ? 0 : data.gender == 'female' ? 1 : 2,
+          dob: moment(data.dob).format('DD/MM/YYYY').split('/').reverse().join('-'),
+          idLecturer: id,
+          address: [detailsAddress, district, city],
+          idUser: lecturer.idUser,
+          username: lecturer.username,
+          password: lecturer.password,
+          isDeleted: lecturer.isDeleted,
+          isActivated: lecturer.isActivated,
+          imageUrl: lecturer.imageUrl,
+          idRole: idRoleLecturer,
+        };
+        console.log({ editedLecturer });
+        dispatch(lecturerActions.updateLecturer.updateLecturerRequest(editedLecturer));
+        setCity(city);
+        setIsSubmit(true);
+      }
     }
   };
 
+  const dobValidator = (rule, value, callback) => {
+    try {
+      if (value > Date.now()) {
+        callback('Date of birth is not greater than current date');
+      } else {
+        callback();
+      }
+    } catch {
+      callback();
+    }
+  };
   const checkUsernameIsExist = username => {
     const result = users.data.find(user => user.username === username);
     // result === empty => checkUsernameIsExist: false
@@ -143,6 +162,7 @@ const PersonalInfo = props => {
           city: lecturer.address[2],
         };
         form.setFieldsValue(editedLecturer);
+        setCity(lecturer.address[2]);
       }
     }
   }, [id, lecturers]);
@@ -169,12 +189,13 @@ const PersonalInfo = props => {
       <Form form={form} layout="vertical" validateMessages={validateMessages}>
         <Input.Group>
           <Row gutter={20}>
-            <Col span={16}>
+            <Col xs={24} md={24} xl={10} lg={12} xl={12}>
               <Form.Item label="Full name" name="displayName" rules={[{ required: true }]}>
                 <Input placeholder="Full name" maxLength="255" />
               </Form.Item>
             </Col>
-            <Col xs={8} xl={5}>
+
+            <Col xs={12} md={12} xl={4} lg={6} xl={6}>
               <Form.Item label="Gender" name="gender" rules={[{ required: true }]}>
                 <Select placeholder="Gender" className={styles.maxwidth}>
                   <Option value="male">Male</Option>
@@ -183,12 +204,15 @@ const PersonalInfo = props => {
                 </Select>
               </Form.Item>
             </Col>
-            <Col xs={12} sm={8} xl={5}>
-              <Form.Item label="DOB" name="dob" rules={[{ required: true }]}>
+            <Col xs={12} md={12} xl={10} lg={6} xl={6}>
+              <Form.Item
+                label="DOB"
+                name="dob"
+                rules={[{ required: true }, { validator: dobValidator }]}>
                 <DatePicker format={dateFormat} className={styles.maxwidth} />
               </Form.Item>
             </Col>
-            <Col span={4}>
+            <Col xs={12} md={12} lg={12} xl={8}>
               <Form.Item
                 onKeyPress={event => {
                   if (!/[0-9]/.test(event.key)) {
@@ -201,24 +225,24 @@ const PersonalInfo = props => {
                 <Input type="text" placeholder="Phone number" maxLength="10" />
               </Form.Item>
             </Col>
-            <Col xs={24} sm={8}>
+            <Col xs={12} md={12} lg={12} xl={8}>
               <Form.Item label="Email" name="email" rules={[{ required: true, type: 'email' }]}>
                 <Input type="email" placeholder="Email" />
               </Form.Item>
             </Col>
           </Row>
         </Input.Group>
-        <ProvincePicker />
+        <ProvincePicker city={city} form={form} />
 
         {!id && (
           <Input.Group>
             <Row gutter={20}>
-              <Col span={8}>
+              <Col xs={24} lg={8}>
                 <Form.Item label="Username" name="username" rules={[{ required: true }]}>
                   <Input placeholder="Username" />
                 </Form.Item>
               </Col>
-              <Col span={8}>
+              <Col xs={24} lg={8}>
                 <Form.Item
                   label="Password"
                   name="password"
@@ -226,7 +250,7 @@ const PersonalInfo = props => {
                   <Input.Password placeholder="Password" />
                 </Form.Item>
               </Col>
-              <Col span={8}>
+              <Col xs={24} lg={8}>
                 <Form.Item
                   label="Confirm password"
                   name="confirmPassword"

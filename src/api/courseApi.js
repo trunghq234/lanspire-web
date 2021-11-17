@@ -8,9 +8,8 @@ const courseApi = {
     return res.data;
   },
 
-  getById: async idCourse => {
-    const res = await axiosClient.get(`${url}${idCourse}`);
-    return res.data;
+  getById: idCourse => {
+    return axiosClient.get(`${url}${idCourse}`);
   },
 
   create: async course => {

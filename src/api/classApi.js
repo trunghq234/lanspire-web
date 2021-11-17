@@ -8,9 +8,8 @@ const classApi = {
     return res.data;
   },
 
-  getById: async idClass => {
-    const res = await axiosClient.get(`${url}${idClass}`);
-    return res.data;
+  getById: idClass => {
+    return axiosClient.get(`${url}${idClass}`);
   },
 
   getByIdCourse: idCoure => {

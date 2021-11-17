@@ -74,6 +74,16 @@ const INIT_STATE = {
     isLoading: false,
     isSuccess: false,
   },
+  testTypes: {
+    data: [],
+    isLoading: false,
+    isSuccess: false,
+  },
+  exams: {
+    data: [],
+    isLoading: false,
+    isSuccess: false,
+  },
 };
 
 export default INIT_STATE;

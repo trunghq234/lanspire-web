@@ -1,26 +1,23 @@
 import { Breadcrumb, Card, Tabs } from 'antd';
+import classApi from 'api/classApi';
 import AntCalendar from 'components/Class/AntCalendar';
+import ClassExam from 'components/Class/ClassExam';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { NavLink, useParams } from 'react-router-dom';
-import { classState$ } from 'redux/selectors';
 import CustomCalendar from '../../../components/Class/CustomCalendar';
 import AddAppoint from '../AddAppoint';
 
 const { TabPane } = Tabs;
-const Details = () => {
+const ClassDetails = () => {
   const { idClass } = useParams();
-  const [className, setClassName] = useState('');
-  const { data: classes } = useSelector(classState$);
+  const [classData, setClassData] = useState({});
 
   useEffect(() => {
     if (idClass) {
-      let classRoom = classes.find(classRoom => {
-        return classRoom.idClass == idClass;
-      });
-      if (classRoom) {
-        setClassName(classRoom.className);
-      }
+      classApi
+        .getById(idClass)
+        .then(res => setClassData(res.data))
+        .catch(err => console.log(err));
     }
   }, [idClass]);
   return (
@@ -34,17 +31,20 @@ const Details = () => {
         </Breadcrumb.Item>
         <Breadcrumb.Item>Details</Breadcrumb.Item>
       </Breadcrumb>
-      <h3>{className}</h3>
+      <h3>{classData.className}</h3>
       <Card>
         <Tabs defaultActiveKey="1">
           <TabPane tab="Appoint Lecturer" key="1">
-            <AddAppoint></AddAppoint>
+            <AddAppoint />
           </TabPane>
           <TabPane tab="Calendar 1" key="2">
-            <CustomCalendar></CustomCalendar>
+            <CustomCalendar />
           </TabPane>
           <TabPane tab="Calendar 2" key="3">
-            <AntCalendar></AntCalendar>
+            <AntCalendar />
+          </TabPane>
+          <TabPane tab="Exams" key="4">
+            <ClassExam classData={classData} />
           </TabPane>
         </Tabs>
       </Card>
@@ -52,4 +52,4 @@ const Details = () => {
   );
 };
 
-export default Details;
+export default ClassDetails;

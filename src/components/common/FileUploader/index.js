@@ -5,8 +5,9 @@ import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { storage } from 'utils/firebase';
 import { v4 as uuidv4 } from 'uuid';
 
-const FileUploader = () => {
+const FileUploader = ({ onUpload }) => {
   const [fileList, setFileList] = useState([]);
+  const [fileUrls, setFileUrls] = useState([]);
 
   const checkFileSize = file => {
     if (file) {
@@ -21,6 +22,7 @@ const FileUploader = () => {
 
   const handleOnChange = ({ fileList }) => {
     setFileList(fileList);
+    console.log(fileList);
   };
 
   const uploadFiles = options => {
@@ -33,7 +35,6 @@ const FileUploader = () => {
       'state_changed',
       snapshot => {
         const prog = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-        setProgress(prog);
         onProgress(prog);
       },
       error => {
@@ -42,11 +43,18 @@ const FileUploader = () => {
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then(downloadURL => {
-          console.log('File available at', downloadURL);
+          const tmp = [...fileUrls, downloadURL];
+          setFileUrls(tmp);
         });
         onSuccess('Ok');
+        onUpload(fileUrls);
+        console.log(fileUrls);
       }
     );
+  };
+
+  const handleRemove = file => {
+    console.log(file);
   };
 
   return (
@@ -56,6 +64,7 @@ const FileUploader = () => {
         fileList={fileList}
         onChange={handleOnChange}
         beforeUpload={checkFileSize}
+        onRemove={handleRemove}
         customRequest={uploadFiles}>
         <Button icon={<UploadOutlined />}>Click to Upload</Button>
       </Upload>

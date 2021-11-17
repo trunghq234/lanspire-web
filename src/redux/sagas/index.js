@@ -24,6 +24,8 @@ import * as lecturerActions from '../actions/lecturers';
 import * as studentActions from '../actions/students';
 import * as timeFrameActions from '../actions/timeFrames';
 import * as userActions from '../actions/users';
+import * as testTypeActions from 'redux/actions/testTypes';
+import * as examActions from 'redux/actions/exams';
 import { fetchAuthSaga } from './auth';
 import { createClass, deleteClass, fetchClasses, updateClass } from './classes';
 import {
@@ -59,6 +61,8 @@ import {
   fetchUsersSaga,
   updateUserSaga,
 } from './users';
+import { createTestType, fetchTestTypes, updateTestType, deleteTestType } from './testTypes';
+import { createExam, updateExam, deleteExam, fetchExamsByClass } from './exams';
 
 export default function* mySaga() {
   //column transcript
@@ -134,4 +138,16 @@ export default function* mySaga() {
   yield takeLatest(lecturerActions.createLecturer.createLecturerRequest, createLecturerSaga);
   yield takeLatest(lecturerActions.updateLecturer.updateLecturerRequest, updateLecturerSaga);
   yield takeLatest(lecturerActions.deleteLecturer.deleteLecturerRequest, deleteLecturerSaga);
+
+  // Test types
+  yield takeLatest(testTypeActions.getTestTypes.getTestTypesRequest, fetchTestTypes);
+  yield takeLatest(testTypeActions.createTestType.createTestTypeRequest, createTestType);
+  yield takeLatest(testTypeActions.updateTestType.updateTestTypeRequest, updateTestType);
+  yield takeLatest(testTypeActions.deleteTestType.deleteTestTypeRequest, deleteTestType);
+
+  // Exams
+  yield takeLatest(examActions.getExamsByClass.getExamsByClassRequest, fetchExamsByClass);
+  yield takeLatest(examActions.createExam.createExamRequest, createExam);
+  yield takeLatest(examActions.updateExam.updateExamRequest, updateExam);
+  yield takeLatest(examActions.deleteExam.deleteExamRequest, deleteExam);
 }

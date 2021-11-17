@@ -12,6 +12,8 @@ import levelsReducer from './level';
 import columnTranscriptsReducer from './columnTranscript';
 import classesReducer from './classes';
 import lecturersReducer from './lecturers';
+import testTypesReducer from './testType';
+import examsReducer from './exam';
 
 export default combineReducers({
   employees: employeesReducer,
@@ -27,4 +29,6 @@ export default combineReducers({
   columnTranscripts: columnTranscriptsReducer,
   classes: classesReducer,
   lecturers: lecturersReducer,
+  testTypes: testTypesReducer,
+  exams: examsReducer,
 });

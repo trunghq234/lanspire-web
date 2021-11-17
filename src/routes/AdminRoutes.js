@@ -27,7 +27,8 @@ import {
   studentSvg,
   timeSvg,
 } from 'utils/iconsvg';
-import Details from 'pages/Class/Details';
+import ClassDetails from 'pages/Class/ClassDetails';
+import ClassExam from 'components/Class/ClassExam';
 
 const DashboardIcon = props => <Icon component={dashboardSvg} {...props} />;
 const LecturerIcon = props => <Icon component={lecturerSvg} {...props} />;
@@ -156,7 +157,7 @@ const adminRoutes = [
   {
     path: '/class/details/:idClass',
     exact: true,
-    page: () => <Details />,
+    page: () => <ClassDetails />,
   },
   {
     path: '/employee/edit/:id',

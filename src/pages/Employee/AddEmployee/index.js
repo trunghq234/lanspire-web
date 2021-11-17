@@ -14,7 +14,7 @@ export default function AddEmployee() {
           <a href="">Application Center</a>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <a href="http://localhost:3000/employee/">Employee List</a>
+          <a href="/employee/">Employee List</a>
         </Breadcrumb.Item>
       </Breadcrumb>
 

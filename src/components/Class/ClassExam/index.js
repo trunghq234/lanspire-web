@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Col, Row, Table, Tooltip } from 'antd';
-import { EditOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import AddFileExam from '../AddFileExam';
 import { useDispatch, useSelector } from 'react-redux';
 import { examState$ } from 'redux/selectors';
-import { getExamsByClass } from 'redux/actions/exams';
+import { getExamsByClass, deleteExam } from 'redux/actions/exams';
 import { useParams } from 'react-router';
 import moment from 'moment';
 
@@ -36,17 +36,23 @@ const ClassExam = ({ classData }) => {
       width: '15%',
       render: idExam => {
         return (
-          <Tooltip title="Edit exam">
-            <Button
-              type="default"
-              icon={<EditOutlined />}
-              onClick={() => {
-                setIsVisible(true);
-                const res = examList.find(exam => exam.idExam === idExam);
-                setSelectedExam(res);
-              }}
-            />
-          </Tooltip>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
+            <Tooltip title="Edit exam">
+              <Button
+                type="primary"
+                ghost
+                icon={<EditOutlined />}
+                onClick={() => {
+                  setIsVisible(true);
+                  const res = examList.find(exam => exam.idExam === idExam);
+                  setSelectedExam(res);
+                }}
+              />
+            </Tooltip>
+            <Tooltip title="Delete exam">
+              <Button ghost danger icon={<DeleteOutlined />} onClick={() => deletedExam(idExam)} />
+            </Tooltip>
+          </div>
         );
       },
     },
@@ -83,10 +89,15 @@ const ClassExam = ({ classData }) => {
     );
     setDataSource(res);
   };
+
   const getIdColumn = exams => {
     const res = [];
     exams.map(exam => res.push(exam.Column_Transcript.idColumn));
     setExistedColumn(res);
+  };
+
+  const deletedExam = idExam => {
+    dispatch(deleteExam.deleteExamRequest(idExam));
   };
   return (
     <Row gutter={[20, 20]}>

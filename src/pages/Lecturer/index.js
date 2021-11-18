@@ -7,6 +7,7 @@ import { NavLink, useHistory } from 'react-router-dom';
 import * as lecturerActions from 'redux/actions/lecturers';
 import { lecturerState$ } from 'redux/selectors';
 import styles from './index.module.less';
+import { CSVLink } from 'react-csv';
 
 const { confirm } = Modal;
 const { Search } = Input;
@@ -151,6 +152,37 @@ const Lecturer = () => {
     setFilteredData(dataSearch);
   };
 
+  const headersExcel = [
+    {
+      label: 'Full name',
+      key: 'displayName',
+    },
+    {
+      label: 'Email',
+      key: 'email',
+    },
+    {
+      label: 'Gender',
+      key: 'gender',
+    },
+    {
+      label: 'Phone number',
+      key: 'phoneNumber',
+    },
+    {
+      label: 'Address',
+      key: 'address',
+    },
+    {
+      label: 'Birthday',
+      key: 'birthday',
+    },
+    {
+      label: 'Status',
+      key: 'isActivated',
+    },
+  ];
+
   console.log({ dataSource });
 
   return (
@@ -177,13 +209,25 @@ const Lecturer = () => {
               onSearch={handleSearch}
             />
           </div>
-          <Button
-            onClick={handleAddLecturerClick}
-            className={styles.btn}
-            size="large"
-            type="primary">
-            Add lecturer
-          </Button>
+          <div>
+            <Button
+              style={{ marginRight: '20px' }}
+              onClick={handleAddLecturerClick}
+              className={styles.btn}
+              size="large"
+              type="primary">
+              Add lecturer
+            </Button>
+            <Button className={styles.btn} size="large" type="primary">
+              <CSVLink
+                filename={'Expense_Table.csv'}
+                data={dataSource}
+                headers={headersExcel}
+                className="btn btn-primary">
+                Export to CSV
+              </CSVLink>
+            </Button>
+          </div>
         </div>
         <Table
           bordered={true}

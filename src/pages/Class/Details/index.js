@@ -1,11 +1,11 @@
 import { Breadcrumb, Card, Tabs } from 'antd';
 import AntCalendar from 'components/Class/AntCalendar';
+import EditableTable from 'components/Class/EditableTable';
 import Transcript from 'components/Class/Transcript';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink, useParams } from 'react-router-dom';
 import { classState$ } from 'redux/selectors';
-import CustomCalendar from '../../../components/Class/CustomCalendar';
 import AddAppoint from '../AddAppoint';
 
 const { TabPane } = Tabs;
@@ -41,10 +41,7 @@ const Details = () => {
           <TabPane tab="Appoint Lecturer" key="1">
             <AddAppoint></AddAppoint>
           </TabPane>
-          <TabPane tab="Calendar 1" key="2">
-            <CustomCalendar></CustomCalendar>
-          </TabPane>
-          <TabPane tab="Calendar 2" key="3">
+          <TabPane tab="Calendar" key="3">
             <AntCalendar></AntCalendar>
           </TabPane>
           <TabPane tab="Students" key="4">

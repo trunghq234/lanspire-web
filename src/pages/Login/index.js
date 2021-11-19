@@ -9,6 +9,15 @@ import logo from '../../assets/images/logo.png';
 import facebook from '../../assets/svg/facebook.svg';
 import google from '../../assets/svg/google.svg';
 import styles from './index.module.less';
+import { Link } from 'react-router-dom';
+
+const bcrypt = require('bcryptjs');
+
+const hash = text => {
+  const salt = bcrypt.genSaltSync(10);
+  const hash = bcrypt.hashSync(text, salt);
+  return hash;
+};
 const Login = () => {
   let history = useHistory();
   const dispatch = useDispatch();
@@ -98,9 +107,13 @@ const Login = () => {
                           placeholder="Password"
                           prefix={<LockTwoTone />}></Input.Password>
                       </Form.Item>
-                      {/* <Form.Item name="remember" valuePropName="checked">
-                        <Checkbox>Remember me</Checkbox>
-                      </Form.Item> */}
+                      <Form.Item>
+                        <Link to={`./forgot-password`}>
+                          <Button className={styles['btn-forgot']} type="link">
+                            Forgot password?
+                          </Button>
+                        </Link>
+                      </Form.Item>
                       <Form.Item>
                         <Button
                           size="large"
@@ -112,7 +125,7 @@ const Login = () => {
                         </Button>
                       </Form.Item>
                     </Form>
-                    <div>
+                    {/* <div>
                       <Divider className={styles.divider}>or connect with</Divider>
                       <div style={{ display: 'flex', justifyContent: 'center' }}>
                         <Button style={{ marginRight: '0.5rem' }}>
@@ -128,7 +141,7 @@ const Login = () => {
                           Facebook
                         </Button>
                       </div>
-                    </div>
+                    </div> */}
                   </Col>
                 </Row>
               </div>

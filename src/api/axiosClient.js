@@ -54,6 +54,10 @@ axiosClient.interceptors.response.use(
         localStorage.clear();
         window.location = '/login';
       }
+      if (err.response.status === 404) {
+        alert('Confirm code has been expired or incorrect. Please send request again!');
+        window.location = '/forgot-password';
+      }
     }
 
     return Promise.reject(err);

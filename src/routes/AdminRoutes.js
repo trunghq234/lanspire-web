@@ -27,6 +27,8 @@ import {
   timeSvg,
 } from 'utils/iconsvg';
 import Details from 'pages/Class/Details';
+import Setting from 'pages/Setting';
+import Profile from 'pages/Setting/Profile';
 
 const DashboardIcon = props => <Icon component={dashboardSvg} {...props} />;
 const LecturerIcon = props => <Icon component={lecturerSvg} {...props} />;
@@ -157,6 +159,16 @@ const adminRoutes = [
     exact: true,
     page: () => <AddEmployee />,
   },
+  {
+    path: '/setting/',
+    exact: true,
+    page: () => <Setting />,
+  },
+  {
+    path: '/profile/',
+    exact: true,
+    page: () => <Profile />,
+  },
 ];
 
 const adminMenuItems = {
@@ -241,6 +253,22 @@ const adminMenuItems = {
           path: '/class/',
           name: 'Class list',
           component: <Class />,
+        },
+      ],
+    },
+    {
+      name: 'Setting',
+      icon: <ClassIcon />,
+      routes: [
+        {
+          path: '/profile/',
+          name: 'Profile',
+          component: <Profile />,
+        },
+        {
+          path: '/setting/',
+          name: 'Setting',
+          component: <Setting />,
         },
       ],
     },

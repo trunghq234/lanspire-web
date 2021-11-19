@@ -35,7 +35,7 @@ const Grade = () => {
     if (columnTranscripts.data.length > 0) {
       const tmp = columnTranscripts.data.map(element => {
         return {
-          title: element.columnName,
+          title: element.columnName + ` (${element.min} - ${element.max})`,
           dataIndex: element.idColumn,
           key: `${element.idColumn}`,
           align: 'center',

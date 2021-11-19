@@ -97,6 +97,7 @@ const ArrangeClass = () => {
       const classList = classes.data.reduce((pre, curr) => {
         if (
           moment(curr.startDate) >= currentDate() &&
+          curr.Students.length < curr.Course.max &&
           !keyClassesRegistered.includes(curr.idClass) &&
           !isConflictTimetable(curr.ClassTimes, currentTimetable)
         ) {

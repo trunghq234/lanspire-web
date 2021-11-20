@@ -22,6 +22,16 @@ export function* fetchClass(action) {
   }
 }
 
+export function* fetchClassesByLecturer(action) {
+  try {
+    const classes = yield call(classApi.getByIdLecturer, action.payload);
+
+    yield put(classActions.getClassesByLecturer.getClassesByLecturerSuccess(classes));
+  } catch (error) {
+    yield put(classActions.getClassesByLecturer.getClassesByLecturerFailure(error));
+  }
+}
+
 export function* createClass(action) {
   try {
     const newClass = yield call(classApi.create, action.payload);

@@ -1,8 +1,6 @@
-import Icon from '@ant-design/icons';
 import Class from 'pages/Class';
 import AddClass from 'pages/Class/AddClass';
-import AppointLecturer from 'pages/Class/AppointLecturer';
-import AddAppoint from 'pages/Class/AddAppoint';
+import ClassDetails from 'pages/Class/ClassDetails';
 import Course from 'pages/Course';
 import AddCourse from 'pages/Course/AddCourse';
 import ColumnTranscript from 'pages/Course/ColumnTranscript';
@@ -19,24 +17,14 @@ import AddStudent from 'pages/Student/AddStudent';
 import TimeFrame from 'pages/TimeFrame';
 import React from 'react';
 import {
-  classSvg,
-  courseSvg,
-  dashboardSvg,
-  employeeSvg,
-  lecturerSvg,
-  studentSvg,
-  timeSvg,
-} from 'utils/iconsvg';
-import ClassDetails from 'pages/Class/ClassDetails';
-import ClassExam from 'components/Class/ClassExam';
-
-const DashboardIcon = props => <Icon component={dashboardSvg} {...props} />;
-const LecturerIcon = props => <Icon component={lecturerSvg} {...props} />;
-const CourseIcon = props => <Icon component={courseSvg} {...props} />;
-const EmployeeIcon = props => <Icon component={employeeSvg} {...props} />;
-const ClassIcon = props => <Icon component={classSvg} {...props} />;
-const TimeFrameIcon = props => <Icon component={timeSvg} {...props} />;
-const StudentIcon = props => <Icon component={studentSvg} {...props} />;
+  ClassIcon,
+  CourseIcon,
+  DashboardIcon,
+  EmployeeIcon,
+  LecturerIcon,
+  StudentIcon,
+  TimeFrameIcon,
+} from 'utils/icon';
 
 const adminRoutes = [
   {

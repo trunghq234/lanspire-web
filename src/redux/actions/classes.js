@@ -16,6 +16,12 @@ export const getClass = createActions({
   getClassFailure: error => error,
 });
 
+export const getClassesByLecturer = createActions({
+  getClassesByLecturerRequest: payload => payload,
+  getClassesByLecturerSuccess: payload => payload,
+  getClassesByLecturerFailure: error => error,
+});
+
 export const createClass = createActions({
   createClassRequest: payload => payload,
   createClassSuccess: payload => payload,

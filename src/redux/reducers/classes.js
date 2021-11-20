@@ -44,6 +44,26 @@ export default function classsReducer(state = INIT_STATE.classes, action) {
         isLoading: false,
         isSuccess: false,
       };
+    //get class by lecturer
+    case getType(classActions.getClassesByLecturer.getClassesByLecturerRequest):
+      return {
+        ...state,
+        isLoading: true,
+        isSuccess: false,
+      };
+    case getType(classActions.getClassesByLecturer.getClassesByLecturerSuccess):
+      return {
+        ...state,
+        data: action.payload,
+        isLoading: false,
+        isSuccess: true,
+      };
+    case getType(classActions.getClassesByLecturer.getClassesByLecturerFailure):
+      return {
+        ...state,
+        isLoading: false,
+        isSuccess: false,
+      };
     // create
     case getType(classActions.createClass.createClassRequest):
       return {

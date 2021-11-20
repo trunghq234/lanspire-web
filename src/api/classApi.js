@@ -16,6 +16,11 @@ const classApi = {
     return axiosClient.get(`${url}course/${idCoure}`);
   },
 
+  getByIdLecturer: async idCoure => {
+    const res = await axiosClient.get(`${url}lecturer/${idCoure}`);
+    return res.data;
+  },
+
   create: async classRoom => {
     const res = await axiosClient.post(url, classRoom);
     return res.data;

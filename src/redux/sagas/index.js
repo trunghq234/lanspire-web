@@ -27,7 +27,13 @@ import * as userActions from '../actions/users';
 import * as testTypeActions from 'redux/actions/testTypes';
 import * as examActions from 'redux/actions/exams';
 import { fetchAuthSaga } from './auth';
-import { createClass, deleteClass, fetchClasses, updateClass } from './classes';
+import {
+  createClass,
+  deleteClass,
+  fetchClasses,
+  fetchClassesByLecturer,
+  updateClass,
+} from './classes';
 import {
   createEmployeeSaga,
   deleteEmployeeSaga,
@@ -124,6 +130,10 @@ export default function* mySaga() {
   yield takeLatest(timeFrameActions.deleteTimeFrame.deleteTimeFrameRequest, deleteTimeFrameSaga);
   //classes
   yield takeLatest(classActions.getClasses.getClassesRequest, fetchClasses);
+  yield takeLatest(
+    classActions.getClassesByLecturer.getClassesByLecturerRequest,
+    fetchClassesByLecturer
+  );
   yield takeLatest(classActions.createClass.createClassRequest, createClass);
   yield takeLatest(classActions.updateClass.updateClassRequest, updateClass);
   yield takeLatest(classActions.deleteClass.deleteClassRequest, deleteClass);

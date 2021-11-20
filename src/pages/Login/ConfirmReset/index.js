@@ -35,34 +35,36 @@ const ConfirmReset = props => {
   const dispatch = useDispatch();
   const auth = useSelector(authState$);
   const { username } = useParams();
-  const confirmReset = values => {
-    if (values.newPassword != values.confirmPassword) {
-      notification['error']({
-        message: 'Error',
-        description: `The Confirm Password must be the same as the New Password`,
-      });
-    }
-    setLoading(true);
-
-    authApi
-      .updatePassword({
-        code: values.code,
-        password: hash(values.newPassword),
-        username: username,
-      })
-      .then(res => {
-        notification['info']({
-          message: 'Notification',
-          description: res.data.message,
-        });
-        window.location = '/login';
-      })
-      .catch(err => {
+  const confirmReset = e => {
+    e.preventDefault();
+    form.validateFields().then(values => {
+      if (values.newPassword != values.confirmPassword) {
         notification['error']({
           message: 'Error',
-          description: err,
+          description: `The Confirm Password must be the same as the New Password`,
         });
-      });
+      }
+      setLoading(true);
+      authApi
+        .updatePassword({
+          code: values.code,
+          password: hash(values.newPassword),
+          username: username,
+        })
+        .then(res => {
+          notification.info({
+            message: 'Notification',
+            description: res.data.message,
+          });
+          window.location = '/login';
+        })
+        .catch(err => {
+          notification.error({
+            message: 'Error',
+            description: err.message,
+          });
+        });
+    });
   };
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
@@ -83,7 +85,7 @@ const ConfirmReset = props => {
                     <Form
                       id="login-form"
                       layout="vertical"
-                      onFinish={confirmReset}
+                      // onFinish={confirmReset}
                       form={form}
                       initialValues={{
                         remember: true,
@@ -119,6 +121,7 @@ const ConfirmReset = props => {
                           size="large"
                           type="primary"
                           block="true"
+                          onClick={confirmReset}
                           htmlType="submit"
                           loading={loading}>
                           Reset Password

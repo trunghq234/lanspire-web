@@ -1,12 +1,11 @@
-import { EditOutlined, PlusOutlined } from '@ant-design/icons';
-import { interfaceDeclaration } from '@babel/types';
-import { Button, Table, Tooltip, Tag, Modal, Input, Form, notification } from 'antd';
+import { Form, notification } from 'antd';
 import classApi from 'api/classApi';
 import examApi from 'api/examApi';
 import studentApi from 'api/studentApi';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import EditableTable from '../EditableTable';
+
 const Transcript = () => {
   const [form] = Form.useForm();
 
@@ -20,6 +19,7 @@ const Transcript = () => {
   useEffect(() => {
     setEditable(
       <EditableTable
+        classRoom={classRoom}
         columns={columns}
         dataSource={students}
         loading={isLoading}
@@ -168,10 +168,7 @@ const Transcript = () => {
     setColumns(temp1);
     setStudents(temp);
   };
-  useEffect(() => {
-    console.log(123);
-    console.log(students);
-  }, [students]);
+
   const updateDataSource = newData => {
     let updateData = [];
     const keys = Object.keys(newData[0]);
@@ -190,7 +187,6 @@ const Transcript = () => {
       });
     });
     handleMark(updateData);
-    // console.log(updateData);
   };
   return <div>{editable}</div>;
 };

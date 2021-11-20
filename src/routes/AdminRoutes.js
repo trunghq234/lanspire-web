@@ -27,7 +27,7 @@ import {
   timeSvg,
 } from 'utils/iconsvg';
 import Details from 'pages/Class/Details';
-import Setting from 'pages/Setting';
+import Setting from 'pages/Setting/Setting';
 import Profile from 'pages/Setting/Profile';
 
 const DashboardIcon = props => <Icon component={dashboardSvg} {...props} />;

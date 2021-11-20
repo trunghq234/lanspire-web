@@ -11,8 +11,8 @@ const authApi = {
       username,
     });
   },
-  updatePassword: async data => {
-    return await axiosClient.post('auth/reset-password', data);
+  updatePassword: data => {
+    return axiosClient.post('auth/reset-password', data);
   },
 };
 export default authApi;

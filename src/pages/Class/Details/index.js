@@ -1,6 +1,6 @@
 import { Breadcrumb, Card, Tabs } from 'antd';
+import classApi from 'api/classApi';
 import AntCalendar from 'components/Class/AntCalendar';
-import EditableTable from 'components/Class/EditableTable';
 import Transcript from 'components/Class/Transcript';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -15,15 +15,10 @@ const Details = () => {
   const { data: classes } = useSelector(classState$);
 
   useEffect(() => {
-    if (idClass) {
-      let classRoom = classes.find(classRoom => {
-        return classRoom.idClass == idClass;
-      });
-      if (classRoom) {
-        setClassName(classRoom.className);
-      }
-    }
-  }, [idClass]);
+    classApi.getById(idClass).then(res => {
+      setClassName(res.data.className);
+    });
+  });
   return (
     <div>
       <Breadcrumb>

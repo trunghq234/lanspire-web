@@ -12,6 +12,7 @@ import levelsReducer from './level';
 import columnTranscriptsReducer from './columnTranscript';
 import classesReducer from './classes';
 import lecturersReducer from './lecturers';
+import parameterReducer from './parameters';
 import INIT_STATE from 'redux/constant';
 
 const appReducer = combineReducers({
@@ -28,6 +29,7 @@ const appReducer = combineReducers({
   columnTranscripts: columnTranscriptsReducer,
   classes: classesReducer,
   lecturers: lecturersReducer,
+  parameters: parameterReducer,
 });
 const rootReducer = (state, action) => {
   if (action.type === 'USER_LOGOUT') {

@@ -1,5 +1,6 @@
-import React, { useContext, useState, useEffect, useRef } from 'react';
-import { Table, Input, Button, Popconfirm, Form, Col, Row, notification } from 'antd';
+import { Button, Col, Form, Input, notification, Row, Table } from 'antd';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { CSVLink } from 'react-csv';
 import styles from './index.module.less';
 
 const EditableContext = React.createContext(null);
@@ -91,11 +92,17 @@ const EditableCell = ({
 };
 
 const EditableTable = props => {
+  let headersExcel = [];
+  const [className, setClassName] = useState('');
   const [dataSource, setDataSource] = useState([]);
   const [previousData, setPreviousData] = useState([]);
   useEffect(() => {
+    console.log(props);
     if (props.dataSource.length > 0) {
       mappingDatasource(props.dataSource);
+    }
+    if (props.classRoom) {
+      setClassName(props.classRoom.className + '_Transcript.csv');
     }
   }, [props]);
   const mappingDatasource = dataInput => {
@@ -146,6 +153,10 @@ const EditableTable = props => {
     },
   };
   const columns = props.columns.map(col => {
+    headersExcel.push({
+      label: col.dataIndex,
+      key: col.dataIndex,
+    });
     if (!col.editable) {
       return col;
     }
@@ -184,7 +195,18 @@ const EditableTable = props => {
     <div>
       <Row gutter={[20, 20]} align="top">
         <Col xs={24} sm={16} md={10} lg={8} xl={8}></Col>
-        <Col xs={0} md={8} lg={10} xl={12} flex="auto" />
+        <Col xs={0} md={2} lg={4} xl={8} flex="auto" />
+        <Col xs={24} sm={24} md={6} lg={6} xl={4}>
+          <Button className={styles.btn} type="primary">
+            <CSVLink
+              filename={className}
+              data={dataSource}
+              headers={headersExcel}
+              className="btn btn-primary">
+              Export to CSV
+            </CSVLink>
+          </Button>
+        </Col>
         <Col xs={24} sm={24} md={6} lg={6} xl={4}>
           <Button className={styles.btn} type="primary" onClick={handleSubmit}>
             Save

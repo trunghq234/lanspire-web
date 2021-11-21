@@ -14,12 +14,12 @@ const CourseDetails = () => {
   useEffect(() => {
     courseApi
       .getById(idCourse)
-      .then(res => setCourse(res))
+      .then(res => setCourse(res.data))
       .catch(err => console.log(err));
   }, [idCourse]);
 
   return (
-    <div className={styles.container}>
+    <div>
       <h3>{course.courseName}</h3>
       <Tabs defaultActiveKey="1" type="card">
         <TabPane tab="Information" key="1">

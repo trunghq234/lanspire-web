@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Row, Table, Tooltip } from 'antd';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Button, Col, Modal, notification, Row, Table, Tooltip } from 'antd';
+import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import AddFileExam from '../AddFileExam';
 import { useDispatch, useSelector } from 'react-redux';
 import { examState$ } from 'redux/selectors';
 import { getExamsByClass, deleteExam } from 'redux/actions/exams';
 import { useParams } from 'react-router';
 import moment from 'moment';
+
+const { confirm } = Modal;
 
 const ClassExam = ({ classData }) => {
   const columns = [
@@ -50,7 +52,7 @@ const ClassExam = ({ classData }) => {
               />
             </Tooltip>
             <Tooltip title="Delete exam">
-              <Button ghost danger icon={<DeleteOutlined />} onClick={() => deletedExam(idExam)} />
+              <Button ghost danger icon={<DeleteOutlined />} onClick={() => handleDelete(idExam)} />
             </Tooltip>
           </div>
         );
@@ -65,7 +67,7 @@ const ClassExam = ({ classData }) => {
 
   const { idClass } = useParams();
   const dispatch = useDispatch();
-  const { data: examList, isLoading } = useSelector(examState$);
+  const { data: examList, isLoading, isSuccess } = useSelector(examState$);
   useEffect(() => {
     dispatch(getExamsByClass.getExamsByClassRequest(idClass));
   }, []);
@@ -96,8 +98,25 @@ const ClassExam = ({ classData }) => {
     setExistedColumn(res);
   };
 
-  const deletedExam = idExam => {
-    dispatch(deleteExam.deleteExamRequest(idExam));
+  const handleDelete = idExam => {
+    confirm({
+      title: 'Do you want to delete this exam?',
+      icon: <ExclamationCircleOutlined />,
+      centered: true,
+      content: '',
+      onOk() {
+        dispatch(deleteExam.deleteExamRequest(idExam));
+
+        isSuccess
+          ? notification.success({
+              message: 'Deleted successfully',
+            })
+          : notification.success({
+              message: 'Failed to delete',
+            });
+      },
+      onCancel() {},
+    });
   };
   return (
     <Row gutter={[20, 20]}>

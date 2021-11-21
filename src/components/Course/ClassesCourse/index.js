@@ -45,7 +45,7 @@ const ClassesCourse = ({ idCourse }) => {
               </Link>
             </Tooltip>
             <Tooltip title="Edit information">
-              <Link to={`/class/update/${idClass}`}>
+              <Link to={`/class/edit/${idClass}`}>
                 <Button type="primary" ghost icon={<EditOutlined />}></Button>
               </Link>
             </Tooltip>

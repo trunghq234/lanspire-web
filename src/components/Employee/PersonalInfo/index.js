@@ -1,13 +1,14 @@
-import { Button, Card, Col, DatePicker, Form, Input, Row, Select } from 'antd';
+import { Button, Card, Col, DatePicker, Form, Input, message, Row, Select } from 'antd';
+import { isEmpty } from 'lodash';
+import moment from 'moment';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
-import { employeeState$, usersState$ } from 'redux/selectors';
-import ProvincePicker from '../ProvincePicker';
 import * as employeeActions from 'redux/actions/employees';
-import styles from './index.module.less';
 import { getUsers } from 'redux/actions/users';
-import moment from 'moment';
+import { employeeState$, usersState$ } from 'redux/selectors';
+import ProvincePicker from '../../common/ProvincePicker';
+import styles from './index.module.less';
 
 const { Option } = Select;
 const idRoleEmployee = '386af797-fdf6-42dc-8bab-d5b42561b5fb';
@@ -21,12 +22,15 @@ const PersonalInfo = props => {
   const [form] = Form.useForm();
   const { id } = useParams();
   const dateFormat = 'DD/MM/YYYY';
-
+  const { typeSubmit } = props;
   const validateMessages = {
     required: '${label} is required!',
     types: {
       email: '${label} is not validate email!',
-      number: '${label} is a validate number!',
+      number: '${label} is not a validate number!',
+    },
+    number: {
+      range: '${label} must be between ${min} and ${max}',
     },
     string: {
       len: "'${label}' must be exactly ${len} characters",
@@ -121,7 +125,7 @@ const PersonalInfo = props => {
   };
 
   const checkUsernameIsExist = username => {
-    const result = users.data.find(user => user.username === username);
+    const result = users.find(user => user.username === username);
     // result === empty => checkUsernameIsExist: false
     return !isEmpty(result);
   };
@@ -180,7 +184,8 @@ const PersonalInfo = props => {
 
   return (
     <Card>
-      <Form layout="vertical" validateMessages={validateMessages}>
+      <h3>Personal information</h3>
+      <Form form={form} layout="vertical" validateMessages={validateMessages}>
         <Row gutter={20}>
           <Col xs={24} md={24} xl={10} lg={12} xl={12}>
             <Form.Item label="Full name" name="displayName" rules={[{ required: true }]}>

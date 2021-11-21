@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import * as lecturerActions from 'redux/actions/lecturers';
 import { getUsers } from 'redux/actions/users';
-import { lecturerState$, userState$ } from 'redux/selectors';
+import { lecturerState$, usersState$ } from 'redux/selectors';
 import styles from './index.module.less';
 
 const { Option } = Select;
@@ -18,8 +18,8 @@ const PersonalInfo = props => {
   const dispatch = useDispatch();
   const [isSubmit, setIsSubmit] = useState(false);
   const [city, setCity] = useState('');
-  const lecturers = useSelector(lectureState$);
-  const users = useSelector(userState$);
+  const lecturers = useSelector(lecturerState$);
+  const users = useSelector(usersState$);
   const validateMessages = {
     required: '${label} is required!',
     types: {
@@ -138,7 +138,7 @@ const PersonalInfo = props => {
     }
   };
   const checkUsernameIsExist = username => {
-    const result = users.data.find(user => user.username === username);
+    const result = users.find(user => user.username === username);
     // result === empty => checkUsernameIsExist: false
     return !isEmpty(result);
   };

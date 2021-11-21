@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Form, Input, message, Modal, Row, Select, Upload } from 'antd';
+import { Button, Col, Form, Input, message, Modal, Progress, Row, Select, Upload } from 'antd';
 import { DeleteOutlined, UploadOutlined } from '@ant-design/icons';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { storage } from 'utils/firebase';
@@ -23,6 +23,7 @@ const AddFileExam = ({ isVisible, setIsVisible, existedColumn, classData, select
   const [fileUrls, setFileUrls] = useState([]);
   const [isCompleted, setIsCompleted] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
+  const [progress, setProgress] = useState(0);
   const { idClass } = useParams();
   const checkFileSize = file => {
     if (file) {
@@ -60,7 +61,7 @@ const AddFileExam = ({ isVisible, setIsVisible, existedColumn, classData, select
   const uploadFiles = options => {
     const { onSuccess, onError, file, onProgress } = options;
     if (!file) return;
-    const fileName = 'files/' + file.name + uuidv4();
+    const fileName = `files/${uuidv4()}${file.name}`;
     const sotrageRef = ref(storage, fileName);
     const uploadTask = uploadBytesResumable(sotrageRef, file);
     uploadTask.on(
@@ -68,6 +69,9 @@ const AddFileExam = ({ isVisible, setIsVisible, existedColumn, classData, select
       snapshot => {
         const prog = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
         onProgress(prog);
+        setProgress(prog);
+        if (prog === 100) {
+        }
       },
       error => {
         console.log(error);
@@ -111,8 +115,8 @@ const AddFileExam = ({ isVisible, setIsVisible, existedColumn, classData, select
           })
         );
       }
-      // setIsCompleted(true);
-      // form.resetFields();
+      setIsCompleted(true);
+      form.resetFields();
     });
   };
 
@@ -134,6 +138,7 @@ const AddFileExam = ({ isVisible, setIsVisible, existedColumn, classData, select
       }
     } else {
       setIsEdit(false);
+      setFileUrls([]);
       form.resetFields();
     }
   }, [isVisible]);
@@ -184,7 +189,7 @@ const AddFileExam = ({ isVisible, setIsVisible, existedColumn, classData, select
     <Modal
       centered
       visible={isVisible}
-      title="Add files"
+      title={isEdit ? 'Edit exam' : 'Add exam'}
       okText="Submit"
       cancelText="Cancel"
       onCancel={() => {
@@ -225,6 +230,7 @@ const AddFileExam = ({ isVisible, setIsVisible, existedColumn, classData, select
             </Button>
           </Upload>
         </Form.Item>
+        {progress === 0 || progress === 100 ? '' : <Progress percent={progress} />}
         {fileUrls.length > 0 ? fileUrls.map((file, index) => FileRendered(file.url, index)) : ''}
       </Form>
     </Modal>

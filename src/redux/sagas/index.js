@@ -59,6 +59,7 @@ import {
   fetchTimeFrameSaga,
   fetchTimeFramesSaga,
   updateTimeFrameSaga,
+  updateTimeFramesSaga,
 } from './timeFrames';
 import {
   createUserSaga,
@@ -131,6 +132,7 @@ export default function* mySaga() {
   yield takeLatest(timeFrameActions.getByIdTimeFrame.getByIdTimeFrameRequest, fetchTimeFrameSaga);
   yield takeLatest(timeFrameActions.createTimeFrame.createTimeFrameRequest, createTimeFrameSaga);
   yield takeLatest(timeFrameActions.updateTimeFrame.updateTimeFrameRequest, updateTimeFrameSaga);
+  yield takeLatest(timeFrameActions.updateTimeFrames.updateTimeFramesRequest, updateTimeFramesSaga);
   yield takeLatest(timeFrameActions.deleteTimeFrame.deleteTimeFrameRequest, deleteTimeFrameSaga);
   //classes
   yield takeLatest(classActions.getClasses.getClassesRequest, fetchClasses);

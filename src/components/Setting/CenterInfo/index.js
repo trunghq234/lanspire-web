@@ -41,6 +41,7 @@ const CenterInfo = props => {
         city: parameters.find(parameter => parameter.name == 'city').value,
         district: parameters.find(parameter => parameter.name == 'district').value,
       };
+      setSelectedCity(record.city);
       form.setFieldsValue(record);
     }
   }, [parameters]);

@@ -68,6 +68,8 @@ const Grade = () => {
       const currentClass = student.Classes.reduce((pre, curr) => {
         if (moment(curr.endDate) >= currentDate()) {
           pre.push({ className: curr.className, status: 1 });
+        } else {
+          pre.push({ className: curr.className, status: 0 });
         }
         return pre;
       }, []);

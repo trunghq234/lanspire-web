@@ -42,6 +42,7 @@ const CenterInfo = props => {
         district: parameters.find(parameter => parameter.name == 'district').value,
       };
       setSelectedCity(record.city);
+      setSelectedDistrict(record.district);
       form.setFieldsValue(record);
     }
   }, [parameters]);
@@ -115,7 +116,8 @@ const CenterInfo = props => {
                 value={selectedCity}
                 placeholder="City"
                 onChange={val => {
-                  setSelectedDistrict(null);
+                  form.setFieldsValue({ ...form.getFieldsValue, district: '' });
+                  // setSelectedDistrict(null);
                   setSelectedCity(val);
                 }}>
                 {optionCityRendered}

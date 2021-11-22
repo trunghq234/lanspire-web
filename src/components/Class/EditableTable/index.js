@@ -34,17 +34,17 @@ const EditableCell = ({
     }
   }, [editing]);
 
-  const toggleEdit = () => {
-    setEditing(!editing);
-    form.setFieldsValue({
-      [dataIndex]: record[dataIndex],
-    });
-  };
+  // const toggleEdit = () => {
+  //   setEditing(!editing);
+  //   form.setFieldsValue({
+  //     [dataIndex]: record[dataIndex],
+  //   });
+  // };
 
   const save = async () => {
     try {
       const values = await form.validateFields();
-      toggleEdit();
+      // toggleEdit();
       handleSave({ ...record, ...values });
     } catch (errInfo) {
       console.log('Save failed:', errInfo);
@@ -52,9 +52,8 @@ const EditableCell = ({
   };
 
   let childNode = children;
-
   if (editable) {
-    childNode = editing ? (
+    childNode = (
       <Form.Item
         style={{
           margin: 0,
@@ -69,23 +68,22 @@ const EditableCell = ({
         <Input
           style={{
             textAlign: 'center',
-            width: '100px',
+            width: '150px',
           }}
           ref={inputRef}
+          onChange={save}
           onPressEnter={save}
-          onBlur={save}
-        />
+          onBlur={save}></Input>
       </Form.Item>
-    ) : (
-      <div
-        className={styles['editable-cell-value-wrap']}
-        style={{
-          paddingRight: 24,
-        }}
-        onClick={toggleEdit}>
-        {children}
-      </div>
     );
+    form.setFieldsValue({
+      [dataIndex]: children[1],
+    });
+    // : (
+    //   <div className={styles['editable-cell-value-wrap']} onClick={toggleEdit}>
+    //     {children}
+    //   </div>
+    // );
   }
 
   return <td {...restProps}>{childNode}</td>;
@@ -143,6 +141,8 @@ const EditableTable = props => {
       const item = newData[index];
       newData.splice(index, 1, { ...item, ...row });
       setDataSource(newData);
+    } else {
+      setDataSource(dataSource);
     }
   };
 

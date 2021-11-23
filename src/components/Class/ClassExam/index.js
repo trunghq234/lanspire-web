@@ -27,8 +27,13 @@ const ClassExam = ({ classData }) => {
       align: 'center',
     },
     {
-      title: 'Date',
-      dataIndex: 'postedDate',
+      title: 'Test time',
+      dataIndex: 'testTime',
+      align: 'center',
+    },
+    {
+      title: 'Test date',
+      dataIndex: 'testDate',
       align: 'center',
     },
     {
@@ -85,8 +90,10 @@ const ClassExam = ({ classData }) => {
         examName: exam.examName,
         fileUrl: exam.fileUrl,
         postedDate: moment(exam.postedDate).format('DD/MM/YYYY'),
+        testTime: moment(exam.testTime, 'HH:mm:ss').format('HH:mm'),
+        testDate: moment(exam.testDate).format('DD/MM/YYYY'),
         typeName: exam.TestType.typeName,
-        columnName: exam.Column_Transcript.columnName,
+        columnName: exam.Columns.columnName,
       })
     );
     setDataSource(res);
@@ -94,7 +101,7 @@ const ClassExam = ({ classData }) => {
 
   const getIdColumn = exams => {
     const res = [];
-    exams.map(exam => res.push(exam.Column_Transcript.idColumn));
+    exams.map(exam => res.push(exam.Columns.idColumn));
     setExistedColumn(res);
   };
 

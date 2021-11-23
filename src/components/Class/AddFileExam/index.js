@@ -1,5 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Form, Input, message, Modal, Progress, Row, Select, Upload } from 'antd';
+import {
+  Button,
+  Col,
+  DatePicker,
+  Form,
+  Input,
+  message,
+  Modal,
+  Progress,
+  Row,
+  Select,
+  TimePicker,
+  Upload,
+} from 'antd';
 import { DeleteOutlined, UploadOutlined } from '@ant-design/icons';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { storage } from 'utils/firebase';
@@ -91,7 +104,9 @@ const AddFileExam = ({ isVisible, setIsVisible, existedColumn, classData, select
   const { isLoading, isSuccess } = useSelector(examState$);
   const handleSubmit = () => {
     form.validateFields().then(values => {
-      const { examName, idTestType, idColumn } = values;
+      const { examName, idTestType, idColumn, testTime, testDate } = values;
+      const time = moment(testTime).format('HH:mm');
+      const date = moment(testDate).add('days', 1).format('MM-DD-YYYY');
       const res = fileUrls.map(element => element.url);
       if (isEdit) {
         dispatch(
@@ -100,6 +115,8 @@ const AddFileExam = ({ isVisible, setIsVisible, existedColumn, classData, select
             examName,
             fileUrl: res,
             postedDate: moment().toDate(),
+            testTime: time,
+            testDate: date,
             idTestType,
           })
         );
@@ -109,6 +126,8 @@ const AddFileExam = ({ isVisible, setIsVisible, existedColumn, classData, select
             examName,
             fileUrl: res,
             postedDate: moment().toDate(),
+            testTime: time,
+            testDate: date,
             idClass,
             idTestType,
             idColumn,
@@ -124,17 +143,19 @@ const AddFileExam = ({ isVisible, setIsVisible, existedColumn, classData, select
   useEffect(() => {
     if (selectedExam) {
       setIsEdit(true);
+      const date = moment(selectedExam.testDate).format('DD/MM/YYYY');
       form.setFieldsValue({
         examName: selectedExam.examName,
         idTestType: selectedExam.TestType.idTestType,
-        idColumn: selectedExam.Column_Transcript.columnName,
+        idColumn: selectedExam.Columns.columnName,
+        testTime: moment(selectedExam.testTime, 'HH:mm'),
+        testDate: moment(date, 'DD/MM/YYYY'),
         file: selectedExam.fileUrl,
       });
       if (selectedExam.fileUrl.length > 0) {
         const tmp = [];
         selectedExam.fileUrl.map(file => tmp.push({ url: file, uid: uuidv4() }));
         setFileUrls(tmp);
-        console.log(tmp);
       }
     } else {
       setIsEdit(false);
@@ -217,6 +238,18 @@ const AddFileExam = ({ isVisible, setIsVisible, existedColumn, classData, select
             {columnOption}
           </Select>
         </Form.Item>
+        <Row>
+          <Col span={12}>
+            <Form.Item name="testTime" label="Test time" rules={[{ required: true }]}>
+              <TimePicker allowClear={false} showNow={false} minuteStep={5} format={'HH:mm'} />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item name="testDate" label="Test date" rules={[{ required: true }]}>
+              <DatePicker allowClear={false} format={'DD/MM/YYYY'} />
+            </Form.Item>
+          </Col>
+        </Row>
         <Form.Item name="file" label="File">
           <Upload
             multiple={true}

@@ -14,7 +14,7 @@ const examApi = {
   },
 
   getByClass: async idClass => {
-    const res = await axiosClient.get(`${url}/class/${idClass}`);
+    const res = await axiosClient.get(`${url}class/${idClass}`);
     return res.data;
   },
 

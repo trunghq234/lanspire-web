@@ -3,7 +3,7 @@ const url = '/exams/';
 
 const examApi = {
   getByIdClass: async idClass => {
-    return await axiosClient.post(url + 'findByIdClass', { idClass: idClass });
+    return await axiosClient.get(`${url}classes/${idClass}`);
   },
 };
 

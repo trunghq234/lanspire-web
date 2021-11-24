@@ -4,10 +4,12 @@ import { isEmpty } from 'lodash';
 import moment from 'moment';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import * as lecturerActions from 'redux/actions/lecturers';
 import { getUsers } from 'redux/actions/users';
 import { lecturerState$, usersState$ } from 'redux/selectors';
+import { camelToString } from 'utils/stringHelper';
+import { dobValidator } from 'utils/validator';
 import styles from './index.module.less';
 
 const { Option } = Select;
@@ -16,6 +18,7 @@ const idRoleLecturer = '386af797-fdf6-42dc-8bab-d5b42561b5fb';
 
 const PersonalInfo = props => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const [isSubmit, setIsSubmit] = useState(false);
   const [city, setCity] = useState('');
   const lecturers = useSelector(lecturerState$);
@@ -51,6 +54,8 @@ const PersonalInfo = props => {
       confirmPassword,
     } = data;
 
+    const nameUpperCase = camelToString(displayName); // convert name to upper case
+
     const currentDate = moment();
     if (currentDate < dob) {
       message.error('Date of birth is not greater than current date');
@@ -76,7 +81,7 @@ const PersonalInfo = props => {
               message.error('Confirm password does not match!');
             } else {
               const createdLecturer = {
-                displayName,
+                displayName: nameUpperCase,
                 gender: data.gender == 'male' ? 0 : data.gender == 'female' ? 1 : 2,
                 dob: moment(data.dob).format('DD/MM/YYYY').split('/').reverse().join('-'),
                 phoneNumber,
@@ -88,7 +93,6 @@ const PersonalInfo = props => {
                 password,
                 isActivated: true,
               };
-              console.log({ createdLecturer });
               dispatch(lecturerActions.createLecturer.createLecturerRequest(createdLecturer));
               setCity(city);
               setIsSubmit(true);
@@ -105,7 +109,7 @@ const PersonalInfo = props => {
         const lecturer = lecturers.data.find(lecturer => lecturer.idLecturer === id);
 
         const editedLecturer = {
-          displayName,
+          displayName: nameUpperCase,
           gender: data.gender == 'male' ? 0 : data.gender == 'female' ? 1 : 2,
           dob: moment(data.dob).format('DD/MM/YYYY').split('/').reverse().join('-'),
           idLecturer: id,
@@ -126,17 +130,6 @@ const PersonalInfo = props => {
     }
   };
 
-  const dobValidator = (rule, value, callback) => {
-    try {
-      if (value > Date.now()) {
-        callback('Date of birth is not greater than current date');
-      } else {
-        callback();
-      }
-    } catch {
-      callback();
-    }
-  };
   const checkUsernameIsExist = username => {
     const result = users.find(user => user.username === username);
     // result === empty => checkUsernameIsExist: false
@@ -167,16 +160,18 @@ const PersonalInfo = props => {
     }
   }, [id, lecturers]);
 
-  // Notifies when create or update lecturer success
+  // Redirect to employee list
   React.useEffect(() => {
     if (lecturers.isSuccess && isSubmit) {
-      id
-        ? message.success('Update lecturer success!')
-        : message.success('Create lecturer success!');
-
+      if (id) {
+        message.success('Update lecturer success!');
+        history.push('/lecturer');
+      } else {
+        message.success('Create lecturer success!');
+      }
       form.resetFields();
     }
-  }, [lecturers]);
+  }, [lecturers, history]);
 
   React.useEffect(() => {
     dispatch(lecturerActions.getLecturers.getLecturersRequest());
@@ -254,18 +249,7 @@ const PersonalInfo = props => {
                 <Form.Item
                   label="Confirm password"
                   name="confirmPassword"
-                  rules={[
-                    { required: true },
-                    { min: 6 },
-                    ({ getFieldValue }) => ({
-                      validator(_, value) {
-                        if (!value || getFieldValue('password') === value) {
-                          return Promise.resolve();
-                        }
-                        return Promise.reject('Confirm password does not match!');
-                      },
-                    }),
-                  ]}>
+                  rules={[{ required: true }, { min: 6 }]}>
                   <Input.Password placeholder="Confirm password" />
                 </Form.Item>
               </Col>

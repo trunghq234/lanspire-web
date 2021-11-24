@@ -3,10 +3,12 @@ import { isEmpty } from 'lodash';
 import moment from 'moment';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import * as employeeActions from 'redux/actions/employees';
 import { getUsers } from 'redux/actions/users';
 import { employeeState$, usersState$ } from 'redux/selectors';
+import { camelToString } from 'utils/stringHelper';
+import { dobValidator } from 'utils/validator';
 import ProvincePicker from '../../common/ProvincePicker';
 import styles from './index.module.less';
 
@@ -16,6 +18,7 @@ const idRoleEmployee = '386af797-fdf6-42dc-8bab-d5b42561b5fb';
 const PersonalInfo = props => {
   const [isSubmit, setIsSubmit] = useState(false);
   const [city, setCity] = useState('');
+  const history = useHistory();
   const dispatch = useDispatch();
   const employees = useSelector(employeeState$);
   const users = useSelector(usersState$);
@@ -56,6 +59,8 @@ const PersonalInfo = props => {
       confirmPassword,
     } = data;
 
+    const nameUpperCase = camelToString(displayName); // convert name to upper case
+
     const currentDate = moment();
     if (currentDate < dob) {
       message.error('Date of birth is not greater than current date');
@@ -76,22 +81,28 @@ const PersonalInfo = props => {
       ) {
         if (typeSubmit === 'create') {
           if (!checkUsernameIsExist(username)) {
-            const createdEmployee = {
-              displayName,
-              gender: data.gender == 'male' ? 0 : data.gender == 'female' ? 1 : 2,
-              dob: moment(data.dob).format('DD/MM/YYYY').split('/').reverse().join('-'),
-              phoneNumber,
-              email,
-              address: [detailsAddress, district, city],
-              idRole: idRoleEmployee,
-              imageUrl: 'test',
-              username,
-              password,
-              isActivated: true,
-            };
-            dispatch(employeeActions.createEmployee.createEmployeeRequest(createdEmployee));
-            setCity(city);
-            setIsSubmit(true);
+            // check confirm password
+            if (confirmPassword !== password) {
+              setIsSubmit(true);
+              message.error('Confirm password does not match');
+            } else {
+              const createdEmployee = {
+                displayName: nameUpperCase,
+                gender: data.gender == 'male' ? 0 : data.gender == 'female' ? 1 : 2,
+                dob: moment(data.dob).format('DD/MM/YYYY').split('/').reverse().join('-'),
+                phoneNumber,
+                email,
+                address: [detailsAddress, district, city],
+                idRole: idRoleEmployee,
+                imageUrl: 'test',
+                username,
+                password,
+                isActivated: true,
+              };
+              dispatch(employeeActions.createEmployee.createEmployeeRequest(createdEmployee));
+              setCity(city);
+              setIsSubmit(true);
+            }
           } else {
             setIsSubmit(true);
             isSubmit === true ? message.error('Username is exist!') : '';
@@ -104,7 +115,7 @@ const PersonalInfo = props => {
         const employee = employees.data.find(employee => employee.idEmployee === id);
 
         const editedEmployee = {
-          displayName,
+          displayName: nameUpperCase,
           gender: data.gender == 'male' ? 0 : data.gender == 'female' ? 1 : 2,
           dob: moment(data.dob).format('DD/MM/YYYY').split('/').reverse().join('-'),
           idEmployee: id,
@@ -128,18 +139,6 @@ const PersonalInfo = props => {
     const result = users.find(user => user.username === username);
     // result === empty => checkUsernameIsExist: false
     return !isEmpty(result);
-  };
-
-  const dobValidator = (rule, value, callback) => {
-    try {
-      if (value > Date.now()) {
-        callback('Date of birth is not greater than current date');
-      } else {
-        callback();
-      }
-    } catch {
-      callback();
-    }
   };
 
   // Load information employee to form
@@ -169,13 +168,15 @@ const PersonalInfo = props => {
   // Redirect to employee list
   React.useEffect(() => {
     if (employees.isSuccess && isSubmit) {
-      id
-        ? message.success('Update employee success!')
-        : message.success('Create employee success!');
-
+      if (id) {
+        message.success('Update employee success!');
+        history.push('/employee');
+      } else {
+        message.success('Create employee success!');
+      }
       form.resetFields();
     }
-  }, [employees]);
+  }, [employees, history]);
 
   React.useEffect(() => {
     dispatch(employeeActions.getEmployees.getEmployeesRequest());
@@ -262,14 +263,14 @@ const PersonalInfo = props => {
                   rules={[
                     { required: true },
                     { min: 6 },
-                    ({ getFieldValue }) => ({
-                      validator(_, value) {
-                        if (!value || getFieldValue('password') === value) {
-                          return Promise.resolve();
-                        }
-                        return Promise.reject('Confirm password does not match!');
-                      },
-                    }),
+                    // ({ getFieldValue }) => ({
+                    //   validator(_, value) {
+                    //     if (!value || getFieldValue('password') === value) {
+                    //       return Promise.resolve();
+                    //     }
+                    //     return Promise.reject('Confirm password does not match!');
+                    //   },
+                    // }),
                   ]}>
                   <Input.Password placeholder="Confirm password" />
                 </Form.Item>

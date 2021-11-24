@@ -13,4 +13,16 @@ const numberValidator = (rule, value, callback) => {
   }
 };
 
-export { numberValidator };
+const dobValidator = (rule, value, callback) => {
+  try {
+    if (value > Date.now()) {
+      callback('Date of birth is not valid!');
+    } else {
+      callback();
+    }
+  } catch {
+    callback();
+  }
+};
+
+export { numberValidator, dobValidator };

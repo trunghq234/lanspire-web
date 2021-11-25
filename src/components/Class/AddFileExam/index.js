@@ -7,6 +7,7 @@ import {
   Input,
   message,
   Modal,
+  notification,
   Progress,
   Row,
   Select,
@@ -106,36 +107,48 @@ const AddFileExam = ({ isVisible, setIsVisible, existedColumn, classData, select
     form.validateFields().then(values => {
       const { examName, idTestType, idColumn, testTime, testDate } = values;
       const time = moment(testTime).format('HH:mm');
-      const date = moment(testDate).add('days', 1).format('MM-DD-YYYY');
+      const date = moment(testDate).add(1, 'day').format('MM-DD-YYYY');
       const res = fileUrls.map(element => element.url);
-      if (isEdit) {
-        dispatch(
-          updateExam.updateExamRequest({
-            idExam: selectedExam.idExam,
-            examName,
-            fileUrl: res,
-            postedDate: moment().toDate(),
-            testTime: time,
-            testDate: date,
-            idTestType,
-          })
-        );
+
+      // check test date between start and end date
+      const isValidDate = moment(testDate).isSameOrAfter(classData.startDate, 'day');
+      if (!isValidDate) {
+        notification.warning({
+          message: 'Invalid test date',
+          description: `Test date must same or before starting date (${moment(
+            classData.startDate
+          ).format('DD/MM/YYYY')}).`,
+        });
       } else {
-        dispatch(
-          createExam.createExamRequest({
-            examName,
-            fileUrl: res,
-            postedDate: moment().toDate(),
-            testTime: time,
-            testDate: date,
-            idClass,
-            idTestType,
-            idColumn,
-          })
-        );
+        if (isEdit) {
+          dispatch(
+            updateExam.updateExamRequest({
+              idExam: selectedExam.idExam,
+              examName,
+              fileUrl: res,
+              postedDate: moment().toDate(),
+              testTime: time,
+              testDate: date,
+              idTestType,
+            })
+          );
+        } else {
+          dispatch(
+            createExam.createExamRequest({
+              examName,
+              fileUrl: res,
+              postedDate: moment().toDate(),
+              testTime: time,
+              testDate: date,
+              idClass,
+              idTestType,
+              idColumn,
+            })
+          );
+        }
+        setIsCompleted(true);
+        form.resetFields();
       }
-      setIsCompleted(true);
-      form.resetFields();
     });
   };
 
@@ -179,6 +192,9 @@ const AddFileExam = ({ isVisible, setIsVisible, existedColumn, classData, select
   const [columnOption, setColumnOption] = useState();
   const [typeOption, setTypeOption] = useState();
   useEffect(() => {
+    if (!existedColumn) {
+      return;
+    }
     form.resetFields();
     courseApi.getById(classData.idCourse).then(res => {
       const tmp = res.data.Columns;

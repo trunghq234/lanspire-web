@@ -38,10 +38,10 @@ const ClassExam = ({ classData }) => {
     },
     {
       title: '',
-      dataIndex: 'idExam',
+      dataIndex: ['idExam'],
       align: 'center',
       width: '15%',
-      render: idExam => {
+      render: (idExam, currentExam) => {
         return (
           <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
             <Tooltip title="Edit exam">
@@ -57,7 +57,12 @@ const ClassExam = ({ classData }) => {
               />
             </Tooltip>
             <Tooltip title="Delete exam">
-              <Button ghost danger icon={<DeleteOutlined />} onClick={() => handleDelete(idExam)} />
+              <Button
+                ghost
+                danger
+                icon={<DeleteOutlined />}
+                onClick={() => handleDelete(currentExam)}
+              />
             </Tooltip>
           </div>
         );
@@ -105,14 +110,23 @@ const ClassExam = ({ classData }) => {
     setExistedColumn(res);
   };
 
-  const handleDelete = idExam => {
+  const handleDelete = exam => {
+    const testDate = moment(exam.testDate, 'DD/MM/YYYY');
+    const isPassed = moment(testDate).isSameOrBefore(moment());
+    if (isPassed) {
+      notification.warning({
+        message: 'Exam cannot be deleted!',
+        description: 'Test date is passed',
+      });
+      return;
+    }
     confirm({
       title: 'Do you want to delete this exam?',
       icon: <ExclamationCircleOutlined />,
       centered: true,
       content: '',
       onOk() {
-        dispatch(deleteExam.deleteExamRequest(idExam));
+        dispatch(deleteExam.deleteExamRequest(exam.idExam));
 
         isSuccess
           ? notification.success({

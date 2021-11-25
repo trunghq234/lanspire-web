@@ -3,6 +3,7 @@ import * as columnTranscriptActions from 'redux/actions/columnTranscripts';
 import * as courseActions from 'redux/actions/courses';
 import * as courseTypeActions from 'redux/actions/courseTypes';
 import * as levelActions from 'redux/actions/levels';
+import * as billActions from 'redux/actions/bills';
 import {
   createColumnTranscript,
   deleteColumnTranscript,
@@ -58,6 +59,7 @@ import {
   fetchUsersSaga,
   updateUserSaga,
 } from './users';
+import { createBillSaga, deleteBillSaga, fetchBillsSaga, updateBillSaga } from './bills';
 
 export default function* mySaga() {
   //column transcript
@@ -132,4 +134,10 @@ export default function* mySaga() {
   yield takeLatest(lecturerActions.createLecturer.createLecturerRequest, createLecturerSaga);
   yield takeLatest(lecturerActions.updateLecturer.updateLecturerRequest, updateLecturerSaga);
   yield takeLatest(lecturerActions.deleteLecturer.deleteLecturerRequest, deleteLecturerSaga);
+
+  //bills
+  yield takeLatest(billActions.getBills.getBillsRequest, fetchBillsSaga);
+  yield takeLatest(billActions.createBill.createBillRequest, createBillSaga);
+  yield takeLatest(billActions.updateBill.updateBillRequest, updateBillSaga);
+  yield takeLatest(billActions.deleteBill.deleteBillRequest, deleteBillSaga);
 }

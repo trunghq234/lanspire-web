@@ -41,15 +41,15 @@ const TabArrangeClass = () => {
       align: 'center',
       filters: [
         {
-          text: 'Studied',
+          text: 'Done',
           value: 0,
         },
         {
-          text: 'Studying',
+          text: 'In progress',
           value: 1,
         },
         {
-          text: 'Registered',
+          text: 'Enrolled',
           value: 2,
         },
       ],
@@ -57,7 +57,7 @@ const TabArrangeClass = () => {
         const color = status === 0 ? 'gray' : status === 1 ? 'blue' : 'orange';
         return (
           <Tag color={color} key={index}>
-            {status === 0 ? 'Studied' : status === 1 ? 'Studying' : 'Registered'}
+            {status === 0 ? 'Done' : status === 1 ? 'In progress' : 'Enrolled'}
           </Tag>
         );
       },

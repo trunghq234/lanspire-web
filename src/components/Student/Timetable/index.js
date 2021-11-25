@@ -11,7 +11,7 @@ import { classState$ } from 'redux/selectors';
 import { currentDate } from 'utils/dateTime';
 import styles from './index.module.less';
 
-const Timetable = () => {
+const Timetable = React.forwardRef((props, ref) => {
   const { idStudent } = useParams();
   const [student, setStudent] = useState();
   const [dataSource, setDataSource] = useState([[], [], [], [], [], [], []]);
@@ -86,19 +86,21 @@ const Timetable = () => {
   }, [student, classes.data]);
 
   return (
-    <Row gutter={5} style={{ backgroundColor: 'white' }}>
-      <Col span={3}>
-        <Timeline />
-      </Col>
-      {dataSource.map((day, i) => {
-        return (
-          <Col key={`day-${i}`} span={3} className={styles.dayOfWeek}>
-            <Day events={day} dayOfWeek={i} />
-          </Col>
-        );
-      })}
-    </Row>
+    <div ref={ref}>
+      <Row gutter={5} style={{ backgroundColor: 'white' }}>
+        <Col span={3}>
+          <Timeline />
+        </Col>
+        {dataSource.map((day, i) => {
+          return (
+            <Col key={`day-${i}`} span={3} className={styles.dayOfWeek}>
+              <Day events={day} dayOfWeek={i} />
+            </Col>
+          );
+        })}
+      </Row>
+    </div>
   );
-};
+});
 
 export default Timetable;

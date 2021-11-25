@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import employeesReducer from './employees';
-import StudentsReducer from './students';
+import studentsReducer from './students';
 import usersReducer from './users';
 import userReducer from './user';
 import authReducer from './auth';
@@ -11,13 +11,14 @@ import levelsReducer from './level';
 import columnTranscriptsReducer from './columnTranscript';
 import classesReducer from './classes';
 import lecturersReducer from './lecturers';
+import billsReducer from './bills';
 
 export default combineReducers({
   employees: employeesReducer,
   users: usersReducer,
   user: userReducer,
   auth: authReducer,
-  students: StudentsReducer,
+  students: studentsReducer,
   timeFrames: timeFrameReducer,
   courses: coursesReducer,
   courseTypes: courseTypesReducer,
@@ -25,4 +26,5 @@ export default combineReducers({
   columnTranscripts: columnTranscriptsReducer,
   classes: classesReducer,
   lecturers: lecturersReducer,
+  bills: billsReducer,
 });

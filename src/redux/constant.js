@@ -69,6 +69,12 @@ const INIT_STATE = {
     isLoading: false,
     isSuccess: false,
   },
+  bills: {
+    data: [],
+    isLoading: false,
+    isSuccess: false,
+    error: '',
+  },
 };
 
 export default INIT_STATE;

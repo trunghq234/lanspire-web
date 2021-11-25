@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
 import padStart from 'lodash/padStart';
+import React from 'react';
 import { HOURS_PER_DAY } from './constants';
 import styles from './index.module.less';
 

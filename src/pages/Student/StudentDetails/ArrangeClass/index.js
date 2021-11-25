@@ -19,13 +19,14 @@ import { useHistory, useParams } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
 import { getClasses } from 'redux/actions/classes';
 import { getCourses } from 'redux/actions/courses';
-import { classState$, courseState$, studentState$, userState$ } from 'redux/selectors';
+import { billState$, classState$, courseState$, studentState$, userState$ } from 'redux/selectors';
 import { currentDate, isConflictTimetable } from 'utils/dateTime';
 import { convertCommasToNumber, numberWithCommas } from 'utils/stringHelper';
 import Invoice from 'components/Student/Invoice';
 import styles from './index.module.less';
 import studentApi from 'api/studentApi';
 import { updateStudents } from 'redux/actions/students';
+import { createBill } from 'redux/actions/bills';
 const { Search } = Input;
 
 const ArrangeClass = () => {
@@ -35,6 +36,7 @@ const ArrangeClass = () => {
   const classes = useSelector(classState$);
   const students = useSelector(studentState$);
   const courses = useSelector(courseState$);
+  const bills = useSelector(billState$);
   const user = useSelector(userState$);
   const [total, setTotal] = useState(0);
   const [fullName, setFullName] = useState();
@@ -192,7 +194,7 @@ const ArrangeClass = () => {
 
   //notification
   useEffect(() => {
-    if (isPayment && students.isSuccess) {
+    if (isPayment && students.isSuccess && bills.isSuccess) {
       setVisiblePopConfirm(true);
     } else if (isPayment && !students.isSuccess && students.error.length > 0) {
       notification.error({
@@ -201,8 +203,15 @@ const ArrangeClass = () => {
           width: 300,
         },
       });
+    } else if (isPayment && !bills.isSuccess && bills.error.length > 0) {
+      notification.error({
+        message: bills.error,
+        style: {
+          width: 300,
+        },
+      });
     }
-  }, [students.isLoading]);
+  }, [students.isLoading, bills.isLoading]);
 
   //Search class
   const handleSearch = value => {
@@ -216,6 +225,7 @@ const ArrangeClass = () => {
   const printInvoice = useReactToPrint({
     content: () => invoiceRef.current,
   });
+
   //handle payment
   const handlePayment = () => {
     if (selectedClasses.length !== 0) {
@@ -228,6 +238,20 @@ const ArrangeClass = () => {
         idClasses,
       };
       setIsPayment(true);
+      //bill & bill info
+      const bill = {
+        idUser: user.idUser,
+        idStudent: student.idStudent,
+        createdDate: currentDate().format('MM/DD/YYYY'),
+        totalFee: total,
+        BillInfos: selectedClasses.map(element => {
+          return {
+            idClass: element.key,
+            fee: convertCommasToNumber(element.fee),
+          };
+        }),
+      };
+      dispatch(createBill.createBillRequest(bill));
       dispatch(updateStudents.updateStudentsRequest(studentUpdate));
     } else {
       message.warning('Please, select class for student!');
@@ -276,7 +300,7 @@ const ArrangeClass = () => {
           <Divider />
           <h4>Receipt info</h4>
           <Receipt itemName="Created by" value={user.displayName} />
-          <Receipt itemName="Created date" value={currentDate} />
+          <Receipt itemName="Created date" value={currentDate().format('DD/MM/YYYY')} />
           <Divider className={styles.divider} />
           <h4>Student info</h4>
           <Receipt itemName="Full name" value={fullName} />

@@ -1,4 +1,5 @@
-import { Col, notification, Row, Table } from 'antd';
+import { PrinterOutlined } from '@ant-design/icons';
+import { Button, Col, notification, Row, Table, Select, Card } from 'antd';
 import studentApi from 'api/studentApi';
 import moment from 'moment';
 import React, { useState, useEffect } from 'react';
@@ -7,10 +8,13 @@ import { useParams } from 'react-router';
 import { getColumnTranscripts } from 'redux/actions/columnTranscripts';
 import { columnTranscriptState$ } from 'redux/selectors';
 import { currentDate } from 'utils/dateTime';
+import styles from './index.module.less';
+const { Option } = Select;
 
 const Grade = () => {
   const [columns, setColumns] = useState([]);
   const [dataSource, setDataSource] = useState();
+  const [dataFiler, setDataFilter] = useState();
   const [student, setStudent] = useState();
   const columnTranscripts = useSelector(columnTranscriptState$);
   const { idStudent } = useParams();
@@ -39,24 +43,13 @@ const Grade = () => {
           dataIndex: element.idColumn,
           key: `${element.idColumn}`,
           align: 'center',
+          sorter: (a, b) => a - b,
         };
       });
       tmp.unshift({
         title: 'Class name',
         dataIndex: 'className',
         key: 'className',
-        filters: [
-          {
-            text: 'Studying',
-            value: 1,
-          },
-          {
-            text: 'Studied',
-            value: 0,
-          },
-        ],
-
-        onFilter: (value, record) => record.status === value,
       });
       setColumns(tmp);
     }
@@ -67,9 +60,9 @@ const Grade = () => {
     if (student) {
       const currentClass = student.Classes.reduce((pre, curr) => {
         if (moment(curr.endDate) >= currentDate()) {
-          pre.push({ className: curr.className, status: 1 });
+          pre.push({ className: curr.className, status: 'in_progress' });
         } else {
-          pre.push({ className: curr.className, status: 0 });
+          pre.push({ className: curr.className, status: 'done' });
         }
         return pre;
       }, []);
@@ -86,25 +79,53 @@ const Grade = () => {
             pre.push({
               className: curr.Class.className,
               [curr.idColumn]: curr.Testing.score,
-              status: moment(curr.endDate) < currentDate() ? 0 : 1,
+              status: moment(curr.endDate) < currentDate() ? 'done' : 'in_progress',
             });
           }
-          // console.log(pre);
           return pre;
         },
         [...currentClass]
       );
 
       setDataSource(data);
+      setDataFilter(data);
     }
   }, [student]);
 
+  const handleFilter = value => {
+    if (value === 'all') {
+      setDataFilter(dataSource);
+    } else {
+      console.log(dataSource);
+      const tmp = dataSource.filter(element => element.status === value);
+      setDataFilter(tmp);
+    }
+  };
   return (
-    <Row>
-      <Col span={24}>
-        <Table columns={columns} dataSource={dataSource} bordered />
-      </Col>
-    </Row>
+    <Card>
+      <Row>
+        <Col span={4}>
+          <Select
+            defaultValue="all"
+            onSelect={handleFilter}
+            placeholder="Select status class"
+            style={{ width: '100%', margin: '10px 0' }}>
+            <Option value="all">All classes</Option>
+            <Option value="in_progress">In progress</Option>
+            <Option value="done">Done</Option>
+          </Select>
+        </Col>
+        <Col span={2} offset={18}>
+          <Button block className={styles.print}>
+            <PrinterOutlined />
+            In
+          </Button>
+        </Col>
+        <Col span={24}>
+          <Table columns={columns} dataSource={dataFiler} bordered />
+        </Col>
+      </Row>
+    </Card>
   );
 };
 

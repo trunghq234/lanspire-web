@@ -1,22 +1,15 @@
-import { Row, Col, Card, Tooltip } from 'antd';
-import React, { useEffect } from 'react';
-import styles from './index.module.less';
-import {
-  classSvg,
-  dateSvg,
-  emailSvg,
-  fullNameSvg,
-  genderSvg,
-  locationSvg,
-  phoneSvg,
-} from 'utils/iconsvg';
-import Icon, { EditOutlined } from '@ant-design/icons';
-import { useSelector, useDispatch } from 'react-redux';
-import { studentState$ } from 'redux/selectors';
-import { useState } from 'react';
-import { getStudents } from 'redux/actions/students';
+import Icon, { EditOutlined, PrinterOutlined } from '@ant-design/icons';
+import { Button, Card, Col, Row, Tooltip } from 'antd';
 import moment from 'moment';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
+import { useReactToPrint } from 'react-to-print';
+import { getStudents } from 'redux/actions/students';
+import { studentState$ } from 'redux/selectors';
+import { dateSvg, emailSvg, fullNameSvg, genderSvg, locationSvg, phoneSvg } from 'utils/iconsvg';
+import StudentCard from '../StudentCard';
+import styles from './index.module.less';
 
 const DescriptionItem = ({ title, content, icon }) => (
   <div className={styles['description-item']}>
@@ -37,6 +30,7 @@ const PersonalInfo = props => {
   const [dob, setDOB] = useState();
   const { idStudent } = useParams();
   const history = useHistory();
+  const studentCardRef = useRef();
 
   useEffect(() => {
     dispatch(getStudents.getStudentsRequest());
@@ -58,10 +52,17 @@ const PersonalInfo = props => {
     }
   }, [students.data]);
 
+  const handlePrintStudentCard = useReactToPrint({
+    content: () => studentCardRef.current,
+  });
+
   return (
     <Card>
+      <div style={{ display: 'none' }}>
+        <StudentCard idStudent={idStudent} ref={studentCardRef} />
+      </div>
       <Row>
-        <Col span={23}>
+        <Col span={22}>
           <Col span={24}>
             <h4>Personal</h4>
             <Row>
@@ -87,12 +88,15 @@ const PersonalInfo = props => {
             </Row>
           </Col>
         </Col>
-        <Col span={1}>
+        <Col span={2}>
           <Tooltip title="Edit">
             <EditOutlined
               className={styles['icon-edit']}
               onClick={() => history.push(`/student/edit/${idStudent}`)}
             />
+          </Tooltip>
+          <Tooltip title="Print student card">
+            <PrinterOutlined onClick={handlePrintStudentCard} />
           </Tooltip>
         </Col>
       </Row>

@@ -117,7 +117,7 @@ const ArrangeClass = () => {
       setDataSource(classList);
       setDataSearch(classList);
     }
-  }, [student]);
+  }, [student, classes.data]);
 
   //set info student
   useEffect(() => {

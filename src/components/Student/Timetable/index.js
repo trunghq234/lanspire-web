@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import Day from './Day';
-import Timeline from './Timeline';
 import { Col, notification, Row } from 'antd';
 import studentApi from 'api/studentApi';
 import moment from 'moment';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { getClasses } from 'redux/actions/classes';
 import { classState$ } from 'redux/selectors';
 import { currentDate } from 'utils/dateTime';
+import Day from './Day';
 import styles from './index.module.less';
+import Timeline from './Timeline';
 
 const Timetable = React.forwardRef((props, ref) => {
   const { idStudent } = useParams();
@@ -39,11 +39,7 @@ const Timetable = React.forwardRef((props, ref) => {
   useEffect(() => {
     if (student && classes.data.length > 0) {
       const keyClassesStudying = student.Classes.reduce((pre, curr) => {
-        if (
-          (moment(curr.startDate) < currentDate() && moment(curr.endDate) > currentDate()) ||
-          moment(curr.endDate).format('DD/MM/YYYY') === currentDate().format('DD/MM/YYYY') ||
-          moment(curr.startDate).format('DD/MM/YYYY') === currentDate().format('DD/MM/YYYY')
-        ) {
+        if (moment(curr.endDate) >= currentDate()) {
           pre.push(curr.idClass);
         }
         return pre;

@@ -86,9 +86,7 @@ const TabArrangeClass = () => {
           status:
             moment(element.endDate) < Date.now()
               ? 0
-              : moment(element.startDate) > currentDate() &&
-                moment(element.startDate).format('DD/MM/YYYY') !==
-                  currentDate().format('DD/MM/YYYY')
+              : moment(element.startDate) > currentDate()
               ? 2
               : 1,
         };

@@ -68,7 +68,6 @@ const Grade = () => {
       }, []);
       const data = student.Exams.reduce(
         (pre, curr) => {
-          console.log(pre);
           const tmp = pre.findIndex(element => element.className === curr.Class.className);
           if (tmp >= 0) {
             pre[tmp] = {
@@ -96,7 +95,6 @@ const Grade = () => {
     if (value === 'all') {
       setDataFilter(dataSource);
     } else {
-      console.log(dataSource);
       const tmp = dataSource.filter(element => element.status === value);
       setDataFilter(tmp);
     }

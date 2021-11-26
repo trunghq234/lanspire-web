@@ -15,7 +15,7 @@ const Event = ({ height, top, content }) => {
         <Tooltip title={content.title}>
           <div className={styles['event-title']}>{content.title}</div>
         </Tooltip>
-        <div className={styles['event-room']}>{content.room}</div>
+        <div className={styles['event-room']}>Room {content.room}</div>
         <div className={styles['event-date']}>
           {content.startDate} - {content.endDate}
         </div>

@@ -22,6 +22,15 @@ const DescriptionItem = ({ title, content, icon }) => (
 const PersonalInfo = props => {
   const dispatch = useDispatch();
   const students = useSelector(studentState$);
+  const [studentCard, setStudentCard] = useState({
+    fullName: '',
+    dob: '',
+    phoneNumber: '',
+    centerName: '',
+    centerAddress: '',
+    centerEmail: '',
+    centerPhone: '',
+  });
   const [fullName, setFullName] = useState();
   const [gender, setGender] = useState();
   const [address, setAddress] = useState();
@@ -49,6 +58,15 @@ const PersonalInfo = props => {
       setAddress(
         `${student.User.address[0]}, ${student.User.address[1]}, ${student.User.address[2]}`
       );
+      setStudentCard({
+        fullName: student.User.displayName,
+        dob: moment(student.User.dob).format('DD/MM/YYYY'),
+        phoneNumber: student.User.phoneNumber,
+        centerName: '',
+        centerAddress: '',
+        centerEmail: '',
+        centerPhone: '',
+      });
     }
   }, [students.data]);
 
@@ -59,7 +77,7 @@ const PersonalInfo = props => {
   return (
     <Card>
       <div style={{ display: 'none' }}>
-        <StudentCard idStudent={idStudent} ref={studentCardRef} />
+        <StudentCard studentCard={studentCard} ref={studentCardRef} />
       </div>
       <Row>
         <Col span={22}>

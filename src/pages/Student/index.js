@@ -149,11 +149,7 @@ const Student = () => {
       var status = 0;
       for (let i = 0; i < student.Classes.length; ++i) {
         const item = student.Classes[i];
-        if (
-          (moment(item.startDate) < currentDate() && moment(item.endDate) > currentDate()) ||
-          moment(item.endDate).format('DD/MM/YYYY') === currentDate().format('DD/MM/YYYY') ||
-          moment(item.startDate).format('DD/MM/YYYY') === currentDate().format('DD/MM/YYYY')
-        ) {
+        if (moment(item.startDate) <= currentDate() && moment(item.endDate) >= currentDate()) {
           status = 1;
           break;
         }

@@ -1,4 +1,5 @@
 import Icon from '@ant-design/icons';
+import TimetableToPrint from 'components/Student/TimetableToPrint';
 import Class from 'pages/Class';
 import AddClass from 'pages/Class/AddClass';
 import Details from 'pages/Class/Details';
@@ -166,6 +167,11 @@ const adminRoutes = [
     path: '/employee/edit/:id',
     exact: true,
     page: () => <AddEmployee />,
+  },
+  {
+    path: '/timetable/:id',
+    exact: true,
+    page: () => <TimetableToPrint />,
   },
 ];
 

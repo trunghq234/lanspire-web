@@ -22,7 +22,7 @@ const Title = () => {
         <Col span={17}>
           <p style={{ fontSize: '17px', marginBottom: '0' }}>{user.displayName}</p>
           <p style={{ color: 'rgba(114,132,154,.7)', fontSize: '14px', marginBottom: '0' }}>
-            {user.Role.name}
+            {/* {user.Role.name} */}
           </p>
         </Col>
       </Row>

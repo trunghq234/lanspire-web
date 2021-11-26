@@ -19,6 +19,10 @@ const timeFrameApi = {
     const res = await axiosClient.patch(`/timeFrames/${data.idTimeFrame}`, data);
     return res.data;
   },
+  updateAll: async data => {
+    const res = await axiosClient.patch(`/timeFrames/`, data);
+    return res.data;
+  },
   delete: async id => {
     const res = await axiosClient.delete(`/timeFrames/${id}`);
     return res.data;

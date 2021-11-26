@@ -1,10 +1,11 @@
 import { Breadcrumb, Card, Tabs } from 'antd';
+import classApi from 'api/classApi';
 import AntCalendar from 'components/Class/AntCalendar';
+import Transcript from 'components/Class/Transcript';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink, useParams } from 'react-router-dom';
 import { classState$ } from 'redux/selectors';
-import CustomCalendar from '../../../components/Class/CustomCalendar';
 import AddAppoint from '../AddAppoint';
 
 const { TabPane } = Tabs;
@@ -14,15 +15,10 @@ const Details = () => {
   const { data: classes } = useSelector(classState$);
 
   useEffect(() => {
-    if (idClass) {
-      let classRoom = classes.find(classRoom => {
-        return classRoom.idClass == idClass;
-      });
-      if (classRoom) {
-        setClassName(classRoom.className);
-      }
-    }
-  }, [idClass]);
+    classApi.getById(idClass).then(res => {
+      setClassName(res.data.className);
+    });
+  });
   return (
     <div>
       <Breadcrumb>
@@ -40,11 +36,11 @@ const Details = () => {
           <TabPane tab="Appoint Lecturer" key="1">
             <AddAppoint></AddAppoint>
           </TabPane>
-          <TabPane tab="Calendar 1" key="2">
-            <CustomCalendar></CustomCalendar>
-          </TabPane>
-          <TabPane tab="Calendar 2" key="3">
+          <TabPane tab="Calendar" key="3">
             <AntCalendar></AntCalendar>
+          </TabPane>
+          <TabPane tab="Students" key="4">
+            <Transcript></Transcript>
           </TabPane>
         </Tabs>
       </Card>

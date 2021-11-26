@@ -3,6 +3,14 @@ import * as columnTranscriptActions from 'redux/actions/columnTranscripts';
 import * as courseActions from 'redux/actions/courses';
 import * as courseTypeActions from 'redux/actions/courseTypes';
 import * as levelActions from 'redux/actions/levels';
+import * as authActions from '../actions/auth';
+import * as classActions from '../actions/classes';
+import * as employeeActions from '../actions/employees';
+import * as lecturerActions from '../actions/lecturers';
+import * as studentActions from '../actions/students';
+import * as timeFrameActions from '../actions/timeFrames';
+import * as userActions from '../actions/users';
+import * as parameterActions from '../actions/parameters';
 import {
   createColumnTranscript,
   deleteColumnTranscript,
@@ -17,13 +25,13 @@ import {
   updateCourseType,
 } from 'redux/sagas/courseTypes';
 import { createLevel, deleteLevel, fetchLevels, updateLevel } from 'redux/sagas/levels';
-import * as authActions from '../actions/auth';
-import * as classActions from '../actions/classes';
-import * as employeeActions from '../actions/employees';
-import * as lecturerActions from '../actions/lecturers';
-import * as studentActions from '../actions/students';
-import * as timeFrameActions from '../actions/timeFrames';
-import * as userActions from '../actions/users';
+import {
+  createParameter,
+  deleteParameter,
+  fetchParameters,
+  updateParameter,
+} from 'redux/sagas/parameters';
+
 import { fetchAuthSaga } from './auth';
 import { createClass, deleteClass, fetchClasses, updateClass } from './classes';
 import {
@@ -51,6 +59,7 @@ import {
   fetchTimeFrameSaga,
   fetchTimeFramesSaga,
   updateTimeFrameSaga,
+  updateTimeFramesSaga,
 } from './timeFrames';
 import {
   createUserSaga,
@@ -85,6 +94,12 @@ export default function* mySaga() {
   yield takeLatest(levelActions.updateLevel.updateLevelRequest, updateLevel);
   yield takeLatest(levelActions.deleteLevel.deleteLevelRequest, deleteLevel);
 
+  //parameter
+  yield takeLatest(parameterActions.getParameters.getParametersRequest, fetchParameters);
+  yield takeLatest(parameterActions.createParameter.createParameterRequest, createParameter);
+  yield takeLatest(parameterActions.updateParameter.updateParameterRequest, updateParameter);
+  yield takeLatest(parameterActions.deleteParameter.deleteParameterRequest, deleteParameter);
+
   //course types
   yield takeLatest(courseTypeActions.getCourseTypes.getCourseTypesRequest, fetchCourseTypes);
   yield takeLatest(courseTypeActions.createCourseType.createCourseTypeRequest, createCourseType);
@@ -117,6 +132,7 @@ export default function* mySaga() {
   yield takeLatest(timeFrameActions.getByIdTimeFrame.getByIdTimeFrameRequest, fetchTimeFrameSaga);
   yield takeLatest(timeFrameActions.createTimeFrame.createTimeFrameRequest, createTimeFrameSaga);
   yield takeLatest(timeFrameActions.updateTimeFrame.updateTimeFrameRequest, updateTimeFrameSaga);
+  yield takeLatest(timeFrameActions.updateTimeFrames.updateTimeFramesRequest, updateTimeFramesSaga);
   yield takeLatest(timeFrameActions.deleteTimeFrame.deleteTimeFrameRequest, deleteTimeFrameSaga);
   //classes
   yield takeLatest(classActions.getClasses.getClassesRequest, fetchClasses);

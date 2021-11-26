@@ -17,8 +17,7 @@ const userApi = {
   },
 
   updateUser: async updatedUser => {
-    const res = await axiosClient.patch(`/users/${updatedUser._id}`, updatedUser);
-    return res.data;
+    return await axiosClient.patch(`/users/${updatedUser.idUser}`, updatedUser);
   },
 
   deleteUser: async id => {

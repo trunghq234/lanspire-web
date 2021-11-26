@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
 const axiosClient = axios.create({
   baseURL: 'http://localhost:8080/api',
   headers: {
@@ -53,6 +52,10 @@ axiosClient.interceptors.response.use(
         alert('Your session has been expired. Please log in again!');
         localStorage.clear();
         window.location = '/login';
+      }
+      if (err.response.status === 404) {
+        alert('Confirm code has been expired or incorrect. Please send request again!');
+        window.location = '/forgot-password';
       }
     }
 

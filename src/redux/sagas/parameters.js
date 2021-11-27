@@ -1,8 +1,16 @@
 import { call, put } from 'redux-saga/effects';
 import parameterApi from 'api/parameterApi';
 import * as parameterActions from 'redux/actions/parameters';
+import { takeLatest } from 'redux-saga/effects';
 
-export function* fetchParameters(action) {
+export function* parameterSaga() {
+  yield takeLatest(parameterActions.getParameters.getParametersRequest, fetchParameters);
+  yield takeLatest(parameterActions.createParameter.createParameterRequest, createParameter);
+  yield takeLatest(parameterActions.updateParameter.updateParameterRequest, updateParameter);
+  yield takeLatest(parameterActions.deleteParameter.deleteParameterRequest, deleteParameter);
+}
+
+function* fetchParameters(action) {
   try {
     const parameters = yield call(parameterApi.getAll);
 
@@ -12,7 +20,7 @@ export function* fetchParameters(action) {
   }
 }
 
-export function* createParameter(action) {
+function* createParameter(action) {
   try {
     const newParameter = yield call(parameterApi.create, action.payload);
 
@@ -22,7 +30,7 @@ export function* createParameter(action) {
   }
 }
 
-export function* updateParameter(action) {
+function* updateParameter(action) {
   try {
     yield call(parameterApi.update, action.payload);
     yield put(parameterActions.updateParameter.updateParameterSuccess(action.payload));
@@ -31,7 +39,7 @@ export function* updateParameter(action) {
   }
 }
 
-export function* deleteParameter(action) {
+function* deleteParameter(action) {
   try {
     yield call(parameterApi.delete, action.payload);
 

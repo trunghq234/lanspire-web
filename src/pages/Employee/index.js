@@ -113,9 +113,11 @@ const Employee = () => {
     },
   ];
 
+  // get
   React.useEffect(() => {
     dispatch(employeeActions.getEmployees.getEmployeesRequest());
-  }, [dispatch]);
+  }, []);
+
   React.useEffect(() => {
     const mapEmployeeToData = mapToDataSource(employees.data);
     setDataSource(mapEmployeeToData);

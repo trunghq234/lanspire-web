@@ -1,5 +1,4 @@
 import { Button, Card, Col, DatePicker, Form, Input, message, Row, Select } from 'antd';
-import { isEmpty } from 'lodash';
 import moment from 'moment';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,6 +6,8 @@ import { useHistory, useParams } from 'react-router';
 import * as employeeActions from 'redux/actions/employees';
 import { getUsers } from 'redux/actions/users';
 import { employeeState$, usersState$ } from 'redux/selectors';
+import { converToUser } from 'utils';
+import { checkUsernameIsExist, loadFieldsValue } from 'utils/loadFieldsValueForUser';
 import { camelToString } from 'utils/stringHelper';
 import { dobValidator } from 'utils/validator';
 import ProvincePicker from '../../common/ProvincePicker';
@@ -59,8 +60,6 @@ const PersonalInfo = props => {
       confirmPassword,
     } = data;
 
-    const nameUpperCase = camelToString(displayName); // convert name to upper case
-
     const currentDate = moment();
     if (currentDate < dob) {
       message.error('Date of birth is not greater than current date');
@@ -80,25 +79,13 @@ const PersonalInfo = props => {
         city
       ) {
         if (typeSubmit === 'create') {
-          if (!checkUsernameIsExist(username)) {
+          if (!checkUsernameIsExist(users, username)) {
             // check confirm password
             if (confirmPassword !== password) {
               setIsSubmit(true);
               message.error('Confirm password does not match');
             } else {
-              const createdEmployee = {
-                displayName: nameUpperCase,
-                gender: data.gender == 'male' ? 0 : data.gender == 'female' ? 1 : 2,
-                dob: moment(data.dob).format('DD/MM/YYYY').split('/').reverse().join('-'),
-                phoneNumber,
-                email,
-                address: [detailsAddress, district, city],
-                idRole: idRoleEmployee,
-                imageUrl: 'test',
-                username,
-                password,
-                isActivated: true,
-              };
+              const createdEmployee = converToUser(data, idRoleEmployee);
               dispatch(employeeActions.createEmployee.createEmployeeRequest(createdEmployee));
               setCity(city);
               setIsSubmit(true);
@@ -114,20 +101,13 @@ const PersonalInfo = props => {
       if (typeSubmit === 'edit') {
         const employee = employees.data.find(employee => employee.idEmployee === id);
 
-        const editedEmployee = {
-          displayName: nameUpperCase,
-          gender: data.gender == 'male' ? 0 : data.gender == 'female' ? 1 : 2,
-          dob: moment(data.dob).format('DD/MM/YYYY').split('/').reverse().join('-'),
-          idEmployee: id,
-          address: [detailsAddress, district, city],
+        const editedValue = {
+          ...data,
           idUser: employee.idUser,
           username: employee.username,
           password: employee.password,
-          isDeleted: employee.isDeleted,
-          isActivated: employee.isActivated,
-          imageUrl: employee.imageUrl,
-          idRole: idRoleEmployee,
         };
+        const editedEmployee = converToUser(editedValue, idRoleEmployee);
         dispatch(employeeActions.updateEmployee.updateEmployeeRequest(editedEmployee));
         setCity(city);
         setIsSubmit(true);
@@ -135,35 +115,13 @@ const PersonalInfo = props => {
     }
   };
 
-  const checkUsernameIsExist = username => {
-    const result = users.find(user => user.username === username);
-    // result === empty => checkUsernameIsExist: false
-    return !isEmpty(result);
-  };
-
   // Load information employee to form
   React.useEffect(() => {
-    if (id) {
-      const employee =
-        employees.data && employees.data.find(employee => employee.idEmployee === id);
-
-      if (employee) {
-        const editedEmployee = {
-          displayName: employee.displayName,
-          gender: employee.gender === 0 ? 'male' : employee.gender === 1 ? 'female' : 'others',
-          dob: moment(employee.dob),
-          phoneNumber: employee.phoneNumber,
-          address: employee.address,
-          email: employee.email,
-          detailsAddress: employee.address[0],
-          district: employee.address[1],
-          city: employee.address[2],
-        };
-        form.setFieldsValue(editedEmployee);
-        setCity(employee.address[2]);
-      }
+    if (id && employees.data.length !== 0) {
+      const employee = employees.data.find(employee => employee.idEmployee === id);
+      loadFieldsValue(employee, setCity, form);
     }
-  }, [id, employees]);
+  }, [employees.data]);
 
   // Redirect to employee list
   React.useEffect(() => {

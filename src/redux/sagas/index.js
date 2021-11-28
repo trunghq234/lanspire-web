@@ -26,6 +26,8 @@ import {
   updateCourseType,
 } from 'redux/sagas/courseTypes';
 import { createLevel, deleteLevel, fetchLevels, updateLevel } from 'redux/sagas/levels';
+import * as testTypeActions from 'redux/actions/testTypes';
+import * as examActions from 'redux/actions/exams';
 import {
   createParameter,
   deleteParameter,
@@ -68,6 +70,8 @@ import {
   fetchUsersSaga,
   updateUserSaga,
 } from './users';
+import { createTestType, fetchTestTypes, updateTestType, deleteTestType } from './testTypes';
+import { createExam, updateExam, deleteExam, fetchExamsByClass } from './exams';
 import { createBillSaga, deleteBillSaga, fetchBillsSaga, updateBillSaga } from './bills';
 
 export default function* mySaga() {
@@ -151,6 +155,17 @@ export default function* mySaga() {
   yield takeLatest(lecturerActions.updateLecturer.updateLecturerRequest, updateLecturerSaga);
   yield takeLatest(lecturerActions.deleteLecturer.deleteLecturerRequest, deleteLecturerSaga);
 
+  // Test types
+  yield takeLatest(testTypeActions.getTestTypes.getTestTypesRequest, fetchTestTypes);
+  yield takeLatest(testTypeActions.createTestType.createTestTypeRequest, createTestType);
+  yield takeLatest(testTypeActions.updateTestType.updateTestTypeRequest, updateTestType);
+  yield takeLatest(testTypeActions.deleteTestType.deleteTestTypeRequest, deleteTestType);
+
+  // Exams
+  yield takeLatest(examActions.getExamsByClass.getExamsByClassRequest, fetchExamsByClass);
+  yield takeLatest(examActions.createExam.createExamRequest, createExam);
+  yield takeLatest(examActions.updateExam.updateExamRequest, updateExam);
+  yield takeLatest(examActions.deleteExam.deleteExamRequest, deleteExam);
   //bills
   yield takeLatest(billActions.getBills.getBillsRequest, fetchBillsSaga);
   yield takeLatest(billActions.createBill.createBillRequest, createBillSaga);

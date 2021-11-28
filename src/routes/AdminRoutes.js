@@ -1,10 +1,10 @@
-import Icon from '@ant-design/icons';
+import Icon, { SettingOutlined } from '@ant-design/icons';
 import Class from 'pages/Class';
 import AddClass from 'pages/Class/AddClass';
-import Details from 'pages/Class/Details';
 import Course from 'pages/Course';
 import AddCourse from 'pages/Course/AddCourse';
 import ColumnTranscript from 'pages/Course/ColumnTranscript';
+import CourseDetails from 'pages/Course/CourseDetails';
 import CourseType from 'pages/Course/CourseType';
 import Level from 'pages/Course/Level';
 import Dashboard from 'pages/Dashboard';
@@ -27,6 +27,7 @@ import {
   studentSvg,
   timeSvg,
 } from 'utils/iconsvg';
+import ClassDetails from 'pages/Class/ClassDetails';
 import Setting from 'pages/Setting/Setting';
 import Profile from 'pages/Setting/Profile';
 
@@ -93,6 +94,11 @@ const adminRoutes = [
     path: '/course/edit/:idCourse',
     exact: true,
     page: () => <AddCourse />,
+  },
+  {
+    path: '/course/details/:idCourse',
+    exact: true,
+    page: () => <CourseDetails />,
   },
   {
     path: '/coursetype/',
@@ -162,7 +168,7 @@ const adminRoutes = [
   {
     path: '/class/details/:idClass',
     exact: true,
-    page: () => <Details />,
+    page: () => <ClassDetails />,
   },
   {
     path: '/employee/edit/:id',
@@ -191,26 +197,16 @@ const adminMenuItems = {
       component: <Dashboard />,
     },
     {
-      name: 'Lecturer',
+      name: 'Lecturers',
       icon: <LecturerIcon />,
-      routes: [
-        {
-          path: '/lecturer/',
-          name: 'Lecturer list',
-          component: <Lecturer />,
-        },
-      ],
+      path: '/lecturer/',
+      component: <Lecturer />,
     },
     {
-      name: 'Student',
+      name: 'Students',
       icon: <StudentIcon />,
-      routes: [
-        {
-          path: '/student/list',
-          name: 'Student list',
-          component: <Student />,
-        },
-      ],
+      path: '/student/list',
+      component: <Student />,
     },
     {
       name: 'Course',
@@ -268,7 +264,7 @@ const adminMenuItems = {
     },
     {
       name: 'Setting',
-      icon: <ClassIcon />,
+      icon: <SettingOutlined />,
       routes: [
         {
           path: '/profile/',

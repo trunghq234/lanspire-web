@@ -1,6 +1,5 @@
 import { Breadcrumb, Card, Col, Row, Space } from 'antd';
-import Uploader from 'components/common/Uploader';
-import PersonalInfo from 'components/Lecturer/PersonalInfo';
+import ImageUploader from 'components/common/ImageUploader';
 import React from 'react';
 import { useParams } from 'react-router';
 
@@ -15,7 +14,7 @@ const AddLecturer = () => {
           <a href="">Application Center</a>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <a href="http://localhost:3000/lecturer/">Lecturer List</a>
+          <a href="/lecturer/">Lecturer List</a>
         </Breadcrumb.Item>
       </Breadcrumb>
 
@@ -30,7 +29,7 @@ const AddLecturer = () => {
         </Col>
         <Col xs={24} sm={12} xl={6}>
           <Card>
-            <Uploader />
+            <ImageUploader />
           </Card>
         </Col>
       </Row>

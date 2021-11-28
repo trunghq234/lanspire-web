@@ -1,6 +1,5 @@
 import { Breadcrumb, Card, Col, Row, Space } from 'antd';
-import PersonalInfo from 'components/common/PersonalInfo';
-import Uploader from 'components/common/Uploader';
+import ImageUploader from 'components/common/ImageUploader';
 import React from 'react';
 import { useParams } from 'react-router';
 
@@ -15,7 +14,7 @@ export default function AddEmployee() {
           <a href="">Application Center</a>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <a href="http://localhost:3000/employee/">Employee List</a>
+          <a href="/employee/">Employee List</a>
         </Breadcrumb.Item>
       </Breadcrumb>
 
@@ -26,7 +25,7 @@ export default function AddEmployee() {
         </Col>
         <Col span={6}>
           <Card>
-            <Uploader />
+            <ImageUploader />
           </Card>
         </Col>
       </Row>

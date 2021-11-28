@@ -11,6 +11,8 @@ import levelsReducer from './level';
 import columnTranscriptsReducer from './columnTranscript';
 import classesReducer from './classes';
 import lecturersReducer from './lecturers';
+import testTypesReducer from './testType';
+import examsReducer from './exam';
 import billsReducer from './bills';
 import parameterReducer from './parameters';
 import INIT_STATE from 'redux/constant';
@@ -28,6 +30,8 @@ const appReducer = combineReducers({
   columnTranscripts: columnTranscriptsReducer,
   classes: classesReducer,
   lecturers: lecturersReducer,
+  testTypes: testTypesReducer,
+  exams: examsReducer,
   bills: billsReducer,
   parameters: parameterReducer,
 });

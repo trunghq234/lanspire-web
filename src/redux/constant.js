@@ -7,14 +7,17 @@ const INIT_STATE = {
   users: {
     data: [],
     isLoading: false,
+    isSuccess: false,
   },
   user: {
     data: {},
     isLoading: false,
+    isSuccess: false,
   },
   auth: {
     data: {},
     isLoading: false,
+    isSuccess: false,
   },
   lecturers: {
     data: [],
@@ -38,11 +41,6 @@ const INIT_STATE = {
     isLoading: false,
     isSuccess: false,
     error: '',
-  },
-  studentById: {
-    //Student is get with id
-    data: [],
-    isLoading: false,
   },
   courses: {
     data: [],
@@ -80,6 +78,17 @@ const INIT_STATE = {
     isSuccess: false,
   },
   exams: {
+    data: [],
+    isLoading: false,
+    isSuccess: false,
+  },
+  bills: {
+    data: [],
+    isLoading: false,
+    isSuccess: false,
+    error: '',
+  },
+  parameters: {
     data: [],
     isLoading: false,
     isSuccess: false,

@@ -1,8 +1,6 @@
-import Icon from '@ant-design/icons';
+import Icon, { SettingOutlined } from '@ant-design/icons';
 import Class from 'pages/Class';
 import AddClass from 'pages/Class/AddClass';
-import AppointLecturer from 'pages/Class/AppointLecturer';
-import AddAppoint from 'pages/Class/AddAppoint';
 import Course from 'pages/Course';
 import AddCourse from 'pages/Course/AddCourse';
 import ColumnTranscript from 'pages/Course/ColumnTranscript';
@@ -16,6 +14,8 @@ import Lecturer from 'pages/Lecturer';
 import AddLecturer from 'pages/Lecturer/AddLecturer';
 import Student from 'pages/Student';
 import AddStudent from 'pages/Student/AddStudent';
+import StudentDetails from 'pages/Student/StudentDetails';
+import ArrangeClass from 'pages/Student/StudentDetails/ArrangeClass';
 import TimeFrame from 'pages/TimeFrame';
 import React from 'react';
 import {
@@ -28,7 +28,8 @@ import {
   timeSvg,
 } from 'utils/iconsvg';
 import ClassDetails from 'pages/Class/ClassDetails';
-import ClassExam from 'components/Class/ClassExam';
+import Setting from 'pages/Setting/Setting';
+import Profile from 'pages/Setting/Profile';
 
 const DashboardIcon = props => <Icon component={dashboardSvg} {...props} />;
 const LecturerIcon = props => <Icon component={lecturerSvg} {...props} />;
@@ -68,6 +69,16 @@ const adminRoutes = [
     path: '/student/edit/:idStudent',
     exact: true,
     page: () => <AddStudent />,
+  },
+  {
+    path: '/student/details/:idStudent',
+    exact: true,
+    page: () => <StudentDetails />,
+  },
+  {
+    path: '/student/details/arrange-class/:idStudent',
+    exact: true,
+    page: () => <ArrangeClass />,
   },
   {
     path: '/course/',
@@ -164,6 +175,16 @@ const adminRoutes = [
     exact: true,
     page: () => <AddEmployee />,
   },
+  {
+    path: '/setting/',
+    exact: true,
+    page: () => <Setting />,
+  },
+  {
+    path: '/profile/',
+    exact: true,
+    page: () => <Profile />,
+  },
 ];
 
 const adminMenuItems = {
@@ -176,26 +197,16 @@ const adminMenuItems = {
       component: <Dashboard />,
     },
     {
-      name: 'Lecturer',
+      name: 'Lecturers',
       icon: <LecturerIcon />,
-      routes: [
-        {
-          path: '/lecturer/',
-          name: 'Lecturer list',
-          component: <Lecturer />,
-        },
-      ],
+      path: '/lecturer/',
+      component: <Lecturer />,
     },
     {
-      name: 'Student',
+      name: 'Students',
       icon: <StudentIcon />,
-      routes: [
-        {
-          path: '/student/list',
-          name: 'Student list',
-          component: <Student />,
-        },
-      ],
+      path: '/student/list',
+      component: <Student />,
     },
     {
       name: 'Course',
@@ -248,6 +259,22 @@ const adminMenuItems = {
           path: '/class/',
           name: 'Class list',
           component: <Class />,
+        },
+      ],
+    },
+    {
+      name: 'Setting',
+      icon: <SettingOutlined />,
+      routes: [
+        {
+          path: '/profile/',
+          name: 'Profile',
+          component: <Profile />,
+        },
+        {
+          path: '/setting/',
+          name: 'Setting',
+          component: <Setting />,
         },
       ],
     },

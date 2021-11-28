@@ -12,7 +12,9 @@ const lecturerState$ = state => state.lecturers;
 const studentState$ = state => state.students;
 const testTypeState$ = state => state.testTypes;
 const examState$ = state => state.exams;
+const billState$ = state => state.bills;
 
+const parameterState$ = state => state.parameters;
 export {
   usersState$,
   userState$,
@@ -28,4 +30,6 @@ export {
   columnTranscriptState$,
   testTypeState$,
   examState$,
+  billState$,
+  parameterState$,
 };

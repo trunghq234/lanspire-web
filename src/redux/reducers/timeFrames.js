@@ -93,6 +93,28 @@ const timeFrameReducer = (state = INIT_STATE.timeFrames, action) => {
         isLoading: false,
         isSuccess: false,
       };
+    //Update all
+    case getType(timeFrameActions.updateTimeFrames.updateTimeFramesRequest):
+      return {
+        ...state,
+        isLoading: true,
+        isSuccess: false,
+        error: '',
+      };
+    case getType(timeFrameActions.updateTimeFrames.updateTimeFramesSuccess):
+      return {
+        ...state,
+        data: action.payload,
+        isLoading: false,
+        isSuccess: true,
+      };
+    case getType(timeFrameActions.updateTimeFrames.updateTimeFramesFailure):
+      return {
+        ...state,
+        error: action.message,
+        isLoading: false,
+        isSuccess: false,
+      };
     //delete
     case getType(timeFrameActions.deleteTimeFrame.deleteTimeFrameRequest):
       return {

@@ -96,4 +96,111 @@ const studentSvg = () => (
     />
   </svg>
 );
-export { dashboardSvg, lecturerSvg, courseSvg, employeeSvg, classSvg, timeSvg, studentSvg };
+
+const dateSvg = () => (
+  <svg
+    viewBox="64 64 896 896"
+    focusable="false"
+    data-icon="calendar"
+    width="1em"
+    height="1em"
+    fill="currentColor"
+    aria-hidden="true">
+    <path d="M880 184H712v-64c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v64H384v-64c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v64H144c-17.7 0-32 14.3-32 32v664c0 17.7 14.3 32 32 32h736c17.7 0 32-14.3 32-32V216c0-17.7-14.3-32-32-32zm-40 656H184V460h656v380zM184 392V256h128v48c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-48h256v48c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-48h128v136H184z"></path>
+  </svg>
+);
+const fullNameSvg = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="h-6 w-6"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor">
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+    />
+  </svg>
+);
+const genderSvg = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    version="1.0"
+    viewBox="0 0 512.000000 512.000000"
+    preserveAspectRatio="xMidYMid meet">
+    <g
+      transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
+      fill="currentColor"
+      stroke="none">
+      <path d="M2559 5097 c-61 -32 -99 -89 -106 -159 -7 -68 8 -117 50 -165 64 -73 60 -73 552 -73 l440 0 -391 -391 -391 -391 -80 46 c-274 160 -646 195 -952 91 -184 -62 -392 -205 -511 -349 -172 -210 -257 -432 -267 -701 -11 -287 70 -539 242 -760 165 -211 372 -343 653 -415 l42 -11 0 -409 0 -410 -244 0 c-256 0 -286 -4 -344 -47 -106 -79 -102 -262 8 -338 53 -37 119 -45 361 -45 l219 0 0 -174 c0 -204 10 -268 49 -316 49 -61 95 -81 177 -78 90 4 141 36 179 111 24 49 25 57 25 253 l0 202 258 4 c240 3 260 5 297 25 22 11 50 32 62 45 75 80 68 224 -13 300 -58 54 -81 58 -354 58 l-250 0 0 410 0 410 28 6 c238 53 443 170 607 346 134 144 225 311 277 509 19 72 22 110 23 274 0 165 -3 202 -22 278 -28 107 -69 207 -126 309 l-44 76 394 394 393 393 0 -445 c0 -499 0 -493 73 -557 81 -71 197 -69 277 3 74 67 71 32 68 851 l-3 731 -30 44 c-18 25 -49 52 -75 66 l-44 22 -732 0 -731 0 -44 -23z m-346 -1423 c255 -56 469 -257 549 -514 33 -108 33 -293 -1 -400 -99 -321 -376 -530 -700 -530 -118 0 -211 19 -303 62 -267 123 -431 377 -431 668 -1 127 24 225 86 344 74 144 237 287 387 342 126 45 287 56 413 28z" />
+    </g>
+  </svg>
+);
+const phoneSvg = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="h-6 w-6"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor">
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+    />
+  </svg>
+);
+const emailSvg = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="h-6 w-6"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor">
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+    />
+  </svg>
+);
+const locationSvg = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="h-6 w-6"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor">
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+    />
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+    />
+  </svg>
+);
+export {
+  dashboardSvg,
+  lecturerSvg,
+  courseSvg,
+  employeeSvg,
+  classSvg,
+  timeSvg,
+  studentSvg,
+  dateSvg,
+  fullNameSvg,
+  genderSvg,
+  phoneSvg,
+  locationSvg,
+  emailSvg,
+};

@@ -2,9 +2,9 @@ import { Breadcrumb, Card, Tabs } from 'antd';
 import classApi from 'api/classApi';
 import AntCalendar from 'components/Class/AntCalendar';
 import ClassExam from 'components/Class/ClassExam';
+import Transcript from 'components/Class/Transcript';
 import React, { useEffect, useState } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
-import CustomCalendar from '../../../components/Class/CustomCalendar';
 import AddAppoint from '../AddAppoint';
 
 const { TabPane } = Tabs;
@@ -37,13 +37,13 @@ const ClassDetails = () => {
           <TabPane tab="Appoint Lecturer" key="1">
             <AddAppoint />
           </TabPane>
-          <TabPane tab="Calendar 1" key="2">
-            <CustomCalendar />
-          </TabPane>
-          <TabPane tab="Calendar 2" key="3">
+          <TabPane tab="Calendar" key="2">
             <AntCalendar />
           </TabPane>
-          <TabPane tab="Exams" key="4">
+          <TabPane tab="Students" key="3">
+            <Transcript />
+          </TabPane>
+          <TabPane tab="Students" key="4">
             <ClassExam classData={classData} />
           </TabPane>
         </Tabs>

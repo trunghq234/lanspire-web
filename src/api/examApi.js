@@ -18,6 +18,10 @@ const examApi = {
     return res.data;
   },
 
+  getByIdClass: idClass => {
+    return axiosClient.get(`${url}classes/${idClass}`);
+  },
+
   create: async exam => {
     const res = await axiosClient.post(url, exam);
     return res.data;

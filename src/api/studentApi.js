@@ -6,8 +6,7 @@ const studentApi = {
     return res.data;
   },
   getById: async id => {
-    const res = await axiosClient.get(`/students/${id}`);
-    return res.data;
+    return await axiosClient.get(`/students/${id}`);
   },
   create: async data => {
     const res = await axiosClient.post('/students', data);
@@ -16,6 +15,9 @@ const studentApi = {
   update: async data => {
     const res = await axiosClient.patch(`/students/${data.idStudent}`, data);
     return res.data;
+  },
+  updateScore: async data => {
+    return await axiosClient.post(`/students/updateScore/`, data);
   },
   remove: async id => {
     const res = await axiosClient.delete(`/students/${id}`);

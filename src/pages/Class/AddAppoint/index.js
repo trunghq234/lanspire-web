@@ -29,7 +29,7 @@ const AddAppoint = () => {
       render: image => {
         return (
           <div>
-            <Image src={image} style={{ width: '100px' }}></Image>
+            <Image className={styles.image} src={image}></Image>
           </div>
         );
       },

@@ -27,7 +27,7 @@ export function* updateStudentsSaga(action) {
 
     yield put(studentActions.updateStudents.updateStudentsSuccess(action.payload));
   } catch (error) {
-    yield put(studentActions.updateStudents.updatesStudentsFailure(error));
+    yield put(studentActions.updateStudents.updateStudentsFailure(error));
   }
 }
 
@@ -37,14 +37,5 @@ export function* deleteStudentsSaga(action) {
     yield put(studentActions.deleteStudents.deleteStudentsSuccess(action.payload));
   } catch (error) {
     yield put(studentActions.deleteStudents.deleteStudentsFailure(error));
-  }
-}
-
-export function* getStudentByIdSaga(action) {
-  try {
-    const student = yield call(studentApi.getById, action.payload);
-    yield put(studentActions.getById.getByIdSuccess(student));
-  } catch (error) {
-    yield put(studentActions.getById.getByIdFailure(error));
   }
 }

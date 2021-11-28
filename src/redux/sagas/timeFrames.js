@@ -29,6 +29,15 @@ export function* updateTimeFrameSaga(action) {
   }
 }
 
+export function* updateTimeFramesSaga(action) {
+  try {
+    const data = yield call(timeFrameApi.updateAll, action.payload);
+    yield put(timeFrameActions.updateTimeFrames.updateTimeFramesSuccess(data));
+  } catch (error) {
+    yield put(timeFrameActions.updateTimeFrames.updateTimeFramesFailure(error));
+  }
+}
+
 export function* deleteTimeFrameSaga(action) {
   try {
     yield call(timeFrameApi.delete, action.payload);

@@ -7,6 +7,7 @@ import { useHistory } from 'react-router-dom';
 import * as employeeActions from 'redux/actions/employees';
 import { employeeState$ } from 'redux/selectors';
 import styles from './index.module.less';
+import { CSVLink } from 'react-csv';
 
 const { confirm } = Modal;
 const { Search } = Input;
@@ -146,6 +147,37 @@ const Employee = () => {
     setFilteredData(dataSearch);
   };
 
+  const headersExcel = [
+    {
+      label: 'Full name',
+      key: 'displayName',
+    },
+    {
+      label: 'Email',
+      key: 'email',
+    },
+    {
+      label: 'Gender',
+      key: 'gender',
+    },
+    {
+      label: 'Phone number',
+      key: 'phoneNumber',
+    },
+    {
+      label: 'Address',
+      key: 'address',
+    },
+    {
+      label: 'Birthday',
+      key: 'birthday',
+    },
+    {
+      label: 'Status',
+      key: 'isActivated',
+    },
+  ];
+
   console.log({ dataSource });
 
   return (
@@ -173,9 +205,25 @@ const Employee = () => {
               onSearch={handleSearch}
             />
           </div>
-          <Button className={styles.btn} size="large" type="primary" onClick={handleAddEmployee}>
-            Add employee
-          </Button>
+          <div>
+            <Button
+              style={{ marginRight: '20px' }}
+              className={styles.btn}
+              size="large"
+              type="primary"
+              onClick={handleAddEmployee}>
+              Add employee
+            </Button>
+            <Button className={styles.btn} size="large" type="primary">
+              <CSVLink
+                filename={'Expense_Table.csv'}
+                data={dataSource}
+                headers={headersExcel}
+                className="btn btn-primary">
+                Export to CSV
+              </CSVLink>
+            </Button>
+          </div>
         </div>
         <Table
           bordered={true}

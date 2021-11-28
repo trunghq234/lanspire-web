@@ -13,7 +13,6 @@ import {
   Tooltip,
 } from 'antd';
 import React, { useEffect, useState } from 'react';
-// import { validateMessages } from 'constant/validationMessage';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { createClass, updateClass } from 'redux/actions/classes';
@@ -49,7 +48,8 @@ const AddClass = () => {
     setCourseList(courses);
   }, [courses]);
   useEffect(() => {
-    setTimeFrameList(timeFrames);
+    const activateTimeFrames = timeFrames.filter(timeFrame => timeFrame.activate == true);
+    setTimeFrameList(activateTimeFrames);
   }, [timeFrames]);
   useEffect(() => {
     dispatch(getCourses.getCoursesRequest());

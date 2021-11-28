@@ -175,14 +175,14 @@ const Class = () => {
         courseName = course.courseName;
         max = course.max;
       }
-      const learnings = classRoom.Learnings;
-      let students = [];
-      if (learnings) {
-        students = learnings.filter(
-          (v, i, a) =>
-            a.findIndex(t => t.idStudent === v.idStudent && t.idClass === v.idClass) === i
-        );
-      }
+      const students = classRoom.Students;
+      // let students = [];
+      // if (learnings) {
+      //   students = learnings.filter(
+      //     (v, i, a) =>
+      //       a.findIndex(t => t.idStudent === v.idStudent && t.idClass === v.idClass) === i
+      //   );
+      // }
       res.push({
         idClass: classRoom.idClass,
         className: classRoom.className,

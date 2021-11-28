@@ -12,8 +12,10 @@ import columnTranscriptsReducer from './columnTranscript';
 import classesReducer from './classes';
 import lecturersReducer from './lecturers';
 import billsReducer from './bills';
+import parameterReducer from './parameters';
+import INIT_STATE from 'redux/constant';
 
-export default combineReducers({
+const appReducer = combineReducers({
   employees: employeesReducer,
   users: usersReducer,
   user: userReducer,
@@ -27,4 +29,14 @@ export default combineReducers({
   classes: classesReducer,
   lecturers: lecturersReducer,
   bills: billsReducer,
+  parameters: parameterReducer,
 });
+const rootReducer = (state, action) => {
+  if (action.type === 'USER_LOGOUT') {
+    return appReducer(undefined, action);
+  }
+
+  return appReducer(state, action);
+};
+
+export default rootReducer;

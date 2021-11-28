@@ -11,9 +11,11 @@ const Content = props => {
   let dispatch = useDispatch();
   let logout = () => {
     if (localStorage.getItem('accessToken')) {
-      dispatch(RESET_ACTION);
+      store.dispatch({
+        type: 'USER_LOGOUT',
+      });
       localStorage.clear();
-      history.replace('/login');
+      history.push('/login');
     }
   };
   let editProfile = () => {};

@@ -9,8 +9,7 @@ const classApi = {
   },
 
   getById: async idClass => {
-    const res = await axiosClient.get(`${url}${idClass}`);
-    return res.data;
+    return await axiosClient.get(`${url}${idClass}`);
   },
 
   create: async classRoom => {

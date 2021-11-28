@@ -1,5 +1,4 @@
 import Icon from '@ant-design/icons';
-import TimetableToPrint from 'components/Student/TimetableToPrint';
 import Class from 'pages/Class';
 import AddClass from 'pages/Class/AddClass';
 import Details from 'pages/Class/Details';
@@ -28,6 +27,8 @@ import {
   studentSvg,
   timeSvg,
 } from 'utils/iconsvg';
+import Setting from 'pages/Setting/Setting';
+import Profile from 'pages/Setting/Profile';
 
 const DashboardIcon = props => <Icon component={dashboardSvg} {...props} />;
 const LecturerIcon = props => <Icon component={lecturerSvg} {...props} />;
@@ -169,9 +170,14 @@ const adminRoutes = [
     page: () => <AddEmployee />,
   },
   {
-    path: '/timetable/:id',
+    path: '/setting/',
     exact: true,
-    page: () => <TimetableToPrint />,
+    page: () => <Setting />,
+  },
+  {
+    path: '/profile/',
+    exact: true,
+    page: () => <Profile />,
   },
 ];
 
@@ -257,6 +263,22 @@ const adminMenuItems = {
           path: '/class/',
           name: 'Class list',
           component: <Class />,
+        },
+      ],
+    },
+    {
+      name: 'Setting',
+      icon: <ClassIcon />,
+      routes: [
+        {
+          path: '/profile/',
+          name: 'Profile',
+          component: <Profile />,
+        },
+        {
+          path: '/setting/',
+          name: 'Setting',
+          component: <Setting />,
         },
       ],
     },

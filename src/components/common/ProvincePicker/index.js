@@ -12,6 +12,11 @@ const ProvincePicker = props => {
     cityOptions.push(city);
   }
 
+  //Set city when open form edit
+  useEffect(() => {
+    setSelectedCity(props.city);
+  }, [props.city]);
+
   const mapDistrictToArray = districts => {
     let result = [];
     for (let district of Object.values(districts)) {
@@ -44,25 +49,25 @@ const ProvincePicker = props => {
   const optionDistrictRendered = renderOptions(districtInSelectedCity);
   return (
     <Row gutter={20}>
-      <Col span={8}>
+      <Col xs={24} md={8} lg={8}>
         <Form.Item label="Address" name="detailsAddress" rules={[{ required: true }]}>
           <Input placeholder="Address" style={{ width: '100%' }} />
         </Form.Item>
       </Col>
-      <Col span={8}>
+      <Col xs={12} md={8} lg={8}>
         <Form.Item label="City" name="city" rules={[{ required: true }]}>
           <Select
             value={selectedCity}
             placeholder="Tỉnh/Thành phố"
             onChange={val => {
-              setSelectedDistrict(null);
+              props.form.setFieldsValue({ ...props.form.getFieldsValue(), district: '' });
               setSelectedCity(val);
             }}>
             {optionCityRendered}
           </Select>
         </Form.Item>
       </Col>
-      <Col span={8}>
+      <Col xs={12} md={8} lg={8}>
         <Form.Item label="District" name="district" rules={[{ required: true }]}>
           <Select
             value={selectedDistrict}

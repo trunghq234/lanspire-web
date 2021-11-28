@@ -120,7 +120,7 @@ const Grade = () => {
           </Button>
         </Col>
         <Col span={24}>
-          <Table columns={columns} dataSource={dataFiler} bordered />
+          <Table columns={columns} dataSource={dataFiler} bordered loading={!student} />
         </Col>
       </Row>
     </Card>

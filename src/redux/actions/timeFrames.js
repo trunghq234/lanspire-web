@@ -22,6 +22,12 @@ const updateTimeFrame = createActions({
   updateTimeFrameFailure: payload => payload,
 });
 
+const updateTimeFrames = createActions({
+  updateTimeFramesRequest: payload => payload,
+  updateTimeFramesSuccess: payload => payload,
+  updateTimeFramesFailure: payload => payload,
+});
+
 const deleteTimeFrame = createActions({
   deleteTimeFrameRequest: payload => payload,
   deleteTimeFrameSuccess: payload => payload,
@@ -33,4 +39,11 @@ const getByIdTimeFrame = createActions({
   getByIdTimeFrameSuccess: payload => payload,
   getByIdTimeFrameFailure: payload => payload,
 });
-export { getAllTimeFrames, createTimeFrame, deleteTimeFrame, updateTimeFrame, getByIdTimeFrame };
+export {
+  getAllTimeFrames,
+  createTimeFrame,
+  deleteTimeFrame,
+  updateTimeFrame,
+  getByIdTimeFrame,
+  updateTimeFrames,
+};

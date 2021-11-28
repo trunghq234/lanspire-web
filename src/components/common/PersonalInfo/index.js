@@ -1,12 +1,19 @@
 import { Card, Col, DatePicker, Form, Input, Row, Select } from 'antd';
 import React, { useState } from 'react';
 import ProvincePicker from '../ProvincePicker';
+import styles from './index.module.less';
 
 const { Option } = Select;
 const idRoleEmployee = '386af797-fdf6-42dc-8bab-d5b42561b5fb';
 
 const PersonalInfo = props => {
-  const [address, setAddress] = useState({});
+  const [isSubmit, setIsSubmit] = useState(false);
+  const [city, setCity] = useState('');
+  const dispatch = useDispatch();
+  const employees = useSelector(employeeState$);
+  const users = useSelector(userState$);
+  const [form] = Form.useForm();
+  const { id } = useParams();
   const dateFormat = 'DD/MM/YYYY';
 
   const validateMessages = {
@@ -39,65 +46,71 @@ const PersonalInfo = props => {
       confirmPassword,
     } = data;
 
-    // create employee
-    if (
-      displayName &&
-      gender &&
-      dob &&
-      phoneNumber &&
-      email &&
-      username &&
-      password &&
-      confirmPassword &&
-      detailsAddress &&
-      district &&
-      city
-    ) {
-      if (typeSubmit === 'create') {
-        if (!checkUsernameIsExist(username)) {
-          const createdEmployee = {
-            displayName,
-            gender: data.gender == 'male' ? 0 : data.gender == 'female' ? 1 : 2,
-            dob: moment(data.dob).format('DD/MM/YYYY').split('/').reverse().join('-'),
-            phoneNumber,
-            email,
-            address: [detailsAddress, district, city],
-            idRole: idRoleEmployee,
-            imageUrl: 'test',
-            username,
-            password,
-            isActivated: true,
-          };
-          console.log({ createdEmployee });
-          // dispatch(employeeActions.createEmployee.createEmployeeRequest(createdEmployee));
-          setIsSubmit(true);
-        } else {
-          setIsSubmit(true);
-          isSubmit === true ? message.error('Username is exist!') : '';
+    const currentDate = moment();
+    if (currentDate < dob) {
+      message.error('Date of birth is not greater than current date');
+    } else {
+      // create employee
+      if (
+        displayName &&
+        gender &&
+        dob &&
+        phoneNumber &&
+        email &&
+        username &&
+        password &&
+        confirmPassword &&
+        detailsAddress &&
+        district &&
+        city
+      ) {
+        if (typeSubmit === 'create') {
+          if (!checkUsernameIsExist(username)) {
+            const createdEmployee = {
+              displayName,
+              gender: data.gender == 'male' ? 0 : data.gender == 'female' ? 1 : 2,
+              dob: moment(data.dob).format('DD/MM/YYYY').split('/').reverse().join('-'),
+              phoneNumber,
+              email,
+              address: [detailsAddress, district, city],
+              idRole: idRoleEmployee,
+              imageUrl: 'test',
+              username,
+              password,
+              isActivated: true,
+            };
+            dispatch(employeeActions.createEmployee.createEmployeeRequest(createdEmployee));
+            setCity(city);
+            setIsSubmit(true);
+          } else {
+            setIsSubmit(true);
+            isSubmit === true ? message.error('Username is exist!') : '';
+          }
         }
       }
-    }
 
-    // edit employee
-    if (typeSubmit === 'edit') {
-      const employee = employees.data.find(employee => employee.idEmployee === id);
+      // edit employee
+      if (typeSubmit === 'edit') {
+        const employee = employees.data.find(employee => employee.idEmployee === id);
 
-      const editedEmployee = {
-        displayName,
-        gender: data.gender == 'male' ? 0 : data.gender == 'female' ? 1 : 2,
-        dob: moment(data.dob).format('DD/MM/YYYY').split('/').reverse().join('-'),
-        idEmployee: id,
-        address: [detailsAddress, district, city],
-        idUser: employee.idUser,
-        username: employee.username,
-        password: employee.password,
-        isDeleted: employee.isDeleted,
-        isActivated: employee.isActivated,
-        imageUrl: employee.imageUrl,
-        idRole: idRoleEmployee,
-      };
-      dispatch(employeeActions.updateEmployee.updateEmployeeRequest(editedEmployee));
-      setIsSubmit(true);
+        const editedEmployee = {
+          displayName,
+          gender: data.gender == 'male' ? 0 : data.gender == 'female' ? 1 : 2,
+          dob: moment(data.dob).format('DD/MM/YYYY').split('/').reverse().join('-'),
+          idEmployee: id,
+          address: [detailsAddress, district, city],
+          idUser: employee.idUser,
+          username: employee.username,
+          password: employee.password,
+          isDeleted: employee.isDeleted,
+          isActivated: employee.isActivated,
+          imageUrl: employee.imageUrl,
+          idRole: idRoleEmployee,
+        };
+        dispatch(employeeActions.updateEmployee.updateEmployeeRequest(editedEmployee));
+        setCity(city);
+        setIsSubmit(true);
+      }
     }
   };
 
@@ -106,9 +119,18 @@ const PersonalInfo = props => {
     // result === empty => checkUsernameIsExist: false
     return !isEmpty(result);
   };
-  function isVietnamesePhoneNumber(number) {
-    return /(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b/.test(number);
-  }
+
+  const dobValidator = (rule, value, callback) => {
+    try {
+      if (value > Date.now()) {
+        callback('Date of birth is not greater than current date');
+      } else {
+        callback();
+      }
+    } catch {
+      callback();
+    }
+  };
 
   // Load information employee to form
   React.useEffect(() => {
@@ -129,6 +151,7 @@ const PersonalInfo = props => {
           city: employee.address[2],
         };
         form.setFieldsValue(editedEmployee);
+        setCity(employee.address[2]);
       }
     }
   }, [id, employees]);
@@ -153,13 +176,13 @@ const PersonalInfo = props => {
     <Card>
       <Form layout="vertical" validateMessages={validateMessages}>
         <Row gutter={20}>
-          <Col span={16}>
+          <Col xs={24} md={24} xl={10} lg={12} xl={12}>
             <Form.Item label="Full name" name="displayName" rules={[{ required: true }]}>
               <Input placeholder="Full name" />
             </Form.Item>
           </Col>
 
-          <Col span={4}>
+          <Col xs={12} md={12} xl={4} lg={6} xl={6}>
             <Form.Item label="Gender" name="gender" rules={[{ required: true }]}>
               <Select>
                 <Option value="male">Male</Option>
@@ -169,13 +192,21 @@ const PersonalInfo = props => {
             </Form.Item>
           </Col>
 
-          <Col span={4}>
-            <Form.Item label="DOB" name="dob" rules={[{ required: true }]}>
-              <DatePicker format={dateFormat} />
+          <Col xs={12} md={12} xl={10} lg={6} xl={6}>
+            <Form.Item
+              label="DOB"
+              name="dob"
+              rules={[
+                { required: true },
+                {
+                  validator: dobValidator,
+                },
+              ]}>
+              <DatePicker format={dateFormat} className={styles.maxwidth} />
             </Form.Item>
           </Col>
 
-          <Col span={4}>
+          <Col xs={12} md={12} lg={12} xl={8}>
             <Form.Item
               label="Phone number"
               name="phoneNumber"
@@ -189,23 +220,23 @@ const PersonalInfo = props => {
             </Form.Item>
           </Col>
 
-          <Col span={8}>
-            <Form.Item label="Email" name="email" rules={[{ required: true }]}>
-              <Input type="email" placeholder="Email" />
+          <Col xs={12} md={12} lg={12} xl={8}>
+            <Form.Item label="Email" name="email" rules={[{ required: true, type: 'email' }]}>
+              <Input placeholder="Email" />
             </Form.Item>
           </Col>
         </Row>
-        <ProvincePicker />
+        <ProvincePicker city={city} form={form} />
 
         {!id && (
           <Input.Group>
             <Row gutter={20}>
-              <Col span={8}>
+              <Col xs={24} lg={8}>
                 <Form.Item label="Username" name="username" rules={[{ required: true }]}>
                   <Input placeholder="Username" />
                 </Form.Item>
               </Col>
-              <Col span={8}>
+              <Col xs={24} lg={8}>
                 <Form.Item
                   label="Password"
                   name="password"
@@ -213,7 +244,7 @@ const PersonalInfo = props => {
                   <Input.Password placeholder="Password" />
                 </Form.Item>
               </Col>
-              <Col span={8}>
+              <Col xs={24} lg={8}>
                 <Form.Item
                   label="Confirm password"
                   name="confirmPassword"

@@ -10,15 +10,15 @@ const StudentCard = React.forwardRef((props, ref) => {
         <h1 className={styles['center-name']}>LANSPIRE CENTER</h1>
         <h1 className={styles.title}>Thẻ học viên</h1>
         <Row className={styles.row}>
-          <Col span={10}>Họ tên:</Col>
+          <Col span={10}>Full name:</Col>
           <Col Span={10}>{info.fullName}</Col>
         </Row>
         <Row className={styles.row}>
-          <Col span={10}>Ngày sinh:</Col>
+          <Col span={10}>Date of birth:</Col>
           <Col Span={10}>{info.dob}</Col>
         </Row>
         <Row className={styles.row}>
-          <Col span={10}>Điện thoại:</Col>
+          <Col span={10}>Phone number:</Col>
           <Col Span={10}>{info.phoneNumber}</Col>
         </Row>
       </div>

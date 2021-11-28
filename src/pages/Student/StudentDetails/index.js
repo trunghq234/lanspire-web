@@ -43,6 +43,7 @@ const StudentDetails = () => {
           <Tooltip title="Print timetable">
             <Button onClick={handlePrintTimetable} style={{ marginBottom: '10px' }}>
               <PrinterOutlined />
+              Print
             </Button>
           </Tooltip>
           <Timetable />

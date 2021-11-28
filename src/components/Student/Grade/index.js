@@ -116,7 +116,7 @@ const Grade = () => {
         <Col span={2} offset={18}>
           <Button block className={styles.print}>
             <PrinterOutlined />
-            In
+            Print
           </Button>
         </Col>
         <Col span={24}>

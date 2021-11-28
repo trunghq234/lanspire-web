@@ -1,7 +1,6 @@
 import { combineReducers } from 'redux';
 import employeesReducer from './employees';
-import StudentsReducer from './students';
-import StudentByIdReducer from './studentById';
+import studentsReducer from './students';
 import usersReducer from './users';
 import userReducer from './user';
 import authReducer from './auth';
@@ -12,6 +11,7 @@ import levelsReducer from './level';
 import columnTranscriptsReducer from './columnTranscript';
 import classesReducer from './classes';
 import lecturersReducer from './lecturers';
+import billsReducer from './bills';
 import parameterReducer from './parameters';
 import INIT_STATE from 'redux/constant';
 
@@ -20,8 +20,7 @@ const appReducer = combineReducers({
   users: usersReducer,
   user: userReducer,
   auth: authReducer,
-  students: StudentsReducer,
-  studentById: StudentByIdReducer,
+  students: studentsReducer,
   timeFrames: timeFrameReducer,
   courses: coursesReducer,
   courseTypes: courseTypesReducer,
@@ -29,6 +28,7 @@ const appReducer = combineReducers({
   columnTranscripts: columnTranscriptsReducer,
   classes: classesReducer,
   lecturers: lecturersReducer,
+  bills: billsReducer,
   parameters: parameterReducer,
 });
 const rootReducer = (state, action) => {

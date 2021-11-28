@@ -1,8 +1,7 @@
 import Icon from '@ant-design/icons';
 import Class from 'pages/Class';
 import AddClass from 'pages/Class/AddClass';
-import AppointLecturer from 'pages/Class/AppointLecturer';
-import AddAppoint from 'pages/Class/AddAppoint';
+import Details from 'pages/Class/Details';
 import Course from 'pages/Course';
 import AddCourse from 'pages/Course/AddCourse';
 import ColumnTranscript from 'pages/Course/ColumnTranscript';
@@ -15,6 +14,8 @@ import Lecturer from 'pages/Lecturer';
 import AddLecturer from 'pages/Lecturer/AddLecturer';
 import Student from 'pages/Student';
 import AddStudent from 'pages/Student/AddStudent';
+import StudentDetails from 'pages/Student/StudentDetails';
+import ArrangeClass from 'pages/Student/StudentDetails/ArrangeClass';
 import TimeFrame from 'pages/TimeFrame';
 import React from 'react';
 import {
@@ -26,7 +27,6 @@ import {
   studentSvg,
   timeSvg,
 } from 'utils/iconsvg';
-import Details from 'pages/Class/Details';
 import Setting from 'pages/Setting/Setting';
 import Profile from 'pages/Setting/Profile';
 
@@ -68,6 +68,16 @@ const adminRoutes = [
     path: '/student/edit/:idStudent',
     exact: true,
     page: () => <AddStudent />,
+  },
+  {
+    path: '/student/details/:idStudent',
+    exact: true,
+    page: () => <StudentDetails />,
+  },
+  {
+    path: '/student/details/arrange-class/:idStudent',
+    exact: true,
+    page: () => <ArrangeClass />,
   },
   {
     path: '/course/',

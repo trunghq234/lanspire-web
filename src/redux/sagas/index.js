@@ -3,6 +3,7 @@ import * as columnTranscriptActions from 'redux/actions/columnTranscripts';
 import * as courseActions from 'redux/actions/courses';
 import * as courseTypeActions from 'redux/actions/courseTypes';
 import * as levelActions from 'redux/actions/levels';
+import * as billActions from 'redux/actions/bills';
 import * as authActions from '../actions/auth';
 import * as classActions from '../actions/classes';
 import * as employeeActions from '../actions/employees';
@@ -50,7 +51,6 @@ import {
   createStudentsSaga,
   deleteStudentsSaga,
   fetchStudentsSaga,
-  getStudentByIdSaga,
   updateStudentsSaga,
 } from './students';
 import {
@@ -68,6 +68,7 @@ import {
   fetchUsersSaga,
   updateUserSaga,
 } from './users';
+import { createBillSaga, deleteBillSaga, fetchBillsSaga, updateBillSaga } from './bills';
 
 export default function* mySaga() {
   //column transcript
@@ -117,7 +118,6 @@ export default function* mySaga() {
   yield takeLatest(studentActions.createStudents.createStudentsRequest, createStudentsSaga);
   yield takeLatest(studentActions.updateStudents.updateStudentsRequest, updateStudentsSaga);
   yield takeLatest(studentActions.deleteStudents.deleteStudentsRequest, deleteStudentsSaga);
-  yield takeLatest(studentActions.getById.getByIdRequest, getStudentByIdSaga);
 
   // users
   yield takeLatest(userActions.getUsers.getUsersRequest, fetchUsersSaga);
@@ -150,4 +150,10 @@ export default function* mySaga() {
   yield takeLatest(lecturerActions.createLecturer.createLecturerRequest, createLecturerSaga);
   yield takeLatest(lecturerActions.updateLecturer.updateLecturerRequest, updateLecturerSaga);
   yield takeLatest(lecturerActions.deleteLecturer.deleteLecturerRequest, deleteLecturerSaga);
+
+  //bills
+  yield takeLatest(billActions.getBills.getBillsRequest, fetchBillsSaga);
+  yield takeLatest(billActions.createBill.createBillRequest, createBillSaga);
+  yield takeLatest(billActions.updateBill.updateBillRequest, updateBillSaga);
+  yield takeLatest(billActions.deleteBill.deleteBillRequest, deleteBillSaga);
 }

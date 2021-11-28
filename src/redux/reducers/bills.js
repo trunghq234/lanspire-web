@@ -1,98 +1,98 @@
 import INIT_STATE from '../constant';
-import { getType } from '../actions/students';
-import * as studentActions from '../actions/students';
+import { getType } from '../actions/bills';
+import * as billActions from '../actions/bills';
 
-export default function studentsReducer(state = INIT_STATE.students, action) {
+export default function billsReducer(state = INIT_STATE.bills, action) {
   switch (action.type) {
-    // get Students
-    case getType(studentActions.getStudents.getStudentsRequest):
+    // get Bills
+    case getType(billActions.getBills.getBillsRequest):
       return {
         ...state,
         isLoading: true,
         error: '',
         isSuccess: false,
       };
-    case getType(studentActions.getStudents.getStudentsSuccess):
+    case getType(billActions.getBills.getBillsSuccess):
       return {
         ...state,
         data: action.payload,
         isLoading: false,
       };
-    case getType(studentActions.getStudents.getStudentsFailure):
+    case getType(billActions.getBills.getBillsFailure):
       return {
         ...state,
         error: action.payload.message,
         isLoading: false,
       };
-    //create student
-    case getType(studentActions.createStudents.createStudentsRequest):
+    //create Bill
+    case getType(billActions.createBill.createBillRequest):
       return {
         ...state,
         error: '',
         isLoading: true,
         isSuccess: false,
       };
-    case getType(studentActions.createStudents.createStudentsSuccess):
+    case getType(billActions.createBill.createBillSuccess):
       return {
         ...state,
         data: [...state.data, action.payload],
         isLoading: false,
         isSuccess: true,
       };
-    case getType(studentActions.createStudents.createStudentsFailure):
+    case getType(billActions.createBill.createBillFailure):
       return {
         ...state,
         error: action.payload.message,
         isLoading: false,
       };
 
-    // update Student
-    case getType(studentActions.updateStudents.updateStudentsRequest):
+    // update Bill
+    case getType(billActions.updateBill.updateBillRequest):
       return {
         ...state,
         error: '',
         isLoading: true,
         isSuccess: false,
       };
-    case getType(studentActions.updateStudents.updateStudentsSuccess):
+    case getType(billActions.updateBill.updateBillSuccess):
       return {
         ...state,
-        data: state.data.map(student =>
-          student.idStudent === action.payload.idStudent ? action.payload : student
+        data: state.data.map(bill =>
+          bill.idBill === action.payload.idBill ? action.payload : bill
         ),
         isLoading: false,
         isSuccess: true,
       };
-    case getType(studentActions.updateStudents.updateStudentsFailure):
+    case getType(billActions.updateBill.updateBillFailure):
       return {
         ...state,
         error: action.payload.message,
         isLoading: false,
       };
 
-    //delete student
-    case getType(studentActions.deleteStudents.deleteStudentsRequest):
+    //delete Bill
+    case getType(billActions.deleteBill.deleteBillRequest):
       return {
         ...state,
         isLoading: true,
         isSuccess: false,
         error: '',
       };
-    case getType(studentActions.deleteStudents.deleteStudentsSuccess):
+    case getType(billActions.deleteBill.deleteBillSuccess):
       return {
         ...state,
         isLoading: false,
         isSuccess: true,
-        data: state.data.map(student => {
-          if (student.idStudent === action.payload) {
+        data: state.data.map(bill => {
+          if (bill.idBill === action.payload) {
             return {
-              ...student,
+              ...bill,
               isDeleted: true,
             };
-          } else return student;
+          } else return bill;
         }),
       };
-    case getType(studentActions.deleteStudents.deleteStudentsFailure):
+    case getType(billActions.deleteBill.deleteBillFailure):
       return {
         ...state,
         error: action.payload.message,

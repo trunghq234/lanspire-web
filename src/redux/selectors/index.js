@@ -10,6 +10,8 @@ const timeFrameState$ = state => state.timeFrames;
 const employeeState$ = state => state.employees;
 const lecturerState$ = state => state.lecturers;
 const studentState$ = state => state.students;
+const billState$ = state => state.bills;
+
 const parameterState$ = state => state.parameters;
 export {
   usersState$,
@@ -24,5 +26,6 @@ export {
   lecturerState$,
   studentState$,
   columnTranscriptState$,
+  billState$,
   parameterState$,
 };

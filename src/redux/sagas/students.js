@@ -1,8 +1,17 @@
 import { call, put } from 'redux-saga/effects';
 import studentApi from '../../api/studentApi';
 import * as studentActions from '../actions/students';
+import { takeLatest } from 'redux-saga/effects';
 
-export function* fetchStudentsSaga(action) {
+export function* studentSaga() {
+  yield takeLatest(studentActions.getStudents.getStudentsRequest, fetchStudentsSaga);
+  yield takeLatest(studentActions.createStudents.createStudentsRequest, createStudentsSaga);
+  yield takeLatest(studentActions.updateStudents.updateStudentsRequest, updateStudentsSaga);
+  yield takeLatest(studentActions.deleteStudents.deleteStudentsRequest, deleteStudentsSaga);
+  yield takeLatest(studentActions.getById.getByIdRequest, getStudentByIdSaga);
+}
+
+function* fetchStudentsSaga(action) {
   try {
     const students = yield call(studentApi.getAll);
     yield put(studentActions.getStudents.getStudentsSuccess(students));
@@ -11,7 +20,7 @@ export function* fetchStudentsSaga(action) {
   }
 }
 
-export function* createStudentsSaga(action) {
+function* createStudentsSaga(action) {
   try {
     const newStudent = yield call(studentApi.create, action.payload);
 
@@ -21,7 +30,7 @@ export function* createStudentsSaga(action) {
   }
 }
 
-export function* updateStudentsSaga(action) {
+function* updateStudentsSaga(action) {
   try {
     yield call(studentApi.update, action.payload);
 
@@ -31,7 +40,7 @@ export function* updateStudentsSaga(action) {
   }
 }
 
-export function* deleteStudentsSaga(action) {
+function* deleteStudentsSaga(action) {
   try {
     yield call(studentApi.remove, action.payload);
     yield put(studentActions.deleteStudents.deleteStudentsSuccess(action.payload));
@@ -40,7 +49,7 @@ export function* deleteStudentsSaga(action) {
   }
 }
 
-export function* getStudentByIdSaga(action) {
+function* getStudentByIdSaga(action) {
   try {
     const student = yield call(studentApi.getById, action.payload);
     yield put(studentActions.getById.getByIdSuccess(student));

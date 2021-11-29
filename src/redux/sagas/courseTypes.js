@@ -1,8 +1,16 @@
 import { call, put } from 'redux-saga/effects';
 import courseTypeApi from 'api/courseTypeApi';
 import * as courseTypeActions from 'redux/actions/courseTypes';
+import { takeLatest } from 'redux-saga/effects';
 
-export function* fetchCourseTypes(action) {
+export function* courseTypeSaga() {
+  yield takeLatest(courseTypeActions.getCourseTypes.getCourseTypesRequest, fetchCourseTypes);
+  yield takeLatest(courseTypeActions.createCourseType.createCourseTypeRequest, createCourseType);
+  yield takeLatest(courseTypeActions.updateCourseType.updateCourseTypeRequest, updateCourseType);
+  yield takeLatest(courseTypeActions.deleteCourseType.deleteCourseTypeRequest, deleteCourseType);
+}
+
+function* fetchCourseTypes(action) {
   try {
     const courseType = yield call(courseTypeApi.getAll);
 
@@ -12,7 +20,7 @@ export function* fetchCourseTypes(action) {
   }
 }
 
-export function* createCourseType(action) {
+function* createCourseType(action) {
   try {
     const newCourseType = yield call(courseTypeApi.create, action.payload);
 
@@ -22,7 +30,7 @@ export function* createCourseType(action) {
   }
 }
 
-export function* updateCourseType(action) {
+function* updateCourseType(action) {
   try {
     yield call(courseTypeApi.update, action.payload);
     yield put(courseTypeActions.updateCourseType.updateCourseTypeSuccess(action.payload));
@@ -31,7 +39,7 @@ export function* updateCourseType(action) {
   }
 }
 
-export function* deleteCourseType(action) {
+function* deleteCourseType(action) {
   try {
     yield call(courseTypeApi.delete, action.payload);
 

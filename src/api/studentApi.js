@@ -17,6 +17,9 @@ const studentApi = {
     const res = await axiosClient.patch(`/students/${data.idStudent}`, data);
     return res.data;
   },
+  updateScore: async data => {
+    return await axiosClient.post(`/students/updateScore/`, data);
+  },
   remove: async id => {
     const res = await axiosClient.delete(`/students/${id}`);
     return res.data;

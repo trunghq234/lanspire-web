@@ -20,10 +20,16 @@ const students = useSelector(studentState$);
 const courses = useSelector(courseState$);
 const classes = useSelector(classState$);
 
-const employeesData = mapToEmployee(employees.data);
-const lecturersData = mapToLecturer(lecturers.data);
-const studentsData = mapToStudent(students.data);
-const coursesData = mapToCourse(courses.data);
-const classesData = mapToClass(classes.data);
+const employeesDataExcel = mapToEmployee(employees.data);
+const lecturersDataExcel = mapToLecturer(lecturers.data);
+const studentsDataExcel = mapToStudent(students.data);
+const coursesDataExcel = mapToCourse(courses.data);
+const classesDataExcel = mapToClass(classes.data);
 
-export { employeesData, lecturersData, studentsData, coursesData, classesData };
+export {
+  employeesDataExcel,
+  lecturersDataExcel,
+  studentsDataExcel,
+  coursesDataExcel,
+  classesDataExcel,
+};

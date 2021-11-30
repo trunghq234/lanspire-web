@@ -2,39 +2,39 @@ import moment from 'moment';
 const formatDate = 'DD/MM/YYYY';
 
 const mapToEmployee = employees => {
-  employees.map(item => {
+  return employees.map(({ User }) => {
     return {
-      username: item.username,
-      displayName: item.displayName,
-      email: item.email,
-      gender: item.gender === 0 ? 'Male' : item.gender === 1 ? 'Female' : 'Others',
-      phoneNumber: item.phoneNumber,
-      imageUrl: item.imageUrl === null ? '' : item.imageUrl,
-      address: `${item.address[0]} - ${item.address[1]} - ${item.address[2]}`,
-      birthday: moment(item.dob).format(formatDate),
-      isActivated: item.isActivated === true ? 'Working' : 'Unemployeed',
+      username: User.username,
+      displayName: User.displayName,
+      email: User.email,
+      gender: User.gender === 0 ? 'Male' : User.gender === 1 ? 'Female' : 'Others',
+      phoneNumber: User.phoneNumber,
+      imageUrl: User.imageUrl === null ? '' : User.imageUrl,
+      address: `${User.address[0]} - ${User.address[1]} - ${User.address[2]}`,
+      birthday: moment(User.dob).format(formatDate),
+      isActivated: User.isActivated === true ? 'Working' : 'Unworking',
     };
   });
 };
 
 const mapToLecturer = lecturers => {
-  lecturers.map(item => {
+  return lecturers.map(({ User }) => {
     return {
-      username: item.username,
-      displayName: item.displayName,
-      email: item.email,
-      gender: item.gender === 0 ? 'Male' : item.gender === 1 ? 'Female' : 'Others',
-      phoneNumber: item.phoneNumber,
-      imageUrl: item.imageUrl === null ? '' : item.imageUrl,
-      address: `${item.address[0]} - ${item.address[1]} - ${item.address[2]}`,
-      birthday: moment(item.dob).format(formatDate),
-      isActivated: item.isActivated === true ? 'Working' : 'Unemployeed',
+      username: User.username,
+      displayName: User.displayName,
+      email: User.email,
+      gender: User.gender === 0 ? 'Male' : User.gender === 1 ? 'Female' : 'Others',
+      phoneNumber: User.phoneNumber,
+      imageUrl: User.imageUrl === null ? '' : User.imageUrl,
+      address: `${User.address[0]} - ${User.address[1]} - ${User.address[2]}`,
+      birthday: moment(User.dob).format(formatDate),
+      isActivated: User.isActivated === true ? 'Working' : 'Unworking',
     };
   });
 };
 
 const mapToStudent = students => {
-  students.map(item => {
+  return students.map(item => {
     const { User } = item;
     return {
       displayName: User.displayName,
@@ -50,7 +50,7 @@ const mapToStudent = students => {
 };
 
 const mapToCourse = courses => {
-  courses.map(item => {
+  return courses.map(item => {
     return {
       courseName: item.courseName,
       level: `${item.Level.levelName} ${item.Level.point}`,
@@ -63,7 +63,7 @@ const mapToCourse = courses => {
 };
 
 const mapToClass = classes => {
-  classes.map(item => {
+  return classes.map(item => {
     return {
       className: item.className,
       course: item.Course.courseName,

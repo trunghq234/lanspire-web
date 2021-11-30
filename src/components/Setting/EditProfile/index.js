@@ -1,28 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import PropTypes from 'prop-types';
-import { getUser, updateUser } from 'redux/actions/users';
-import { userState$ } from 'redux/selectors';
+import { UserOutlined } from '@ant-design/icons';
 import {
-  Form,
-  Col,
-  Row,
-  Space,
   Avatar,
   Button,
-  Upload,
-  Input,
-  Select,
+  Col,
   DatePicker,
+  Form,
+  Input,
   notification,
+  Row,
+  Select,
   Skeleton,
+  Upload,
 } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
-import styles from './index.module.less';
-import LocationVN from '../../common/ProvincePicker/LocationVN.json';
 import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUser } from 'redux/actions/users';
+import { userState$ } from 'redux/selectors';
 import userApi from '../../../api/userApi';
-const Option = { Select };
+import LocationVN from '../../common/ProvincePicker/LocationVN.json';
+import styles from './index.module.less';
+const { Option } = Select;
 const EditProfile = () => {
   const dateFormat = 'DD/MM/YYYY';
   const [form] = Form.useForm();

@@ -36,7 +36,7 @@ function* updateStudentsSaga(action) {
 
     yield put(studentActions.updateStudents.updateStudentsSuccess(action.payload));
   } catch (error) {
-    yield put(studentActions.updateStudents.updatesStudentsFailure(error));
+    yield put(studentActions.updateStudents.updateStudentsFailure(error));
   }
 }
 

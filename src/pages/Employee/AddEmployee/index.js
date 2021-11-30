@@ -1,6 +1,6 @@
 import { Breadcrumb, Card, Col, Row, Space } from 'antd';
+import ImageUploader from 'components/common/ImageUploader';
 import PersonalInfo from 'components/Employee/PersonalInfo/index';
-import Uploader from 'components/common/Uploader';
 import React from 'react';
 import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
@@ -29,7 +29,7 @@ export default function AddEmployee() {
         </Col>
         <Col span={6}>
           <Card>
-            <Uploader />
+            <ImageUploader />
           </Card>
         </Col>
       </Row>

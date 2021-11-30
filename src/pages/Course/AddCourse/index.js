@@ -45,7 +45,6 @@ const AddCourse = () => {
           dispatch(updateCourse.updateCourseRequest(tmp));
         } else {
           const tmp = { ...course, columns: columnKeys };
-          // console.log({ tmp });
           dispatch(createCourse.createCourseRequest(tmp));
         }
         setIsSuccess(isDispatchSuccess);

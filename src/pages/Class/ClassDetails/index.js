@@ -1,24 +1,25 @@
 import { Breadcrumb, Card, Tabs } from 'antd';
 import classApi from 'api/classApi';
 import AntCalendar from 'components/Class/AntCalendar';
+import ClassExam from 'components/Class/ClassExam';
 import Transcript from 'components/Class/Transcript';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { NavLink, useParams } from 'react-router-dom';
-import { classState$ } from 'redux/selectors';
 import AddAppoint from '../AddAppoint';
 
 const { TabPane } = Tabs;
-const Details = () => {
+const ClassDetails = () => {
   const { idClass } = useParams();
-  const [className, setClassName] = useState('');
-  const { data: classes } = useSelector(classState$);
+  const [classData, setClassData] = useState({});
 
   useEffect(() => {
-    classApi.getById(idClass).then(res => {
-      setClassName(res.data.className);
-    });
-  });
+    if (idClass) {
+      classApi
+        .getById(idClass)
+        .then(res => setClassData(res.data))
+        .catch(err => console.log(err));
+    }
+  }, [idClass]);
   return (
     <div>
       <Breadcrumb>
@@ -30,17 +31,20 @@ const Details = () => {
         </Breadcrumb.Item>
         <Breadcrumb.Item>Details</Breadcrumb.Item>
       </Breadcrumb>
-      <h3>{className}</h3>
+      <h3>{classData.className}</h3>
       <Card>
         <Tabs defaultActiveKey="1">
           <TabPane tab="Appoint Lecturer" key="1">
-            <AddAppoint></AddAppoint>
+            <AddAppoint />
           </TabPane>
-          <TabPane tab="Calendar" key="3">
-            <AntCalendar></AntCalendar>
+          <TabPane tab="Calendar" key="2">
+            <AntCalendar />
+          </TabPane>
+          <TabPane tab="Students" key="3">
+            <Transcript />
           </TabPane>
           <TabPane tab="Students" key="4">
-            <Transcript></Transcript>
+            <ClassExam classData={classData} />
           </TabPane>
         </Tabs>
       </Card>
@@ -48,4 +52,4 @@ const Details = () => {
   );
 };
 
-export default Details;
+export default ClassDetails;

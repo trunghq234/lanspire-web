@@ -42,11 +42,6 @@ const INIT_STATE = {
     isSuccess: false,
     error: '',
   },
-  studentById: {
-    //Student is get with id
-    data: [],
-    isLoading: false,
-  },
   courses: {
     data: [],
     isLoading: false,
@@ -76,6 +71,22 @@ const INIT_STATE = {
     data: [],
     isLoading: false,
     isSuccess: false,
+  },
+  testTypes: {
+    data: [],
+    isLoading: false,
+    isSuccess: false,
+  },
+  exams: {
+    data: [],
+    isLoading: false,
+    isSuccess: false,
+  },
+  bills: {
+    data: [],
+    isLoading: false,
+    isSuccess: false,
+    error: '',
   },
   parameters: {
     data: [],

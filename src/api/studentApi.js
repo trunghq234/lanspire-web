@@ -6,8 +6,7 @@ const studentApi = {
     return res.data;
   },
   getById: async id => {
-    const res = await axiosClient.get(`/students/${id}`);
-    return res.data;
+    return await axiosClient.get(`/students/${id}`);
   },
   create: async data => {
     const res = await axiosClient.post('/students', data);

@@ -13,10 +13,12 @@ const numberValidator = (rule, value, callback) => {
   }
 };
 
-const dobValidator = (rule, value, callback) => {
+// date < current date
+const dateValidator = (rule, value, callback) => {
   try {
     if (value > Date.now()) {
-      callback('Date of birth is not valid!');
+      const tmp = camelToString(rule.field);
+      callback(`${titleCase(tmp)} is not greater than current date!`);
     } else {
       callback();
     }
@@ -24,5 +26,4 @@ const dobValidator = (rule, value, callback) => {
     callback();
   }
 };
-
-export { numberValidator, dobValidator };
+export { numberValidator, dateValidator };

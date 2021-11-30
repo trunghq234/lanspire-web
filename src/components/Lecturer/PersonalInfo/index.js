@@ -97,11 +97,10 @@ const PersonalInfo = props => {
         const editedValue = {
           ...data,
           idUser: lecturer.idUser,
-          username: lecturer.username,
-          password: lecturer.password,
+          username: lecturer.User.username,
+          password: lecturer.User.password,
         };
         const editedLecturer = converToUser(editedValue, idRoleLecturer);
-        console.log({ editedLecturer, editedValue });
         dispatch(lecturerActions.updateLecturer.updateLecturerRequest(editedLecturer));
         setCity(city);
         setIsSubmit(true);

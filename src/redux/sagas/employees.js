@@ -23,7 +23,6 @@ function* updateEmployeeSaga(action) {
   try {
     yield call(employeeApi.updateEmployee, action.payload);
 
-    console.log(action.payload);
     yield put(employeeActions.updateEmployee.updateEmployeeSuccess(action.payload));
   } catch (error) {
     yield put(employeeActions.updateEmployee.updateEmployeeFailure(error));

@@ -14,7 +14,7 @@ import ProvincePicker from '../../common/ProvincePicker';
 import styles from './index.module.less';
 
 const { Option } = Select;
-const idRoleEmployee = '386af797-fdf6-42dc-8bab-d5b42561b5fb';
+const idRoleEmployee = '0a15d8a4-e1a1-4fc1-ba7a-157b34959289';
 
 const PersonalInfo = props => {
   const [isSubmit, setIsSubmit] = useState(false);
@@ -104,8 +104,8 @@ const PersonalInfo = props => {
         const editedValue = {
           ...data,
           idUser: employee.idUser,
-          username: employee.username,
-          password: employee.password,
+          username: employee.User.username,
+          password: employee.User.password,
         };
         const editedEmployee = converToUser(editedValue, idRoleEmployee);
         dispatch(employeeActions.updateEmployee.updateEmployeeRequest(editedEmployee));

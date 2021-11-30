@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { Breadcrumb, Button, Card, Input, Table, Row, Col, Tooltip, message, Modal } from 'antd';
-import { EditOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import {
+  EditOutlined,
+  DeleteOutlined,
+  ExclamationCircleOutlined,
+  EyeOutlined,
+} from '@ant-design/icons';
 import { courseState$ } from 'redux/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteCourse, getCourses } from 'redux/actions/courses';
@@ -45,9 +50,14 @@ const Course = () => {
       render: idCourse => {
         return (
           <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
+            <Tooltip title="View details">
+              <Link to={`/course/details/${idCourse}`}>
+                <Button icon={<EyeOutlined />} />
+              </Link>
+            </Tooltip>
             <Tooltip title="Edit information">
               <Link to={`/course/edit/${idCourse}`}>
-                <Button type="primary" ghost icon={<EditOutlined />}></Button>
+                <Button type="primary" ghost icon={<EditOutlined />} />
               </Link>
             </Tooltip>
             <Tooltip title="Delete">
@@ -69,7 +79,7 @@ const Course = () => {
 
   const mappingDatasource = dataInput => {
     const res = [];
-    dataInput.map((course, index) => {
+    dataInput.map(course => {
       const { levelName, point } = course.Level;
       const { typeName } = course.CourseType;
       res.push({

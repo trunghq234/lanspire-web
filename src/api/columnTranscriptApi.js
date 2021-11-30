@@ -8,6 +8,10 @@ const columnTranscriptApi = {
     return res.data;
   },
 
+  getAllPromiss: () => {
+    return axiosClient.get(url);
+  },
+
   getById: async idColumn => {
     const res = await axiosClient.get(`${url}${idColumn}`);
     return res.data;

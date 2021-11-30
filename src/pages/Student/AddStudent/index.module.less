@@ -1,12 +1,13 @@
-.form {
+.container {
+  max-width: 800px;
   margin: 0 auto;
 }
-
 .actions {
+  margin-top: 20px;
   .btn-add {
     background-color: #1890ff;
     color: white;
-    min-width: 110px;
+    width: 100%;
     border-radius: 10px;
     &:hover {
       background-color: darken(#1890ff, 10);
@@ -14,6 +15,7 @@
   }
   .btn-discard {
     position: absolute;
+    width: 35%;
     right: 0;
     border-radius: 10px;
     &:hover {
@@ -23,6 +25,6 @@
   }
 }
 .heading {
-  font-size: 1.5rem;
-  margin: auto 0;
+  font-size: 2rem;
+  font-weight: 700;
 }

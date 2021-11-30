@@ -18,6 +18,7 @@ const Dashboard = () => {
   useEffect(() => {
     dispatch(getClasses.getClassesRequest());
   }, []);
+
   return (
     <div>
       <h1>Dashboard</h1>

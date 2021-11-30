@@ -30,15 +30,15 @@ const UserInfo = props => {
   };
 
   return (
-    <Card>
-      <Row gutter={20}>
-        <Col span={16}>
+    <div>
+      <Row gutter={20} justify="center">
+        <Col span={15}>
           <Form.Item label="Full name" name="fullName" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
         </Col>
 
-        <Col span={4}>
+        <Col span={15}>
           <Form.Item label="Gender" name="gender" rules={[{ required: true }]}>
             <Select>
               <Option value="male">Male</Option>
@@ -48,17 +48,15 @@ const UserInfo = props => {
           </Form.Item>
         </Col>
 
-        <Col span={4}>
+        <Col span={15}>
           <Form.Item
             label="DOB"
             name="dob"
             rules={[{ required: true }, { validator: dobValidator }]}>
-            <DatePicker format={dateFormat} />
+            <DatePicker format={dateFormat} style={{ width: '100%' }} />
           </Form.Item>
         </Col>
-      </Row>
-      <Row gutter={20}>
-        <Col span={8}>
+        <Col span={15}>
           <Form.Item
             label="Phone number"
             name="phoneNumber"
@@ -67,14 +65,14 @@ const UserInfo = props => {
           </Form.Item>
         </Col>
 
-        <Col span={16}>
+        <Col span={15}>
           <Form.Item label="Email" name="email" rules={[{ required: true, type: 'email' }]}>
             <Input />
           </Form.Item>
         </Col>
       </Row>
       <ProvincePicker city={props.city} form={props.form} />
-    </Card>
+    </div>
   );
 };
 

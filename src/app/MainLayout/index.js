@@ -5,6 +5,7 @@ import ProLayout from '@ant-design/pro-layout';
 import logo from 'assets/images/logo.png';
 import AppFooter from 'components/layout/Footer';
 import RightContent from 'components/layout/RightContent';
+import NotFound from 'pages/NotFound';
 
 const MainLayout = props => {
   const [pathname, setPathname] = useState(window.location.pathname);
@@ -16,6 +17,7 @@ const MainLayout = props => {
         return <Route key={index} path={route.path} exact={route.exact} component={route.page} />;
       });
     }
+    result.push(<Route path="*" component={NotFound} />);
     return result;
   };
 
@@ -47,8 +49,7 @@ const MainLayout = props => {
         </NavLink>
       )}
       rightContentRender={() => <RightContent />}
-      footerRender={() => <AppFooter />}
-    >
+      footerRender={() => <AppFooter />}>
       <div className={styles.container}>
         <Switch>
           {showRoutes(props.routes)}

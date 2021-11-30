@@ -1,5 +1,7 @@
-import { Col, notification, Row } from 'antd';
+import { notification } from 'antd';
+import lecturerApi from 'api/lecturerApi';
 import studentApi from 'api/studentApi';
+import Timetable from 'components/common/Timetable';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,22 +9,20 @@ import { useParams } from 'react-router';
 import { getClasses } from 'redux/actions/classes';
 import { classState$ } from 'redux/selectors';
 import { currentDate } from 'utils/dateTime';
-import Day from './Day';
-import styles from './index.module.less';
-import Timeline from './Timeline';
 
-const Timetable = React.forwardRef((props, ref) => {
-  const { idStudent } = useParams();
-  const [student, setStudent] = useState();
+const LecturerTimetable = React.forwardRef((props, ref) => {
+  const { idLecturer } = useParams();
+  const [lecturer, setLecturer] = useState();
   const [dataSource, setDataSource] = useState([[], [], [], [], [], [], []]);
   const classes = useSelector(classState$);
   const dispatch = useDispatch();
 
-  //get student by id
+  //get lecturer by id
   useEffect(async () => {
     try {
-      const res = await studentApi.getById(idStudent);
-      setStudent(res.data);
+      const res = await lecturerApi.getLecturerById(idLecturer);
+      console.log(res);
+      setLecturer(res);
     } catch (err) {
       notification.error({
         message: `${err}`,
@@ -37,15 +37,15 @@ const Timetable = React.forwardRef((props, ref) => {
 
   //load timetable
   useEffect(() => {
-    if (student && classes.data.length > 0) {
-      const keyClassesStudying = student.Classes.reduce((pre, curr) => {
+    if (lecturer && classes.data.length > 0) {
+      const keyClassesTeaching = lecturer.Classes.reduce((pre, curr) => {
         if (moment(curr.endDate) >= currentDate()) {
           pre.push(curr.idClass);
         }
         return pre;
       }, []);
       const timetable = classes.data.reduce((pre, curr) => {
-        if (keyClassesStudying.includes(curr.idClass)) {
+        if (keyClassesTeaching.includes(curr.idClass)) {
           pre.push(
             ...curr.ClassTimes.map(element => {
               return {
@@ -79,24 +79,13 @@ const Timetable = React.forwardRef((props, ref) => {
       }
       setDataSource(tmp);
     }
-  }, [student, classes.data]);
+  }, [lecturer, classes.data]);
 
   return (
     <div ref={ref}>
-      <Row gutter={5} style={{ backgroundColor: 'white' }}>
-        <Col span={3}>
-          <Timeline />
-        </Col>
-        {dataSource.map((day, i) => {
-          return (
-            <Col key={`day-${i}`} span={3} className={styles.dayOfWeek}>
-              <Day events={day} dayOfWeek={i} />
-            </Col>
-          );
-        })}
-      </Row>
+      <Timetable dataSource={dataSource} />
     </div>
   );
 });
 
-export default Timetable;
+export default LecturerTimetable;

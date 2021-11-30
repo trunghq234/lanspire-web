@@ -30,6 +30,7 @@ import {
 import ClassDetails from 'pages/Class/ClassDetails';
 import Setting from 'pages/Setting/Setting';
 import Profile from 'pages/Setting/Profile';
+import LecturerTimetable from 'components/Lecturer/TabTimetable';
 
 const DashboardIcon = props => <Icon component={dashboardSvg} {...props} />;
 const LecturerIcon = props => <Icon component={lecturerSvg} {...props} />;
@@ -185,6 +186,11 @@ const adminRoutes = [
     exact: true,
     page: () => <Profile />,
   },
+  {
+    path: '/lecturer/timetable/:idLecturer',
+    exact: true,
+    page: () => <LecturerTimetable />,
+  },
 ];
 
 const adminMenuItems = {
@@ -277,6 +283,12 @@ const adminMenuItems = {
           component: <Setting />,
         },
       ],
+    },
+    {
+      path: '/lecturer/timetable/acd36b97-b305-4579-9332-bfdc624e7b40',
+      name: 'timetable',
+      icon: <TimeFrameIcon />,
+      component: <LecturerTimetable />,
     },
   ],
 };

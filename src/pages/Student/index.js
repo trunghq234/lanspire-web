@@ -25,6 +25,17 @@ import moment from 'moment';
 const { Search } = Input;
 
 const Student = () => {
+  const dispatch = useDispatch();
+  const students = useSelector(studentState$);
+  const [data, setData] = useState([]); //Data ban đầu
+  const [dataSearch, setDataSearch] = useState([]); //Data sau khi search
+  const [isDeleted, setIsDeleted] = useState(false);
+  const [idStudent, setIdStudent] = useState();
+  const [visibleModal, setVisibleModal] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const history = useHistory();
+
   const columns = [
     {
       title: 'No.',
@@ -126,17 +137,6 @@ const Student = () => {
       },
     },
   ];
-
-  const dispatch = useDispatch();
-  const students = useSelector(studentState$);
-  const [data, setData] = useState([]); //Data ban đầu
-  const [dataSearch, setDataSearch] = useState([]); //Data sau khi search
-  const [isDeleted, setIsDeleted] = useState(false);
-  const [idStudent, setIdStudent] = useState();
-  const [visibleModal, setVisibleModal] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
-  const history = useHistory();
 
   useEffect(() => {
     dispatch(getStudents.getStudentsRequest());

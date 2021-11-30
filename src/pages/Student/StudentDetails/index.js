@@ -3,11 +3,11 @@ import { Breadcrumb, Button, Col, Tabs, Tooltip } from 'antd';
 import Grade from 'components/Student/Grade';
 import TabArrangeClass from 'components/Student/TabArrangeClass';
 import PersonalInfo from 'components/Student/TabPersonalInfo';
-import Timetable from 'components/Student/Timetable/index.js';
 import TimetableToPrint from 'components/Student/TimetableToPrint';
 import React, { useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
+import StudentTimetable from 'components/Student/TabTimetable';
 
 const { TabPane } = Tabs;
 
@@ -46,7 +46,7 @@ const StudentDetails = () => {
               Print
             </Button>
           </Tooltip>
-          <Timetable />
+          <StudentTimetable />
           <div style={{ display: 'none' }}>
             <TimetableToPrint idStudent={idStudent} ref={timetableRef} />
           </div>

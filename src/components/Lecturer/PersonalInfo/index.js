@@ -9,7 +9,7 @@ import { getUsers } from 'redux/actions/users';
 import { lecturerState$, usersState$ } from 'redux/selectors';
 import { converToUser } from 'utils';
 import { checkUsernameIsExist, loadFieldsValue } from 'utils/loadFieldsValueForUser';
-import { dobValidator } from 'utils/validator';
+import { dateValidator } from 'utils/validator';
 import styles from './index.module.less';
 
 const { Option } = Select;
@@ -159,7 +159,7 @@ const PersonalInfo = props => {
               <Form.Item
                 label="DOB"
                 name="dob"
-                rules={[{ required: true }, { validator: dobValidator }]}>
+                rules={[{ required: true }, { validator: dateValidator }]}>
                 <DatePicker format={dateFormat} className={styles.maxwidth} />
               </Form.Item>
             </Col>

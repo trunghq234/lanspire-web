@@ -10,7 +10,6 @@ import {
 
 export default function ExportCSV({ data, headers, type }) {
   const [dataExcel, setDataExcel] = React.useState([]);
-  console.log({ data, type });
 
   React.useEffect(() => {
     mapping(data, type);
@@ -47,7 +46,6 @@ export default function ExportCSV({ data, headers, type }) {
         break;
     }
   };
-  console.log({ dataExcel });
 
   return (
     <CSVLink

@@ -9,9 +9,9 @@ import { employeeState$, usersState$ } from 'redux/selectors';
 import { converToUser } from 'utils';
 import { checkUsernameIsExist, loadFieldsValue } from 'utils/loadFieldsValueForUser';
 import { camelToString } from 'utils/stringHelper';
-import { dobValidator } from 'utils/validator';
 import ProvincePicker from '../../common/ProvincePicker';
 import styles from './index.module.less';
+import { dateValidator } from 'utils/validator';
 
 const { Option } = Select;
 const idRoleEmployee = '0a15d8a4-e1a1-4fc1-ba7a-157b34959289';
@@ -169,7 +169,7 @@ const PersonalInfo = props => {
               rules={[
                 { required: true },
                 {
-                  validator: dobValidator,
+                  validator: dateValidator,
                 },
               ]}>
               <DatePicker format={dateFormat} className={styles.maxwidth} />

@@ -1,7 +1,6 @@
 import moment from 'moment';
 
 export const converToUser = (value, idRole) => {
-  console.log({ value });
   const user = {
     displayName: value.displayName,
     gender: value.gender == 'male' ? 0 : value.gender == 'female' ? 1 : 2,

@@ -1,5 +1,6 @@
 import { Breadcrumb, Card, Col, Row, Space } from 'antd';
 import ImageUploader from 'components/common/ImageUploader';
+import PersonalInfo from 'components/Lecturer/PersonalInfo';
 import React from 'react';
 import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';

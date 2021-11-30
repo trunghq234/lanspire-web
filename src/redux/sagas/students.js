@@ -8,7 +8,6 @@ export function* studentSaga() {
   yield takeLatest(studentActions.createStudents.createStudentsRequest, createStudentsSaga);
   yield takeLatest(studentActions.updateStudents.updateStudentsRequest, updateStudentsSaga);
   yield takeLatest(studentActions.deleteStudents.deleteStudentsRequest, deleteStudentsSaga);
-  yield takeLatest(studentActions.getById.getByIdRequest, getStudentByIdSaga);
 }
 
 function* fetchStudentsSaga(action) {
@@ -46,14 +45,5 @@ function* deleteStudentsSaga(action) {
     yield put(studentActions.deleteStudents.deleteStudentsSuccess(action.payload));
   } catch (error) {
     yield put(studentActions.deleteStudents.deleteStudentsFailure(error));
-  }
-}
-
-function* getStudentByIdSaga(action) {
-  try {
-    const student = yield call(studentApi.getById, action.payload);
-    yield put(studentActions.getById.getByIdSuccess(student));
-  } catch (error) {
-    yield put(studentActions.getById.getByIdFailure(error));
   }
 }

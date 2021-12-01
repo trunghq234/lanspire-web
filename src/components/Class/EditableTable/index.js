@@ -95,7 +95,6 @@ const EditableTable = props => {
   const [dataSource, setDataSource] = useState([]);
   const [previousData, setPreviousData] = useState([]);
   useEffect(() => {
-    console.log(props);
     if (props.dataSource.length > 0) {
       mappingDatasource(props.dataSource);
     }

@@ -48,7 +48,6 @@ const Parameter = props => {
   };
 
   const handleCancel = () => {
-    console.log('Clicked cancel button');
     setVisible(false);
   };
   for (let city of Object.values(LocationVN)) {
@@ -79,7 +78,6 @@ const Parameter = props => {
   }, [selectedCity]);
   useEffect(() => {
     if (parameters.length > 0) {
-      console.log(parameters);
       const openTime = parameters.find(parameter => parameter.name == 'openTime').value;
       const closeTime = parameters.find(parameter => parameter.name == 'closeTime').value;
 
@@ -130,7 +128,6 @@ const Parameter = props => {
       const endTime = moment(`11/20/2021 ${timeFrame.endingTime}`);
       const duration = moment.duration(endTime.diff(startTime));
       var minutes = duration.asMinutes();
-      console.log(minutes);
       timeFrame.activate = true;
       if (values.minTimeFrame > minutes) {
         timeFrame.activate = false;

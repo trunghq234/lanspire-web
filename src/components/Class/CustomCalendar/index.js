@@ -79,8 +79,6 @@ const CustomCalendar = () => {
     timeGutterFormat: 'HH:mm',
   };
   const onChange = (value, dateString) => {
-    console.log('Selected Time: ', value);
-    console.log('Formatted Selected Time: ', dateString);
     if (value) {
       setSelectedDate(value.toDate());
     }

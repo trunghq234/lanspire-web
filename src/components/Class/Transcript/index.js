@@ -8,8 +8,6 @@ import EditableTable from '../EditableTable';
 import moment from 'moment';
 
 const Transcript = () => {
-  const [form] = Form.useForm();
-
   const { idClass } = useParams();
   const [classRoom, setClassRoom] = useState();
   const [columns, setColumns] = useState([]);
@@ -50,7 +48,6 @@ const Transcript = () => {
       return false;
     }
     const isHasExam = exams.find(exam => exam.idExam == value.idExam);
-    console.log(isHasExam);
     if (isHasExam) {
       if (value.score < isHasExam.Columns.min || value.score > isHasExam.Columns.max) {
         notification['error']({
@@ -159,7 +156,6 @@ const Transcript = () => {
         ...customColumn,
       });
     });
-    console.log(temp);
     setIsLoanding(false);
     setColumns(temp1);
     setStudents(temp);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Row, Col, Table, Button } from 'antd';
 import styles from './index.module.less';
-import { numberWithCommas } from 'utils/stringHelper';
+import { parseThousand } from 'utils/stringHelper';
 import { currentDate } from 'utils/dateTime';
 
 const Invoice = React.forwardRef((props, ref) => {
@@ -94,7 +94,7 @@ const Invoice = React.forwardRef((props, ref) => {
         <h1 className={styles['total-title']}>Total:</h1>
         <div lassName={styles['total-fee']}>
           <h1>
-            {numberWithCommas(totalFee)}
+            {parseThousand(totalFee)}
             <span className={styles['total-unit']}>VND</span>
           </h1>
         </div>

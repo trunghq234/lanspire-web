@@ -112,7 +112,7 @@ const dateSvg = () => (
 const fullNameSvg = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    class="h-6 w-6"
+    className="h-6 w-6"
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor">
@@ -141,7 +141,7 @@ const genderSvg = () => (
 const phoneSvg = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    class="h-6 w-6"
+    className="h-6 w-6"
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor">
@@ -156,7 +156,7 @@ const phoneSvg = () => (
 const emailSvg = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    class="h-6 w-6"
+    className="h-6 w-6"
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor">
@@ -171,7 +171,7 @@ const emailSvg = () => (
 const locationSvg = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    class="h-6 w-6"
+    className="h-6 w-6"
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor">
@@ -189,6 +189,20 @@ const locationSvg = () => (
     />
   </svg>
 );
+const cashSvg = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="h-5 w-5"
+    viewBox="0 0 20 20"
+    fill="currentColor">
+    <path
+      fillRule="evenodd"
+      d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z"
+      clipRule="evenodd"
+    />
+  </svg>
+);
+
 export {
   dashboardSvg,
   lecturerSvg,
@@ -203,4 +217,5 @@ export {
   phoneSvg,
   locationSvg,
   emailSvg,
+  cashSvg,
 };

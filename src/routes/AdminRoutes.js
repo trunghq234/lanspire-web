@@ -19,6 +19,7 @@ import ArrangeClass from 'pages/Student/StudentDetails/ArrangeClass';
 import TimeFrame from 'pages/TimeFrame';
 import React from 'react';
 import {
+  cashSvg,
   classSvg,
   courseSvg,
   dashboardSvg,
@@ -30,6 +31,9 @@ import {
 import ClassDetails from 'pages/Class/ClassDetails';
 import Setting from 'pages/Setting/Setting';
 import Profile from 'pages/Setting/Profile';
+import ClassExam from 'components/Class/ClassExam';
+import Invoice from 'pages/Invoice';
+import InvoiceDetails from 'pages/Invoice/InvoiceDetails';
 
 const DashboardIcon = props => <Icon component={dashboardSvg} {...props} />;
 const LecturerIcon = props => <Icon component={lecturerSvg} {...props} />;
@@ -38,6 +42,7 @@ const EmployeeIcon = props => <Icon component={employeeSvg} {...props} />;
 const ClassIcon = props => <Icon component={classSvg} {...props} />;
 const TimeFrameIcon = props => <Icon component={timeSvg} {...props} />;
 const StudentIcon = props => <Icon component={studentSvg} {...props} />;
+const CashIcon = props => <Icon component={cashSvg} {...props} />;
 
 const adminRoutes = [
   {
@@ -185,6 +190,16 @@ const adminRoutes = [
     exact: true,
     page: () => <Profile />,
   },
+  {
+    path: '/invoice',
+    exact: true,
+    page: () => <Invoice />,
+  },
+  {
+    path: '/invoice/:idBill',
+    exact: true,
+    page: () => <InvoiceDetails />,
+  },
 ];
 
 const adminMenuItems = {
@@ -277,6 +292,12 @@ const adminMenuItems = {
           component: <Setting />,
         },
       ],
+    },
+    {
+      path: '/invoice',
+      name: 'Invoice',
+      icon: <CashIcon />,
+      component: <Invoice />,
     },
   ],
 };

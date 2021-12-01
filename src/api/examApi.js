@@ -19,7 +19,7 @@ const examApi = {
   },
 
   getByIdClass: idClass => {
-    return axiosClient.get(`${url}classes/${idClass}`);
+    return axiosClient.get(`${url}class/${idClass}`);
   },
 
   create: async exam => {

@@ -5,6 +5,7 @@ import studentApi from 'api/studentApi';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import EditableTable from '../EditableTable';
+import moment from 'moment';
 
 const Transcript = () => {
   const [form] = Form.useForm();
@@ -35,15 +36,13 @@ const Transcript = () => {
     });
   }, []);
   useEffect(() => {
-    if (classRoom) {
+    if (classRoom && exams) {
       mappingDatasource(classRoom);
     }
-  }, [classRoom]);
+  }, [classRoom, exams]);
 
   const checkDataTesting = value => {
-    // console.log(value.score);
     if (isNaN(value.score)) {
-      console.log(1);
       notification['error']({
         message: 'Error',
         description: `Score must be a Number`,
@@ -51,6 +50,7 @@ const Transcript = () => {
       return false;
     }
     const isHasExam = exams.find(exam => exam.idExam == value.idExam);
+    console.log(isHasExam);
     if (isHasExam) {
       if (value.score < isHasExam.Columns.min || value.score > isHasExam.Columns.max) {
         notification['error']({
@@ -59,8 +59,8 @@ const Transcript = () => {
         });
         return false;
       }
-      if (isHasExam.testDay) {
-        if (moment().isBefore(moment(isExam.testDay))) {
+      if (isHasExam.testDate) {
+        if (moment().isBefore(moment(isHasExam.testDate))) {
           notification['error']({
             message: 'Error',
             description: `The exam hasn't taken place yet`,
@@ -139,16 +139,12 @@ const Transcript = () => {
       };
       temp1.map(column => {
         if (column.dataIndex != 'student') {
-          let test;
-          if (student.Testings.length > 0) {
-            test = student.Testings.find(testing => testing.Exam.idColumn == column.key);
+          let exam;
+          if (student.Exams.length > 0) {
+            exam = student.Exams.find(exam => exam.idColumn == column.key);
           }
-          if (test) {
-            let color = 'green';
-            if (test.score < column.avarage) {
-              color = 'volcano';
-            }
-            customColumn[column.dataIndex] = { score: test.score, idExam: test.idExam };
+          if (exam) {
+            customColumn[column.dataIndex] = { score: exam.Testing.score, idExam: exam.idExam };
           } else {
             const isHasExam = exams.find(exam => exam.idColumn == column.key);
             if (isHasExam) {
@@ -163,7 +159,7 @@ const Transcript = () => {
         ...customColumn,
       });
     });
-
+    console.log(temp);
     setIsLoanding(false);
     setColumns(temp1);
     setStudents(temp);

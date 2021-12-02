@@ -228,8 +228,12 @@ const Class = () => {
     });
   };
   useEffect(() => {
-    mappingDatasource(data);
-    mappingFilter(courses);
+    if (data.length > 0) {
+      mappingDatasource(data);
+    }
+    if (courses) {
+      mappingFilter(courses);
+    }
   }, [data, courses]);
   useEffect(() => {
     dispatch(getCourses.getCoursesRequest());

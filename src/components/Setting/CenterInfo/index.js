@@ -38,6 +38,8 @@ const CenterInfo = props => {
       const record = {
         centerName: parameters.find(parameter => parameter.name == 'centerName').value,
         address: parameters.find(parameter => parameter.name == 'address').value,
+        email: parameters.find(parameter => parameter.name == 'email').value,
+        phoneNumber: parameters.find(parameter => parameter.name == 'phoneNumber').value,
         city: parameters.find(parameter => parameter.name == 'city').value,
         district: parameters.find(parameter => parameter.name == 'district').value,
       };
@@ -77,6 +79,14 @@ const CenterInfo = props => {
       {
         name: 'city',
         value: values.city,
+      },
+      {
+        name: 'email',
+        value: values.email,
+      },
+      {
+        name: 'phoneNumber',
+        value: values.phoneNumber,
       },
     ];
     parameterApi
@@ -134,6 +144,24 @@ const CenterInfo = props => {
                 }}>
                 {optionDistrictRendered}
               </Select>
+            </Form.Item>
+          </Col>
+          <Col className={styles['form-col']} xs={24} sm={24} md={12}>
+            <Form.Item label="Email" name="email" rules={[{ required: true, type: 'email' }]}>
+              <Input placeholder="Email" />
+            </Form.Item>
+          </Col>
+          <Col className={styles['form-col']} xs={24} sm={24} md={12}>
+            <Form.Item
+              label="Phone number"
+              name="phoneNumber"
+              onKeyPress={event => {
+                if (!/[0-9]/.test(event.key)) {
+                  event.preventDefault();
+                }
+              }}
+              rules={[{ required: true }, { min: 10 }]}>
+              <Input placeholder="Phone number" />
             </Form.Item>
           </Col>
           <Col className={styles['form-col']} xs={24} sm={24} md={12}></Col>

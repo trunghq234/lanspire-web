@@ -126,7 +126,6 @@ const AntCalendar = props => {
     return <CalendarCell date={date} events={evs} />;
   };
   const showDrawer = value => {
-    console.log(currentMode);
     if (currentMode == 'date') {
       const evs = events.filter(
         event => event.day.format('DD:MM:YYYY') == value.format('DD:MM:YYYY')

@@ -242,6 +242,7 @@ const AddClass = () => {
       } else {
         dispatch(
           updateClass.updateClassRequest({
+            ...classRoom,
             idClass: idClass,
             className: className,
             room: room,

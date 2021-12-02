@@ -43,7 +43,7 @@ const ClassDetails = () => {
           <TabPane tab="Students" key="3">
             <Transcript />
           </TabPane>
-          <TabPane tab="Students" key="4">
+          <TabPane tab="Exam" key="4">
             <ClassExam classData={classData} />
           </TabPane>
         </Tabs>

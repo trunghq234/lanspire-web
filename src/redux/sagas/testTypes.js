@@ -1,8 +1,16 @@
 import { call, put } from 'redux-saga/effects';
 import testTypeApi from 'api/testTypeApi';
 import * as testTypeActions from 'redux/actions/testTypes';
+import { takeLatest } from 'redux-saga/effects';
 
-export function* fetchTestTypes(action) {
+export function* testTypeSaga() {
+  yield takeLatest(testTypeActions.getTestTypes.getTestTypesRequest, fetchTestTypesSaga);
+  yield takeLatest(testTypeActions.createTestType.createTestTypeRequest, createTestTypeSaga);
+  yield takeLatest(testTypeActions.updateTestType.updateTestTypeRequest, updateTestTypeSaga);
+  yield takeLatest(testTypeActions.deleteTestType.deleteTestTypeRequest, deleteTestTypeSaga);
+}
+
+function* fetchTestTypesSaga(action) {
   try {
     const testTypes = yield call(testTypeApi.getAll);
 
@@ -12,7 +20,7 @@ export function* fetchTestTypes(action) {
   }
 }
 
-export function* createTestType(action) {
+function* createTestTypeSaga(action) {
   try {
     const newTestType = yield call(testTypeApi.create, action.payload);
 
@@ -22,7 +30,7 @@ export function* createTestType(action) {
   }
 }
 
-export function* updateTestType(action) {
+function* updateTestTypeSaga(action) {
   try {
     yield call(testTypeApi.update, action.payload);
     yield put(testTypeActions.updateTestType.updateTestTypeSuccess(action.payload));
@@ -31,7 +39,7 @@ export function* updateTestType(action) {
   }
 }
 
-export function* deleteTestType(action) {
+function* deleteTestTypeSaga(action) {
   try {
     yield call(testTypeApi.delete, action.payload);
 

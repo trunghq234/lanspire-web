@@ -17,7 +17,8 @@ const MainLayout = props => {
         return <Route key={index} path={route.path} exact={route.exact} component={route.page} />;
       });
     }
-    result.push(<Route path="*" component={NotFound} />);
+    result.push(<Route key={routes.length} path="*" component={NotFound} />);
+
     return result;
   };
 

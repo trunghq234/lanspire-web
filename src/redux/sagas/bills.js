@@ -1,8 +1,16 @@
 import { call, put } from 'redux-saga/effects';
 import billApi from '../../api/billApi';
 import * as billActions from '../actions/bills';
+import { takeLatest } from 'redux-saga/effects';
 
-export function* fetchBillsSaga(action) {
+export function* billSaga() {
+  yield takeLatest(billActions.getBills.getBillsRequest, fetchBillsSaga);
+  yield takeLatest(billActions.createBill.createBillRequest, createBillSaga);
+  yield takeLatest(billActions.updateBill.updateBillRequest, updateBillSaga);
+  yield takeLatest(billActions.deleteBill.deleteBillRequest, deleteBillSaga);
+}
+
+function* fetchBillsSaga(action) {
   try {
     const bills = yield call(billApi.getAll);
     yield put(billActions.getBills.getBillsSuccess(bills));
@@ -11,7 +19,7 @@ export function* fetchBillsSaga(action) {
   }
 }
 
-export function* createBillSaga(action) {
+function* createBillSaga(action) {
   try {
     const newBill = yield call(billApi.create, action.payload);
 
@@ -21,7 +29,7 @@ export function* createBillSaga(action) {
   }
 }
 
-export function* updateBillSaga(action) {
+function* updateBillSaga(action) {
   try {
     yield call(billApi.update, action.payload);
 
@@ -31,7 +39,7 @@ export function* updateBillSaga(action) {
   }
 }
 
-export function* deleteBillSaga(action) {
+function* deleteBillSaga(action) {
   try {
     yield call(billApi.remove, action.payload);
     yield put(billActions.deleteBill.deleteBillSuccess(action.payload));

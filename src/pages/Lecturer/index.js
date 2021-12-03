@@ -8,26 +8,26 @@ import * as lecturerActions from 'redux/actions/lecturers';
 import { lecturerState$ } from 'redux/selectors';
 import styles from './index.module.less';
 import { CSVLink } from 'react-csv';
+import ExportCSV from 'components/common/ExportCSV';
+import { lecturerHeadersExcel } from 'constant/headersExcel';
 
 const { confirm } = Modal;
 const { Search } = Input;
 
 const mapToDataSource = array => {
-  console.log({ array });
   return array.map(item => {
-    const address = `${item.address[0]}, ${item.address[1]}, ${item.address[2]}`;
     return {
       key: item.idLecturer,
       idLecturer: item.idLecturer,
       idUser: item.idUser,
-      username: item.username === null ? 'null' : item.username,
-      displayName: item.displayName,
-      email: item.email,
-      gender: item.gender === 0 ? 'Male' : item.gender === 1 ? 'Female' : 'Others',
-      phoneNumber: item.phoneNumber,
-      address,
-      birthday: moment(item.dob).format('DD/MM/YYYY'),
-      isActivated: item.isActivated,
+      username: item.User.username === null ? 'null' : item.User.username,
+      displayName: item.User.displayName,
+      email: item.User.email,
+      gender: item.User.gender === 0 ? 'Male' : item.User.gender === 1 ? 'Female' : 'Others',
+      phoneNumber: item.User.phoneNumber,
+      address: `${item.User.address[0]}, ${item.User.address[1]}, ${item.User.address[2]}`,
+      birthday: moment(item.User.dob).format('DD/MM/YYYY'),
+      isActivated: item.User.isActivated,
       isDeleted: item.isDeleted,
     };
   });
@@ -140,6 +140,7 @@ const Lecturer = () => {
       content: '',
       onOk() {
         const lecturer = lecturers.data.find(lecturer => lecturer.idLecturer === idLecturer);
+        console.log({ lecturer });
         dispatch(lecturerActions.deleteLecturer.deleteLecturerRequest(lecturer));
       },
       onCancel() {},
@@ -151,39 +152,6 @@ const Lecturer = () => {
     );
     setFilteredData(dataSearch);
   };
-
-  const headersExcel = [
-    {
-      label: 'Full name',
-      key: 'displayName',
-    },
-    {
-      label: 'Email',
-      key: 'email',
-    },
-    {
-      label: 'Gender',
-      key: 'gender',
-    },
-    {
-      label: 'Phone number',
-      key: 'phoneNumber',
-    },
-    {
-      label: 'Address',
-      key: 'address',
-    },
-    {
-      label: 'Birthday',
-      key: 'birthday',
-    },
-    {
-      label: 'Status',
-      key: 'isActivated',
-    },
-  ];
-
-  console.log({ dataSource });
 
   return (
     <>
@@ -219,13 +187,7 @@ const Lecturer = () => {
               Add lecturer
             </Button>
             <Button className={styles.btn} size="large" type="primary">
-              <CSVLink
-                filename={'Expense_Table.csv'}
-                data={dataSource}
-                headers={headersExcel}
-                className="btn btn-primary">
-                Export to CSV
-              </CSVLink>
+              <ExportCSV data={lecturers.data} headers={lecturerHeadersExcel} type="lecturer" />
             </Button>
           </div>
         </div>

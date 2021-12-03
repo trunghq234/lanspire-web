@@ -1,8 +1,16 @@
 import { call, put } from 'redux-saga/effects';
 import courseApi from 'api/courseApi';
 import * as courseActions from 'redux/actions/courses';
+import { takeLatest } from 'redux-saga/effects';
 
-export function* fetchCourses(action) {
+export function* courseSaga() {
+  yield takeLatest(courseActions.getCourses.getCoursesRequest, fetchCourses);
+  yield takeLatest(courseActions.createCourse.createCourseRequest, createCourse);
+  yield takeLatest(courseActions.updateCourse.updateCourseRequest, updateCourse);
+  yield takeLatest(courseActions.deleteCourse.deleteCourseRequest, deleteCourse);
+}
+
+function* fetchCourses(action) {
   try {
     const courses = yield call(courseApi.getAll);
 
@@ -12,7 +20,7 @@ export function* fetchCourses(action) {
   }
 }
 
-export function* createCourse(action) {
+function* createCourse(action) {
   try {
     const newCourse = yield call(courseApi.create, action.payload);
 
@@ -22,7 +30,7 @@ export function* createCourse(action) {
   }
 }
 
-export function* updateCourse(action) {
+function* updateCourse(action) {
   try {
     yield call(courseApi.update, action.payload);
     yield put(courseActions.updateCourse.updateCourseSuccess(action.payload));
@@ -31,7 +39,7 @@ export function* updateCourse(action) {
   }
 }
 
-export function* deleteCourse(action) {
+function* deleteCourse(action) {
   try {
     yield call(courseApi.delete, action.payload);
 

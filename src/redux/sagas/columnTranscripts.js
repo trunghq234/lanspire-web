@@ -1,8 +1,29 @@
 import { call, put } from 'redux-saga/effects';
 import columnTranscriptApi from 'api/columnTranscriptApi';
 import * as columnTranscriptActions from 'redux/actions/columnTranscripts';
+import { takeLatest } from 'redux-saga/effects';
 
-export function* fetchColumnTranscripts(action) {
+export function* columnTranscriptSaga() {
+  //column transcript
+  yield takeLatest(
+    columnTranscriptActions.getColumnTranscripts.getColumnTranscriptsRequest,
+    fetchColumnTranscripts
+  );
+  yield takeLatest(
+    columnTranscriptActions.createColumnTranscript.createColumnTranscriptRequest,
+    createColumnTranscript
+  );
+  yield takeLatest(
+    columnTranscriptActions.updateColumnTranscript.updateColumnTranscriptRequest,
+    updateColumnTranscript
+  );
+  yield takeLatest(
+    columnTranscriptActions.deleteColumnTranscript.deleteColumnTranscriptRequest,
+    deleteColumnTranscript
+  );
+}
+
+function* fetchColumnTranscripts(action) {
   try {
     const columnTranscripts = yield call(columnTranscriptApi.getAll);
 
@@ -14,7 +35,7 @@ export function* fetchColumnTranscripts(action) {
   }
 }
 
-export function* createColumnTranscript(action) {
+function* createColumnTranscript(action) {
   try {
     const newColumnTranscript = yield call(columnTranscriptApi.create, action.payload);
 
@@ -28,7 +49,7 @@ export function* createColumnTranscript(action) {
   }
 }
 
-export function* updateColumnTranscript(action) {
+function* updateColumnTranscript(action) {
   try {
     yield call(columnTranscriptApi.update, action.payload);
     yield put(

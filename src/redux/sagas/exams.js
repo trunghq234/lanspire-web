@@ -1,8 +1,16 @@
 import { call, put } from 'redux-saga/effects';
 import examApi from 'api/examApi';
 import * as examActions from 'redux/actions/exams';
+import { takeLatest } from 'redux-saga/effects';
 
-export function* fetchExamsByClass(action) {
+export function* examSaga() {
+  yield takeLatest(examActions.getExamsByClass.getExamsByClassRequest, fetchExamsByClassSaga);
+  yield takeLatest(examActions.createExam.createExamRequest, createExamSaga);
+  yield takeLatest(examActions.updateExam.updateExamRequest, updateExamSaga);
+  yield takeLatest(examActions.deleteExam.deleteExamRequest, deleteExamSaga);
+}
+
+export function* fetchExamsByClassSaga(action) {
   try {
     const exams = yield call(examApi.getByClass, action.payload);
 
@@ -12,7 +20,7 @@ export function* fetchExamsByClass(action) {
   }
 }
 
-export function* createExam(action) {
+export function* createExamSaga(action) {
   try {
     const newExam = yield call(examApi.create, action.payload);
 
@@ -22,7 +30,7 @@ export function* createExam(action) {
   }
 }
 
-export function* updateExam(action) {
+export function* updateExamSaga(action) {
   try {
     const updatedExam = yield call(examApi.update, action.payload);
 
@@ -32,7 +40,7 @@ export function* updateExam(action) {
   }
 }
 
-export function* deleteExam(action) {
+export function* deleteExamSaga(action) {
   try {
     yield call(examApi.delete, action.payload);
 

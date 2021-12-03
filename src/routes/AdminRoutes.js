@@ -218,6 +218,12 @@ const adminMenuItems = {
       component: <Lecturer />,
     },
     {
+      name: 'Employee',
+      icon: <EmployeeIcon />,
+      path: '/employee/',
+      component: <Employee />,
+    },
+    {
       name: 'Students',
       icon: <StudentIcon />,
       path: '/student/list',
@@ -246,17 +252,6 @@ const adminMenuItems = {
           path: '/columntranscript/',
           name: 'Column transcript',
           component: <ColumnTranscript />,
-        },
-      ],
-    },
-    {
-      name: 'Employee',
-      icon: <EmployeeIcon />,
-      routes: [
-        {
-          path: '/employee/',
-          name: 'Employee list',
-          component: <Employee />,
         },
       ],
     },

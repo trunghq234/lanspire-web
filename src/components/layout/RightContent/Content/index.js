@@ -1,15 +1,12 @@
 import { EditOutlined, LogoutOutlined } from '@ant-design/icons';
 import { Menu } from 'antd';
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
-import { RESET_ACTION } from 'redux/actions/actionTypes';
 import store from 'redux/store';
 
 const Content = props => {
-  let history = useHistory();
-  let dispatch = useDispatch();
-  let logout = () => {
+  const history = useHistory();
+  const logout = () => {
     if (localStorage.getItem('accessToken')) {
       store.dispatch({
         type: 'USER_LOGOUT',
@@ -18,7 +15,9 @@ const Content = props => {
       history.push('/login');
     }
   };
-  let editProfile = () => {};
+  const editProfile = () => {
+    history.push('/profile/');
+  };
 
   const contents = [
     {
@@ -47,7 +46,7 @@ const Content = props => {
       );
     });
   };
-  let menuRendered = renderMenu();
+  const menuRendered = renderMenu();
   return (
     <div>
       <Menu style={{ width: 180 }}>{menuRendered}</Menu>

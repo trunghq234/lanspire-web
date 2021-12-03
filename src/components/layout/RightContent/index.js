@@ -1,4 +1,5 @@
-import { Avatar, Badge, Image, Popover } from 'antd';
+import { Avatar, Popover } from 'antd';
+import { avatarUrl } from 'constant/imageUrl.js';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from 'redux/actions/users';
@@ -16,17 +17,17 @@ const RightContent = () => {
   return (
     <div>
       <Popover placement="bottomRight" content={<Content />} title={<Title />} trigger="hover">
-        <Badge dot>
-          <Avatar
-            src={
-              !user.imageUrl ? (
-                <Image src="https://joeschmoe.io/api/v1/random" style={{ width: 32 }} />
-              ) : (
-                <Image src={user.imageUrl} style={{ width: 32 }} />
-              )
-            }
-          />
-        </Badge>
+        <Avatar
+          style={{ cursor: 'pointer' }}
+          shape="square"
+          src={
+            !user.imageUrl ? (
+              <img alt="avatar" src={avatarUrl} style={{ width: 32 }} />
+            ) : (
+              <img alt="avatar" src={user.imageUrl} style={{ width: 32 }} />
+            )
+          }
+        />
       </Popover>
     </div>
   );

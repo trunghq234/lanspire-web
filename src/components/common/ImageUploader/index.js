@@ -5,13 +5,14 @@ import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { storage } from 'utils/firebase';
 import { v4 as uuidv4 } from 'uuid';
 
-const ImageUploader = () => {
+const ImageUploader = ({ onUploaded, url }) => {
   const [previewImage, setPreviewImage] = useState('');
   const [previewVisible, setPreviewVisible] = useState(false);
-  const [fileList, setFileList] = useState([]);
+  const [fileList, setFileList] = useState([
+    { uid: '-1', url: url, thumbUrl: url, status: 'success' },
+  ]);
   const [progress, setProgress] = useState(0);
   const [progressVisible, setProgressVisible] = useState(false);
-  const [fileUrl, setFileUrl] = useState([]);
 
   const handleCancel = () => setPreviewVisible(false);
 
@@ -49,13 +50,11 @@ const ImageUploader = () => {
         setProgress(prog);
       },
       error => {
-        console.log(error);
         onError(error);
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then(downloadURL => {
-          setFileUrl(downloadURL);
-          console.log(downloadURL);
+          onUploaded(downloadURL);
         });
         onSuccess('Ok');
         setProgressVisible(false);
@@ -78,7 +77,7 @@ const ImageUploader = () => {
         {fileList.length < 1 && <UploadOutlined />}
       </Upload>
       {progressVisible && <Progress percent={progress} />}
-      <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
+      <Modal width={400} visible={previewVisible} footer={null} onCancel={handleCancel}>
         <img alt="example" style={{ width: '100%' }} src={previewImage} />
       </Modal>
     </div>

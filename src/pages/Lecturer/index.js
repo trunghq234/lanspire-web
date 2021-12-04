@@ -156,13 +156,10 @@ const Lecturer = () => {
   return (
     <>
       <Breadcrumb>
-        <Breadcrumb.Item>Home</Breadcrumb.Item>
         <Breadcrumb.Item>
-          <a href="">Application Center</a>
+          <NavLink to="/">Dashboard</NavLink>
         </Breadcrumb.Item>
-        <Breadcrumb.Item>
-          <a href="">Application List</a>
-        </Breadcrumb.Item>
+        <Breadcrumb.Item>Employees</Breadcrumb.Item>
       </Breadcrumb>
       <h3 className="heading">Lecturer list</h3>
       <Card>

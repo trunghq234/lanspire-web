@@ -218,7 +218,7 @@ const adminMenuItems = {
       component: <Lecturer />,
     },
     {
-      name: 'Employee',
+      name: 'Employees',
       icon: <EmployeeIcon />,
       path: '/employee/',
       component: <Employee />,
@@ -257,20 +257,21 @@ const adminMenuItems = {
     },
     {
       path: '/time-frame',
-      name: 'Time Frame',
+      name: 'Time frame',
       icon: <TimeFrameIcon />,
       component: <TimeFrame />,
     },
     {
-      name: 'Class',
+      name: 'Classses',
       icon: <ClassIcon />,
-      routes: [
-        {
-          path: '/class/',
-          name: 'Class list',
-          component: <Class />,
-        },
-      ],
+      path: '/class/',
+      component: <Class />,
+    },
+    {
+      path: '/invoice',
+      name: 'Invoice',
+      icon: <CashIcon />,
+      component: <Invoice />,
     },
     {
       name: 'Setting',
@@ -287,12 +288,6 @@ const adminMenuItems = {
           component: <Setting />,
         },
       ],
-    },
-    {
-      path: '/invoice',
-      name: 'Invoice',
-      icon: <CashIcon />,
-      component: <Invoice />,
     },
   ],
 };

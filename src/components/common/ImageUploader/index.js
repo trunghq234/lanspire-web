@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, Progress, Upload } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
@@ -8,13 +8,22 @@ import { v4 as uuidv4 } from 'uuid';
 const ImageUploader = ({ onUploaded, url }) => {
   const [previewImage, setPreviewImage] = useState('');
   const [previewVisible, setPreviewVisible] = useState(false);
-  const [fileList, setFileList] = useState([
-    { uid: '-1', url: url, thumbUrl: url, status: 'success' },
-  ]);
+  const [fileList, setFileList] = useState([]);
   const [progress, setProgress] = useState(0);
   const [progressVisible, setProgressVisible] = useState(false);
 
+  useEffect(() => {
+    if (url) {
+      setFileList([{ uid: '-1', url: url, thumbUrl: url, status: 'success' }]);
+    }
+  }, [url]);
+
   const handleCancel = () => setPreviewVisible(false);
+
+  const handleRemove = () => {
+    setFileList([]);
+    onUploaded(null);
+  };
 
   const handlePreview = file => {
     setPreviewImage(file.thumbUrl);
@@ -70,6 +79,7 @@ const ImageUploader = ({ onUploaded, url }) => {
         multiple={false}
         maxCount={1}
         fileList={fileList}
+        onRemove={handleRemove}
         onPreview={handlePreview}
         onChange={handleUpload}
         beforeUpload={checkFileSize}

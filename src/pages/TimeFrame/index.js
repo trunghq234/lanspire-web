@@ -29,8 +29,8 @@ const TimeFrame = () => {
   const dispatch = useDispatch();
   const timeFrames = useSelector(timeFrameState$);
   const formRef = createRef();
-  const tooltipEdit = 'abcdef';
-  const tooltipDelete = 'abadad';
+  const tooltipEdit = `Can't edit because time frame is in use`;
+  const tooltipDelete = `Can't delete because time frame is in use`;
 
   const columns = [
     {
@@ -110,7 +110,10 @@ const TimeFrame = () => {
                 }}
               />
             </Tooltip>
-            <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.idTimeFrame)}>
+            <Popconfirm
+              title="Sure to delete?"
+              onConfirm={() => handleDelete(record.idTimeFrame)}
+              disabled={record.ClassTimes.length > 0}>
               <Tooltip title={record.ClassTimes.length > 0 ? tooltipDelete : 'Delete time frame'}>
                 <Button danger icon={<DeleteOutlined />} disabled={record.ClassTimes.length > 0} />
               </Tooltip>
@@ -201,6 +204,7 @@ const TimeFrame = () => {
       startingTime: start,
       endingTime: end,
       ClassTimes: [],
+      activate: true,
     };
     dispatch(timeFrameActions.updateTimeFrame.updateTimeFrameRequest(tmp));
     setIsEdit(false);

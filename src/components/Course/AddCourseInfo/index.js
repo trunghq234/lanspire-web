@@ -89,7 +89,14 @@ const AddCourseInfo = ({ form, goNext, handleSubmitCourse, editCourse, isBack })
           label="Fee"
           name="fee"
           rules={[{ required: true }, { validator: numberValidator }]}>
-          <Input style={{ width: '50%' }} min={0} maxLength={18} placeholder="Course fee" />
+          <InputNumber
+            style={{ width: '50%' }}
+            min={0}
+            maxLength={18}
+            addonAfter="₫"
+            placeholder="Course fee"
+            formatter={value => value.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+          />
         </Form.Item>
         <Form.Item label="Max number of students" name="max" rules={[{ required: true }]}>
           <InputNumber
@@ -135,7 +142,7 @@ const AddCourseInfo = ({ form, goNext, handleSubmitCourse, editCourse, isBack })
           <TextArea
             allowClear
             maxLength="255"
-            placeholder="Description about the course type"
+            placeholder="Description about the course"
             autoSize={{ minRows: 3, maxRows: 6 }}
           />
         </Form.Item>

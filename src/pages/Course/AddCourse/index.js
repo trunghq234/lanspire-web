@@ -21,8 +21,7 @@ const AddCourse = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [isBack, setIsBack] = useState(false);
   const [columnKeys, setColumnKeys] = useState([]);
-  const [course, setCourse] = useState({});
-  const [editCourse, setEditCourse] = useState();
+  const [course, setCourse] = useState();
 
   const { idCourse } = useParams();
   useEffect(() => {
@@ -30,7 +29,7 @@ const AddCourse = () => {
       setIsEdit(true);
       dispatch(getCourses.getCoursesRequest());
       const tmp = courseList.find(course => course.idCourse === idCourse);
-      setEditCourse(tmp);
+      setCourse(tmp);
     }
   }, [idCourse]);
 
@@ -73,7 +72,8 @@ const AddCourse = () => {
     }
   }, [isDispatchSuccess, isLoading]);
   const handleSubmitCourse = value => {
-    setCourse(value);
+    const tmp = { ...course, ...value };
+    setCourse(tmp);
   };
   const handleAddNew = () => {
     form.resetFields();
@@ -85,7 +85,7 @@ const AddCourse = () => {
       form={form}
       handleSubmitCourse={handleSubmitCourse}
       goNext={goNext}
-      editCourse={editCourse}
+      editCourse={course}
       isBack={isBack}
     />,
     <ColumnInput
@@ -93,7 +93,7 @@ const AddCourse = () => {
       handleSubmit={handleSubmit}
       goPrev={goPrev}
       changeColNum={e => setColumnKeys(e)}
-      editCourse={editCourse}
+      editCourse={course}
     />,
   ];
   return (

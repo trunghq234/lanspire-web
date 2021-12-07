@@ -187,7 +187,7 @@ const Invoice = () => {
         </Breadcrumb.Item>
         <Breadcrumb.Item>Invoice</Breadcrumb.Item>
       </Breadcrumb>
-      <h3>Invoice list</h3>
+      <h3 className="heading">Invoice list</h3>
       <Card>
         <Row gutter={[20, 20]}>
           <Col span={8}>

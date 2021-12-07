@@ -31,14 +31,8 @@ const TopClasses = () => {
           <Skeleton title={false} paragraph={{ rows: 16 }} />
         ) : (
           classes.map((e, index) => (
-            <Col span={24}>
-              <Course
-                key={index}
-                no={index + 1}
-                idclass={e.idclass}
-                classname={e.classname}
-                total={e.total}
-              />
+            <Col key={index} span={24}>
+              <Course no={index + 1} idclass={e.idclass} classname={e.classname} total={e.total} />
             </Col>
           ))
         )}

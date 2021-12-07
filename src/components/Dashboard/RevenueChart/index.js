@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Col, Row, Select, Spin } from 'antd';
 import { Line } from '@ant-design/charts';
-import styles from './index.module.less';
 import moment from 'moment';
 
 const { Option } = Select;
@@ -77,7 +76,7 @@ const RevenueChart = ({ data, isLoading }) => {
         <Col flex="auto" />
         <Col span={4}>
           <Select
-            className={styles.select}
+            className="full"
             placeholder="Select mode"
             defaultValue="Last 7 days"
             onChange={setDays}>

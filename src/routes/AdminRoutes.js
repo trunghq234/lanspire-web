@@ -1,48 +1,49 @@
-import Icon, { SettingOutlined } from '@ant-design/icons';
+import Icon from '@ant-design/icons';
 import Class from 'pages/Class';
 import AddClass from 'pages/Class/AddClass';
+import ClassDetails from 'pages/Class/ClassDetails';
 import Course from 'pages/Course';
 import AddCourse from 'pages/Course/AddCourse';
-import ColumnTranscript from 'pages/Course/ColumnTranscript';
 import CourseDetails from 'pages/Course/CourseDetails';
-import CourseType from 'pages/Course/CourseType';
-import Level from 'pages/Course/Level';
 import Dashboard from 'pages/Dashboard';
 import Employee from 'pages/Employee';
 import AddEmployee from 'pages/Employee/AddEmployee';
+import ColumnTranscript from 'pages/Expand/ColumnTranscript';
+import CourseType from 'pages/Expand/CourseType';
+import Level from 'pages/Expand/Level';
+import TimeFrame from 'pages/Expand/TimeFrame';
+import Invoice from 'pages/Invoice';
+import InvoiceDetails from 'pages/Invoice/InvoiceDetails';
 import Lecturer from 'pages/Lecturer';
 import AddLecturer from 'pages/Lecturer/AddLecturer';
+import Profile from 'pages/Setting/Profile';
+import Setting from 'pages/Setting/Setting';
 import Student from 'pages/Student';
 import AddStudent from 'pages/Student/AddStudent';
 import StudentDetails from 'pages/Student/StudentDetails';
 import ArrangeClass from 'pages/Student/StudentDetails/ArrangeClass';
-import TimeFrame from 'pages/TimeFrame';
 import React from 'react';
 import {
   cashSvg,
   classSvg,
+  cogSvg,
   courseSvg,
   dashboardSvg,
-  employeeSvg,
-  lecturerSvg,
+  expandSvg,
   studentSvg,
-  timeSvg,
+  userGroupSvg,
+  usersSvg,
 } from 'utils/iconsvg';
-import ClassDetails from 'pages/Class/ClassDetails';
-import Setting from 'pages/Setting/Setting';
-import Profile from 'pages/Setting/Profile';
-import ClassExam from 'components/Class/ClassExam';
-import Invoice from 'pages/Invoice';
-import InvoiceDetails from 'pages/Invoice/InvoiceDetails';
 
 const DashboardIcon = props => <Icon component={dashboardSvg} {...props} />;
-const LecturerIcon = props => <Icon component={lecturerSvg} {...props} />;
 const CourseIcon = props => <Icon component={courseSvg} {...props} />;
-const EmployeeIcon = props => <Icon component={employeeSvg} {...props} />;
+const UsersIcon = props => <Icon component={usersSvg} {...props} />;
+const UserGroupIcon = props => <Icon component={userGroupSvg} {...props} />;
 const ClassIcon = props => <Icon component={classSvg} {...props} />;
-const TimeFrameIcon = props => <Icon component={timeSvg} {...props} />;
 const StudentIcon = props => <Icon component={studentSvg} {...props} />;
 const CashIcon = props => <Icon component={cashSvg} {...props} />;
+const ExpandIcon = props => <Icon component={expandSvg} {...props} />;
+const CogIcon = props => <Icon component={cogSvg} {...props} />;
 
 const adminRoutes = [
   {
@@ -212,16 +213,16 @@ const adminMenuItems = {
       component: <Dashboard />,
     },
     {
-      name: 'Lecturers',
-      icon: <LecturerIcon />,
-      path: '/lecturer/',
-      component: <Lecturer />,
+      name: 'Courses',
+      icon: <CourseIcon />,
+      path: '/course/',
+      component: <Course />,
     },
     {
-      name: 'Employees',
-      icon: <EmployeeIcon />,
-      path: '/employee/',
-      component: <Employee />,
+      name: 'Classses',
+      icon: <ClassIcon />,
+      path: '/class/',
+      component: <Class />,
     },
     {
       name: 'Students',
@@ -230,14 +231,21 @@ const adminMenuItems = {
       component: <Student />,
     },
     {
-      name: 'Course',
-      icon: <CourseIcon />,
+      name: 'Lecturers',
+      icon: <UserGroupIcon />,
+      path: '/lecturer/',
+      component: <Lecturer />,
+    },
+    {
+      name: 'Employees',
+      icon: <UsersIcon />,
+      path: '/employee/',
+      component: <Employee />,
+    },
+    {
+      name: 'Expand',
+      icon: <ExpandIcon />,
       routes: [
-        {
-          path: '/course/',
-          name: 'Course list',
-          component: <Course />,
-        },
         {
           path: '/coursetype/',
           name: 'Course type',
@@ -253,29 +261,22 @@ const adminMenuItems = {
           name: 'Column transcript',
           component: <ColumnTranscript />,
         },
+        {
+          path: '/time-frame/',
+          name: 'Time frame',
+          component: <TimeFrame />,
+        },
       ],
     },
     {
-      path: '/time-frame',
-      name: 'Time frame',
-      icon: <TimeFrameIcon />,
-      component: <TimeFrame />,
-    },
-    {
-      name: 'Classses',
-      icon: <ClassIcon />,
-      path: '/class/',
-      component: <Class />,
-    },
-    {
       path: '/invoice',
-      name: 'Invoice',
+      name: 'Invoices',
       icon: <CashIcon />,
       component: <Invoice />,
     },
     {
       name: 'Setting',
-      icon: <SettingOutlined />,
+      icon: <CogIcon />,
       routes: [
         {
           path: '/profile/',

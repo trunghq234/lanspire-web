@@ -85,11 +85,13 @@ const InvoiceDetails = () => {
       title: 'Start date',
       dataIndex: 'startDate',
       align: 'center',
+      render: text => <div>{moment(text, 'YYYY-MM-DD').format('DD-MM-YYYY')}</div>,
     },
     {
       title: 'End date',
       dataIndex: 'endDate',
       align: 'center',
+      render: text => <div>{moment(text, 'YYYY-MM-DD').format('DD-MM-YYYY')}</div>,
     },
     {
       title: 'Room',

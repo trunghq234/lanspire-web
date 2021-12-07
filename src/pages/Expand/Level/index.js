@@ -1,53 +1,48 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Breadcrumb, Button, Tooltip, Card, Input, Row, Col, Table, message, Modal } from 'antd';
+import { Breadcrumb, Button, Tooltip, Card, Input, Row, Col, Table, message } from 'antd';
+import { Modal } from 'antd';
 import { EditOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import AddLevel from '../../../components/Course/AddLevel';
 import { useDispatch, useSelector } from 'react-redux';
-import { columnTranscriptState$ } from 'redux/selectors';
-import { getColumnTranscripts, deleteColumnTranscript } from 'redux/actions/columnTranscripts';
-import AddColumnTranscript from 'components/Course/AddColumnTranscript';
+import { levelState$ } from 'redux/selectors';
+import { getLevels, deleteLevel } from 'redux/actions/levels';
 
 const { confirm } = Modal;
 const { Search } = Input;
 
-const ColumnTranscript = () => {
+const Level = () => {
   const columns = [
     {
-      title: 'Column name',
-      dataIndex: 'columnName',
+      title: 'Level name',
+      dataIndex: 'levelName',
     },
     {
-      title: 'Min',
-      dataIndex: 'min',
+      title: 'Point',
+      dataIndex: 'point',
       align: 'center',
-      sorter: (a, b) => a.min - b.min,
+      sorter: (a, b) => a.point - b.point,
     },
     {
-      title: 'Max',
-      dataIndex: 'max',
+      title: 'Language',
+      dataIndex: 'language',
       align: 'center',
-      sorter: (a, b) => a.max - b.max,
     },
     {
       title: '',
-      dataIndex: 'idColumn',
+      dataIndex: 'idLevel',
       align: 'center',
       width: '10%',
-      render: idColumn => {
+      render: idLevel => {
         return (
           <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
-            <Tooltip title="Edit information">
-              <Link to={`/columntranscript/${idColumn}`}>
-                <Button
-                  onClick={() => setTrigger(!trigger)}
-                  type="primary"
-                  ghost
-                  icon={<EditOutlined />}
-                />
+            <Tooltip title="Edit level">
+              <Link to={`/level/${idLevel}`}>
+                <Button type="primary" ghost icon={<EditOutlined />} />
               </Link>
             </Tooltip>
             <Tooltip title="Delete">
-              <Button onClick={() => handleDelete(idColumn)} danger icon={<DeleteOutlined />} />
+              <Button onClick={() => handleDelete(idLevel)} danger icon={<DeleteOutlined />} />
             </Tooltip>
           </div>
         );
@@ -55,43 +50,36 @@ const ColumnTranscript = () => {
     },
   ];
 
-  const [trigger, setTrigger] = useState(false);
   const dispatch = useDispatch();
-  const { data, isLoading, isSuccess } = useSelector(columnTranscriptState$);
+  const { data, isLoading, isSuccess } = useSelector(levelState$);
   useEffect(() => {
-    dispatch(getColumnTranscripts.getColumnTranscriptsRequest());
+    dispatch(getLevels.getLevelsRequest());
   }, []);
 
   const handleDelete = id => {
     confirm({
-      title: 'Do you want to delete this column?',
+      title: 'Do you want to delete this level?',
       icon: <ExclamationCircleOutlined />,
+      content: '',
       centered: true,
       onOk() {
-        dispatch(deleteColumnTranscript.deleteColumnTranscriptRequest(id));
+        dispatch(deleteLevel.deleteLevelRequest(id));
 
         isSuccess
-          ? message['success']({
+          ? message.success({
               content: 'Deleted successfully',
-              style: {
-                marginTop: '20vh',
-              },
             })
-          : message['error']({
+          : message.error({
               content: 'Error',
-              style: {
-                marginTop: '20vh',
-              },
             });
       },
-      onCancel() {},
     });
   };
 
   const [dataSource, setDataSource] = useState([]);
   const handleSearch = value => {
     const dataTmp = data.filter(
-      item => item.columnName.toLowerCase().search(value.toLowerCase()) >= 0
+      item => item.levelName.toLowerCase().search(value.toLowerCase()) >= 0
     );
     setDataSource(dataTmp);
   };
@@ -104,9 +92,9 @@ const ColumnTranscript = () => {
         <Breadcrumb.Item>
           <a href="/">Dashboard</a>
         </Breadcrumb.Item>
-        <Breadcrumb.Item>Column transcript</Breadcrumb.Item>
+        <Breadcrumb.Item>Level</Breadcrumb.Item>
       </Breadcrumb>
-      <h3>Column transcript</h3>
+      <h3 className="heading">Level</h3>
       <Row gutter={[20, 20]}>
         <Col xs={{ order: 1 }} sm={{ order: 1 }} lg={{ order: 0 }} span={24} xl={16}>
           <Card>
@@ -126,7 +114,7 @@ const ColumnTranscript = () => {
                   loading={isLoading}
                   columns={columns}
                   dataSource={dataSource}
-                  rowKey={row => row.idColumn}
+                  rowKey={row => row.idLevel}
                   pagination={{
                     defaultPageSize: 10,
                     showSizeChanger: true,
@@ -139,7 +127,7 @@ const ColumnTranscript = () => {
         </Col>
         <Col lg={{ order: 1 }} span={24} xl={8}>
           <Card>
-            <AddColumnTranscript trigger={trigger} />
+            <AddLevel />
           </Card>
         </Col>
       </Row>
@@ -147,4 +135,4 @@ const ColumnTranscript = () => {
   );
 };
 
-export default ColumnTranscript;
+export default Level;

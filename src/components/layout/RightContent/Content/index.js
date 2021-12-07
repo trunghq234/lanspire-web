@@ -1,8 +1,12 @@
-import { EditOutlined, LogoutOutlined } from '@ant-design/icons';
 import { Menu } from 'antd';
 import React from 'react';
 import { useHistory } from 'react-router';
 import store from 'redux/store';
+import Icon from '@ant-design/icons';
+import { logOutSvg, penSvg } from 'utils/iconsvg.js';
+
+const PenIcon = props => <Icon component={penSvg} {...props} />;
+const LogOutIcon = props => <Icon component={logOutSvg} {...props} />;
 
 const Content = props => {
   const history = useHistory();
@@ -22,13 +26,13 @@ const Content = props => {
   const contents = [
     {
       key: '1',
-      icon: EditOutlined,
+      icon: PenIcon,
       content: 'Edit Profile',
       onClick: editProfile,
     },
     {
       key: '2',
-      icon: LogoutOutlined,
+      icon: LogOutIcon,
       content: 'Log Out',
       onClick: logout,
     },

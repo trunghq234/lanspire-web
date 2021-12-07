@@ -104,7 +104,7 @@ const Dashboard = () => {
 
   return (
     <div>
-      <h1>Dashboard</h1>
+      <h3 className="heading">Dashboard</h3>
       <Row gutter={[20, 20]}>
         {statistics.map(item => (
           <Col key={item.title} span={6}>

@@ -34,7 +34,6 @@ const ColumnInput = ({ editCourse, ...props }) => {
   const [selected, setSelected] = useState([]);
   useEffect(() => {
     if (editCourse && idCourse) {
-      console.log(editCourse);
       const selectedKey = editCourse.Columns.map(column => column.idColumn);
       setSelected(selectedKey);
       props.changeColNum(selectedKey);

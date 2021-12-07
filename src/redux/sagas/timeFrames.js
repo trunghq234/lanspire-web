@@ -5,7 +5,6 @@ import { takeLatest } from 'redux-saga/effects';
 
 export function* timeFrameSaga() {
   yield takeLatest(timeFrameActions.getAllTimeFrames.getAllTimeFramesRequest, fetchTimeFramesSaga);
-  yield takeLatest(timeFrameActions.getByIdTimeFrame.getByIdTimeFrameRequest, fetchTimeFrameSaga);
   yield takeLatest(timeFrameActions.createTimeFrame.createTimeFrameRequest, createTimeFrameSaga);
   yield takeLatest(timeFrameActions.updateTimeFrame.updateTimeFrameRequest, updateTimeFrameSaga);
   yield takeLatest(timeFrameActions.updateTimeFrames.updateTimeFramesRequest, updateTimeFramesSaga);
@@ -20,20 +19,10 @@ function* fetchTimeFramesSaga(action) {
     yield put(timeFrameActions.getAllTimeFrames.getAllTimeFramesFailure(error));
   }
 }
-function* fetchTimeFrameSaga(action) {
-  try {
-    const timeFrame = yield call(timeFrameApi.getById, action.payload);
-
-    yield put(timeFrameActions.getByIdTimeFrame.getByIdTimeFrameSuccess(timeFrame));
-  } catch (error) {
-    yield put(timeFrameActions.getByIdTimeFrame.getByIdTimeFrameFailure(error));
-  }
-}
-
 function* updateTimeFrameSaga(action) {
   try {
-    const data = yield call(timeFrameApi.update, action.payload);
-    yield put(timeFrameActions.updateTimeFrame.updateTimeFrameSuccess(data));
+    yield call(timeFrameApi.update, action.payload);
+    yield put(timeFrameActions.updateTimeFrame.updateTimeFrameSuccess(action.payload));
   } catch (error) {
     yield put(timeFrameActions.updateTimeFrame.updateTimeFrameFailure(error));
   }
@@ -41,8 +30,8 @@ function* updateTimeFrameSaga(action) {
 
 function* updateTimeFramesSaga(action) {
   try {
-    const data = yield call(timeFrameApi.updateAll, action.payload);
-    yield put(timeFrameActions.updateTimeFrames.updateTimeFramesSuccess(data));
+    yield call(timeFrameApi.updateAll, action.payload);
+    yield put(timeFrameActions.updateTimeFrames.updateTimeFramesSuccess(action.payload));
   } catch (error) {
     yield put(timeFrameActions.updateTimeFrames.updateTimeFramesFailure(error));
   }
@@ -60,8 +49,8 @@ function* deleteTimeFrameSaga(action) {
 
 function* createTimeFrameSaga(action) {
   try {
-    const timeFrame = yield call(timeFrameApi.create, action.payload);
-    yield put(timeFrameActions.createTimeFrame.createTimeFrameSuccess(timeFrame));
+    yield call(timeFrameApi.create, action.payload);
+    yield put(timeFrameActions.createTimeFrame.createTimeFrameSuccess(action.payload));
   } catch (error) {
     yield put(timeFrameActions.createTimeFrame.createTimeFrameFailure(error));
   }

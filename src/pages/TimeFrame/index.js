@@ -1,7 +1,18 @@
 import React, { createRef, useEffect, useState } from 'react';
 import FormAdd from 'components/TimeFrame/FormAdd';
 import moment from 'moment';
-import { Row, Col, Table, Tooltip, Button, notification, Popconfirm, Card, Breadcrumb } from 'antd';
+import {
+  Row,
+  Col,
+  Table,
+  Tooltip,
+  Button,
+  notification,
+  Popconfirm,
+  Card,
+  Breadcrumb,
+  Tag,
+} from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { timeFrameState$ } from 'redux/selectors';
@@ -9,6 +20,18 @@ import * as timeFrameActions from 'redux/actions/timeFrames';
 import FormEdit from 'components/TimeFrame/FormEdit';
 import style from './index.module.less';
 const TimeFrame = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [dataSource, setDataSource] = useState([]);
+  const [isEdit, setIsEdit] = useState(false);
+  const [isSubmit, setIsSubmit] = useState(false);
+  const [recordEdited, setIdRecordEdited] = useState({});
+  const dispatch = useDispatch();
+  const timeFrames = useSelector(timeFrameState$);
+  const formRef = createRef();
+  const tooltipEdit = 'abcdef';
+  const tooltipDelete = 'abadad';
+
   const columns = [
     {
       key: 'id',
@@ -45,15 +68,41 @@ const TimeFrame = () => {
       align: 'center',
     },
     {
+      key: 'status',
+      title: 'Status',
+      dataIndex: 'activate',
+      filters: [
+        {
+          text: 'Inactivated',
+          value: false,
+        },
+        {
+          text: 'Activate',
+          value: true,
+        },
+      ],
+      render: (status, index) => {
+        const color = status == 0 ? 'gray' : 'orange';
+        return (
+          <Tag color={color} key={index}>
+            {status == 0 ? 'Inactivated' : 'Activate'}
+          </Tag>
+        );
+      },
+      onFilter: (value, record) => record.activate === value,
+      align: 'center',
+    },
+    {
       title: '',
       align: 'center',
       render: record => {
         return (
           <div style={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>
-            <Tooltip title="Edit information">
+            <Tooltip title={record.ClassTimes.length > 0 ? tooltipEdit : 'Edit time frame'}>
               <Button
                 type="primary"
                 ghost
+                disabled={record.ClassTimes.length > 0}
                 icon={<EditOutlined />}
                 onClick={() => {
                   setIsEdit(true);
@@ -62,8 +111,8 @@ const TimeFrame = () => {
               />
             </Tooltip>
             <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.idTimeFrame)}>
-              <Tooltip title="Delete">
-                <Button danger icon={<DeleteOutlined />} />
+              <Tooltip title={record.ClassTimes.length > 0 ? tooltipDelete : 'Delete time frame'}>
+                <Button danger icon={<DeleteOutlined />} disabled={record.ClassTimes.length > 0} />
               </Tooltip>
             </Popconfirm>
           </div>
@@ -71,14 +120,6 @@ const TimeFrame = () => {
       },
     },
   ];
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
-  const [dataSource, setDataSource] = useState([]);
-  const [isEdit, setIsEdit] = useState(false);
-  const [recordEdited, setIdRecordEdited] = useState({});
-  const dispatch = useDispatch();
-  const timeFrames = useSelector(timeFrameState$);
-  const formRef = createRef();
 
   useEffect(() => {
     dispatch(timeFrameActions.getAllTimeFrames.getAllTimeFramesRequest());
@@ -87,12 +128,7 @@ const TimeFrame = () => {
   //Set data source
   useEffect(() => {
     setDataSource(timeFrames.data);
-    if (timeFrames.isLoading && timeFrames.error.length > 0) {
-      notification.error({
-        message: timeFrames.error,
-      });
-    }
-  }, [timeFrames]);
+  }, [timeFrames.data]);
 
   //Notification success
   useEffect(() => {
@@ -100,22 +136,34 @@ const TimeFrame = () => {
       notification.success({
         message: 'Successfully!',
       });
+    } else if (isSubmit && !timeFrames.isSuccess && timeFrames.error.length > 0) {
+      notification.error({
+        message: timeFrames.error,
+        style: {
+          width: 300,
+        },
+      });
     }
+    setIsSubmit(false);
   }, [timeFrames.isLoading]);
 
   //reset form add
   useEffect(() => {
     formRef.current.resetFields();
   }, [timeFrames.data]);
+
+  //handle disable button edit and delete
+  useEffect(() => {}, []);
+
   //Add
   const handleAddTimeFrames = values => {
     const newTimeFrames = [];
     let isExist = false;
     for (var i = 0; i < values.timeFrames.length; ++i) {
       const item = values.timeFrames[i];
-      const start = moment(item.time[0]).format('HH:mm');
-      const end = moment(item.time[1]).format('HH:mm');
-      const tmp = { startingTime: start, endingTime: end };
+      const start = moment(item.time[0]).format('HH:mm:ss');
+      const end = moment(item.time[1]).format('HH:mm:ss');
+      const tmp = { startingTime: start, endingTime: end, ClassTimes: [], activate: true };
       const exist = newTimeFrames.find(
         element => element.startingTime === start && element.endingTime === end
       );
@@ -132,6 +180,7 @@ const TimeFrame = () => {
       });
     } else {
       dispatch(timeFrameActions.createTimeFrame.createTimeFrameRequest(newTimeFrames));
+      setIsSubmit(true);
     }
   };
 
@@ -140,16 +189,24 @@ const TimeFrame = () => {
     const tmp = dataSource.filter(item => item.idTimeFrame != idTimeFrame);
     setDataSource(tmp);
     dispatch(timeFrameActions.deleteTimeFrame.deleteTimeFrameRequest(idTimeFrame));
+    setIsSubmit(true);
   };
 
   //Update
   const handleUpdate = value => {
-    const start = moment(value.timeFrame[0]).format('HH:mm');
-    const end = moment(value.timeFrame[1]).format('HH:mm');
-    const tmp = { idTimeFrame: recordEdited.idTimeFrame, startingTime: start, endingTime: end };
+    const start = moment(value.timeFrame[0]).format('HH:mm:ss');
+    const end = moment(value.timeFrame[1]).format('HH:mm:ss');
+    const tmp = {
+      idTimeFrame: recordEdited.idTimeFrame,
+      startingTime: start,
+      endingTime: end,
+      ClassTimes: [],
+    };
     dispatch(timeFrameActions.updateTimeFrame.updateTimeFrameRequest(tmp));
     setIsEdit(false);
+    setIsSubmit(true);
   };
+
   return (
     <Col span={24}>
       <Breadcrumb style={{ marginBottom: '10px' }}>

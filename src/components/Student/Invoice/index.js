@@ -1,14 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { Card, Row, Col, Table, Button } from 'antd';
-import styles from './index.module.less';
-import { numberWithCommas } from 'utils/stringHelper';
+import { Col, Row, Table } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getParameters } from 'redux/actions/parameters';
+import { parameterState$ } from 'redux/selectors';
 import { currentDate } from 'utils/dateTime';
+import { numberWithCommas } from 'utils/stringHelper';
+import styles from './index.module.less';
 
 const Invoice = React.forwardRef((props, ref) => {
   const [centerName, setCenterName] = useState('Lanspire');
   const [centerAddress, setCenterAddress] = useState('Hồ chí minh');
   const [centerPhone, setCenterPhone] = useState('012345678');
   const { fullName, phoneNumber, address, totalFee, dataSource, creator } = props;
+  const dispatch = useDispatch();
+  const parameters = useSelector(parameterState$);
   const columns = [
     {
       title: 'No.',
@@ -46,6 +51,23 @@ const Invoice = React.forwardRef((props, ref) => {
       align: 'center',
     },
   ];
+
+  useEffect(() => {
+    dispatch(getParameters.getParametersRequest());
+  }, []);
+
+  useEffect(() => {
+    if (parameters.data.length > 0) {
+      setCenterName(parameters.data.find(parameter => parameter.name === 'centerName').value);
+      const address =
+        parameters.data.find(parameter => parameter.name === 'address').value +
+        parameters.data.find(parameter => parameter.name === 'district').value +
+        parameters.data.find(parameter => parameter.name === 'city').value;
+      setCenterAddress(address);
+      setCenterPhone(parameters.data.find(parameter => parameter.name === 'phoneNumber').value);
+    }
+  }, [parameters]);
+
   return (
     <div ref={ref} className={styles['invoice-root']}>
       <Row>

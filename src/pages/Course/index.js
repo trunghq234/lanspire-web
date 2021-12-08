@@ -138,7 +138,7 @@ const Course = () => {
         <Row gutter={[20, 20]} align="top">
           <Col xs={24} sm={16} md={10} lg={8} xl={8}>
             <Search
-              className={styles.search}
+              className="full"
               size="large"
               placeholder="Search by name"
               allowClear

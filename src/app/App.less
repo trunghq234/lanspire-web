@@ -1,5 +1,6 @@
 @import url('../assets//css/_mixin.less');
 @import '~antd/dist/antd.less';
+@import 'theme.less';
 
 .ant-card {
   .border();
@@ -33,7 +34,9 @@
   height: 100%;
 }
 
-
+.ant-menu-item .ant-menu-item-icon, .ant-menu-submenu-title .ant-menu-item-icon, .ant-menu-item .anticon, .ant-menu-submenu-title .anticon {
+  min-width: 20px !important;
+}
 
 // .ant-breadcrumb {
 //   margin-bottom: 20px !important;

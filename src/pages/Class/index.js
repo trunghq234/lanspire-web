@@ -31,6 +31,7 @@ import styles from './index.module.less';
 
 const { Search } = Input;
 const { confirm } = Modal;
+
 const Class = () => {
   const dispatch = useDispatch();
   const { data, isLoading, isSuccess } = useSelector(classState$);
@@ -237,10 +238,8 @@ const Class = () => {
   }, [data, courses]);
   useEffect(() => {
     dispatch(getCourses.getCoursesRequest());
-  }, [dispatch]);
-  useEffect(() => {
     dispatch(getClasses.getClassesRequest());
-  }, [dispatch]);
+  }, []);
   return (
     <>
       <Breadcrumb>

@@ -1,11 +1,11 @@
-import { Form, notification } from 'antd';
+import { notification } from 'antd';
 import classApi from 'api/classApi';
 import examApi from 'api/examApi';
 import studentApi from 'api/studentApi';
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import EditableTable from '../EditableTable';
-import moment from 'moment';
 
 const Transcript = () => {
   const { idClass } = useParams();
@@ -22,7 +22,8 @@ const Transcript = () => {
         columns={columns}
         dataSource={students}
         loading={isLoading}
-        setDataSource={updateDataSource}></EditableTable>
+        setDataSource={updateDataSource}
+      />
     );
   }, [columns]);
   useEffect(() => {

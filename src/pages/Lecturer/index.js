@@ -73,7 +73,7 @@ const Lecturer = () => {
       ellipsis: true,
     },
     {
-      title: 'Birthday',
+      title: 'DOB',
       dataIndex: 'birthday',
       align: 'center',
       ellipsis: true,

@@ -1,15 +1,13 @@
-import Icon, { LockTwoTone, UserOutlined } from '@ant-design/icons';
-import { Alert, Button, Card, Col, Divider, Form, Input, Row } from 'antd';
+import { LockTwoTone, UserOutlined } from '@ant-design/icons';
+import { Alert, Button, Card, Col, Form, Input, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
+import { Link } from 'react-router-dom';
 import { getAuth } from 'redux/actions/auth';
 import { authState$ } from 'redux/selectors';
 import logo from '../../assets/images/logo.png';
-import facebook from '../../assets/svg/facebook.svg';
-import google from '../../assets/svg/google.svg';
 import styles from './index.module.less';
-import { Link } from 'react-router-dom';
 
 const bcrypt = require('bcryptjs');
 
@@ -38,6 +36,7 @@ const Login = () => {
           localStorage.setItem('accessToken', auth.data.accessToken);
           localStorage.setItem('refreshToken', auth.data.refreshToken);
           localStorage.setItem('idUser', auth.data.idUser);
+          localStorage.setItem('role', auth.data.role);
           history.push('/');
         } else {
           setLoading(false);

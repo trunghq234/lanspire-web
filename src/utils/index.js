@@ -9,7 +9,7 @@ export const converToUser = (value, idRole) => {
     email: value.email,
     address: [value.detailsAddress, value.district, value.city],
     idRole,
-    imageUrl: 'test',
+    imageUrl: value.imageUrl,
     username: value.username,
     password: value.password,
     isActivated: true,

@@ -38,7 +38,7 @@ const Login = () => {
           localStorage.setItem('accessToken', auth.data.accessToken);
           localStorage.setItem('refreshToken', auth.data.refreshToken);
           localStorage.setItem('idUser', auth.data.idUser);
-          history.push('/admin');
+          history.push('/');
         } else {
           setLoading(false);
           handleFailed(auth.data.message);

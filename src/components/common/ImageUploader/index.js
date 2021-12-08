@@ -1,19 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, Progress, Upload } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { storage } from 'utils/firebase';
 import { v4 as uuidv4 } from 'uuid';
 
-const ImageUploader = () => {
+const ImageUploader = ({ onUploaded, url }) => {
   const [previewImage, setPreviewImage] = useState('');
   const [previewVisible, setPreviewVisible] = useState(false);
   const [fileList, setFileList] = useState([]);
   const [progress, setProgress] = useState(0);
   const [progressVisible, setProgressVisible] = useState(false);
-  const [fileUrl, setFileUrl] = useState([]);
+
+  useEffect(() => {
+    if (url) {
+      setFileList([{ uid: '-1', url: url, thumbUrl: url, status: 'success' }]);
+    }
+  }, [url]);
 
   const handleCancel = () => setPreviewVisible(false);
+
+  const handleRemove = () => {
+    setFileList([]);
+    onUploaded(null);
+  };
 
   const handlePreview = file => {
     setPreviewImage(file.thumbUrl);
@@ -49,13 +59,11 @@ const ImageUploader = () => {
         setProgress(prog);
       },
       error => {
-        console.log(error);
         onError(error);
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then(downloadURL => {
-          setFileUrl(downloadURL);
-          console.log(downloadURL);
+          onUploaded(downloadURL);
         });
         onSuccess('Ok');
         setProgressVisible(false);
@@ -71,6 +79,7 @@ const ImageUploader = () => {
         multiple={false}
         maxCount={1}
         fileList={fileList}
+        onRemove={handleRemove}
         onPreview={handlePreview}
         onChange={handleUpload}
         beforeUpload={checkFileSize}
@@ -78,7 +87,7 @@ const ImageUploader = () => {
         {fileList.length < 1 && <UploadOutlined />}
       </Upload>
       {progressVisible && <Progress percent={progress} />}
-      <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
+      <Modal width={400} visible={previewVisible} footer={null} onCancel={handleCancel}>
         <img alt="example" style={{ width: '100%' }} src={previewImage} />
       </Modal>
     </div>

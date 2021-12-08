@@ -8,6 +8,7 @@ import { timeFrameState$ } from 'redux/selectors';
 import * as timeFrameActions from 'redux/actions/timeFrames';
 import FormEdit from 'components/TimeFrame/FormEdit';
 import style from './index.module.less';
+
 const TimeFrame = () => {
   const columns = [
     {
@@ -152,14 +153,14 @@ const TimeFrame = () => {
   };
   return (
     <Col span={24}>
-      <Breadcrumb style={{ marginBottom: '10px' }}>
+      <Breadcrumb>
         <Breadcrumb.Item>
           <a href="/">Dashboard</a>
         </Breadcrumb.Item>
         <Breadcrumb.Item>Time frame</Breadcrumb.Item>
       </Breadcrumb>
-      <h2 className={style.title}>Time frame list</h2>
-      <Row gutter={50}>
+      <h3 className="heading">Time frame</h3>
+      <Row gutter={[20, 20]}>
         <Col span={16}>
           <Card>
             <Table

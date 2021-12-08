@@ -5,8 +5,8 @@ const billApi = {
     const res = await axiosClient.get('/bills');
     return res.data;
   },
-  getById: async id => {
-    return await axiosClient.get(`/bills/${id}`);
+  getById: idBill => {
+    return axiosClient.get(`/bills/${idBill}`);
   },
   create: async data => {
     const res = await axiosClient.post('/bills', data);

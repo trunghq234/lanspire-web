@@ -4,6 +4,7 @@ import styles from './index.module.less';
 import { useDispatch, useSelector } from 'react-redux';
 import { columnTranscriptState$ } from 'redux/selectors';
 import { getColumnTranscripts } from 'redux/actions/columnTranscripts';
+import { useParams } from 'react-router';
 
 const ColumnInput = ({ editCourse, ...props }) => {
   const columns = [
@@ -23,6 +24,7 @@ const ColumnInput = ({ editCourse, ...props }) => {
     },
   ];
 
+  const { idCourse } = useParams();
   const dispatch = useDispatch();
   const { data, isLoading } = useSelector(columnTranscriptState$);
   useEffect(() => {
@@ -31,7 +33,7 @@ const ColumnInput = ({ editCourse, ...props }) => {
 
   const [selected, setSelected] = useState([]);
   useEffect(() => {
-    if (editCourse) {
+    if (editCourse && idCourse) {
       const selectedKey = editCourse.Columns.map(column => column.idColumn);
       setSelected(selectedKey);
       props.changeColNum(selectedKey);

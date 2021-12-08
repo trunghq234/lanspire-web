@@ -14,12 +14,12 @@ const formatName = string => {
   return res;
 };
 
-const numberWithCommas = number => {
-  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+const parseThousand = number => {
+  return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
 
 const convertCommasToNumber = string => {
   return Number(string.replace(/,/g, ''));
 };
 
-export { titleCase, camelToString, formatName, numberWithCommas, convertCommasToNumber };
+export { titleCase, camelToString, formatName, parseThousand, convertCommasToNumber };

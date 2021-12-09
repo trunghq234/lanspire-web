@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { parameterState$ } from 'redux/selectors';
 import LocationVN from '../../common/ProvincePicker/LocationVN.json';
-import styles from './index.module.less';
+
 const CenterInfo = props => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState('false');
@@ -106,21 +106,41 @@ const CenterInfo = props => {
   };
   return (
     <div>
-      <h3>Change Center Infomation</h3>
-      {/* <Skeleton loading={loading} active> */}
+      <h3>Center infomation</h3>
       <Form layout="vertical" form={form} style={{ marginTop: '1.5rem' }} onFinish={handleSubmit}>
-        <Row>
-          <Col className={styles['form-col']} xs={24} sm={24} md={12}>
+        <Row gutter={[20, 10]}>
+          <Col span={16}>
             <Form.Item label="Center Name" name="centerName" rules={[{ required: true }]}>
               <Input placeholder="Center Name" />
             </Form.Item>
           </Col>
-          <Col className={styles['form-col']} xs={24} sm={24} md={12}>
+          <Col span={8} />
+          <Col span={8}>
+            <Form.Item label="Email" name="email" rules={[{ required: true, type: 'email' }]}>
+              <Input placeholder="Email" />
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item
+              label="Phone number"
+              name="phoneNumber"
+              onKeyPress={event => {
+                if (!/[0-9]/.test(event.key)) {
+                  event.preventDefault();
+                }
+              }}
+              rules={[{ required: true }, { min: 10 }]}>
+              <Input placeholder="Phone number" />
+            </Form.Item>
+          </Col>
+          <Col span={8} />
+          <Col span={16}>
             <Form.Item label="Address" name="address" rules={[{ required: true }]}>
               <Input placeholder="Address" />
             </Form.Item>
           </Col>
-          <Col className={styles['form-col']} xs={24} sm={24} md={12}>
+          <Col span={8} />
+          <Col span={8}>
             <Form.Item label="City" name="city" rules={[{ required: true }]}>
               <Select
                 value={selectedCity}
@@ -134,7 +154,7 @@ const CenterInfo = props => {
               </Select>
             </Form.Item>
           </Col>
-          <Col className={styles['form-col']} xs={24} sm={24} md={12}>
+          <Col span={8}>
             <Form.Item label="District" name="district" rules={[{ required: true }]}>
               <Select
                 value={selectedDistrict}
@@ -146,33 +166,14 @@ const CenterInfo = props => {
               </Select>
             </Form.Item>
           </Col>
-          <Col className={styles['form-col']} xs={24} sm={24} md={12}>
-            <Form.Item label="Email" name="email" rules={[{ required: true, type: 'email' }]}>
-              <Input placeholder="Email" />
-            </Form.Item>
-          </Col>
-          <Col className={styles['form-col']} xs={24} sm={24} md={12}>
-            <Form.Item
-              label="Phone number"
-              name="phoneNumber"
-              onKeyPress={event => {
-                if (!/[0-9]/.test(event.key)) {
-                  event.preventDefault();
-                }
-              }}
-              rules={[{ required: true }, { min: 10 }]}>
-              <Input placeholder="Phone number" />
-            </Form.Item>
-          </Col>
-          <Col className={styles['form-col']} xs={24} sm={24} md={12}></Col>
-          <Col className={styles['form-col']} xs={24} sm={24} md={12}>
+          <Col span={8} />
+          <Col span={16}>
             <Button style={{ width: '100%' }} type="primary" htmlType="submit" size="large">
-              Save Change
+              Save changes
             </Button>
           </Col>
         </Row>
       </Form>
-      {/* </Skeleton> */}
     </div>
   );
 };

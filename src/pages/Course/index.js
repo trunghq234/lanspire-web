@@ -32,7 +32,7 @@ const Course = () => {
       align: 'center',
     },
     {
-      title: 'Fee',
+      title: 'Fee (₫)',
       dataIndex: 'fee',
       align: 'center',
       sorter: (a, b) => a.fee - b.fee,

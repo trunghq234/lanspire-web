@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getParameters } from 'redux/actions/parameters';
 import { parameterState$ } from 'redux/selectors';
 import { currentDate } from 'utils/dateTime';
-import { numberWithCommas } from 'utils/stringHelper';
 import styles from './index.module.less';
 
 const Invoice = React.forwardRef((props, ref) => {
@@ -116,7 +115,7 @@ const Invoice = React.forwardRef((props, ref) => {
         <h1 className={styles['total-title']}>Total:</h1>
         <div lassName={styles['total-fee']}>
           <h1>
-            {numberWithCommas(totalFee)}
+            {parseThousand(totalFee)}
             <span className={styles['total-unit']}>VND</span>
           </h1>
         </div>

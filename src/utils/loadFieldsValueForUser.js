@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { isEmpty } from 'lodash';
 
-export const loadFieldsValue = (value, setCity, form) => {
+export const loadFieldsValue = (value, setCity, form, setImgUrl) => {
   const editedLecturer = {
     displayName: value.User.displayName,
     gender: value.User.gender === 0 ? 'male' : value.User.gender === 1 ? 'female' : 'others',
@@ -13,6 +13,7 @@ export const loadFieldsValue = (value, setCity, form) => {
     city: value.User.address[2],
   };
   setCity(value.User.address[2]);
+  setImgUrl(value?.User?.imageUrl);
   form.setFieldsValue(editedLecturer);
 };
 

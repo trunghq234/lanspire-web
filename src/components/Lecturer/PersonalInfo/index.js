@@ -53,6 +53,7 @@ const PersonalInfo = props => {
       password,
       confirmPassword,
     } = data;
+    data.imageUrl = props.imgUrl;
 
     const currentDate = moment();
     if (currentDate < dob) {
@@ -99,6 +100,7 @@ const PersonalInfo = props => {
           idUser: lecturer.idUser,
           username: lecturer.User.username,
           password: lecturer.User.password,
+          imageUrl: props.imgUrl,
         };
         const editedLecturer = converToUser(editedValue, idRoleLecturer);
         dispatch(lecturerActions.updateLecturer.updateLecturerRequest(editedLecturer));
@@ -112,7 +114,7 @@ const PersonalInfo = props => {
   React.useEffect(() => {
     if (id && lecturers.data.length !== 0) {
       const lecturer = lecturers.data.find(lecturer => lecturer.idLecturer === id);
-      loadFieldsValue(lecturer, setCity, form);
+      loadFieldsValue(lecturer, setCity, form, props.setImgUrl);
     }
   }, [lecturers.data]);
 
@@ -126,6 +128,7 @@ const PersonalInfo = props => {
         message.success('Create lecturer success!');
       }
       form.resetFields();
+      props.setImgUrl(null);
     }
   }, [lecturers, history]);
 

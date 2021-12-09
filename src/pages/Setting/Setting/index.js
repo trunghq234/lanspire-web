@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Radio, Space, Breadcrumb, Card } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { Link, NavLink } from 'react-router-dom';
+import { Breadcrumb, Card, Tabs } from 'antd';
+import { ExclamationCircleOutlined, SolutionOutlined } from '@ant-design/icons';
+import { NavLink } from 'react-router-dom';
 import CenterInfo from 'components/Setting/CenterInfo';
 import Parameter from 'components/Setting/Parameter';
+
+const { TabPane } = Tabs;
 
 const Setting = props => {
   const [offset, setOffset] = useState(6);
@@ -22,14 +24,28 @@ const Setting = props => {
       </Breadcrumb>
       <h3 className="heading">Setting</h3>
       <Card>
-        <Row gutter={[20, 20]}>
-          <Col xs={24} sm={24} md={24} lg={12} offset={offset}>
-            <CenterInfo></CenterInfo>
-          </Col>
-          <Col xs={24} sm={24} md={24} lg={12} offset={offset}>
-            <Parameter></Parameter>
-          </Col>
-        </Row>
+        <Tabs tabPosition="left">
+          <TabPane
+            tab={
+              <span>
+                <ExclamationCircleOutlined />
+                Information
+              </span>
+            }
+            key="1">
+            <CenterInfo />
+          </TabPane>
+          <TabPane
+            tab={
+              <span>
+                <SolutionOutlined />
+                Regulations
+              </span>
+            }
+            key="2">
+            <Parameter />
+          </TabPane>
+        </Tabs>
       </Card>
     </div>
   );

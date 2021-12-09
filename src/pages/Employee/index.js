@@ -5,7 +5,7 @@ import { employeeHeadersExcel } from 'constant/headersExcel';
 import moment from 'moment';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 import * as employeeActions from 'redux/actions/employees';
 import { employeeState$ } from 'redux/selectors';
 import styles from './index.module.less';
@@ -154,17 +154,13 @@ const Employee = () => {
 
   return (
     <div>
-      <Breadcrumb style={{ marginBottom: '20px' }}>
-        <Breadcrumb.Item>Home</Breadcrumb.Item>
+      <Breadcrumb>
         <Breadcrumb.Item>
-          <a href="">Application Center</a>
+          <NavLink to="/">Dashboard</NavLink>
         </Breadcrumb.Item>
-        <Breadcrumb.Item>
-          <a href="">Application List</a>
-        </Breadcrumb.Item>
+        <Breadcrumb.Item>Employees</Breadcrumb.Item>
       </Breadcrumb>
-
-      <h3>Employee List</h3>
+      <h3 className="heading">Employee list</h3>
       <Card>
         <div className={styles.wrapper}>
           <div>

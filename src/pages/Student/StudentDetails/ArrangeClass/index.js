@@ -21,7 +21,7 @@ import { getClasses } from 'redux/actions/classes';
 import { getCourses } from 'redux/actions/courses';
 import { billState$, classState$, courseState$, studentState$, userState$ } from 'redux/selectors';
 import { currentDate, isConflictTimetable } from 'utils/dateTime';
-import { convertCommasToNumber, numberWithCommas } from 'utils/stringHelper';
+import { convertCommasToNumber, parseThousand } from 'utils/stringHelper';
 import Invoice from 'components/Student/Invoice';
 import styles from './index.module.less';
 import studentApi from 'api/studentApi';
@@ -109,7 +109,7 @@ const ArrangeClass = () => {
             course: curr.Course.courseName,
             startDate: moment(curr.startDate).format('DD/MM/YYYY'),
             endDate: moment(curr.endDate).format('DD/MM/YYYY'),
-            fee: numberWithCommas(curr.Course.fee),
+            fee: parseThousand(curr.Course.fee),
           });
         }
         return pre;
@@ -320,7 +320,7 @@ const ArrangeClass = () => {
             <Col span={16}>
               <Row>
                 <Col span={20}>
-                  <h3 className={styles.total}>{numberWithCommas(total)}</h3>
+                  <h3 className={styles.total}>{parseThousand(total)}</h3>
                 </Col>
                 <Col span={4}>
                   <h5 className={styles.unit}>VND</h5>

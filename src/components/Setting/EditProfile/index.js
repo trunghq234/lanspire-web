@@ -12,6 +12,7 @@ import {
   Skeleton,
   Upload,
 } from 'antd';
+import ImageUploader from 'components/common/ImageUploader';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -19,22 +20,21 @@ import { getUser } from 'redux/actions/users';
 import { userState$ } from 'redux/selectors';
 import userApi from '../../../api/userApi';
 import LocationVN from '../../common/ProvincePicker/LocationVN.json';
-import styles from './index.module.less';
 const { Option } = Select;
+
 const EditProfile = () => {
   const dateFormat = 'DD/MM/YYYY';
   const [form] = Form.useForm();
-  const [loading, setLoading] = useState('true');
-  const [justify, setJustify] = useState('left');
+  const [loading, setLoading] = useState(true);
+  const [imgUrl, setImgUrl] = useState('');
   const dispatch = useDispatch();
   const user = useSelector(userState$);
   const idUser = localStorage.getItem('idUser');
+
   useEffect(() => {
-    if (screen.width <= 768) {
-      setJustify('center');
-    }
     dispatch(getUser.getUserRequest(idUser));
   }, []);
+
   let cityOptions = [];
   const [districtInSelectedCity, setDistrictInSelectedCity] = useState([]);
   const [selectedCity, setSelectedCity] = useState();
@@ -88,10 +88,12 @@ const EditProfile = () => {
         record['district'] = user.address[1];
         record['city'] = user.address[2];
       }
+      setImgUrl(user.imageUrl);
       form.setFieldsValue(record);
       setLoading(false);
     }
   }, [user]);
+
   const handleSubmit = () => {
     const { phoneNumber, gender, dob, email, displayName, district, city, address } =
       form.getFieldsValue();
@@ -110,6 +112,7 @@ const EditProfile = () => {
         email: email,
         dob: dob.format('MM/DD/YYYY'),
         address: [address, district, city],
+        imageUrl: imgUrl,
       };
       userApi.updateUser(updatedUser).then(res => {
         dispatch(getUser.getUserRequest(idUser));
@@ -121,115 +124,106 @@ const EditProfile = () => {
     }
   };
 
+  useEffect(() => {
+    console.log(imgUrl);
+  }, [imgUrl]);
+
   return (
-    <div>
-      <Row justify={justify} style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <Avatar
-          style={{ marginBottom: '8px' }}
-          size={{
-            xs: 100,
-            sm: 80,
-            md: 40,
-            lg: 64,
-            xl: 80,
-            xxl: 100,
-          }}
-          icon={<UserOutlined />}
-        />
-        <div className={styles['handle-avatar']}>
-          <Upload>
-            <Button type="primary">Change Avatar</Button>
-          </Upload>
-          <Button type="primary" ghost style={{ marginLeft: '0.5rem' }}>
-            Remove
-          </Button>
-        </div>
+    <Skeleton loading={loading} active>
+      <Row gutter={[40, 0]}>
+        <Col span={16}>
+          <Form
+            layout="vertical"
+            form={form}
+            style={{ marginTop: '1.5rem' }}
+            onFinish={handleSubmit}>
+            <Row gutter={[20, 0]}>
+              <Col span={24}>
+                <Form.Item
+                  label="Full name"
+                  name="displayName"
+                  rules={[{ required: true, max: 256 }]}>
+                  <Input placeholder="Full name" />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item label="Gender" name="gender" rules={[{ required: true }]}>
+                  <Select placeholder="Gender">
+                    <Option value="male">Male</Option>
+                    <Option value="female">Female</Option>
+                    <Option value="other">Others</Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item label="Date of birth" name="dob" rules={[{ required: true }]}>
+                  <DatePicker format={dateFormat} style={{ width: '100%' }} />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  onKeyPress={event => {
+                    if (!/[0-9]/.test(event.key)) {
+                      event.preventDefault();
+                    }
+                  }}
+                  label="Phone number"
+                  name="phoneNumber"
+                  rules={[{ required: true }, { min: 10 }]}>
+                  <Input type="text" placeholder="Phone number" maxLength="10" />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item label="Email" name="email" rules={[{ required: true, type: 'email' }]}>
+                  <Input type="email" placeholder="Email" />
+                </Form.Item>
+              </Col>
+              <Col span={24}>
+                <Form.Item label="Address" name="address" rules={[{ required: true }]}>
+                  <Input placeholder="Address" />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item label="City" name="city" rules={[{ required: true }]}>
+                  <Select
+                    value={selectedCity}
+                    placeholder="City"
+                    onChange={val => {
+                      setSelectedDistrict(null);
+                      setSelectedCity(val);
+                    }}>
+                    {optionCityRendered}
+                  </Select>
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item label="District" name="district" rules={[{ required: true }]}>
+                  <Select
+                    value={selectedDistrict}
+                    placeholder="District"
+                    onChange={val => {
+                      setSelectedDistrict(val);
+                    }}>
+                    {optionDistrictRendered}
+                  </Select>
+                </Form.Item>
+              </Col>
+              <Col span={24}>
+                <Form.Item>
+                  <Button style={{ width: '100%' }} type="primary" htmlType="submit" size="large">
+                    Save changes
+                  </Button>
+                </Form.Item>
+              </Col>
+            </Row>
+          </Form>
+        </Col>
+        <Col span={8}>
+          <h4>Avatar</h4>
+          <ImageUploader url={imgUrl} onUploaded={setImgUrl} />
+        </Col>
       </Row>
-      <Skeleton loading={loading} active>
-        <Form layout="vertical" form={form} style={{ marginTop: '1.5rem' }} onFinish={handleSubmit}>
-          <Row>
-            <Col xs={24} sm={24} md={24} lg={16}>
-              <Row>
-                <Col className={styles['form-col']} xs={24} sm={24} md={12}>
-                  <Form.Item label="Full Name" name="displayName" rules={[{ required: true }]}>
-                    <Input placeholder="Full name" />
-                  </Form.Item>
-                </Col>
-                <Col className={styles['form-col']} xs={24} sm={24} md={12}>
-                  <Form.Item label="Gender" name="gender" rules={[{ required: true }]}>
-                    <Select placeholder="Gender" className={styles.maxwidth}>
-                      <Option value="male">Male</Option>
-                      <Option value="female">Female</Option>
-                      <Option value="other">Others</Option>
-                    </Select>
-                  </Form.Item>
-                </Col>
-                <Col className={styles['form-col']} xs={24} sm={24} md={12}>
-                  <Form.Item label="Email" name="email" rules={[{ required: true, type: 'email' }]}>
-                    <Input type="email" placeholder="Email" />
-                  </Form.Item>
-                </Col>
-                <Col className={styles['form-col']} xs={24} sm={24} md={12}>
-                  <Form.Item
-                    onKeyPress={event => {
-                      if (!/[0-9]/.test(event.key)) {
-                        event.preventDefault();
-                      }
-                    }}
-                    label="Phone number"
-                    name="phoneNumber"
-                    rules={[{ required: true }, { min: 10 }]}>
-                    <Input type="text" placeholder="Phone number" maxLength="10" />
-                  </Form.Item>
-                </Col>
-                <Col className={styles['form-col']} xs={24} sm={24} md={12}>
-                  <Form.Item label="Date of Birth" name="dob" rules={[{ required: true }]}>
-                    <DatePicker format={dateFormat} style={{ width: '100%' }} />
-                  </Form.Item>
-                </Col>
-                <Col className={styles['form-col']} xs={24} sm={24} md={12}>
-                  <Form.Item label="Address" name="address" rules={[{ required: true }]}>
-                    <Input placeholder="Address" />
-                  </Form.Item>
-                </Col>
-                <Col className={styles['form-col']} xs={24} sm={24} md={12}>
-                  <Form.Item label="City" name="city" rules={[{ required: true }]}>
-                    <Select
-                      value={selectedCity}
-                      placeholder="City"
-                      onChange={val => {
-                        setSelectedDistrict(null);
-                        setSelectedCity(val);
-                      }}>
-                      {optionCityRendered}
-                    </Select>
-                  </Form.Item>
-                </Col>
-                <Col className={styles['form-col']} xs={24} sm={24} md={12}>
-                  <Form.Item label="District" name="district" rules={[{ required: true }]}>
-                    <Select
-                      value={selectedDistrict}
-                      placeholder="District"
-                      onChange={val => {
-                        setSelectedDistrict(val);
-                      }}>
-                      {optionDistrictRendered}
-                    </Select>
-                  </Form.Item>
-                </Col>
-                <Col className={styles['form-col']} xs={24} sm={24} md={6}>
-                  <Form.Item>
-                    <Button style={{ width: '100%' }} type="primary" htmlType="submit" size="large">
-                      Save Change
-                    </Button>
-                  </Form.Item>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-        </Form>
-      </Skeleton>
-    </div>
+    </Skeleton>
   );
 };
 

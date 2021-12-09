@@ -12,9 +12,8 @@ import {
   Breadcrumb,
   Card,
   Tooltip,
-  Drawer,
 } from 'antd';
-import { EditOutlined, DeleteOutlined, EyeOutlined, VideoCameraOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, EyeOutlined } from '@ant-design/icons';
 import styles from './index.module.less';
 import { studentState$ } from 'redux/selectors/index';
 import { useSelector, useDispatch } from 'react-redux';
@@ -22,6 +21,7 @@ import { deleteStudents, getStudents } from 'redux/actions/students';
 import { formatName } from 'utils/stringHelper';
 import { currentDate } from 'utils/dateTime';
 import moment from 'moment';
+import { NavLink } from 'react-router-dom';
 const { Search } = Input;
 
 const Student = () => {
@@ -227,13 +227,13 @@ const Student = () => {
         onCancel={() => setVisibleModal(false)}>
         Are you sure delete this student?
       </Modal>
-      <Breadcrumb style={{ marginBottom: '10px' }}>
+      <Breadcrumb>
         <Breadcrumb.Item>
-          <a href="/">Dashboard</a>
+          <NavLink to="/">Dashboard</NavLink>
         </Breadcrumb.Item>
         <Breadcrumb.Item>Student list</Breadcrumb.Item>
       </Breadcrumb>
-      <h2 className={styles.title}>Student list</h2>
+      <h3 className="heading">Student list</h3>
       <Card>
         <Row
           gutter={[

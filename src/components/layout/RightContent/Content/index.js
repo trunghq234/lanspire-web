@@ -1,15 +1,16 @@
-import { EditOutlined, LogoutOutlined } from '@ant-design/icons';
 import { Menu } from 'antd';
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
-import { RESET_ACTION } from 'redux/actions/actionTypes';
 import store from 'redux/store';
+import Icon from '@ant-design/icons';
+import { logOutSvg, penSvg } from 'utils/iconsvg.js';
+
+const PenIcon = props => <Icon component={penSvg} {...props} />;
+const LogOutIcon = props => <Icon component={logOutSvg} {...props} />;
 
 const Content = props => {
-  let history = useHistory();
-  let dispatch = useDispatch();
-  let logout = () => {
+  const history = useHistory();
+  const logout = () => {
     if (localStorage.getItem('accessToken')) {
       store.dispatch({
         type: 'USER_LOGOUT',
@@ -18,18 +19,20 @@ const Content = props => {
       history.push('/login');
     }
   };
-  let editProfile = () => {};
+  const editProfile = () => {
+    history.push('/profile/');
+  };
 
   const contents = [
     {
       key: '1',
-      icon: EditOutlined,
+      icon: PenIcon,
       content: 'Edit Profile',
       onClick: editProfile,
     },
     {
       key: '2',
-      icon: LogoutOutlined,
+      icon: LogOutIcon,
       content: 'Log Out',
       onClick: logout,
     },
@@ -47,7 +50,7 @@ const Content = props => {
       );
     });
   };
-  let menuRendered = renderMenu();
+  const menuRendered = renderMenu();
   return (
     <div>
       <Menu style={{ width: 180 }}>{menuRendered}</Menu>

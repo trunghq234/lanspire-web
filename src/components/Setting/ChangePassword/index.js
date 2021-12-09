@@ -1,21 +1,9 @@
 import React from 'react';
-import {
-  Form,
-  Col,
-  Row,
-  Space,
-  Avatar,
-  Button,
-  Upload,
-  Input,
-  notification,
-  DatePicker,
-} from 'antd';
-import { LockTwoTone } from '@ant-design/icons';
+import { Form, Col, Row, Button, Input, notification } from 'antd';
 import { userState$ } from 'redux/selectors';
 import { useSelector } from 'react-redux';
-import { useHistory, useParams } from 'react-router';
-import userApi from '../../../api/userApi';
+import { useHistory } from 'react-router';
+import userApi from 'api/userApi';
 import store from 'redux/store';
 import styles from './index.module.less';
 const bcrypt = require('bcryptjs');
@@ -25,7 +13,7 @@ const hash = text => {
   const hash = bcrypt.hashSync(text, salt);
   return hash;
 };
-const ChangePassword = props => {
+const ChangePassword = () => {
   const history = useHistory();
   const user = useSelector(userState$);
   const idUser = localStorage.getItem('idUser');
@@ -36,14 +24,14 @@ const ChangePassword = props => {
     if (newPassword != confirmPassword) {
       notification['error']({
         message: 'Error',
-        description: `The Confirm Password must be the same as the New Password `,
+        description: `The confirm password must be the same as the new password `,
       });
       return;
     }
     if (currentPassword == newPassword) {
       notification['error']({
         message: 'Error',
-        description: `The New Password must be different from the Current Password `,
+        description: `The new password must be different from the current password `,
       });
       return;
     }
@@ -79,14 +67,14 @@ const ChangePassword = props => {
   };
   return (
     <div>
-      <h3>Change Password</h3>
+      <h3>Change password</h3>
       <Form layout="vertical" onFinish={handleSubmit} form={form}>
         <Row>
           <Col xs={24} sm={24} md={24} lg={8}>
             <Row>
               <Col className={styles['form-col']} span={24}>
                 <Form.Item
-                  label="Current Password"
+                  label="Current password"
                   name="currentPassword"
                   rules={[
                     { required: true, message: 'Please input your current password!' },
@@ -97,7 +85,7 @@ const ChangePassword = props => {
               </Col>
               <Col className={styles['form-col']} span={24}>
                 <Form.Item
-                  label="New Password"
+                  label="New password"
                   name="newPassword"
                   rules={[
                     { required: true, message: 'Please input new password!' },
@@ -108,7 +96,7 @@ const ChangePassword = props => {
               </Col>
               <Col className={styles['form-col']} span={24}>
                 <Form.Item
-                  label="Confirm Password"
+                  label="Confirm password"
                   name="confirmPassword"
                   rules={[
                     { required: true, message: 'Please input confirm password!' },

@@ -8,7 +8,6 @@ import { getUsers } from 'redux/actions/users';
 import { employeeState$, usersState$ } from 'redux/selectors';
 import { converToUser } from 'utils';
 import { checkUsernameIsExist, loadFieldsValue } from 'utils/loadFieldsValueForUser';
-import { camelToString } from 'utils/stringHelper';
 import ProvincePicker from '../../common/ProvincePicker';
 import styles from './index.module.less';
 import { dateValidator } from 'utils/validator';
@@ -59,6 +58,7 @@ const PersonalInfo = props => {
       password,
       confirmPassword,
     } = data;
+    data.imageUrl = props.imgUrl;
 
     const currentDate = moment();
     if (currentDate < dob) {
@@ -106,6 +106,7 @@ const PersonalInfo = props => {
           idUser: employee.idUser,
           username: employee.User.username,
           password: employee.User.password,
+          imageUrl: props.imgUrl,
         };
         const editedEmployee = converToUser(editedValue, idRoleEmployee);
         dispatch(employeeActions.updateEmployee.updateEmployeeRequest(editedEmployee));
@@ -119,7 +120,7 @@ const PersonalInfo = props => {
   React.useEffect(() => {
     if (id && employees.data.length !== 0) {
       const employee = employees.data.find(employee => employee.idEmployee === id);
-      loadFieldsValue(employee, setCity, form);
+      loadFieldsValue(employee, setCity, form, props.setImgUrl);
     }
   }, [employees.data]);
 
@@ -133,6 +134,7 @@ const PersonalInfo = props => {
         message.success('Create employee success!');
       }
       form.resetFields();
+      props.setImgUrl(null);
     }
   }, [employees, history]);
 
@@ -151,7 +153,6 @@ const PersonalInfo = props => {
               <Input placeholder="Full name" />
             </Form.Item>
           </Col>
-
           <Col xs={12} md={12} xl={4} lg={6} xl={6}>
             <Form.Item label="Gender" name="gender" rules={[{ required: true }]}>
               <Select>
@@ -161,7 +162,6 @@ const PersonalInfo = props => {
               </Select>
             </Form.Item>
           </Col>
-
           <Col xs={12} md={12} xl={10} lg={6} xl={6}>
             <Form.Item
               label="DOB"
@@ -175,7 +175,6 @@ const PersonalInfo = props => {
               <DatePicker format={dateFormat} className={styles.maxwidth} />
             </Form.Item>
           </Col>
-
           <Col xs={12} md={12} lg={12} xl={8}>
             <Form.Item
               label="Phone number"
@@ -189,7 +188,6 @@ const PersonalInfo = props => {
               <Input type="text" placeholder="Phone number" maxLength="10" />
             </Form.Item>
           </Col>
-
           <Col xs={12} md={12} lg={12} xl={8}>
             <Form.Item label="Email" name="email" rules={[{ required: true, type: 'email' }]}>
               <Input placeholder="Email" />
@@ -197,7 +195,6 @@ const PersonalInfo = props => {
           </Col>
         </Row>
         <ProvincePicker city={city} form={form} />
-
         {!id && (
           <Input.Group>
             <Row gutter={20}>
@@ -236,7 +233,6 @@ const PersonalInfo = props => {
             </Row>
           </Input.Group>
         )}
-
         <Form.Item>
           <Button onClick={handleSubmit} type="primary" htmlType="submit">
             Submit

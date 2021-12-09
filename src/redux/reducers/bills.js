@@ -83,14 +83,7 @@ export default function billsReducer(state = INIT_STATE.bills, action) {
         ...state,
         isLoading: false,
         isSuccess: true,
-        data: state.data.map(bill => {
-          if (bill.idBill === action.payload) {
-            return {
-              ...bill,
-              isDeleted: true,
-            };
-          } else return bill;
-        }),
+        data: state.data.filter(bill => bill.idBill !== action.payload),
       };
     case getType(billActions.deleteBill.deleteBillFailure):
       return {

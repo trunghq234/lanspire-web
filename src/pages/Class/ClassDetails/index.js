@@ -20,10 +20,7 @@ const ClassDetails = () => {
     if (idClass) {
       classApi
         .getById(idClass)
-        .then(res => {
-          setClassData(res.data);
-          console.log(res.data);
-        })
+        .then(res => setClassData(res.data))
         .catch(err => console.log(err));
     }
   }, [idClass]);

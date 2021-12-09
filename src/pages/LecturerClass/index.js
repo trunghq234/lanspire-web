@@ -10,7 +10,6 @@ const LecturerClass = () => {
   useEffect(() => {
     setIsLoading(true);
     const idLecturer = localStorage.getItem('idLecturer');
-    console.log(idLecturer);
     classApi
       .getByIdLecturer(idLecturer)
       .then(res => {

@@ -101,23 +101,22 @@ const Student = () => {
       key: 'actions',
       dataIndex: 'idStudent',
       align: 'center',
-      width: '10%',
       render: idStudent => {
         return (
-          <div className={role === 'admin' && 'flex'}>
+          <div className={role !== 'employee' && 'flex'}>
             <Tooltip title="Student details">
               <Link to={`/student/details/${idStudent}`}>
                 <Button icon={<EyeOutlined />} />
               </Link>
             </Tooltip>
-            {role === 'admin' && (
+            {role !== 'employee' && (
               <Tooltip title="Edit information">
                 <Link to={`/student/edit/${idStudent}`}>
                   <Button type="primary" ghost icon={<EditOutlined />} />
                 </Link>
               </Tooltip>
             )}
-            {role === 'admin' && (
+            {role !== 'employee' && (
               <Tooltip title="Delete">
                 <Button danger icon={<DeleteOutlined />} onClick={() => handleDelete(idCourse)} />
               </Tooltip>

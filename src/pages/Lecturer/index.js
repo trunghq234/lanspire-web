@@ -99,7 +99,7 @@ const Lecturer = () => {
       align: 'center',
       width: '10%',
       render: idLecturer => (
-        <div style={{ display: 'flex', justifyContent: 'center', columnGap: '20px' }}>
+        <div className="flex">
           <Button
             onClick={() => handleEditLecturer(idLecturer)}
             type="primary"
@@ -126,16 +126,13 @@ const Lecturer = () => {
 
   useEffect(() => {
     const role = localStorage.getItem('role');
-    setRole(role);
-    dispatch(lecturerActions.getLecturers.getLecturersRequest());
-  }, []);
-
-  useEffect(() => {
     if (role !== 'admin') {
       initColumns.pop();
       setColumns(initColumns);
     }
-  }, [role]);
+    setRole(role);
+    dispatch(lecturerActions.getLecturers.getLecturersRequest());
+  }, []);
 
   useEffect(() => {
     const mapLecturersToData = mapToDataSource(lecturers.data);

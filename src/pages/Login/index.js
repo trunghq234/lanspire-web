@@ -31,17 +31,17 @@ const Login = () => {
   };
   useEffect(() => {
     if (auth) {
-      if (auth.data) {
-        if (auth.data.accessToken) {
-          localStorage.setItem('accessToken', auth.data.accessToken);
-          localStorage.setItem('refreshToken', auth.data.refreshToken);
-          localStorage.setItem('idUser', auth.data.idUser);
-          localStorage.setItem('role', auth.data.role);
-          history.push('/');
-        } else {
-          setLoading(false);
-          handleFailed(auth.data.message);
-        }
+      if (auth.accessToken) {
+        localStorage.setItem('accessToken', auth.accessToken);
+        localStorage.setItem('refreshToken', auth.refreshToken);
+        localStorage.setItem('idUser', auth.user.idUser);
+        localStorage.setItem('role', auth.user.Role.name);
+        localStorage.setItem('idLecturer', auth.user.Lecturer?.idLecturer);
+        localStorage.setItem('idEmployee', auth.user.Employee?.idEmployee);
+        history.push('/');
+      } else {
+        setLoading(false);
+        handleFailed(auth.message);
       }
     }
   }, [auth]);

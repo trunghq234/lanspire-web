@@ -40,6 +40,7 @@ const PersonalInfo = props => {
   const { idStudent } = useParams();
   const history = useHistory();
   const studentCardRef = useRef();
+  const role = localStorage.getItem('role');
 
   useEffect(() => {
     dispatch(getStudents.getStudentsRequest());
@@ -91,16 +92,18 @@ const PersonalInfo = props => {
           <DescriptionItem title="Address" content={address} icon={locationSvg} />
         </Col>
         <Col span={2}>
-          <div className="flex">
-            <Tooltip title="Edit information">
-              <Button
-                icon={<EditOutlined />}
-                onClick={() => history.push(`/student/edit/${idStudent}`)}
-              />
-            </Tooltip>
+          <div className={role === 'admin' && 'flex'}>
             <Tooltip title="Print student card">
               <Button type="primary" icon={<PrinterOutlined />} onClick={handlePrintStudentCard} />
             </Tooltip>
+            {role === 'admin' && (
+              <Tooltip title="Edit information">
+                <Button
+                  icon={<EditOutlined />}
+                  onClick={() => history.push(`/student/edit/${idStudent}`)}
+                />
+              </Tooltip>
+            )}
           </div>
         </Col>
       </Row>

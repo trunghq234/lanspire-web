@@ -144,11 +144,12 @@ const ClassExam = ({ classData }) => {
   return (
     <Row gutter={[20, 20]}>
       <Col span={4}>
-        <h3>Class exams</h3>
+        <h3 className="heading">Class exams</h3>
       </Col>
       <Col flex="auto" />
-      <Col>
+      <Col span={4}>
         <Button
+          block
           type="primary"
           size="large"
           onClick={() => {

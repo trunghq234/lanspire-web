@@ -34,7 +34,7 @@ const ClassCard = ({ classData }) => {
         <Col span={24} className={styles.students}>
           <UserSvg />
           <Tooltip title="Number of students">
-            <p>{`4/${classData.Course.max}`}</p>
+            <p>{`${classData.Students.length}/${classData.Course.max}`}</p>
           </Tooltip>
         </Col>
         <Col span={24}>

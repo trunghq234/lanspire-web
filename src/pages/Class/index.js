@@ -29,7 +29,6 @@ import { getCourses } from 'redux/actions/courses';
 import { classState$, courseState$ } from 'redux/selectors';
 import styles from './index.module.less';
 
-const { Search } = Input;
 const { confirm } = Modal;
 
 const Class = () => {

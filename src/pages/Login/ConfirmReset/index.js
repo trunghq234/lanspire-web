@@ -1,25 +1,13 @@
 import { LockTwoTone, UserOutlined } from '@ant-design/icons';
-import {
-  Alert,
-  Button,
-  Card,
-  Col,
-  Form,
-  Input,
-  Row,
-  notification,
-  Statistic,
-  Skeleton,
-} from 'antd';
-import React, { useEffect, useState } from 'react';
+import { Button, Card, Col, Form, Input, notification, Row, Statistic } from 'antd';
+import authApi from 'api/authApi';
+import moment from 'moment';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useHistory, useParams } from 'react-router-dom';
-import { getAuth } from 'redux/actions/auth';
+import { useHistory, useParams } from 'react-router-dom';
 import { authState$ } from 'redux/selectors';
 import logo from '../../../assets/images/logo.png';
 import styles from './index.module.less';
-import authApi from 'api/authApi';
-import moment from 'moment';
 const bcrypt = require('bcryptjs');
 const { Countdown } = Statistic;
 const hash = text => {

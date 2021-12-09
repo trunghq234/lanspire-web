@@ -52,7 +52,7 @@ const ClassDetails = () => {
           <TabPane tab="Calendar" key="1">
             <AntCalendar classData={classData} />
           </TabPane>
-          {role === 'admin' && (
+          {role !== 'employee' && (
             <TabPane tab="Transcript" key="2">
               <Transcript />
             </TabPane>
@@ -60,15 +60,15 @@ const ClassDetails = () => {
           <TabPane tab="Students" key="3">
             <ClassStudent />
           </TabPane>
+          {role !== 'employee' && (
+            <TabPane tab="Exam" key="4">
+              <ClassExam classData={classData} />
+            </TabPane>
+          )}
           {role === 'admin' && (
-            <>
-              <TabPane tab="Exam" key="4">
-                <ClassExam classData={classData} />
-              </TabPane>
-              <TabPane tab="Appoint lecturer" key="5">
-                <AddAppoint />
-              </TabPane>
-            </>
+            <TabPane tab="Appoint lecturer" key="5">
+              <AddAppoint />
+            </TabPane>
           )}
         </Tabs>
       </Card>

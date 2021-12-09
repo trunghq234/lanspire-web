@@ -1,41 +1,44 @@
-.invoice-root {
-  padding: 20px;
+.center {
+  .title {
+    font-weight: 600;
+    font-size: 18px;
+    margin: 20px 0px 0px;
+  }
+  p {
+    margin: 0px;
+  }
 }
-.header {
-  text-align: end;
+
+.student {
+  text-align: right;
+  h2 {
+    font-weight: 700;
+    font-size: 30px;
+    margin: 0px;
+  }
+  h4 {
+    font-size: 20px;
+    margin: 20px 0px 0px;
+  }
+  p {
+    margin: 0px;
+  }
 }
-.title {
-  margin: 0;
-  font-size: 3rem;
+
+.total {
+  text-align: right;
+  p {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0px;
+  }
 }
-.invoice-to {
-  text-align: end;
-}
-.item-p {
-  margin: 0;
-}
-.item-h4 {
-  margin: 0;
-}
-.info-center {
-  font-size: 0.9rem;
-  margin-bottom: 20px;
-  margin-top: -10px;
-}
-.info-invoice {
-  margin-bottom: 20px;
-}
-.total-row {
-  margin-top: 20px;
-  margin-bottom: -10px;
-}
-.total-title {
-  margin-right: 100px;
-}
-.total-fee {
-  text-align: end;
-}
-.total-unit {
-  font-size: 1rem;
-  margin-left: 5px;
+
+@media print {
+  @page {
+    size: letter portrait;
+  }
+  .print {
+    padding: 50px 40px;
+  }
 }

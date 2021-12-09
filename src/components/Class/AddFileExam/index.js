@@ -107,7 +107,7 @@ const AddFileExam = ({ isVisible, setIsVisible, existedColumn, classData, select
     form.validateFields().then(values => {
       const { examName, idTestType, idColumn, testTime, testDate } = values;
       const time = moment(testTime).format('HH:mm');
-      const date = moment(testDate).add(1, 'day').format('MM-DD-YYYY');
+      const date = moment(testDate).format('MM-DD-YYYY');
       const res = fileUrls.map(element => element.url);
 
       // check test date between start and end date

@@ -1,14 +1,41 @@
+import { Col, Row, Table } from 'antd';
 import React, { useState, useEffect } from 'react';
-import { Card, Row, Col, Table, Button } from 'antd';
-import styles from './index.module.less';
-import { parseThousand } from 'utils/stringHelper';
 import { currentDate } from 'utils/dateTime';
+import { parseThousand } from 'utils/stringHelper';
+import { parameterState$ } from 'redux/selectors';
+import { getParameters } from 'redux/actions/parameters';
+import { useDispatch, useSelector } from 'react-redux';
+import styles from './index.module.less';
+import logo from 'assets/images/logo.png';
 
 const Invoice = React.forwardRef((props, ref) => {
-  const [centerName, setCenterName] = useState('Lanspire');
-  const [centerAddress, setCenterAddress] = useState('Hồ chí minh');
-  const [centerPhone, setCenterPhone] = useState('012345678');
-  const { fullName, phoneNumber, address, totalFee, dataSource, creator } = props;
+  const dispatch = useDispatch();
+  const { data, isLoading } = useSelector(parameterState$);
+  const [param, setParam] = useState({});
+
+  useEffect(() => {
+    dispatch(getParameters.getParametersRequest());
+  }, []);
+
+  useEffect(() => {
+    if (data.length > 0) {
+      const centerName = data.find(e => e.name == 'centerName').value;
+      const address = data.find(e => e.name == 'address').value;
+      const district = data.find(e => e.name == 'district').value;
+      const city = data.find(e => e.name == 'city').value;
+      const phoneNumber = data.find(e => e.name == 'phoneNumber').value;
+      setParam({
+        centerName,
+        address,
+        district,
+        city,
+        phoneNumber,
+      });
+    }
+  }, [data]);
+
+  const { fullName, phoneNumber, address, totalFee, classes } = props;
+
   const columns = [
     {
       title: 'No.',
@@ -46,58 +73,45 @@ const Invoice = React.forwardRef((props, ref) => {
       align: 'center',
     },
   ];
+
   return (
-    <div ref={ref} className={styles['invoice-root']}>
-      <Row>
-        <Col span={14}>Logo center</Col>
-        <Col span={10} className={styles.header}>
-          <h1 className={styles.title}>
-            <strong>INVOICE</strong>
-          </h1>
-          <div className={styles['info-center']}>
-            <strong>{centerName}</strong>
-            <p className={styles['item-p']}>{centerPhone}</p>
-            <p className={styles['item-p']}>{centerAddress}</p>
-          </div>
+    <div ref={ref} className={styles.print}>
+      <Row gutter={[20, 20]}>
+        <Col span={8} className={styles.center}>
+          <img alt="logo" src={logo} width="80px" />
         </Col>
-      </Row>
-      <Row className={styles['info-invoice']}>
-        <Col span={10}>
-          <h4 className={styles['item-h4']}>
-            <strong>Invoice info:</strong>
-          </h4>
-          <p className={styles['item-p']}>{`Date: ${currentDate().format('DD/MM/YYYY')}`}</p>
-          <p className={styles['item-p']}>{` By: ${creator}`}</p>
+        <Col span={8} />
+        <Col span={8} className={styles.student}>
+          <h2>INVOICE</h2>
+          <p>{currentDate().format('DD/MM/YYYY')}</p>
         </Col>
-        <Col span={14}>
-          <div className={styles['invoice-to']}>
-            <h4 className={styles['item-h4']}>
-              <strong>Invoice to:</strong>
-            </h4>
-            <p className={styles['item-p']}>{fullName}</p>
-            <p className={styles['item-p']}>{phoneNumber}</p>
-            <p className={styles['item-p']}>{address}</p>
-          </div>
+        <Col span={8} className={styles.center}>
+          <p className={styles.title}>{param.centerName}</p>
+          <p>{param.address}</p>
+          <p>{`${param.district}, ${param.city}`}</p>
+          <p>Phone: {param.phoneNumber}</p>
         </Col>
-      </Row>
-      <Row>
+        <Col span={8} />
+        <Col span={8} className={styles.student}>
+          <h4>Invoice to</h4>
+          <p>{fullName}</p>
+          <p>{phoneNumber}</p>
+          <p>{address}</p>
+        </Col>
         <Col span={24}>
           <Table
-            columns={columns}
             bordered
-            dataSource={dataSource}
-            pagination={{ hideOnSinglePage: true }}
+            loading={isLoading}
+            columns={columns}
+            rowKey={row => row.no}
+            pagination={false}
+            dataSource={classes}
           />
         </Col>
-      </Row>
-      <Row justify="end" className={styles['total-row']}>
-        <h1 className={styles['total-title']}>Total:</h1>
-        <div lassName={styles['total-fee']}>
-          <h1>
-            {parseThousand(totalFee)}
-            <span className={styles['total-unit']}>VND</span>
-          </h1>
-        </div>
+        <Col flex="auto" />
+        <Col span={8} className={styles.total}>
+          <p>{`Total: ${parseThousand(totalFee)} ₫`}</p>
+        </Col>
       </Row>
     </div>
   );

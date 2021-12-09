@@ -107,8 +107,8 @@ const ArrangeClass = () => {
             key: curr.idClass,
             className: curr.className,
             course: curr.Course.courseName,
-            startDate: moment(curr.startDate).format('DD/MM/YYYY'),
-            endDate: moment(curr.endDate).format('DD/MM/YYYY'),
+            startDate: moment(curr.startDate).format('DD-MM-YYYY'),
+            endDate: moment(curr.endDate).format('DD-MM-YYYY'),
             fee: parseThousand(curr.Course.fee),
           });
         }
@@ -127,9 +127,7 @@ const ArrangeClass = () => {
         student.User.gender === 1 ? 'Male' : student.User.gender === 0 ? 'Female' : 'Others'
       );
       setPhoneNumber(student.User.phoneNumber);
-      setAddress(
-        `${student.User.address[0]}, ${student.User.address[1]}, ${student.User.address[2]}`
-      );
+      setAddress(student.User.address);
     }
   }, [student, classes.data]);
 
@@ -251,6 +249,7 @@ const ArrangeClass = () => {
           };
         }),
       };
+      // console.log(bill);
       dispatch(createBill.createBillRequest(bill));
       dispatch(updateStudents.updateStudentsRequest(studentUpdate));
     } else {
@@ -306,7 +305,15 @@ const ArrangeClass = () => {
           <Receipt itemName="Full name" value={fullName} />
           <Receipt itemName="Gender" value={gender} />
           <Receipt itemName="Phone" value={phoneNumber} />
-          <Receipt itemName="Address" value={address} />
+          <Row className={styles['item-receipt']}>
+            <Col span={10}>
+              <p className={styles['item-name']}>Address</p>
+            </Col>
+            <Col span={14} className={styles['address-student']}>
+              <p>{address ? address[0] : ''},</p>
+              <p>{`${address ? address[1] : ''}, ${address ? address[2] : ''}`}</p>
+            </Col>
+          </Row>
           <Divider className={styles.divider} />
           <h4>Registered classes</h4>
           {selectedClasses.map(item => {
@@ -364,12 +371,11 @@ const ArrangeClass = () => {
         }}>
         <Invoice
           ref={invoiceRef}
-          dataSource={selectedClasses}
+          classes={selectedClasses}
           totalFee={total}
           fullName={fullName}
           phoneNumber={phoneNumber}
-          address={address}
-          creator={user.displayName}
+          address={address?.join(', ')}
         />
       </Modal>
     </Row>

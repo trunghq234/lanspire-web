@@ -39,6 +39,8 @@ const Class = () => {
   const [searchText, setSearchText] = useState('');
   const [dataSource, setDataSource] = useState([]);
   const [dataFilter, setDataFilter] = useState([]);
+  const [role, setRole] = useState();
+
   const columns = [
     {
       title: 'Class name',
@@ -138,20 +140,24 @@ const Class = () => {
       width: '10%',
       render: idClass => {
         return (
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
-            <Tooltip title="Edit information">
-              <Link to={`/class/edit/${idClass}`}>
-                <Button type="primary" ghost icon={<EditOutlined />}></Button>
-              </Link>
-            </Tooltip>
-            <Tooltip title="Delete">
-              <Button danger icon={<DeleteOutlined />} onClick={() => handleDelete(idClass)} />
-            </Tooltip>
-            <Tooltip title="More information">
+          <div className={role === 'admin' && 'flex'}>
+            <Tooltip title="View details">
               <Link to={`/class/details/${idClass}`}>
-                <Button type="link" icon={<EyeOutlined />} />
+                <Button icon={<EyeOutlined />} />
               </Link>
             </Tooltip>
+            {role === 'admin' && (
+              <Tooltip title="Edit information">
+                <Link to={`/class/edit/${idClass}`}>
+                  <Button type="primary" ghost icon={<EditOutlined />}></Button>
+                </Link>
+              </Tooltip>
+            )}
+            {role === 'admin' && (
+              <Tooltip title="Delete">
+                <Button danger icon={<DeleteOutlined />} onClick={() => handleDelete(idClass)} />
+              </Tooltip>
+            )}
           </div>
         );
       },
@@ -237,6 +243,8 @@ const Class = () => {
     }
   }, [data, courses]);
   useEffect(() => {
+    const role = localStorage.getItem('role');
+    setRole(role);
     dispatch(getCourses.getCoursesRequest());
     dispatch(getClasses.getClassesRequest());
   }, []);
@@ -248,15 +256,17 @@ const Class = () => {
         </Breadcrumb.Item>
         <Breadcrumb.Item>Classes</Breadcrumb.Item>
       </Breadcrumb>
-      <h3 className="heading">Class</h3>
+      <h3 className="heading">Classes</h3>
       <Card>
         <Row gutter={[20, 20]} align="top">
           <Col xs={24} sm={16} md={10} lg={8} xl={8}></Col>
           <Col xs={0} md={8} lg={10} xl={12} flex="auto" />
           <Col xs={24} sm={24} md={6} lg={6} xl={4}>
-            <Button className={styles.btn} size="large" type="primary">
-              <NavLink to="/class/add">Add Class</NavLink>
-            </Button>
+            {role === 'admin' && (
+              <Button className={styles.btn} size="large" type="primary">
+                <Link to="/class/add">Add Class</Link>
+              </Button>
+            )}
           </Col>
           <Col span={24}>
             <Table

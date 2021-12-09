@@ -38,7 +38,7 @@ const ClassesCourse = ({ idCourse }) => {
       width: '10%',
       render: idClass => {
         return (
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
+          <div className="flex">
             <Tooltip title="View class details">
               <Link to={`/class/details/${idClass}`}>
                 <Button icon={<EyeOutlined />} />

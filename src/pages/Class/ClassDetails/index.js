@@ -14,6 +14,7 @@ const { TabPane } = Tabs;
 const ClassDetails = () => {
   const { idClass } = useParams();
   const [classData, setClassData] = useState();
+  const [role, setRole] = useState();
 
   useEffect(() => {
     if (idClass) {
@@ -26,6 +27,11 @@ const ClassDetails = () => {
         .catch(err => console.log(err));
     }
   }, [idClass]);
+
+  useEffect(() => {
+    const tmp = localStorage.getItem('role');
+    setRole(tmp);
+  }, []);
   return (
     <div>
       <Breadcrumb>
@@ -46,18 +52,24 @@ const ClassDetails = () => {
           <TabPane tab="Calendar" key="1">
             <AntCalendar classData={classData} />
           </TabPane>
-          <TabPane tab="Transcript" key="2">
-            <Transcript />
-          </TabPane>
+          {role === 'admin' && (
+            <TabPane tab="Transcript" key="2">
+              <Transcript />
+            </TabPane>
+          )}
           <TabPane tab="Students" key="3">
             <ClassStudent />
           </TabPane>
-          <TabPane tab="Exam" key="4">
-            <ClassExam classData={classData} />
-          </TabPane>
-          <TabPane tab="Appoint lecturer" key="5">
-            <AddAppoint />
-          </TabPane>
+          {role === 'admin' && (
+            <>
+              <TabPane tab="Exam" key="4">
+                <ClassExam classData={classData} />
+              </TabPane>
+              <TabPane tab="Appoint lecturer" key="5">
+                <AddAppoint />
+              </TabPane>
+            </>
+          )}
         </Tabs>
       </Card>
     </div>

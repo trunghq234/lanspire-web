@@ -10,8 +10,9 @@ const RevenueChart = ({ data, isLoading }) => {
   const [days, setDays] = useState(7);
 
   useEffect(() => {
-    if (data.length != 0) {
+    if (data.length != 0 && !isLoading) {
       renderData(days);
+      console.log('object');
     }
   }, [data, days]);
 
@@ -26,10 +27,12 @@ const RevenueChart = ({ data, isLoading }) => {
     padding: 'auto',
     xField: 'date',
     yField: 'total',
-    xAxis: {
-      tickCount: 15,
-    },
     yAxis: {
+      top: true,
+      title: {
+        text: 'anc',
+        position: 'start',
+      },
       label: {
         formatter: function formatter(v) {
           return ''
@@ -42,6 +45,7 @@ const RevenueChart = ({ data, isLoading }) => {
       },
     },
     xAxis: {
+      tickCount: 15,
       label: {
         formatter: function formatter(v) {
           return moment(v).format('DD/MM/YYYY');
@@ -49,6 +53,7 @@ const RevenueChart = ({ data, isLoading }) => {
       },
     },
     tooltip: {
+      title: 'Revenue',
       formatter: function formatter(v) {
         return {
           name: moment(v.date).format('DD/MM/YYYY'),
@@ -58,10 +63,10 @@ const RevenueChart = ({ data, isLoading }) => {
         };
       },
     },
-    smooth: true,
+    // smooth: true,
     animation: {
       appear: {
-        animation: 'path-in',
+        animation: 'wave-in',
         duration: 400,
       },
     },

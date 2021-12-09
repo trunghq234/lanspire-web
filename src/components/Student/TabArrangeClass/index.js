@@ -100,17 +100,15 @@ const TabArrangeClass = () => {
   return (
     <Col span={24}>
       <Card>
-        <Row>
+        <Row gutter={[20, 20]}>
           <Col span={5}>
-            <h3>Class list</h3>
+            <h3 className="heading">Class list</h3>
           </Col>
           <Col span={4} offset={15}>
-            <Button type="primary" block onClick={handleClickArrangeClass}>
-              Arrange New Class
+            <Button size="large" type="primary" block onClick={handleClickArrangeClass}>
+              Arrange class
             </Button>
           </Col>
-        </Row>
-        <Row>
           <Col span={24}>
             <Table
               bordered

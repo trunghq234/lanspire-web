@@ -30,20 +30,22 @@ const ClassExam = ({ classData }) => {
       title: 'Test time',
       dataIndex: 'testTime',
       align: 'center',
+      width: '15%',
     },
     {
       title: 'Test date',
       dataIndex: 'testDate',
       align: 'center',
+      width: '15%',
     },
     {
       title: '',
       dataIndex: ['idExam'],
       align: 'center',
-      width: '15%',
+      width: '10%',
       render: (idExam, currentExam) => {
         return (
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
+          <div className="flex">
             <Tooltip title="Edit exam">
               <Button
                 type="primary"

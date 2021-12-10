@@ -247,7 +247,7 @@ const Student = () => {
           <Col span={24}>
             <Table
               columns={columns}
-              rowKey={dataSearch.id}
+              rowKey={row => row.idStudent}
               dataSource={dataSearch}
               bordered
               pagination={{

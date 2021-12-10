@@ -46,7 +46,7 @@ const Dashboard = () => {
         setRevenue(res.data);
       })
       .catch(error => {
-        console.log('fetch data failed', error);
+        console.log(error);
       });
   };
 

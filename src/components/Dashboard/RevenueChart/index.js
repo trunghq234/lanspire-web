@@ -12,7 +12,6 @@ const RevenueChart = ({ data, isLoading }) => {
   useEffect(() => {
     if (data.length != 0 && !isLoading) {
       renderData(days);
-      console.log(dataChart);
     }
   }, [data, days]);
 
@@ -75,7 +74,7 @@ const RevenueChart = ({ data, isLoading }) => {
         };
       },
     },
-    smooth: false,
+    smooth: true,
     animation: {
       appear: {
         animation: 'wave-in',

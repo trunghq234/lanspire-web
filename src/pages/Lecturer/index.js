@@ -153,7 +153,6 @@ const Lecturer = () => {
       content: '',
       onOk() {
         const lecturer = lecturers.data.find(lecturer => lecturer.idLecturer === idLecturer);
-        console.log({ lecturer });
         dispatch(lecturerActions.deleteLecturer.deleteLecturerRequest(lecturer));
       },
       onCancel() {},

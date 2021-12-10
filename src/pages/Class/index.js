@@ -273,7 +273,7 @@ const Class = () => {
               columns={columns}
               dataSource={dataSource}
               loading={isLoading}
-              rowKey={row => row.idCourse}
+              rowKey={row => row.idClass}
               pagination={{
                 defaultPageSize: 10,
                 showSizeChanger: true,

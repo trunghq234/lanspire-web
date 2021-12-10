@@ -12,13 +12,21 @@ const RevenueChart = ({ data, isLoading }) => {
   useEffect(() => {
     if (data.length != 0 && !isLoading) {
       renderData(days);
-      console.log('object');
+      console.log(dataChart);
     }
   }, [data, days]);
 
   const renderData = days => {
     const earlyDate = moment().subtract(days, 'days');
-    const tmp = data.filter(e => moment(e.date, 'YYYY-MM-DD').isAfter(earlyDate));
+    const tmp = [];
+    data.map(e => {
+      if (moment(e.date, 'YYYY-MM-DD').isAfter(earlyDate)) {
+        tmp.push({
+          date: e.date,
+          total: parseInt(e.total),
+        });
+      }
+    });
     setDataChart(tmp);
   };
 
@@ -30,8 +38,8 @@ const RevenueChart = ({ data, isLoading }) => {
     yAxis: {
       top: true,
       title: {
-        text: 'anc',
-        position: 'start',
+        text: 'Revenue (đồng)',
+        position: 'center',
       },
       label: {
         formatter: function formatter(v) {
@@ -46,6 +54,10 @@ const RevenueChart = ({ data, isLoading }) => {
     },
     xAxis: {
       tickCount: 15,
+      title: {
+        text: 'Date',
+        position: 'center',
+      },
       label: {
         formatter: function formatter(v) {
           return moment(v).format('DD/MM/YYYY');
@@ -63,7 +75,7 @@ const RevenueChart = ({ data, isLoading }) => {
         };
       },
     },
-    // smooth: true,
+    smooth: false,
     animation: {
       appear: {
         animation: 'wave-in',

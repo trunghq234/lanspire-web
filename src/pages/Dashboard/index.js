@@ -63,10 +63,8 @@ const Dashboard = () => {
 
   const getInProgressClasses = () => {
     let numOfClasses = 0;
-    const startOfMonth = moment().startOf('month');
-    const endOfMonth = moment().endOf('month');
     classes.map(e => {
-      if (moment(e.date, 'YYYY-MM-DD').isBetween(startOfMonth, endOfMonth)) {
+      if (moment().isBetween(e.startDate, e.endDate)) {
         numOfClasses++;
       }
     });

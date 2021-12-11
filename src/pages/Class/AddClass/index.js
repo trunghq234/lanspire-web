@@ -35,7 +35,7 @@ const AddClass = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [isSubmit, setIsSubmit] = useState(false);
   const [isInProcess, setIsInProcess] = useState(false);
-  // const [isDuplicate, setIsDuplicate] = useState(false);
+  const [isFinished, setIsFinished] = useState(false);
   const { isSuccess, isLoading } = useSelector(classState$);
   const { data: classes } = useSelector(classState$);
   const { idClass } = useParams();
@@ -66,8 +66,11 @@ const AddClass = () => {
       });
       if (classRoom) {
         setClass(classRoom);
-        if (moment(classRoom.startDate).format('DD:MM:YYYY') < moment().format('DD:MM:YYYY')) {
+        if (moment(classRoom.startDate).isSameOrBefore(moment())) {
           setIsInProcess(true);
+        }
+        if (moment(classRoom.endDate).isBefore(moment(), 'date')) {
+          setIsFinished(true);
         }
         const classTimes = classRoom.ClassTimes;
         form.setFieldsValue({
@@ -317,11 +320,7 @@ const AddClass = () => {
                 />
               </Form.Item>
               <Form.Item label="End Date" name="endDate" rules={[{ required: true }]}>
-                <DatePicker
-                  disabled={isInProcess}
-                  format={dateFormat}
-                  className={styles.maxwidth}
-                />
+                <DatePicker disabled={isFinished} format={dateFormat} className={styles.maxwidth} />
               </Form.Item>
               <Form.Item label="Course" name="course" rules={[{ required: true }]}>
                 <Select disabled={isInProcess}>

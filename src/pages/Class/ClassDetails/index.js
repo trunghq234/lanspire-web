@@ -2,15 +2,19 @@ import { Breadcrumb, Card, Tabs } from 'antd';
 import classApi from 'api/classApi';
 import AntCalendar from 'components/Class/AntCalendar';
 import ClassExam from 'components/Class/ClassExam';
+import ClassInformation from 'components/Class/ClassInformation';
+import ClassStudent from 'components/Class/ClassStudent';
 import Transcript from 'components/Class/Transcript';
 import React, { useEffect, useState } from 'react';
-import { NavLink, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import AddAppoint from '../AddAppoint';
 
 const { TabPane } = Tabs;
+
 const ClassDetails = () => {
   const { idClass } = useParams();
-  const [classData, setClassData] = useState({});
+  const [classData, setClassData] = useState();
+  const [role, setRole] = useState();
 
   useEffect(() => {
     if (idClass) {
@@ -20,32 +24,49 @@ const ClassDetails = () => {
         .catch(err => console.log(err));
     }
   }, [idClass]);
+
+  useEffect(() => {
+    const tmp = localStorage.getItem('role');
+    setRole(tmp);
+  }, []);
   return (
     <div>
       <Breadcrumb>
         <Breadcrumb.Item>
-          <NavLink to="/">Dashboard</NavLink>
+          <Link to="/">Dashboard</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <NavLink to="/class">Classes</NavLink>
+          <Link to="/class">Classes</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item>Details</Breadcrumb.Item>
       </Breadcrumb>
-      <h3>{classData.className}</h3>
+      <h3 className="heading">{classData?.className}</h3>
       <Card>
-        <Tabs defaultActiveKey="1">
-          <TabPane tab="Appoint Lecturer" key="1">
-            <AddAppoint />
+        <Tabs defaultActiveKey="0">
+          <TabPane tab="Informations" key="0">
+            <ClassInformation classData={classData} course={classData?.Course} />
           </TabPane>
-          <TabPane tab="Calendar" key="2">
-            <AntCalendar />
+          <TabPane tab="Calendar" key="1">
+            <AntCalendar classData={classData} />
           </TabPane>
+          {role !== 'employee' && (
+            <TabPane tab="Transcript" key="2">
+              <Transcript />
+            </TabPane>
+          )}
           <TabPane tab="Students" key="3">
-            <Transcript />
+            <ClassStudent />
           </TabPane>
-          <TabPane tab="Exam" key="4">
-            <ClassExam classData={classData} />
-          </TabPane>
+          {role !== 'employee' && (
+            <TabPane tab="Exam" key="4">
+              <ClassExam classData={classData} />
+            </TabPane>
+          )}
+          {role === 'admin' && (
+            <TabPane tab="Appoint lecturer" key="5">
+              <AddAppoint />
+            </TabPane>
+          )}
         </Tabs>
       </Card>
     </div>

@@ -196,18 +196,14 @@ const EditableTable = props => {
         <Col xs={24} sm={16} md={10} lg={8} xl={8}></Col>
         <Col xs={0} md={2} lg={4} xl={8} flex="auto" />
         <Col xs={24} sm={24} md={6} lg={6} xl={4}>
-          <Button className={styles.btn} type="primary">
-            <CSVLink
-              filename={className}
-              data={dataSource}
-              headers={headersExcel}
-              className="btn btn-primary">
+          <Button size="large" block type="primary">
+            <CSVLink filename={className} data={dataSource} headers={headersExcel}>
               Export to CSV
             </CSVLink>
           </Button>
         </Col>
         <Col xs={24} sm={24} md={6} lg={6} xl={4}>
-          <Button className={styles.btn} type="primary" onClick={handleSubmit}>
+          <Button size="large" block type="primary" onClick={handleSubmit}>
             Save
           </Button>
         </Col>

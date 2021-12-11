@@ -1,27 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
+import { DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
 import {
-  Table,
-  Input,
+  Breadcrumb,
   Button,
-  Tag,
+  Card,
   Col,
-  Row,
+  Input,
   Modal,
   notification,
-  Breadcrumb,
-  Card,
+  Row,
+  Table,
+  Tag,
   Tooltip,
 } from 'antd';
-import { EditOutlined, DeleteOutlined, EyeOutlined } from '@ant-design/icons';
-import styles from './index.module.less';
-import { studentState$ } from 'redux/selectors/index';
-import { useSelector, useDispatch } from 'react-redux';
-import { deleteStudents, getStudents } from 'redux/actions/students';
-import { formatName } from 'utils/stringHelper';
-import { currentDate } from 'utils/dateTime';
 import moment from 'moment';
-import { NavLink } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
+import { Link, NavLink } from 'react-router-dom';
+import { deleteStudents, getStudents } from 'redux/actions/students';
+import { studentState$ } from 'redux/selectors/index';
+import { currentDate } from 'utils/dateTime';
+import { formatName } from 'utils/stringHelper';
+
 const { Search } = Input;
 
 const Student = () => {
@@ -99,28 +99,28 @@ const Student = () => {
     },
     {
       key: 'actions',
-      width: '150px',
-      render: record => {
+      dataIndex: 'idStudent',
+      align: 'center',
+      render: idStudent => {
         return (
-          <div className={styles['actions-for-item']}>
-            <Tooltip title="More info">
-              <EyeOutlined
-                className={styles['btn-view']}
-                onClick={() => handleClickView(record.idStudent)}
-              />
+          <div className={role !== 'employee' && 'flex'}>
+            <Tooltip title="Student details">
+              <Link to={`/student/details/${idStudent}`}>
+                <Button icon={<EyeOutlined />} />
+              </Link>
             </Tooltip>
-            <Tooltip title="Edit">
-              <EditOutlined
-                className={styles['btn-edit']}
-                onClick={() => handleEditStudent(record.idStudent)}
-              />
-            </Tooltip>
-            <Tooltip title="Delete">
-              <DeleteOutlined
-                className={styles['btn-delete']}
-                onClick={() => onDelete(record.idStudent)}
-              />
-            </Tooltip>
+            {role !== 'employee' && (
+              <Tooltip title="Edit information">
+                <Link to={`/student/edit/${idStudent}`}>
+                  <Button type="primary" ghost icon={<EditOutlined />} />
+                </Link>
+              </Tooltip>
+            )}
+            {role !== 'employee' && (
+              <Tooltip title="Delete">
+                <Button danger icon={<DeleteOutlined />} onClick={() => handleDelete(idCourse)} />
+              </Tooltip>
+            )}
           </div>
         );
       },
@@ -136,9 +136,11 @@ const Student = () => {
   const [visibleModal, setVisibleModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const history = useHistory();
+  const [role, setRole] = useState();
 
   useEffect(() => {
+    const role = localStorage.getItem('role');
+    setRole(role);
     dispatch(getStudents.getStudentsRequest());
   }, []);
 
@@ -171,16 +173,12 @@ const Student = () => {
     setDataSearch(tmpData);
   }, [students]);
 
-  const handleClickAddNewStudent = () => {
-    history.push('/student/add');
-  };
-
   const handleSearch = value => {
     const dataTmp = data.filter(item => item.name.toLowerCase().search(value.toLowerCase()) >= 0);
     setDataSearch(dataTmp);
   };
 
-  const onDelete = id => {
+  const handleDelete = id => {
     setVisibleModal(true);
     setIdStudent(id);
   };
@@ -189,9 +187,6 @@ const Student = () => {
     dispatch(deleteStudents.deleteStudentsRequest(idStudent));
     setVisibleModal(false);
     setIsDeleted(true);
-  };
-  const handleEditStudent = id => {
-    history.push(`/student/edit/${id}`);
   };
 
   useEffect(() => {
@@ -213,13 +208,8 @@ const Student = () => {
     }
   }, [students.isLoading]);
 
-  //click button view
-  const handleClickView = id => {
-    history.push(`/student/details/${id}`);
-  };
-
   return (
-    <div className={styles.container}>
+    <div>
       <Modal
         title="Warning"
         visible={visibleModal}
@@ -231,54 +221,47 @@ const Student = () => {
         <Breadcrumb.Item>
           <NavLink to="/">Dashboard</NavLink>
         </Breadcrumb.Item>
-        <Breadcrumb.Item>Student list</Breadcrumb.Item>
+        <Breadcrumb.Item>Students</Breadcrumb.Item>
       </Breadcrumb>
-      <h3 className="heading">Student list</h3>
+      <h3 className="heading">Students</h3>
       <Card>
-        <Row
-          gutter={[
-            { xs: 0, sm: 0, md: 10, lg: 10 },
-            { xs: 5, sm: 5, md: 0, lg: 0 },
-          ]}
-          className={styles['actions-for-list']}>
+        <Row gutter={[20, 20]}>
           <Col xs={24} sm={24} md={8} lg={10} xl={8}>
             <Search
-              className={styles['search-name']}
-              placeholder="Enter name ..."
+              className="full"
+              placeholder="Search by name"
+              allowClear
               enterButton
               size="large"
               onSearch={handleSearch}
             />
           </Col>
-          <Col
-            xs={24}
-            sm={24}
-            md={{ span: 5, offset: 11 }}
-            lg={{ span: 4, offset: 10 }}
-            xl={{ span: 3, offset: 13 }}>
-            <Button
-              className={styles['add-student']}
-              size="large"
-              onClick={handleClickAddNewStudent}>
-              Add student
-            </Button>
+          <Col flex="auto" />
+          <Col xs={24} sm={24} md={6} lg={6} xl={4}>
+            {role === 'admin' && (
+              <Button type="primary" size="large" block>
+                <Link to="/student/add">Add student</Link>
+              </Button>
+            )}
+          </Col>
+          <Col span={24}>
+            <Table
+              columns={columns}
+              rowKey={row => row.idStudent}
+              dataSource={dataSearch}
+              bordered
+              pagination={{
+                showSizeChanger: true,
+                current: currentPage,
+                onChange: (page, pageSize) => {
+                  setCurrentPage(page);
+                  setPageSize(pageSize);
+                },
+              }}
+              loading={students.isLoading}
+            />
           </Col>
         </Row>
-        <Table
-          columns={columns}
-          rowKey={dataSearch.id}
-          dataSource={dataSearch}
-          bordered
-          pagination={{
-            showSizeChanger: true,
-            current: currentPage,
-            onChange: (page, pageSize) => {
-              setCurrentPage(page);
-              setPageSize(pageSize);
-            },
-          }}
-          loading={students.isLoading}
-        />
       </Card>
     </div>
   );

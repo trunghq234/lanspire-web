@@ -1,4 +1,3 @@
-import Icon from '@ant-design/icons';
 import Class from 'pages/Class';
 import AddClass from 'pages/Class/AddClass';
 import ClassDetails from 'pages/Class/ClassDetails';
@@ -24,26 +23,16 @@ import StudentDetails from 'pages/Student/StudentDetails';
 import ArrangeClass from 'pages/Student/StudentDetails/ArrangeClass';
 import React from 'react';
 import {
-  cashSvg,
-  classSvg,
-  cogSvg,
-  courseSvg,
-  dashboardSvg,
-  expandSvg,
-  studentSvg,
-  userGroupSvg,
-  usersSvg,
-} from 'utils/iconsvg';
-
-const DashboardIcon = props => <Icon component={dashboardSvg} {...props} />;
-const CourseIcon = props => <Icon component={courseSvg} {...props} />;
-const UsersIcon = props => <Icon component={usersSvg} {...props} />;
-const UserGroupIcon = props => <Icon component={userGroupSvg} {...props} />;
-const ClassIcon = props => <Icon component={classSvg} {...props} />;
-const StudentIcon = props => <Icon component={studentSvg} {...props} />;
-const CashIcon = props => <Icon component={cashSvg} {...props} />;
-const ExpandIcon = props => <Icon component={expandSvg} {...props} />;
-const CogIcon = props => <Icon component={cogSvg} {...props} />;
+  CashIcon,
+  ClassIcon,
+  CogIcon,
+  CourseIcon,
+  DashboardIcon,
+  ExpandIcon,
+  StudentIcon,
+  UserGroupIcon,
+  UsersIcon,
+} from 'utils/icon';
 
 const adminRoutes = [
   {

@@ -35,7 +35,7 @@ const ColumnTranscript = () => {
       width: '10%',
       render: idColumn => {
         return (
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
+          <div className="flex">
             <Tooltip title="Edit information">
               <Link to={`/columntranscript/${idColumn}`}>
                 <Button

@@ -124,10 +124,6 @@ const EditProfile = () => {
     }
   };
 
-  useEffect(() => {
-    console.log(imgUrl);
-  }, [imgUrl]);
-
   return (
     <Skeleton loading={loading} active>
       <Row gutter={[40, 0]}>

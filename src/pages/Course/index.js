@@ -10,7 +10,6 @@ import {
 import { courseState$ } from 'redux/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteCourse, getCourses } from 'redux/actions/courses';
-import styles from './index.module.less';
 
 const { Search } = Input;
 const { confirm } = Modal;
@@ -49,20 +48,24 @@ const Course = () => {
       width: '10%',
       render: idCourse => {
         return (
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
+          <div className={role === 'admin' && 'flex'}>
             <Tooltip title="View details">
               <Link to={`/course/details/${idCourse}`}>
                 <Button icon={<EyeOutlined />} />
               </Link>
             </Tooltip>
-            <Tooltip title="Edit information">
-              <Link to={`/course/edit/${idCourse}`}>
-                <Button type="primary" ghost icon={<EditOutlined />} />
-              </Link>
-            </Tooltip>
-            <Tooltip title="Delete">
-              <Button danger icon={<DeleteOutlined />} onClick={() => handleDelete(idCourse)} />
-            </Tooltip>
+            {role === 'admin' && (
+              <Tooltip title="Edit information">
+                <Link to={`/course/edit/${idCourse}`}>
+                  <Button type="primary" ghost icon={<EditOutlined />} />
+                </Link>
+              </Tooltip>
+            )}
+            {role === 'admin' && (
+              <Tooltip title="Delete">
+                <Button danger icon={<DeleteOutlined />} onClick={() => handleDelete(idCourse)} />
+              </Tooltip>
+            )}
           </div>
         );
       },
@@ -72,8 +75,11 @@ const Course = () => {
   const dispatch = useDispatch();
   const { data, isLoading, isSuccess } = useSelector(courseState$);
   const [dataSource, setDataSource] = useState([]);
+  const [role, setRole] = useState();
 
   useEffect(() => {
+    const role = localStorage.getItem('role');
+    setRole(role);
     dispatch(getCourses.getCoursesRequest());
   }, []);
 
@@ -133,12 +139,12 @@ const Course = () => {
         </Breadcrumb.Item>
         <Breadcrumb.Item>Courses</Breadcrumb.Item>
       </Breadcrumb>
-      <h3 className="heading">Course</h3>
+      <h3 className="heading">Courses</h3>
       <Card>
-        <Row gutter={[20, 20]} align="top">
+        <Row gutter={[20, 20]}>
           <Col xs={24} sm={16} md={10} lg={8} xl={8}>
             <Search
-              className={styles.search}
+              className="full"
               size="large"
               placeholder="Search by name"
               allowClear
@@ -148,9 +154,11 @@ const Course = () => {
           </Col>
           <Col flex="auto" />
           <Col xs={24} sm={24} md={6} lg={6} xl={4}>
-            <Button className={styles.btn} size="large" type="primary">
-              <NavLink to="/course/add">Add course</NavLink>
-            </Button>
+            {role === 'admin' && (
+              <Button size="large" type="primary" block>
+                <Link to="/course/add">Add course</Link>
+              </Button>
+            )}
           </Col>
           <Col span={24}>
             <Table

@@ -29,7 +29,7 @@ const CourseType = () => {
       width: '10%',
       render: idCourseType => {
         return (
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
+          <div className="flex">
             <Tooltip title="Edit information">
               <Link to={`/coursetype/${idCourseType}`}>
                 <Button

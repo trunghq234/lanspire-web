@@ -57,7 +57,7 @@ const Invoice = () => {
       width: '10%',
       render: idBill => {
         return (
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
+          <div className="flex">
             <Tooltip title="View details">
               <Link to={`/invoice/${idBill}`}>
                 <Button type="primary" ghost icon={<EyeOutlined />} />
@@ -80,6 +80,7 @@ const Invoice = () => {
   const [dateFormat, setDateFormat] = useState('YYYY');
   const [isDisabled, setIsDisabled] = useState(true);
   const [searchValue, setSearchValue] = useState();
+  const [role, setRole] = useState('admin');
 
   const dateFormats = ['YYYY', 'YYYY', 'MM-YYYY', 'DD-MM-YYYY'];
   const pickers = ['all', 'year', 'month', 'date'];
@@ -120,6 +121,8 @@ const Invoice = () => {
   };
 
   useEffect(() => {
+    const role = localStorage.getItem('role');
+    setRole(role);
     dispatch(getBills.getBillsRequest());
   }, []);
 

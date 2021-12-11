@@ -18,6 +18,7 @@ import {
   Space,
   Table,
   Tooltip,
+  Tag,
 } from 'antd';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
@@ -30,6 +31,7 @@ import { classState$, courseState$ } from 'redux/selectors';
 import styles from './index.module.less';
 
 const { confirm } = Modal;
+const { Search } = Input;
 
 const Class = () => {
   const dispatch = useDispatch();
@@ -44,51 +46,53 @@ const Class = () => {
     {
       title: 'Class name',
       dataIndex: 'className',
-      filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
-        <div style={{ padding: 8 }}>
-          <Input
-            placeholder={`Search class name`}
-            value={selectedKeys[0]}
-            onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-            onPressEnter={() => handleSearch(selectedKeys, confirm)}
-            style={{ marginBottom: 8, display: 'block' }}
-          />
-          <Space>
-            <Button
-              type="primary"
-              onClick={() => handleSearch(selectedKeys, confirm)}
-              icon={<SearchOutlined />}
-              size="medium"
-              style={{ width: 100 }}>
-              Search
-            </Button>
-            <Button
-              onClick={() => {
-                handleReset(clearFilters);
-                confirm({ closeDropdown: false });
-              }}
-              size="medium"
-              style={{ width: 90 }}>
-              Reset
-            </Button>
-          </Space>
-        </div>
-      ),
-      filterIcon: filtered => (
-        <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />
-      ),
-      onFilter: (value, record) =>
-        record.className
-          ? record.className.toString().toLowerCase().includes(value.toLowerCase())
-          : '',
-      render: text => (
-        <Highlighter
-          highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-          searchWords={[searchText]}
-          autoEscape
-          textToHighlight={text ? text.toString() : ''}
-        />
-      ),
+      width: '15%',
+
+      // filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+      //   <div style={{ padding: 8 }}>
+      //     <Input
+      //       placeholder={`Search class name`}
+      //       value={selectedKeys[0]}
+      //       onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+      //       onPressEnter={() => handleSearch(selectedKeys, confirm)}
+      //       style={{ marginBottom: 8, display: 'block' }}
+      //     />
+      //     <Space>
+      //       <Button
+      //         type="primary"
+      //         onClick={() => handleSearch(selectedKeys, confirm)}
+      //         icon={<SearchOutlined />}
+      //         size="medium"
+      //         style={{ width: 100 }}>
+      //         Search
+      //       </Button>
+      //       <Button
+      //         onClick={() => {
+      //           handleReset(clearFilters);
+      //           confirm({ closeDropdown: false });
+      //         }}
+      //         size="medium"
+      //         style={{ width: 90 }}>
+      //         Reset
+      //       </Button>
+      //     </Space>
+      //   </div>
+      // ),
+      // filterIcon: filtered => (
+      //   <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />
+      // ),
+      // onFilter: (value, record) =>
+      //   record.className
+      //     ? record.className.toString().toLowerCase().includes(value.toLowerCase())
+      //     : '',
+      // render: text => (
+      //   <Highlighter
+      //     highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+      //     searchWords={[searchText]}
+      //     autoEscape
+      //     textToHighlight={text ? text.toString() : ''}
+      //   />
+      // ),
     },
     {
       title: 'Course',
@@ -96,7 +100,7 @@ const Class = () => {
       filters: dataFilter,
       filterSearch: true,
       onFilter: (value, record) => record.course.includes(value),
-      width: '20%',
+      width: '15%',
     },
     {
       title: 'Room',
@@ -133,6 +137,37 @@ const Class = () => {
       },
     },
     {
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+      align: 'center',
+      filters: [
+        {
+          text: 'Not started',
+          value: 0,
+        },
+        {
+          text: 'In process',
+          value: 1,
+        },
+        {
+          text: 'Finished',
+          value: 2,
+        },
+      ],
+      defaultFilteredValue: [true],
+      render: (status, index) => {
+        const color = status === 0 ? 'gray' : status === 1 ? 'blue' : 'orange';
+        return (
+          <Tag color={color} key={index}>
+            {status === 0 ? 'Not started' : status === 1 ? 'In process' : 'Finished'}
+          </Tag>
+        );
+      },
+      responsive: ['sm'],
+      onFilter: (value, record) => record.status === value,
+    },
+    {
       title: '',
       dataIndex: 'idClass',
       align: 'center',
@@ -162,10 +197,10 @@ const Class = () => {
       },
     },
   ];
-  const handleSearch = (selectedKeys, confirm) => {
-    confirm();
-    setSearchText(selectedKeys[0]);
-  };
+  // const handleSearch = (selectedKeys, confirm) => {
+  //   confirm();
+  //   setSearchText(selectedKeys[0]);
+  // };
 
   const handleReset = clearFilters => {
     clearFilters();
@@ -182,13 +217,11 @@ const Class = () => {
         max = course.max;
       }
       const students = classRoom.Students;
-      // let students = [];
-      // if (learnings) {
-      //   students = learnings.filter(
-      //     (v, i, a) =>
-      //       a.findIndex(t => t.idStudent === v.idStudent && t.idClass === v.idClass) === i
-      //   );
-      // }
+      const status = moment(classRoom.endDate).isBefore(moment(), 'date')
+        ? 2
+        : moment().isBefore(moment(classRoom.startDate), 'date')
+        ? 0
+        : 1;
       res.push({
         idClass: classRoom.idClass,
         className: classRoom.className,
@@ -197,6 +230,7 @@ const Class = () => {
         endDate: new Date(classRoom.endDate).toLocaleDateString('en-GB'),
         course: courseName,
         student: [students.length, max],
+        status: status,
       });
     });
     setDataSource(res);
@@ -247,6 +281,12 @@ const Class = () => {
     dispatch(getCourses.getCoursesRequest());
     dispatch(getClasses.getClassesRequest());
   }, []);
+  const handleSearch = value => {
+    const dataTmp = data.filter(
+      item => item.className.toLowerCase().search(value.toLowerCase()) >= 0
+    );
+    mappingDatasource(dataTmp);
+  };
   return (
     <>
       <Breadcrumb>
@@ -258,7 +298,16 @@ const Class = () => {
       <h3 className="heading">Classes</h3>
       <Card>
         <Row gutter={[20, 20]} align="top">
-          <Col xs={24} sm={16} md={10} lg={8} xl={8}></Col>
+          <Col xs={24} sm={16} md={10} lg={8} xl={8}>
+            <Search
+              className="full"
+              size="large"
+              placeholder="Search by class name"
+              allowClear
+              enterButton
+              onSearch={handleSearch}
+            />
+          </Col>
           <Col xs={0} md={8} lg={10} xl={12} flex="auto" />
           <Col xs={24} sm={24} md={6} lg={6} xl={4}>
             {role === 'admin' && (

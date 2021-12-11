@@ -20,7 +20,10 @@ const Login = () => {
   let history = useHistory();
   const dispatch = useDispatch();
   const auth = useSelector(authState$);
-
+  const [loading, setLoading] = useState(false);
+  const [isFailed, setIsFailed] = useState('0');
+  const [failedMessage, setFailedMessage] = useState('');
+  const [form] = Form.useForm();
   const login = values => {
     setLoading(true);
     let data = {
@@ -30,7 +33,7 @@ const Login = () => {
     dispatch(getAuth.getAuthRequest(data));
   };
   useEffect(() => {
-    if (auth) {
+    if (Object.keys(auth).length !== 0 && Object.keys(auth).length !== 2) {
       if (auth.accessToken) {
         localStorage.setItem('accessToken', auth.accessToken);
         localStorage.setItem('refreshToken', auth.refreshToken);
@@ -58,10 +61,6 @@ const Login = () => {
     }, 5000);
   };
 
-  const [loading, setLoading] = useState(false);
-  const [isFailed, setIsFailed] = useState('0');
-  const [failedMessage, setFailedMessage] = useState('');
-  const [form] = Form.useForm();
   return (
     <div className={styles.content}>
       <div className={styles.container}>

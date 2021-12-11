@@ -121,6 +121,10 @@ const AddAppoint = () => {
       if (!isBusy()) {
         dispatch(updateClass.updateClassRequest({ idClass: idClass, lecturers: selected }));
         setIsSuccess(true);
+        notification.success({
+          message: 'Success',
+          description: 'Appoint lecturer successfully!',
+        });
       }
     }
   };
@@ -128,7 +132,11 @@ const AddAppoint = () => {
     let res = false;
     selected.map(idLecturer => {
       const lecturer = lecturers.find(lecturer => lecturer.idLecturer == idLecturer);
-      const teachingTimes = lecturer.TeachingTimes;
+      const classList = lecturer.Classes;
+      let teachingTimes = [];
+      classList.map(classRoom => {
+        teachingTimes.push(...classRoom.TimeFrames);
+      });
       const classRoom = classes.find(classRoom => classRoom.idClass == idClass);
       teachingTimes.map(teachingTime => {
         classRoom.ClassTimes.map(classTime => {

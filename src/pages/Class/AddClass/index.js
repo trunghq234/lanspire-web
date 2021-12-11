@@ -20,6 +20,7 @@ import { getCourses } from 'redux/actions/courses';
 import * as timeFrameActions from 'redux/actions/timeFrames';
 import { classState$, courseState$, timeFrameState$ } from 'redux/selectors';
 import styles from './index.module.less';
+import { getClasses } from 'redux/actions/classes';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -34,7 +35,7 @@ const AddClass = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [isSubmit, setIsSubmit] = useState(false);
   const [isInProcess, setIsInProcess] = useState(false);
-  // const [isDuplicate, setIsDuplicate] = useState(false);
+  const [isFinished, setIsFinished] = useState(false);
   const { isSuccess, isLoading } = useSelector(classState$);
   const { data: classes } = useSelector(classState$);
   const { idClass } = useParams();
@@ -53,6 +54,7 @@ const AddClass = () => {
   }, [timeFrames]);
   useEffect(() => {
     dispatch(getCourses.getCoursesRequest());
+    dispatch(getClasses.getClassesRequest());
     dispatch(timeFrameActions.getAllTimeFrames.getAllTimeFramesRequest());
   }, []);
   useEffect(() => {
@@ -64,8 +66,11 @@ const AddClass = () => {
       });
       if (classRoom) {
         setClass(classRoom);
-        if (moment(classRoom.startDate).format('DD:MM:YYYY') < moment().format('DD:MM:YYYY')) {
+        if (moment(classRoom.startDate).isSameOrBefore(moment())) {
           setIsInProcess(true);
+        }
+        if (moment(classRoom.endDate).isBefore(moment(), 'date')) {
+          setIsFinished(true);
         }
         const classTimes = classRoom.ClassTimes;
         form.setFieldsValue({
@@ -88,7 +93,7 @@ const AddClass = () => {
         }
       }
     }
-  }, [idClass]);
+  }, [idClass, classes]);
 
   useEffect(() => {
     if (isSubmit) {
@@ -193,21 +198,28 @@ const AddClass = () => {
         data = updateTimeFrames;
       }
     } else {
-      notification['error']({
+      notification.error({
         message: 'Can not add class ',
         description: 'Class must have at least one time frame',
       });
       return;
     }
     if (startDate >= endDate) {
-      notification['error']({
+      notification.error({
         message: 'Can not add class ',
         description: 'Start Date must be less than End Date',
       });
       return;
     }
+    if (moment(startDate).isBefore(moment(), 'date') && !isEdit) {
+      notification.error({
+        message: 'Can not add class',
+        description: 'Start Date must be greater than Today',
+      });
+      return;
+    }
     if (CheckIsExist(data)) {
-      notification['error']({
+      notification.error({
         message: 'Can not add class ',
         description: `Time Frame is duplicate`,
       });
@@ -215,7 +227,7 @@ const AddClass = () => {
     }
     const { isDuplicate, classDuplicate } = checkDuplicateRoom(data, room);
     if (isDuplicate) {
-      notification['error']({
+      notification.error({
         message: 'Can not add class ',
         description: `This room has duplicate time in class '` + classDuplicate + `'`,
       });
@@ -315,11 +327,7 @@ const AddClass = () => {
                 />
               </Form.Item>
               <Form.Item label="End Date" name="endDate" rules={[{ required: true }]}>
-                <DatePicker
-                  disabled={isInProcess}
-                  format={dateFormat}
-                  className={styles.maxwidth}
-                />
+                <DatePicker disabled={isFinished} format={dateFormat} className={styles.maxwidth} />
               </Form.Item>
               <Form.Item label="Course" name="course" rules={[{ required: true }]}>
                 <Select disabled={isInProcess}>

@@ -58,4 +58,11 @@ const formatDate = date => {
   return moment(date, 'YYYY-MM-DD').format('DD-MM-YYYY');
 };
 
-export { currentDate, isTimeFrameOverlap, isConflictTimetable, compareTime, countCertainDays, formatDate };
+export {
+  currentDate,
+  isTimeFrameOverlap,
+  isConflictTimetable,
+  compareTime,
+  countCertainDays,
+  formatDate,
+};

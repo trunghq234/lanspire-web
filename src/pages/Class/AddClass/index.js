@@ -198,21 +198,28 @@ const AddClass = () => {
         data = updateTimeFrames;
       }
     } else {
-      notification['error']({
+      notification.error({
         message: 'Can not add class ',
         description: 'Class must have at least one time frame',
       });
       return;
     }
     if (startDate >= endDate) {
-      notification['error']({
+      notification.error({
         message: 'Can not add class ',
         description: 'Start Date must be less than End Date',
       });
       return;
     }
+    if (moment(startDate).isBefore(moment(), 'date') && !isEdit) {
+      notification.error({
+        message: 'Can not add class',
+        description: 'Start Date must be greater than Today',
+      });
+      return;
+    }
     if (CheckIsExist(data)) {
-      notification['error']({
+      notification.error({
         message: 'Can not add class ',
         description: `Time Frame is duplicate`,
       });
@@ -220,7 +227,7 @@ const AddClass = () => {
     }
     const { isDuplicate, classDuplicate } = checkDuplicateRoom(data, room);
     if (isDuplicate) {
-      notification['error']({
+      notification.error({
         message: 'Can not add class ',
         description: `This room has duplicate time in class '` + classDuplicate + `'`,
       });

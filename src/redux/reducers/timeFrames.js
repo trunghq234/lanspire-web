@@ -25,28 +25,6 @@ const timeFrameReducer = (state = INIT_STATE.timeFrames, action) => {
         isLoading: false,
         isSuccess: false,
       };
-    // get by id
-    case getType(timeFrameActions.getByIdTimeFrame.getByIdTimeFrameRequest):
-      return {
-        ...state,
-        isLoading: true,
-        isSuccess: false,
-        error: '',
-      };
-    case getType(timeFrameActions.getByIdTimeFrame.getByIdTimeFrameSuccess):
-      return {
-        ...state,
-        data: action.payload,
-        isLoading: false,
-      };
-    case getType(timeFrameActions.getByIdTimeFrame.getByIdTimeFrameFailure):
-      return {
-        ...state,
-        error: action.message,
-        isLoading: false,
-        isSuccess: false,
-      };
-
     //create
     case getType(timeFrameActions.createTimeFrame.createTimeFrameRequest):
       return {

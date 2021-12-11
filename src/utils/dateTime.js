@@ -45,4 +45,4 @@ const isConflictTimetable = (classTimes, currentTimetable) => {
   }
   return res;
 };
-export { currentDate, isTimeFrameOverlap, isConflictTimetable };
+export { currentDate, isTimeFrameOverlap, isConflictTimetable, compareTime };

@@ -1,14 +1,8 @@
-import { Col, Form, Input, Row, Button, TimePicker, notification, Popconfirm, Tooltip } from 'antd';
-import React, { useState, useEffect } from 'react';
-import LocationVN from '../../common/ProvincePicker/LocationVN.json';
+import { Button, Col, Form, Input, notification, Popconfirm, Row, TimePicker } from 'antd';
+import React, { useEffect, useState } from 'react';
 import * as parameterActions from 'redux/actions/parameters';
 import * as timeFrameActions from 'redux/actions/timeFrames';
-
 import { parameterState$, timeFrameState$ } from 'redux/selectors';
-import { useDispatch, useSelector } from 'react-redux';
-import moment from 'moment';
-import parameterApi from 'api/parameterApi';
-import timeFrameApi from 'api/timeFrameApi';
 
 const Parameter = props => {
   const dispatch = useDispatch();
@@ -92,7 +86,7 @@ const Parameter = props => {
     parameterApi
       .update(updatedParameter)
       .then(res => {
-        timeFrameApi.updateAll(timeFrames);
+        dispatch(timeFrameActions.updateTimeFrames.updateTimeFramesRequest(timeFrames));
         notification.success({
           message: 'Success',
           description: 'Update parameter successfully',

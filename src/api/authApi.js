@@ -2,9 +2,10 @@ import axiosClient from './axiosClient';
 
 const authApi = {
   loginAccount: async user => {
-    return await axiosClient.post('auth/signin', {
+    const res = await axiosClient.post('auth/signin', {
       user,
     });
+    return res.data;
   },
   resetEmail: async username => {
     return await axiosClient.post('auth/send-mail', {

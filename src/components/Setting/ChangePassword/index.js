@@ -67,7 +67,6 @@ const ChangePassword = () => {
   };
   return (
     <div>
-      <h3>Change password</h3>
       <Form layout="vertical" onFinish={handleSubmit} form={form}>
         <Row>
           <Col xs={24} sm={24} md={24} lg={8}>

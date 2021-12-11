@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Col, Row, Form, Input, InputNumber, Select } from 'antd';
+import { Button, Col, Row, Form, Input, InputNumber, Select, notification } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { courseTypeState$, levelState$ } from 'redux/selectors';
+import { courseTypeState$, levelState$, parameterState$ } from 'redux/selectors';
 import { getCourseTypes } from 'redux/actions/courseTypes';
 import { getLevels } from 'redux/actions/levels';
 import { numberValidator } from 'utils/validator';
@@ -13,14 +13,18 @@ const AddCourseInfo = ({ form, goNext, handleSubmitCourse, editCourse, isBack })
   const [isSelected, setIsSelected] = useState(false);
   const [levelNameList, setLevelNameList] = useState([]);
   const [pointList, setPointList] = useState([]);
+  const [maxStudent, setMaxStudent] = useState(1);
 
   const dispatch = useDispatch();
   const { data: courseTypeList } = useSelector(courseTypeState$);
   const { data: levels } = useSelector(levelState$);
+  const { data: parameters } = useSelector(parameterState$);
 
   useEffect(() => {
     dispatch(getCourseTypes.getCourseTypesRequest());
     dispatch(getLevels.getLevelsRequest());
+    const para = parameters.find(e => (e.name = 'maxStudent'));
+    setMaxStudent(para?.value);
   }, []);
 
   useEffect(() => {
@@ -39,7 +43,6 @@ const AddCourseInfo = ({ form, goNext, handleSubmitCourse, editCourse, isBack })
   };
 
   const handleNext = () => {
-    goNext();
     const { courseName, fee, description, max, levelName, point, type } = form.getFieldsValue();
     const Level = pointList.find(level => level.levelName === levelName && level.point == point);
     const CourseType = courseTypeList.find(element => element.typeName === type);
@@ -54,6 +57,15 @@ const AddCourseInfo = ({ form, goNext, handleSubmitCourse, editCourse, isBack })
         CourseType: CourseType,
         idCourseType: CourseType.idCourseType,
       });
+    }
+
+    if (max > maxStudent) {
+      notification.warning({
+        message: 'Violate the regulations',
+        description: `The maximum number of students must be less than or equal to ${maxStudent}`,
+      });
+    } else {
+      goNext();
     }
   };
 
@@ -93,6 +105,7 @@ const AddCourseInfo = ({ form, goNext, handleSubmitCourse, editCourse, isBack })
             style={{ width: '50%' }}
             min={0}
             maxLength={18}
+            step={100000}
             addonAfter="₫"
             placeholder="Course fee"
             formatter={value => value.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
@@ -101,7 +114,7 @@ const AddCourseInfo = ({ form, goNext, handleSubmitCourse, editCourse, isBack })
         <Form.Item label="Max number of students" name="max" rules={[{ required: true }]}>
           <InputNumber
             style={{ width: '50%' }}
-            min={0}
+            min={1}
             maxLength={18}
             placeholder="Max number"
             formatter={value => value.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}

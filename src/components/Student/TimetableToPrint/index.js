@@ -1,4 +1,4 @@
-import { Card, Row, Col } from 'antd';
+import { Row, Col, notification } from 'antd';
 import studentApi from 'api/studentApi';
 import moment from 'moment';
 import React, { useState, useEffect } from 'react';
@@ -25,7 +25,7 @@ const TimetableToPrint = React.forwardRef((props, ref) => {
       setStudent(res.data);
     } catch (err) {
       notification.error({
-        message: `${err}`,
+        message: err,
       });
     }
   }, []);

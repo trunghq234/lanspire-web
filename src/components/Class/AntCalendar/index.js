@@ -1,64 +1,44 @@
-import { Badge, Calendar, Modal, Button, Row, Col } from 'antd';
+import { Badge, Button, Calendar, Col, Modal, Row } from 'antd';
 import 'antd/dist/antd.css';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import * as timeFrameActions from 'redux/actions/timeFrames';
-import { classState$, timeFrameState$ } from 'redux/selectors';
+import { timeFrameState$ } from 'redux/selectors';
 import styles from './index.module.less';
 
-const AntCalendar = props => {
+const AntCalendar = ({ classData }) => {
   const dispatch = useDispatch();
   const [timeFrameList, setTimeFrameList] = useState([]);
   const { data: timeFrames } = useSelector(timeFrameState$);
-  const { data: classes } = useSelector(classState$);
-  const { idClass } = useParams();
   const [events, setEvents] = useState([]);
   const [currentEvents, setCurrentEvents] = useState([]);
   const [visible, setVisible] = useState(false);
-  const [classRoom, setClassRoom] = useState({});
   let listDay;
-  const colors = [
-    'pink',
-    'red',
-    'yellow',
-    'orange',
-    'cyan',
-    'green',
-    'blue',
-    'purple',
-    'geekblue',
-    'magenta',
-    'volcano',
-    'gold',
-    'lime',
-  ];
+  const colors = ['pink', 'red', 'cyan', 'green', 'blue', 'purple', 'gold', 'lime'];
   let currentMode = 'date';
   useEffect(() => {
     dispatch(timeFrameActions.getAllTimeFrames.getAllTimeFramesRequest());
   }, []);
   useEffect(() => {
-    if (timeFrames.length != 0) {
-      mappingDataSource(classes, timeFrames);
+    if (timeFrames.length != 0 && classData) {
+      mappingDataSource(timeFrames);
     }
-  }, [timeFrames]);
-  const mappingDataSource = (classes, timeFrames) => {
+  }, [timeFrames, classData]);
+  const mappingDataSource = timeFrames => {
     const res = [];
-    const classRoom = classes.find(classRoom => classRoom.idClass == idClass);
-    setClassRoom(classRoom);
-    if (classRoom) {
-      const classTimes = classRoom.ClassTimes;
-      classTimes.map(classTime => {
+    if (classData) {
+      classData.ClassTimes.map(classTime => {
         const timeFrame = timeFrames.find(
           timeFrame => timeFrame.idTimeFrame == classTime.idTimeFrame
         );
         res.push({
           ...timeFrame,
           dayOfWeek: classTime.dayOfWeek,
-          room: classRoom.room,
-          startClass: classRoom.startDate,
-          endClass: classRoom.endDate,
+          room: classData.room,
+          startClass: classData.startDate,
+          endClass: classData.endDate,
         });
       });
       setTimeFrameList(res);
@@ -67,10 +47,10 @@ const AntCalendar = props => {
   useEffect(() => {
     const temp = [];
     if (timeFrameList) {
-      timeFrameList.map(timeFrame => {
+      timeFrameList.map((timeFrame, index) => {
         setListDay(timeFrame.dayOfWeek, timeFrame.startClass, timeFrame.endClass);
         listDay.map(day => {
-          const color = colors[Math.floor(Math.random() * colors.length)];
+          const color = colors[index % colors.length];
           temp.push({
             day: day,
             content:
@@ -153,7 +133,7 @@ const AntCalendar = props => {
         dateFullCellRender={cellRenderFunc}
       />
       <Modal
-        title={classRoom.className}
+        title={classData?.className}
         placement="right"
         onCancel={handleCancel}
         visible={visible}
@@ -161,12 +141,13 @@ const AntCalendar = props => {
           <Button key="cancel" type="primary" onClick={handleCancel}>
             Cancel
           </Button>,
-        ]}>
+        ]}
+        centered>
         <Row>
           <Col span={12}>
             <ul className={styles['list-event']}>
-              {currentEvents.map(item => (
-                <li>
+              {currentEvents.map((item, index) => (
+                <li key={index}>
                   <Badge color={item.color} text={item.content} />
                 </li>
               ))}

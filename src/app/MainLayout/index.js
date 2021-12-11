@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Redirect, Route, Switch, NavLink } from 'react-router-dom';
 import styles from './main.module.less';
 import ProLayout from '@ant-design/pro-layout';
@@ -9,6 +9,11 @@ import NotFound from 'pages/NotFound';
 
 const MainLayout = props => {
   const [pathname, setPathname] = useState(window.location.pathname);
+
+  useEffect(() => {
+    const path = window.location.pathname;
+    setPathname(path);
+  });
 
   const showRoutes = routes => {
     var result = null;

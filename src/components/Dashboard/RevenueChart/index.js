@@ -10,14 +10,22 @@ const RevenueChart = ({ data, isLoading }) => {
   const [days, setDays] = useState(7);
 
   useEffect(() => {
-    if (data.length != 0) {
+    if (data.length != 0 && !isLoading) {
       renderData(days);
     }
   }, [data, days]);
 
   const renderData = days => {
     const earlyDate = moment().subtract(days, 'days');
-    const tmp = data.filter(e => moment(e.date, 'YYYY-MM-DD').isAfter(earlyDate));
+    const tmp = [];
+    data.map(e => {
+      if (moment(e.date, 'YYYY-MM-DD').isAfter(earlyDate)) {
+        tmp.push({
+          date: e.date,
+          total: parseInt(e.total),
+        });
+      }
+    });
     setDataChart(tmp);
   };
 
@@ -26,10 +34,12 @@ const RevenueChart = ({ data, isLoading }) => {
     padding: 'auto',
     xField: 'date',
     yField: 'total',
-    xAxis: {
-      tickCount: 15,
-    },
     yAxis: {
+      top: true,
+      title: {
+        text: 'Revenue (đồng)',
+        position: 'center',
+      },
       label: {
         formatter: function formatter(v) {
           return ''
@@ -42,6 +52,11 @@ const RevenueChart = ({ data, isLoading }) => {
       },
     },
     xAxis: {
+      tickCount: 15,
+      title: {
+        text: 'Date',
+        position: 'center',
+      },
       label: {
         formatter: function formatter(v) {
           return moment(v).format('DD/MM/YYYY');
@@ -49,6 +64,7 @@ const RevenueChart = ({ data, isLoading }) => {
       },
     },
     tooltip: {
+      title: 'Revenue',
       formatter: function formatter(v) {
         return {
           name: moment(v.date).format('DD/MM/YYYY'),
@@ -61,7 +77,7 @@ const RevenueChart = ({ data, isLoading }) => {
     smooth: true,
     animation: {
       appear: {
-        animation: 'path-in',
+        animation: 'wave-in',
         duration: 400,
       },
     },

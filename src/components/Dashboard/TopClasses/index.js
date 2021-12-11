@@ -25,7 +25,7 @@ const TopClasses = () => {
 
   return (
     <div>
-      <h4>Top classes</h4>
+      <h3>Top classes</h3>
       <Row gutter={[20, 20]}>
         {isLoading ? (
           <Skeleton title={false} paragraph={{ rows: 16 }} />

@@ -35,7 +35,7 @@ const Level = () => {
       width: '10%',
       render: idLevel => {
         return (
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
+          <div className="flex">
             <Tooltip title="Edit level">
               <Link to={`/level/${idLevel}`}>
                 <Button type="primary" ghost icon={<EditOutlined />} />

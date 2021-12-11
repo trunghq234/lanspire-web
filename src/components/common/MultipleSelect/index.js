@@ -8,7 +8,6 @@ const MultipleSelect = props => {
   const [selectedValues, setSelectedValues] = useState([]);
 
   function onChange(value) {
-    console.log(`selected ${value}`);
     setSelectedValues(value);
   }
   function onBlur() {}
@@ -46,8 +45,7 @@ const MultipleSelect = props => {
           option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
         }
         disabled={props.disabled || false}
-        defaultValue={selectedValues}
-      >
+        defaultValue={selectedValues}>
         {optionRendered}
       </Select>
     </div>

@@ -2,7 +2,7 @@
 @timeline-height: 65px;
 @timelineBorderColor: #efefef;
 @lineColor: #c3c3c3;
-@eventColor: #d6c274;
+@eventColor: #bae7ff;
 @eventContentColor: rgba(0, 0, 0, 0.5);
 .container {
   min-height: @container-min-height;
@@ -22,7 +22,7 @@
   padding-top: @timeline-height;
   color: #bbb;
   width: 100%;
-  border-right: 1px solid @timelineBorderColor;
+  border: 1px solid @lineColor;
 }
 .timeline {
   &:extend(.container);
@@ -64,10 +64,13 @@
 }
 .eventsBackgroundHour {
   height: @timeline-height;
-  border-bottom: 1px solid @lineColor;
+  border-top: 1px solid @lineColor;
   background-color: @timelineBorderColor;
   &:first-child {
     background-color: inherit;
+  }
+  &:last-child {
+    border-bottom: 1px solid @lineColor;
   }
 }
 

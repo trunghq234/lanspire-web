@@ -44,6 +44,7 @@ export default function classsReducer(state = INIT_STATE.classes, action) {
         isLoading: false,
         isSuccess: false,
       };
+
     // create
     case getType(classActions.createClass.createClassRequest):
       return {

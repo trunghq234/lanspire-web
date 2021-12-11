@@ -1,24 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import { DeleteOutlined, ExclamationCircleOutlined, EyeOutlined } from '@ant-design/icons';
 import {
+  Breadcrumb,
   Button,
   Card,
   Col,
+  DatePicker,
+  Modal,
+  notification,
   Row,
+  Select,
   Table,
   Tooltip,
-  Select,
-  Breadcrumb,
-  message,
-  Modal,
-  DatePicker,
 } from 'antd';
-import { DeleteOutlined, ExclamationCircleOutlined, EyeOutlined } from '@ant-design/icons';
-import { useDispatch, useSelector } from 'react-redux';
-import { billState$ } from 'redux/selectors';
-import { deleteBill, getBills } from 'redux/actions/bills';
-import moment from 'moment';
-import { Link, NavLink } from 'react-router-dom';
 import Search from 'antd/lib/input/Search';
+import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, NavLink } from 'react-router-dom';
+import { deleteBill, getBills } from 'redux/actions/bills';
+import { billState$ } from 'redux/selectors';
 
 const { Option } = Select;
 const { confirm } = Modal;
@@ -57,7 +57,7 @@ const Invoice = () => {
       width: '10%',
       render: idBill => {
         return (
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
+          <div className="flex">
             <Tooltip title="View details">
               <Link to={`/invoice/${idBill}`}>
                 <Button type="primary" ghost icon={<EyeOutlined />} />
@@ -80,6 +80,7 @@ const Invoice = () => {
   const [dateFormat, setDateFormat] = useState('YYYY');
   const [isDisabled, setIsDisabled] = useState(true);
   const [searchValue, setSearchValue] = useState();
+  const [deleted, setDeleted] = useState(false);
 
   const dateFormats = ['YYYY', 'YYYY', 'MM-YYYY', 'DD-MM-YYYY'];
   const pickers = ['all', 'year', 'month', 'date'];
@@ -152,18 +153,25 @@ const Invoice = () => {
       content: '',
       onOk() {
         dispatch(deleteBill.deleteBillRequest(idBill));
-
-        isSuccess
-          ? message.success({
-              content: 'Deleted successfully',
-            })
-          : message.error({
-              content: 'Error',
-            });
+        setDeleted(true);
       },
       onCancel() {},
     }),
   ];
+
+  useEffect(() => {
+    if (deleted && !isLoading) {
+      if (isSuccess) {
+        notification.success({
+          message: 'Deleted successfully',
+        });
+      } else {
+        notification.error({
+          message: 'Can not delete this invoice',
+        });
+      }
+    }
+  }, [isLoading, isSuccess, deleted]);
 
   const handleSearch = (value, picker, selectedDate) => {
     const list = handleChangeDate(picker, selectedDate);

@@ -22,7 +22,6 @@ const FileUploader = ({ onUpload }) => {
 
   const handleOnChange = ({ fileList }) => {
     setFileList(fileList);
-    console.log(fileList);
   };
 
   const uploadFiles = options => {
@@ -48,14 +47,11 @@ const FileUploader = ({ onUpload }) => {
         });
         onSuccess('Ok');
         onUpload(fileUrls);
-        console.log(fileUrls);
       }
     );
   };
 
-  const handleRemove = file => {
-    console.log(file);
-  };
+  const handleRemove = file => {};
 
   return (
     <div style={{ gap: '20px', display: 'flex', flexDirection: 'column' }}>

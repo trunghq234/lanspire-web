@@ -15,6 +15,7 @@ const DescriptionItem = ({ title, content }) => (
 );
 
 const CourseInfo = ({ course }) => {
+  const role = localStorage.getItem('role');
   return (
     <Card>
       <Row>
@@ -41,13 +42,15 @@ const CourseInfo = ({ course }) => {
           )}
         </Col>
         <Col flex="auto" />
-        <Col>
-          <Tooltip title="Edit">
-            <Link to={`/course/edit/${course.idCourse}`}>
-              <Button type="primary" ghost icon={<EditOutlined />} />
-            </Link>
-          </Tooltip>
-        </Col>
+        {role === 'admin' && (
+          <Col>
+            <Tooltip title="Edit">
+              <Link to={`/course/edit/${course.idCourse}`}>
+                <Button type="primary" ghost icon={<EditOutlined />} />
+              </Link>
+            </Tooltip>
+          </Col>
+        )}
       </Row>
     </Card>
   );

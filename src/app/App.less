@@ -1,5 +1,6 @@
 @import url('../assets//css/_mixin.less');
 @import '~antd/dist/antd.less';
+@import 'theme.less';
 
 .ant-card {
   .border();
@@ -20,7 +21,7 @@
 }
 
 .heading {
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 700;
 }
 
@@ -33,17 +34,10 @@
   height: 100%;
 }
 
+.ant-menu-item .ant-menu-item-icon, .ant-menu-submenu-title .ant-menu-item-icon, .ant-menu-item .anticon, .ant-menu-submenu-title .anticon {
+  min-width: 20px !important;
+}
 
-
-// .ant-breadcrumb {
-//   margin-bottom: 20px !important;
-// }
-
-// .ant-btn-primary {
-//   font-weight: 600;
-//   height: 40px;
-//   min-width: 100px;
-// }
 .ant-btn-sm {
   border-radius: 4px;
   line-height: 1px;

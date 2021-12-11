@@ -6,6 +6,7 @@ import { EditOutlined, EyeOutlined } from '@ant-design/icons';
 import moment from 'moment';
 
 const ClassesCourse = ({ idCourse }) => {
+  const role = localStorage.getItem('role');
   const columns = [
     {
       title: 'Class name',
@@ -38,17 +39,19 @@ const ClassesCourse = ({ idCourse }) => {
       width: '10%',
       render: idClass => {
         return (
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
+          <div className={role === 'admin' && 'flex'}>
             <Tooltip title="View class details">
               <Link to={`/class/details/${idClass}`}>
                 <Button icon={<EyeOutlined />} />
               </Link>
             </Tooltip>
-            <Tooltip title="Edit information">
-              <Link to={`/class/edit/${idClass}`}>
-                <Button type="primary" ghost icon={<EditOutlined />}></Button>
-              </Link>
-            </Tooltip>
+            {role === 'admin' && (
+              <Tooltip title="Edit information">
+                <Link to={`/class/edit/${idClass}`}>
+                  <Button type="primary" ghost icon={<EditOutlined />}></Button>
+                </Link>
+              </Tooltip>
+            )}
           </div>
         );
       },

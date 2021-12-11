@@ -1,16 +1,12 @@
-import React, { createRef, useEffect, useState } from 'react';
-import FormAdd from 'components/TimeFrame/FormAdd';
-import moment from 'moment';
-import { Row, Col, Table, Tooltip, Button, notification, Popconfirm, Card, Breadcrumb } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Breadcrumb, Button, Card, Col, notification, Popconfirm, Row, Table, Tooltip } from 'antd';
+import React, { createRef, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { lecturerState$, classState$ } from 'redux/selectors';
-import * as lecturerActions from 'redux/actions/lecturers';
+import { Link } from 'react-router-dom';
 import * as classActions from 'redux/actions/classes';
-
-import FormEdit from 'components/TimeFrame/FormEdit';
+import * as lecturerActions from 'redux/actions/lecturers';
+import { classState$, lecturerState$ } from 'redux/selectors';
 import style from './index.module.less';
-import { Link, useHistory, useParams } from 'react-router-dom';
 
 const AppointLecturer = () => {
   const columns = [
@@ -119,7 +115,7 @@ const AppointLecturer = () => {
   };
   return (
     <Col span={24}>
-      <Breadcrumb style={{ marginBottom: '10px' }}>
+      <Breadcrumb>
         <Breadcrumb.Item>
           <Link to="/">Dashboard</Link>
         </Breadcrumb.Item>
@@ -127,10 +123,10 @@ const AppointLecturer = () => {
           <Link to="/class">Classes</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <Link to="/class/appoint">Appoint Lecturer List</Link>
+          <Link to="/class/appoint">Appoint lecturer</Link>
         </Breadcrumb.Item>
       </Breadcrumb>
-      <h2 className={style.title}>Appoint Lecturer list</h2>
+      <h3 className="heading">Appoint lecturer</h3>
       <Row gutter={50}>
         <Col span={24}>
           <Card>

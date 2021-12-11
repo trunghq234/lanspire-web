@@ -192,7 +192,7 @@ const AddFileExam = ({ isVisible, setIsVisible, existedColumn, classData, select
   const [columnOption, setColumnOption] = useState();
   const [typeOption, setTypeOption] = useState();
   useEffect(() => {
-    if (!existedColumn) {
+    if (!existedColumn && !classData) {
       return;
     }
     form.resetFields();

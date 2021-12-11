@@ -20,6 +20,7 @@ import { getCourses } from 'redux/actions/courses';
 import * as timeFrameActions from 'redux/actions/timeFrames';
 import { classState$, courseState$, timeFrameState$ } from 'redux/selectors';
 import styles from './index.module.less';
+import { getClasses } from 'redux/actions/classes';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -53,6 +54,7 @@ const AddClass = () => {
   }, [timeFrames]);
   useEffect(() => {
     dispatch(getCourses.getCoursesRequest());
+    dispatch(getClasses.getClassesRequest());
     dispatch(timeFrameActions.getAllTimeFrames.getAllTimeFramesRequest());
   }, []);
   useEffect(() => {
@@ -88,7 +90,7 @@ const AddClass = () => {
         }
       }
     }
-  }, [idClass]);
+  }, [idClass, classes]);
 
   useEffect(() => {
     if (isSubmit) {

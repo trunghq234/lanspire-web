@@ -1,32 +1,28 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { PrinterOutlined } from '@ant-design/icons';
 import {
-  Row,
-  Col,
-  Table,
-  Card,
-  Input,
-  Divider,
   Button,
+  Card,
+  Col,
+  Divider,
+  Input,
   message,
   notification,
-  Modal,
   Popconfirm,
+  Row,
+  Table,
 } from 'antd';
+import billApi from 'api/billApi';
+import studentApi from 'api/studentApi';
 import moment from 'moment';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
-import { useReactToPrint } from 'react-to-print';
 import { getClasses } from 'redux/actions/classes';
 import { getCourses } from 'redux/actions/courses';
+import { updateStudents } from 'redux/actions/students';
 import { billState$, classState$, courseState$, studentState$, userState$ } from 'redux/selectors';
 import { currentDate, isConflictTimetable } from 'utils/dateTime';
 import { convertCommasToNumber, parseThousand } from 'utils/stringHelper';
-import Invoice from 'components/Student/Invoice';
 import styles from './index.module.less';
-import studentApi from 'api/studentApi';
-import { updateStudents } from 'redux/actions/students';
-import { createBill } from 'redux/actions/bills';
 const { Search } = Input;
 
 const ArrangeClass = () => {
@@ -43,7 +39,6 @@ const ArrangeClass = () => {
   const [gender, setGender] = useState();
   const [address, setAddress] = useState();
   const [isPayment, setIsPayment] = useState(false);
-  const [visibleModal, setVisibleModal] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState();
   const [selectedClasses, setSelectedClasses] = useState([]);
   const [dataSearch, setDataSearch] = useState([]); //Data sau khi search
@@ -52,7 +47,7 @@ const ArrangeClass = () => {
   const dispatch = useDispatch();
   const { idStudent } = useParams();
   const history = useHistory();
-  const invoiceRef = useRef();
+  const [idBill, setIdBill] = useState('');
   useEffect(() => {
     dispatch(getClasses.getClassesRequest());
     dispatch(getCourses.getCoursesRequest());
@@ -107,8 +102,8 @@ const ArrangeClass = () => {
             key: curr.idClass,
             className: curr.className,
             course: curr.Course.courseName,
-            startDate: moment(curr.startDate).format('DD/MM/YYYY'),
-            endDate: moment(curr.endDate).format('DD/MM/YYYY'),
+            startDate: moment(curr.startDate).format('DD-MM-YYYY'),
+            endDate: moment(curr.endDate).format('DD-MM-YYYY'),
             fee: parseThousand(curr.Course.fee),
           });
         }
@@ -127,9 +122,7 @@ const ArrangeClass = () => {
         student.User.gender === 1 ? 'Male' : student.User.gender === 0 ? 'Female' : 'Others'
       );
       setPhoneNumber(student.User.phoneNumber);
-      setAddress(
-        `${student.User.address[0]}, ${student.User.address[1]}, ${student.User.address[2]}`
-      );
+      setAddress(student.User.address);
     }
   }, [student, classes.data]);
 
@@ -194,7 +187,7 @@ const ArrangeClass = () => {
 
   //notification
   useEffect(() => {
-    if (isPayment && students.isSuccess && bills.isSuccess) {
+    if (isPayment && students.isSuccess) {
       setVisiblePopConfirm(true);
     } else if (isPayment && !students.isSuccess && students.error.length > 0) {
       notification.error({
@@ -221,13 +214,8 @@ const ArrangeClass = () => {
     setDataSearch(dataTmp);
   };
 
-  //print
-  const printInvoice = useReactToPrint({
-    content: () => invoiceRef.current,
-  });
-
   //handle payment
-  const handlePayment = () => {
+  const handlePayment = async () => {
     if (selectedClasses.length !== 0) {
       const idClasses = [...selectedRowKeys];
       student.Classes.forEach(element => {
@@ -251,8 +239,11 @@ const ArrangeClass = () => {
           };
         }),
       };
-      dispatch(createBill.createBillRequest(bill));
-      dispatch(updateStudents.updateStudentsRequest(studentUpdate));
+      const data = await billApi.create(bill);
+      if (data) {
+        setIdBill(data.idBill);
+        dispatch(updateStudents.updateStudentsRequest(studentUpdate));
+      }
     } else {
       message.warning('Please, select class for student!');
     }
@@ -306,7 +297,15 @@ const ArrangeClass = () => {
           <Receipt itemName="Full name" value={fullName} />
           <Receipt itemName="Gender" value={gender} />
           <Receipt itemName="Phone" value={phoneNumber} />
-          <Receipt itemName="Address" value={address} />
+          <Row className={styles['item-receipt']}>
+            <Col span={10}>
+              <p className={styles['item-name']}>Address</p>
+            </Col>
+            <Col span={14} className={styles['address-student']}>
+              <p>{address ? address[0] : ''},</p>
+              <p>{`${address ? address[1] : ''}, ${address ? address[2] : ''}`}</p>
+            </Col>
+          </Row>
           <Divider className={styles.divider} />
           <h4>Registered classes</h4>
           {selectedClasses.map(item => {
@@ -333,7 +332,7 @@ const ArrangeClass = () => {
             onCancel={() => history.push(`/student/details/${idStudent}`)}
             onConfirm={() => {
               setVisiblePopConfirm(false);
-              setVisibleModal(true);
+              history.push(`/invoice/${idBill}`);
             }}
             visible={visiblePopConfirm}>
             <Button
@@ -347,31 +346,6 @@ const ArrangeClass = () => {
           </Popconfirm>
         </Card>
       </Col>
-      <Modal
-        visible={visibleModal}
-        width="1000px"
-        okText="Print"
-        closable={false}
-        centered={true}
-        onCancel={() => {
-          setVisibleModal(false);
-          history.push(`/student/details/${idStudent}`);
-        }}
-        onOk={printInvoice}
-        okButtonProps={{
-          icon: <PrinterOutlined />,
-          style: { width: '150px', marginRight: '20px' },
-        }}>
-        <Invoice
-          ref={invoiceRef}
-          dataSource={selectedClasses}
-          totalFee={total}
-          fullName={fullName}
-          phoneNumber={phoneNumber}
-          address={address}
-          creator={user.displayName}
-        />
-      </Modal>
     </Row>
   );
 };

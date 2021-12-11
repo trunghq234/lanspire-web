@@ -33,3 +33,15 @@
     margin: 0px;
   }
 }
+
+@media print {
+  @page {
+    size: letter portrait;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print {
+    padding: 50px 40px;
+  }
+}

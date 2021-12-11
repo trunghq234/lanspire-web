@@ -62,7 +62,7 @@ export {
   currentDate,
   isTimeFrameOverlap,
   isConflictTimetable,
+  compareTime,
   countCertainDays,
   formatDate,
-  compareTime,
 };

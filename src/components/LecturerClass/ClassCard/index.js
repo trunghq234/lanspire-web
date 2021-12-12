@@ -22,7 +22,7 @@ const ClassCard = ({ classData }) => {
           </h4>
         </Col>
         <Col span={2}>
-          <Tooltip title="View class details">
+          <Tooltip title="View details">
             <Link to={`/class/details/${classData.idClass}`}>
               <Button type="text" icon={<EyeOutlined />} />
             </Link>

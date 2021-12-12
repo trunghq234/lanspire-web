@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Progress, Upload } from 'antd';
+import { Modal, notification, Progress, Upload } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { storage } from 'utils/firebase';
@@ -38,7 +38,7 @@ const ImageUploader = ({ onUploaded, url }) => {
     if (file) {
       const isLt2M = file.size / 1024 / 1024 < 2;
       if (!isLt2M) {
-        message.error('Image must be smaller than 2MB!');
+        notification.error({ message: 'Image must be smaller than 2MB!' });
       }
       return isLt2M ? true : Upload.LIST_IGNORE;
     }
@@ -87,7 +87,7 @@ const ImageUploader = ({ onUploaded, url }) => {
         {fileList.length < 1 && <UploadOutlined />}
       </Upload>
       {progressVisible && <Progress percent={progress} />}
-      <Modal width={400} visible={previewVisible} footer={null} onCancel={handleCancel}>
+      <Modal centered width={400} visible={previewVisible} footer={null} onCancel={handleCancel}>
         <img alt="example" style={{ width: '100%' }} src={previewImage} />
       </Modal>
     </div>

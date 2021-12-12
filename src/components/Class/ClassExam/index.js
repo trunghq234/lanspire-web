@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Col, Modal, notification, Row, Table, Tooltip } from 'antd';
 import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
-import AddFileExam from '../AddFileExam';
-import { useDispatch, useSelector } from 'react-redux';
-import { examState$ } from 'redux/selectors';
-import { getExamsByClass, deleteExam } from 'redux/actions/exams';
-import { useParams } from 'react-router';
+import { Button, Col, Modal, notification, Row, Table, Tooltip } from 'antd';
 import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router';
+import { deleteExam, getExamsByClass } from 'redux/actions/exams';
+import { examState$ } from 'redux/selectors';
+import AddFileExam from '../AddFileExam';
 
 const { confirm } = Modal;
 
@@ -134,7 +134,7 @@ const ClassExam = ({ classData }) => {
           ? notification.success({
               message: 'Deleted successfully',
             })
-          : notification.success({
+          : notification.error({
               message: 'Failed to delete',
             });
       },

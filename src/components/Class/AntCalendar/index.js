@@ -135,6 +135,7 @@ const AntCalendar = ({ classData }) => {
       <Modal
         title={classData?.className}
         placement="right"
+        centered
         onCancel={handleCancel}
         visible={visible}
         footer={[

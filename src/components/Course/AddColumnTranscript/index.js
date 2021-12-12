@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { useHistory, useParams } from 'react-router';
-import { Button, Col, Form, Input, Row, message, InputNumber } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
-import { columnTranscriptState$ } from 'redux/selectors';
-import { createColumnTranscript, updateColumnTranscript } from 'redux/actions/columnTranscripts';
+import { Button, Col, Form, Input, InputNumber, notification, Row } from 'antd';
 import { validateMessages } from 'constant/validationMessage';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useParams } from 'react-router';
+import { createColumnTranscript, updateColumnTranscript } from 'redux/actions/columnTranscripts';
+import { columnTranscriptState$ } from 'redux/selectors';
 
 const AddColumnTranscript = ({ trigger }) => {
   const [form] = Form.useForm();
@@ -53,13 +53,13 @@ const AddColumnTranscript = ({ trigger }) => {
         );
       }
       if (isSuccess) {
-        message.success({
-          content: isEdit ? 'Updated successfully' : 'Add column successfully',
+        notification.success({
+          message: isEdit ? 'Updated successfully' : 'Add column successfully',
         });
         isEdit ? history.push('/columntranscript/') : '';
       } else {
-        message.error({
-          content: 'Error',
+        notification.error({
+          message: 'Error',
         });
       }
       form.resetFields();
@@ -81,7 +81,7 @@ const AddColumnTranscript = ({ trigger }) => {
       );
       if (res) {
         callback('');
-        message.error('Column must be unique');
+        notification.error({ message: 'Column must be unique' });
       } else {
         callback();
       }

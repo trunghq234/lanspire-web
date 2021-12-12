@@ -1,4 +1,5 @@
 import { Col, Row, Spin } from 'antd';
+import moment from 'moment';
 import React from 'react';
 import { formatDate } from 'utils/dateTime';
 import styles from './index.module.less';
@@ -53,9 +54,10 @@ const ClassInformation = ({ classData, course }) => {
             <Col>
               {classData?.ClassTimes.map(time => (
                 <p className={styles.content} key={time.idClassTime}>
-                  {`${time.TimeFrame.startingTime} - ${time.TimeFrame.endingTime} | ${
-                    weekDays[time.dayOfWeek]
-                  }`}
+                  {`${moment(time.TimeFrame.startingTime, 'HH:mm:ss').format('HH:mm')} - ${moment(
+                    time.TimeFrame.endingTime,
+                    'HH:mm:ss'
+                  ).format('HH:mm')} | ${weekDays[time.dayOfWeek]}`}
                 </p>
               ))}
             </Col>

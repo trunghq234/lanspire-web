@@ -104,7 +104,7 @@ const Student = () => {
       render: idStudent => {
         return (
           <div className={role !== 'employee' && 'flex'}>
-            <Tooltip title="Student details">
+            <Tooltip title="View details">
               <Link to={`/student/details/${idStudent}`}>
                 <Button icon={<EyeOutlined />} />
               </Link>
@@ -118,7 +118,7 @@ const Student = () => {
             )}
             {role !== 'employee' && (
               <Tooltip title="Delete">
-                <Button danger icon={<DeleteOutlined />} onClick={() => handleDelete(idCourse)} />
+                <Button danger icon={<DeleteOutlined />} onClick={() => handleDelete(idStudent)} />
               </Tooltip>
             )}
           </div>
@@ -211,6 +211,7 @@ const Student = () => {
   return (
     <div>
       <Modal
+        centered
         title="Warning"
         visible={visibleModal}
         onOk={handleDeleteStudent}

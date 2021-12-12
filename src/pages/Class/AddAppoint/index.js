@@ -1,5 +1,5 @@
 import { DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
-import { Button, Col, Form, Image, Modal, notification, Row, Table, Tooltip } from 'antd';
+import { Button, Col, Form, Modal, notification, Row, Table, Tooltip } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';

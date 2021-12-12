@@ -11,6 +11,7 @@ const CreateAccountModal = ({
   return (
     <div>
       <Modal
+        centered
         title="Create account"
         visible={isModalVisible}
         okText="Submit"

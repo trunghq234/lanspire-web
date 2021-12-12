@@ -1,15 +1,4 @@
-import {
-  Button,
-  Card,
-  Col,
-  Divider,
-  Input,
-  message,
-  notification,
-  Popconfirm,
-  Row,
-  Table,
-} from 'antd';
+import { Button, Card, Col, Divider, Input, notification, Popconfirm, Row, Table } from 'antd';
 import billApi from 'api/billApi';
 import studentApi from 'api/studentApi';
 import moment from 'moment';
@@ -245,7 +234,7 @@ const ArrangeClass = () => {
         dispatch(updateStudents.updateStudentsRequest(studentUpdate));
       }
     } else {
-      message.warning('Please, select class for student!');
+      notification.warning({ message: 'Please, select class for student!' });
     }
   };
   //component receipt details
@@ -346,6 +335,31 @@ const ArrangeClass = () => {
           </Popconfirm>
         </Card>
       </Col>
+      <Modal
+        visible={visibleModal}
+        width="1000px"
+        okText="Print"
+        closable={false}
+        centered
+        onCancel={() => {
+          setVisibleModal(false);
+          history.push(`/student/details/${idStudent}`);
+        }}
+        onOk={printInvoice}
+        okButtonProps={{
+          icon: <PrinterOutlined />,
+          style: { width: '150px', marginRight: '20px' },
+        }}>
+        <Invoice
+          ref={invoiceRef}
+          dataSource={selectedClasses}
+          totalFee={total}
+          fullName={fullName}
+          phoneNumber={phoneNumber}
+          address={address}
+          creator={user.displayName}
+        />
+      </Modal>
     </Row>
   );
 };

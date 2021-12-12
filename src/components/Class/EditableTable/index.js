@@ -1,7 +1,6 @@
 import { Button, Col, Form, Input, notification, Row, Table } from 'antd';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { CSVLink } from 'react-csv';
-import styles from './index.module.less';
 
 const EditableContext = React.createContext(null);
 

@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { Breadcrumb, Steps, Button, Result, Form, Card, message } from 'antd';
-import { useStepsForm } from 'sunflower-antd';
-import styles from './index.module.less';
+import { Breadcrumb, Button, Card, Form, notification, Result, Steps } from 'antd';
 import AddCourseInfo from 'components/Course/AddCourseInfo';
 import ColumnInput from 'components/Course/ColumnInput';
-import { useDispatch, useSelector } from 'react-redux';
-import { courseState$ } from 'redux/selectors';
-import { createCourse, getCourses, updateCourse } from 'redux/actions/courses';
 import { validateMessages } from 'constant/validationMessage';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useParams } from 'react-router-dom';
+import { createCourse, getCourses, updateCourse } from 'redux/actions/courses';
+import { courseState$ } from 'redux/selectors';
+import { useStepsForm } from 'sunflower-antd';
+import styles from './index.module.less';
 
 const { Step } = Steps;
 
@@ -50,7 +50,7 @@ const AddCourse = () => {
         setIsDone(true);
         gotoStep(current + 1);
       } else {
-        message.warning('Number of column must higher than 0');
+        notification.warning({ message: 'Number of column must higher than 0' });
         setIsDone(false);
       }
     },

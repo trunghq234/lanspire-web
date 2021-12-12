@@ -1,15 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
-import { Breadcrumb, Button, Card, Input, Table, Row, Col, Tooltip, message, Modal } from 'antd';
 import {
-  EditOutlined,
   DeleteOutlined,
+  EditOutlined,
   ExclamationCircleOutlined,
   EyeOutlined,
 } from '@ant-design/icons';
-import { courseState$ } from 'redux/selectors';
+import {
+  Breadcrumb,
+  Button,
+  Card,
+  Col,
+  Input,
+  Modal,
+  notification,
+  Row,
+  Table,
+  Tooltip,
+} from 'antd';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link, NavLink } from 'react-router-dom';
 import { deleteCourse, getCourses } from 'redux/actions/courses';
+import { courseState$ } from 'redux/selectors';
 
 const { Search } = Input;
 const { confirm } = Modal;
@@ -110,11 +121,11 @@ const Course = () => {
         dispatch(deleteCourse.deleteCourseRequest(idCourse));
 
         isSuccess
-          ? message.success({
-              content: 'Deleted successfully',
+          ? notification.success({
+              message: 'Deleted successfully',
             })
-          : message.error({
-              content: 'Error',
+          : notification.error({
+              message: 'Error',
             });
       },
       onCancel() {},

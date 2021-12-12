@@ -1,4 +1,4 @@
-import { Button, Card, Col, DatePicker, Form, Input, Row, Select } from 'antd';
+import { Button, Card, Col, DatePicker, Form, Input, notification, Row, Select } from 'antd';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
@@ -54,7 +54,7 @@ const PersonalInfo = props => {
 
     const currentDate = moment();
     if (currentDate < dob) {
-      message.error('Date of birth is not greater than current date');
+      notification.error({ message: 'Date of birth is not greater than current date' });
     } else {
       // create employee
       if (
@@ -90,7 +90,7 @@ const PersonalInfo = props => {
             setIsSubmit(true);
           } else {
             setIsSubmit(true);
-            isSubmit === true ? message.error('Username is exist!') : '';
+            isSubmit === true ? notification.error({ message: 'Username is exist!' }) : '';
           }
         }
       }
@@ -166,8 +166,8 @@ const PersonalInfo = props => {
   React.useEffect(() => {
     if (employees.isSuccess && isSubmit) {
       id
-        ? message.success('Update employee success!')
-        : message.success('Create employee success!');
+        ? notification.success({ message: 'Update employee success!' })
+        : notification.success({ message: 'Create employee success!' });
 
       form.resetFields();
     }

@@ -2,7 +2,7 @@ import ClassDetails from 'pages/Class/ClassDetails';
 import LecturerClass from 'pages/LecturerClass';
 import Profile from 'pages/Setting/Profile';
 import React from 'react';
-import { HomeIcon, UserCircleIcon } from 'utils/icon';
+import { CalendarIcon, HomeIcon, UserCircleIcon } from 'utils/icon';
 
 const lecturerRoutes = [
   {
@@ -29,6 +29,12 @@ const lecturerMenuItems = {
       path: '/',
       name: 'Home',
       icon: <HomeIcon />,
+      component: <LecturerClass />,
+    },
+    {
+      path: '/schedule',
+      name: 'Schedule',
+      icon: <CalendarIcon />,
       component: <LecturerClass />,
     },
     {

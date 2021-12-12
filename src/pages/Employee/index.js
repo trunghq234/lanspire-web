@@ -1,5 +1,5 @@
 import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
-import { Breadcrumb, Button, Card, Input, Modal, Table, Tag } from 'antd';
+import { Breadcrumb, Button, Card, Col, Input, Modal, Row, Table, Tag } from 'antd';
 import ExportCSV from 'components/common/ExportCSV';
 import { employeeHeadersExcel } from 'constant/headersExcel';
 import moment from 'moment';
@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useHistory } from 'react-router-dom';
 import * as employeeActions from 'redux/actions/employees';
 import { employeeState$ } from 'redux/selectors';
-import styles from './index.module.less';
 
 const { confirm } = Modal;
 const { Search } = Input;
@@ -160,40 +159,40 @@ const Employee = () => {
         </Breadcrumb.Item>
         <Breadcrumb.Item>Employees</Breadcrumb.Item>
       </Breadcrumb>
-      <h3 className="heading">Employee list</h3>
+      <h3 className="heading">Employees</h3>
       <Card>
-        <div className={styles.wrapper}>
-          <div>
+        <Row gutter={[20, 20]}>
+          <Col span={8}>
             <Search
-              className={styles.search}
+              className="full"
               size="large"
               placeholder="Search"
               allowClear
               enterButton
               onSearch={handleSearch}
             />
-          </div>
-          <div>
-            <Button
-              style={{ marginRight: '20px' }}
-              className={styles.btn}
-              size="large"
-              type="primary"
-              onClick={handleAddEmployee}>
+          </Col>
+          <Col flex="auto" />
+          <Col span={4}>
+            <Button block size="large" type="primary" onClick={handleAddEmployee}>
               Add employee
             </Button>
-            <Button className={styles.btn} size="large" type="primary">
+          </Col>
+          <Col span={4}>
+            <Button block size="large" type="primary">
               <ExportCSV data={employees.data} headers={employeeHeadersExcel} type="employee" />
             </Button>
-          </div>
-        </div>
-        <Table
-          bordered={true}
-          columns={columns}
-          loading={employees.isLoading}
-          dataSource={filteredData}
-          rowKey={row => row.idEmployee}
-        />
+          </Col>
+          <Col span={24}>
+            <Table
+              bordered={true}
+              columns={columns}
+              loading={employees.isLoading}
+              dataSource={filteredData}
+              rowKey={row => row.idEmployee}
+            />
+          </Col>
+        </Row>
       </Card>
     </div>
   );

@@ -1,4 +1,15 @@
-import { Button, Card, Col, Divider, Input, notification, Popconfirm, Row, Table } from 'antd';
+import {
+  Button,
+  Card,
+  Col,
+  Divider,
+  Input,
+  Modal,
+  notification,
+  Popconfirm,
+  Row,
+  Table,
+} from 'antd';
 import billApi from 'api/billApi';
 import studentApi from 'api/studentApi';
 import moment from 'moment';

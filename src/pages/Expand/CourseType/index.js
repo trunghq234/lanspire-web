@@ -96,7 +96,7 @@ const CourseType = () => {
     <>
       <Breadcrumb>
         <Breadcrumb.Item>
-          <a href="/">Dashboard</a>
+          <Link to="/">Dashboard</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item>Course type</Breadcrumb.Item>
       </Breadcrumb>

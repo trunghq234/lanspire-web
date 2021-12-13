@@ -25,7 +25,7 @@ const StudentDetails = () => {
           <Link to="/">Dashboard</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <Link to="/student/list">Students</Link>
+          <Link to="/student">Students</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item>Student details</Breadcrumb.Item>
       </Breadcrumb>

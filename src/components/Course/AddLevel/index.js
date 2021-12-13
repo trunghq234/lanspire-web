@@ -52,7 +52,7 @@ const AddLevel = props => {
       notification.success({
         message: isEdit ? 'Updated successfully' : 'Add level successfully',
       });
-      isEdit ? history.push('/level/') : '';
+      isEdit ? history.push('/level') : '';
     } else {
       notification.error({
         message: 'Error',
@@ -64,7 +64,7 @@ const AddLevel = props => {
   const handleReset = () => {
     form.resetFields();
     if (isEdit) {
-      history.push('/level/');
+      history.push('/level');
     }
   };
 

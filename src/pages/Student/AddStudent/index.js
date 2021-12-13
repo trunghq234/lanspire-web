@@ -3,7 +3,7 @@ import { Button, Row, Col, Form, notification, Breadcrumb, Card } from 'antd';
 import styles from './index.module.less';
 import { createStudents, getStudents, updateStudents } from 'redux/actions/students';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import { studentState$ } from 'redux/selectors';
 import moment from 'moment';
 import UserInfo from 'components/Student/UserInfo';
@@ -36,7 +36,7 @@ const AddStudent = () => {
       });
       formRef.current.resetFields();
       if (idStudent) {
-        history.push('/student/list');
+        history.push('/student');
       }
     } else if (isSubmit && !students.isSuccess && students.error.length > 0) {
       notification.error({
@@ -126,10 +126,10 @@ const AddStudent = () => {
     <>
       <Breadcrumb style={{ marginBottom: '10px' }}>
         <Breadcrumb.Item>
-          <a href="/">Dashboard</a>
+          <Link to="/">Dashboard</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <a href="/student/list">Student list</a>
+          <Link to="/student">Students</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item>{contentControl.breadcrumb}</Breadcrumb.Item>
       </Breadcrumb>

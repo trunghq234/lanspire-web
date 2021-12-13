@@ -102,7 +102,7 @@ const ColumnTranscript = () => {
     <>
       <Breadcrumb>
         <Breadcrumb.Item>
-          <a href="/">Dashboard</a>
+          <Link to="/">Dashboard</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item>Column transcript</Breadcrumb.Item>
       </Breadcrumb>

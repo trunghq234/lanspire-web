@@ -100,7 +100,7 @@ const Level = () => {
     <>
       <Breadcrumb>
         <Breadcrumb.Item>
-          <a href="/">Dashboard</a>
+          <Link to="/">Dashboard</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item>Level</Breadcrumb.Item>
       </Breadcrumb>

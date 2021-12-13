@@ -19,6 +19,7 @@ import { timeFrameState$ } from 'redux/selectors';
 import * as timeFrameActions from 'redux/actions/timeFrames';
 import FormEdit from 'components/TimeFrame/FormEdit';
 import style from './index.module.less';
+import { Link } from 'react-router-dom';
 
 const TimeFrame = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -216,7 +217,7 @@ const TimeFrame = () => {
     <Col span={24}>
       <Breadcrumb>
         <Breadcrumb.Item>
-          <a href="/">Dashboard</a>
+          <Link to="/">Dashboard</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item>Time frame</Breadcrumb.Item>
       </Breadcrumb>

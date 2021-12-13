@@ -16,7 +16,7 @@ const lecturerRoutes = [
     page: () => <ClassDetails />,
   },
   {
-    path: '/profile/',
+    path: '/profile',
     exact: true,
     page: () => <Profile />,
   },
@@ -40,7 +40,7 @@ const lecturerMenuItems = {
     {
       name: 'Profile',
       icon: <UserCircleIcon />,
-      path: '/profile/',
+      path: '/profile',
       component: <Profile />,
     },
   ],

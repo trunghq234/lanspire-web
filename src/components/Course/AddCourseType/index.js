@@ -52,7 +52,7 @@ const AddCourseType = ({ trigger }) => {
         notification.success({
           message: isEdit ? 'Updated successfully' : 'Add course type successfully',
         });
-        isEdit ? history.push('/coursetype/') : '';
+        isEdit ? history.push('/coursetype') : '';
       } else {
         notification.error({
           message: 'Error',
@@ -65,7 +65,7 @@ const AddCourseType = ({ trigger }) => {
   const handleReset = () => {
     form.resetFields();
     if (isEdit) {
-      history.push('/coursetype/');
+      history.push('/coursetype');
     }
   };
 

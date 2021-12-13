@@ -1,7 +1,9 @@
 import { Col, Row, Table } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getParameters } from 'redux/actions/parameters';
+import { parameterState$ } from 'redux/selectors';
 import { currentDate } from 'utils/dateTime';
-import { numberWithCommas } from 'utils/stringHelper';
 import styles from './index.module.less';
 
 const Invoice = React.forwardRef((props, ref) => {
@@ -9,6 +11,8 @@ const Invoice = React.forwardRef((props, ref) => {
   const [centerAddress, setCenterAddress] = useState('Hồ chí minh');
   const [centerPhone, setCenterPhone] = useState('012345678');
   const { fullName, phoneNumber, address, totalFee, dataSource, creator } = props;
+  const dispatch = useDispatch();
+  const parameters = useSelector(parameterState$);
   const columns = [
     {
       title: 'No.',
@@ -46,6 +50,23 @@ const Invoice = React.forwardRef((props, ref) => {
       align: 'center',
     },
   ];
+
+  useEffect(() => {
+    dispatch(getParameters.getParametersRequest());
+  }, []);
+
+  useEffect(() => {
+    if (parameters.data.length > 0) {
+      setCenterName(parameters.data.find(parameter => parameter.name === 'centerName').value);
+      const address =
+        parameters.data.find(parameter => parameter.name === 'address').value +
+        parameters.data.find(parameter => parameter.name === 'district').value +
+        parameters.data.find(parameter => parameter.name === 'city').value;
+      setCenterAddress(address);
+      setCenterPhone(parameters.data.find(parameter => parameter.name === 'phoneNumber').value);
+    }
+  }, [parameters]);
+
   return (
     <div ref={ref} className={styles['invoice-root']}>
       <Row>
@@ -94,7 +115,7 @@ const Invoice = React.forwardRef((props, ref) => {
         <h1 className={styles['total-title']}>Total:</h1>
         <div lassName={styles['total-fee']}>
           <h1>
-            {numberWithCommas(totalFee)}
+            {parseThousand(totalFee)}
             <span className={styles['total-unit']}>VND</span>
           </h1>
         </div>

@@ -1,7 +1,13 @@
-import { Card, Col, DatePicker, Form, Input, Row, Select } from 'antd';
+import { Button, Card, Col, DatePicker, Form, Input, Row, Select } from 'antd';
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router';
+import { employeeState$, usersState$ } from 'redux/selectors';
 import ProvincePicker from '../ProvincePicker';
+import * as employeeActions from 'redux/actions/employees';
 import styles from './index.module.less';
+import { getUsers } from 'redux/actions/users';
+import moment from 'moment';
 
 const { Option } = Select;
 const idRoleEmployee = '386af797-fdf6-42dc-8bab-d5b42561b5fb';
@@ -11,7 +17,7 @@ const PersonalInfo = props => {
   const [city, setCity] = useState('');
   const dispatch = useDispatch();
   const employees = useSelector(employeeState$);
-  const users = useSelector(userState$);
+  const users = useSelector(usersState$);
   const [form] = Form.useForm();
   const { id } = useParams();
   const dateFormat = 'DD/MM/YYYY';

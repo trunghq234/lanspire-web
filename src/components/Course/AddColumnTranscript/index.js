@@ -23,7 +23,6 @@ const AddColumnTranscript = ({ trigger }) => {
       const columnTranscript = columnTranscripts.find(
         columnTranscript => columnTranscript.idColumn === idColumn
       );
-      console.log(columnTranscript);
       form.setFieldsValue({
         columnName: columnTranscript.columnName,
         min: columnTranscript.min,

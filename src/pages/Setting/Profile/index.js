@@ -28,7 +28,7 @@ const Profile = props => {
             tab={
               <span>
                 <UserOutlined />
-                Edit Profile
+                Edit profile
               </span>
             }
             key="1">
@@ -38,7 +38,7 @@ const Profile = props => {
             tab={
               <span>
                 <LockOutlined />
-                Change Password
+                Change password
               </span>
             }
             key="2">

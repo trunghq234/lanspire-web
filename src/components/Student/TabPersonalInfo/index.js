@@ -40,6 +40,7 @@ const PersonalInfo = props => {
   const { idStudent } = useParams();
   const history = useHistory();
   const studentCardRef = useRef();
+  const role = localStorage.getItem('role');
 
   useEffect(() => {
     dispatch(getStudents.getStudentsRequest());
@@ -81,41 +82,29 @@ const PersonalInfo = props => {
       </div>
       <Row>
         <Col span={22}>
-          <Col span={24}>
-            <h4>Personal</h4>
-            <Row>
-              <DescriptionItem title="Full name" content={fullName} icon={fullNameSvg} />
-            </Row>
-            <Row>
-              <DescriptionItem title="Gender" content={gender} icon={genderSvg} />
-            </Row>
-            <Row>
-              <DescriptionItem title="Date of birth" content={dob} icon={dateSvg} />
-            </Row>
-          </Col>
-          <Col span={24}>
-            <h4>Contact</h4>
-            <Row>
-              <DescriptionItem title="Phone number" content={phoneNumber} icon={phoneSvg} />
-            </Row>
-            <Row>
-              <DescriptionItem title="Email" content={email} icon={emailSvg} />
-            </Row>
-            <Row>
-              <DescriptionItem title="Address" content={address} icon={locationSvg} />
-            </Row>
-          </Col>
+          <h4>Personal</h4>
+          <DescriptionItem title="Full name" content={fullName} icon={fullNameSvg} />
+          <DescriptionItem title="Gender" content={gender} icon={genderSvg} />
+          <DescriptionItem title="Date of birth" content={dob} icon={dateSvg} />
+          <h4>Contact</h4>
+          <DescriptionItem title="Phone number" content={phoneNumber} icon={phoneSvg} />
+          <DescriptionItem title="Email" content={email} icon={emailSvg} />
+          <DescriptionItem title="Address" content={address} icon={locationSvg} />
         </Col>
         <Col span={2}>
-          <Tooltip title="Edit">
-            <EditOutlined
-              className={styles['icon-edit']}
-              onClick={() => history.push(`/student/edit/${idStudent}`)}
-            />
-          </Tooltip>
-          <Tooltip title="Print student card">
-            <PrinterOutlined onClick={handlePrintStudentCard} />
-          </Tooltip>
+          <div className={role === 'admin' && 'flex'}>
+            <Tooltip title="Print student card">
+              <Button type="primary" icon={<PrinterOutlined />} onClick={handlePrintStudentCard} />
+            </Tooltip>
+            {role === 'admin' && (
+              <Tooltip title="Edit information">
+                <Button
+                  icon={<EditOutlined />}
+                  onClick={() => history.push(`/student/edit/${idStudent}`)}
+                />
+              </Tooltip>
+            )}
+          </div>
         </Col>
       </Row>
     </Card>

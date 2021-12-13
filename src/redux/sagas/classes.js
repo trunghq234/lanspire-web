@@ -1,8 +1,16 @@
 import { call, put } from 'redux-saga/effects';
 import classApi from 'api/classApi';
 import * as classActions from 'redux/actions/classes';
+import { takeLatest } from 'redux-saga/effects';
 
-export function* fetchClasses(action) {
+export function* classSaga() {
+  yield takeLatest(classActions.getClasses.getClassesRequest, fetchClasses);
+  yield takeLatest(classActions.createClass.createClassRequest, createClass);
+  yield takeLatest(classActions.updateClass.updateClassRequest, updateClass);
+  yield takeLatest(classActions.deleteClass.deleteClassRequest, deleteClass);
+}
+
+function* fetchClasses(action) {
   try {
     const classes = yield call(classApi.getAll);
 
@@ -12,7 +20,7 @@ export function* fetchClasses(action) {
   }
 }
 
-export function* fetchClass(action) {
+function* fetchClass(action) {
   try {
     const classRoom = yield call(classApi.getById, action.payload);
 
@@ -22,7 +30,7 @@ export function* fetchClass(action) {
   }
 }
 
-export function* createClass(action) {
+function* createClass(action) {
   try {
     const newClass = yield call(classApi.create, action.payload);
 
@@ -32,7 +40,7 @@ export function* createClass(action) {
   }
 }
 
-export function* updateClass(action) {
+function* updateClass(action) {
   try {
     yield call(classApi.update, action.payload);
     yield put(classActions.updateClass.updateClassSuccess(action.payload));
@@ -41,7 +49,7 @@ export function* updateClass(action) {
   }
 }
 
-export function* deleteClass(action) {
+function* deleteClass(action) {
   try {
     yield call(classApi.delete, action.payload);
 

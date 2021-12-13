@@ -14,42 +14,55 @@ const { confirm } = Modal;
 const AddAppoint = () => {
   const columnLecturers = [
     {
-      title: 'Lecturer',
+      title: 'Lecturer name',
       dataIndex: 'lecturerName',
     },
     {
       title: 'Gender',
       dataIndex: 'gender',
       align: 'center',
+      filters: [
+        { text: 'Male', value: 'Male' },
+        { text: 'Female', value: 'Female' },
+        { text: 'Others', value: 'Others' },
+      ],
+      filterSearch: true,
+      onFilter: (value, record) => record.gender.startsWith(value),
     },
     {
-      title: 'Image',
-      dataIndex: 'image',
+      title: 'DOB',
+      dataIndex: 'dob',
       align: 'center',
-      render: image => {
-        return (
-          <div>
-            <Image className={styles.image} src={image}></Image>
-          </div>
-        );
+      render: text => {
+        return <span>{moment(text, 'YYYY-MM-DD').format('DD-MM-YYYY')}</span>;
       },
+    },
+    {
+      title: 'Phone number',
+      dataIndex: 'phoneNumber',
+      align: 'center',
     },
   ];
   const columns = [
     {
-      title: 'Lecturer',
+      title: 'Lecturer name',
       dataIndex: 'lecturerName',
     },
     {
       title: '',
       dataIndex: 'idLecturer',
+      align: 'center',
+      width: '20%',
       render: idLecturer => {
         return (
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
-            <Tooltip title="Delete">
-              <Button danger icon={<DeleteOutlined />} onClick={() => handleDelete(idLecturer)} />
-            </Tooltip>
-          </div>
+          <Tooltip title="Delete">
+            <Button
+              size="small"
+              danger
+              icon={<DeleteOutlined />}
+              onClick={() => handleDelete(idLecturer)}
+            />
+          </Tooltip>
         );
       },
     },
@@ -108,6 +121,10 @@ const AddAppoint = () => {
       if (!isBusy()) {
         dispatch(updateClass.updateClassRequest({ idClass: idClass, lecturers: selected }));
         setIsSuccess(true);
+        notification.success({
+          message: 'Success',
+          description: 'Appoint lecturer successfully!',
+        });
       }
     }
   };
@@ -115,7 +132,11 @@ const AddAppoint = () => {
     let res = false;
     selected.map(idLecturer => {
       const lecturer = lecturers.find(lecturer => lecturer.idLecturer == idLecturer);
-      const teachingTimes = lecturer.TeachingTimes;
+      const classList = lecturer.Classes;
+      let teachingTimes = [];
+      classList.map(classRoom => {
+        teachingTimes.push(...classRoom.TimeFrames);
+      });
       const classRoom = classes.find(classRoom => classRoom.idClass == idClass);
       teachingTimes.map(teachingTime => {
         classRoom.ClassTimes.map(classTime => {
@@ -173,10 +194,10 @@ const AddAppoint = () => {
         res.push({
           key: lecturer.idLecturer,
           idLecturer: lecturer.idLecturer,
-          lecturerName: lecturer.displayName,
+          lecturerName: lecturer.User.displayName,
           gender: lecturer.gender == 1 ? 'Male' : 'Female',
-          image: 'https://ungho.live/static/sitedata/ckfinder/images/11072018/1.jpg',
-          // avatar: lecturer.imageUrl,
+          phoneNumber: lecturer.User.phoneNumber,
+          dob: lecturer.User.dob,
         });
       }
     });
@@ -211,7 +232,7 @@ const AddAppoint = () => {
   return (
     <Row justify="center" gutter={[20, 10]}>
       <Col span={8}>
-        <h3>Current Lecturer</h3>
+        <h3>Lecturers' class</h3>
         <Table
           bordered
           columns={columns}
@@ -226,8 +247,7 @@ const AddAppoint = () => {
         />
       </Col>
       <Col span={16}>
-        <h3>Appoint New Lecturer</h3>
-
+        <h3>Lecturer list</h3>
         <Table
           bordered
           columns={columnLecturers}

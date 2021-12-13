@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Card, Col, Input, Row, Form, Select, DatePicker } from 'antd';
+import { Col, DatePicker, Form, Input, Row, Select } from 'antd';
+import React from 'react';
 import ProvincePicker from '../ProvincePicker';
 
 const UserInfo = props => {

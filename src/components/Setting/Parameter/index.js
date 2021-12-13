@@ -1,40 +1,17 @@
-import {
-  Col,
-  Form,
-  Input,
-  Row,
-  Skeleton,
-  Select,
-  Button,
-  TimePicker,
-  notification,
-  Popconfirm,
-} from 'antd';
-import React, { useState, useEffect } from 'react';
-import styles from './index.module.less';
-import LocationVN from '../../common/ProvincePicker/LocationVN.json';
+import { Button, Col, Form, Input, notification, Popconfirm, Row, TimePicker } from 'antd';
+import React, { useEffect, useState } from 'react';
 import * as parameterActions from 'redux/actions/parameters';
 import * as timeFrameActions from 'redux/actions/timeFrames';
-
 import { parameterState$, timeFrameState$ } from 'redux/selectors';
-import { useDispatch, useSelector } from 'react-redux';
-import moment from 'moment';
-import parameterApi from 'api/parameterApi';
-import timeFrameApi from 'api/timeFrameApi';
 
 const Parameter = props => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const [offset, setOffset] = useState('5');
-  const [loading, setLoading] = useState('false');
   const format = 'HH:mm';
   const { data: parameters } = useSelector(parameterState$);
   const { data: timeFrames } = useSelector(timeFrameState$);
 
-  let cityOptions = [];
-  const [districtInSelectedCity, setDistrictInSelectedCity] = useState([]);
-  const [selectedCity, setSelectedCity] = useState();
-  const [selectedDistrict, setSelectedDistrict] = useState();
   const [visible, setVisible] = React.useState(false);
   const [confirmLoading, setConfirmLoading] = React.useState(false);
 
@@ -48,20 +25,9 @@ const Parameter = props => {
   };
 
   const handleCancel = () => {
-    console.log('Clicked cancel button');
     setVisible(false);
   };
-  for (let city of Object.values(LocationVN)) {
-    cityOptions.push(city);
-  }
 
-  const mapDistrictToArray = districts => {
-    let result = [];
-    for (let district of Object.values(districts)) {
-      result.push({ name: district });
-    }
-    return result;
-  };
   useEffect(() => {
     if (screen.width < 768) {
       setOffset('0');
@@ -69,17 +35,9 @@ const Parameter = props => {
     dispatch(parameterActions.getParameters.getParametersRequest());
     dispatch(timeFrameActions.getAllTimeFrames.getAllTimeFramesRequest());
   }, []);
-  useEffect(() => {
-    for (let city of Object.values(LocationVN)) {
-      if (city.name === selectedCity) {
-        setDistrictInSelectedCity(mapDistrictToArray(city.districts));
-        return true;
-      }
-    }
-  }, [selectedCity]);
+
   useEffect(() => {
     if (parameters.length > 0) {
-      console.log(parameters);
       const openTime = parameters.find(parameter => parameter.name == 'openTime').value;
       const closeTime = parameters.find(parameter => parameter.name == 'closeTime').value;
 
@@ -91,20 +49,7 @@ const Parameter = props => {
       form.setFieldsValue(record);
     }
   }, [parameters]);
-  const renderOptions = dataList => {
-    if (dataList.length) {
-      return dataList.map(data => {
-        return (
-          <Option key={data['name']} value={data['name']}>
-            {data['name']}
-          </Option>
-        );
-      });
-    }
-    return null;
-  };
-  const optionCityRendered = renderOptions(cityOptions);
-  const optionDistrictRendered = renderOptions(districtInSelectedCity);
+
   const handleSubmit = () => {
     const values = form.getFieldsValue();
     const updatedParameter = [
@@ -130,7 +75,6 @@ const Parameter = props => {
       const endTime = moment(`11/20/2021 ${timeFrame.endingTime}`);
       const duration = moment.duration(endTime.diff(startTime));
       var minutes = duration.asMinutes();
-      console.log(minutes);
       timeFrame.activate = true;
       if (values.minTimeFrame > minutes) {
         timeFrame.activate = false;
@@ -142,7 +86,7 @@ const Parameter = props => {
     parameterApi
       .update(updatedParameter)
       .then(res => {
-        timeFrameApi.updateAll(timeFrames);
+        dispatch(timeFrameActions.updateTimeFrames.updateTimeFramesRequest(timeFrames));
         notification.success({
           message: 'Success',
           description: 'Update parameter successfully',
@@ -158,13 +102,20 @@ const Parameter = props => {
 
   return (
     <div>
-      <h3>Change Parameter</h3>
-      {/* <Skeleton loading={loading} active> */}
-      <Form layout="vertical" form={form} style={{ marginTop: '1.5rem' }} onFinish={handleSubmit}>
-        <Row>
-          <Col className={styles['form-col']} xs={24} sm={24} md={14} offset={offset}>
+      <h3>Regulations</h3>
+      <Form
+        labelCol={{ span: 12 }}
+        wrapperCol={{ span: 12 }}
+        labelAlign="left"
+        layout="horizontal"
+        form={form}
+        style={{ marginTop: '1.5rem' }}
+        onFinish={handleSubmit}>
+        <Row gutter={[20, 10]}>
+          <Col span={14}>
             <Form.Item
-              label="Max student of a course"
+              label="Max number of students"
+              tooltip="Maximum number of students in a course"
               name="maxStudent"
               onKeyPress={event => {
                 if (!/[0-9]/.test(event.key)) {
@@ -172,35 +123,36 @@ const Parameter = props => {
                 }
               }}
               rules={[{ required: true }]}>
-              <Input placeholder="Max student of a course" />
+              <Input placeholder="Max students of a course" />
             </Form.Item>
           </Col>
-          <Col className={styles['form-col']} xs={24} sm={24} md={14} offset={offset}>
-            <Form.Item label="Min of a Time Frame" name="minTimeFrame" rules={[{ required: true }]}>
+          <Col span={16} />
+          <Col span={14}>
+            <Form.Item label="Min of a time frame" name="minTimeFrame" rules={[{ required: true }]}>
               <Input suffix="minutes" placeholder="Min of a Time Frame" />
             </Form.Item>
           </Col>
-          <Col className={styles['form-col']} xs={24} sm={24} md={14} offset={offset}>
-            <Form.Item label="Open time" name="openTime" rules={[{ required: true }]}>
-              <TimePicker.RangePicker style={{ width: '100%' }} format={format} />
+          <Col span={16} />
+          <Col span={14}>
+            <Form.Item label="Business hours" name="openTime" rules={[{ required: true }]}>
+              <TimePicker.RangePicker style={{ width: '100%' }} format={format} minuteStep={5} />
             </Form.Item>
           </Col>
-
-          <Col className={styles['form-col']} xs={24} sm={24} md={12}></Col>
-          <Col className={styles['form-col']} xs={24} sm={24} md={14} offset={offset}>
+          <Col span={16} />
+          <Col span={14}>
             <Button style={{ width: '100%' }} type="primary" onClick={showPopconfirm} size="large">
-              Save Change
+              Save changes
             </Button>
             <Popconfirm
               title="Invalid Timeframe will be inactive. Are you sure to save the changes"
               visible={visible}
               onConfirm={handleOk}
               okButtonProps={{ loading: confirmLoading }}
-              onCancel={handleCancel}></Popconfirm>
+              onCancel={handleCancel}
+            />
           </Col>
         </Row>
       </Form>
-      {/* </Skeleton> */}
     </div>
   );
 };

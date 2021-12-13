@@ -30,20 +30,22 @@ const ClassExam = ({ classData }) => {
       title: 'Test time',
       dataIndex: 'testTime',
       align: 'center',
+      width: '15%',
     },
     {
       title: 'Test date',
       dataIndex: 'testDate',
       align: 'center',
+      width: '15%',
     },
     {
       title: '',
       dataIndex: ['idExam'],
       align: 'center',
-      width: '15%',
+      width: '10%',
       render: (idExam, currentExam) => {
         return (
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
+          <div className="flex">
             <Tooltip title="Edit exam">
               <Button
                 type="primary"
@@ -142,11 +144,12 @@ const ClassExam = ({ classData }) => {
   return (
     <Row gutter={[20, 20]}>
       <Col span={4}>
-        <h3>Class exams</h3>
+        <h3 className="heading">Class exams</h3>
       </Col>
       <Col flex="auto" />
-      <Col>
+      <Col span={4}>
         <Button
+          block
           type="primary"
           size="large"
           onClick={() => {

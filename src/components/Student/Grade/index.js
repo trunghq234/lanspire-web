@@ -101,9 +101,10 @@ const Grade = () => {
   };
   return (
     <Card>
-      <Row>
+      <Row gutter={[20, 20]}>
         <Col span={4}>
           <Select
+            size="large"
             defaultValue="all"
             onSelect={handleFilter}
             placeholder="Select status class"
@@ -113,8 +114,9 @@ const Grade = () => {
             <Option value="done">Done</Option>
           </Select>
         </Col>
-        <Col span={2} offset={18}>
-          <Button block className={styles.print}>
+        <Col flex="auto" />
+        <Col span={4}>
+          <Button block type="primary" size="large">
             <PrinterOutlined />
             Print
           </Button>

@@ -1,4 +1,4 @@
-import { Button, Card, Col, DatePicker, Form, Input, Row, Select } from 'antd';
+import { Button, Card, Col, DatePicker, Form, Input, notification, Row, Select } from 'antd';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
@@ -54,7 +54,7 @@ const PersonalInfo = props => {
 
     const currentDate = moment();
     if (currentDate < dob) {
-      message.error('Date of birth is not greater than current date');
+      notification.error({ message: 'Date of birth is not greater than current date' });
     } else {
       // create employee
       if (
@@ -90,7 +90,7 @@ const PersonalInfo = props => {
             setIsSubmit(true);
           } else {
             setIsSubmit(true);
-            isSubmit === true ? message.error('Username is exist!') : '';
+            isSubmit === true ? notification.error({ message: 'Username is exist!' }) : '';
           }
         }
       }
@@ -166,8 +166,8 @@ const PersonalInfo = props => {
   React.useEffect(() => {
     if (employees.isSuccess && isSubmit) {
       id
-        ? message.success('Update employee success!')
-        : message.success('Create employee success!');
+        ? notification.success({ message: 'Update employee success!' })
+        : notification.success({ message: 'Create employee success!' });
 
       form.resetFields();
     }
@@ -214,15 +214,15 @@ const PersonalInfo = props => {
 
           <Col xs={12} md={12} lg={12} xl={8}>
             <Form.Item
-              label="Phone number"
-              name="phoneNumber"
               onKeyPress={event => {
                 if (!/[0-9]/.test(event.key)) {
                   event.preventDefault();
                 }
               }}
-              rules={[{ required: true }, { min: 10 }]}>
-              <Input type="text" placeholder="Phone number" maxLength="10" />
+              label="Phone number"
+              name="phoneNumber"
+              rules={[{ required: true }]}>
+              <Input type="text" placeholder="Phone number" minLength={10} maxLength={10} />
             </Form.Item>
           </Col>
 

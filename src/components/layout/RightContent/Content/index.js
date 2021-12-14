@@ -20,7 +20,7 @@ const Content = props => {
     }
   };
   const editProfile = () => {
-    history.push('/profile/');
+    history.push('/profile');
   };
 
   const contents = [

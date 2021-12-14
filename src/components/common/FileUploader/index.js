@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { Button, Modal, Progress, Upload, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
+import { Button, notification, Upload } from 'antd';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import React, { useState } from 'react';
 import { storage } from 'utils/firebase';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -13,7 +13,7 @@ const FileUploader = ({ onUpload }) => {
     if (file) {
       const isLt2M = file.size / 1024 / 1024 < 2;
       if (!isLt2M) {
-        message.error('File(s) must be smaller than 2MB!');
+        notification.error({ message: 'File(s) must be smaller than 2MB!' });
       }
       return isLt2M ? true : Upload.LIST_IGNORE;
     }

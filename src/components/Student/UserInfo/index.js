@@ -58,10 +58,15 @@ const UserInfo = props => {
         </Col>
         <Col span={15}>
           <Form.Item
+            onKeyPress={event => {
+              if (!/[0-9]/.test(event.key)) {
+                event.preventDefault();
+              }
+            }}
             label="Phone number"
             name="phoneNumber"
-            rules={[{ required: true }, { validator: numberValidator }]}>
-            <Input />
+            rules={[{ required: true }]}>
+            <Input type="text" placeholder="Phone number" minLength={10} maxLength={10} />
           </Form.Item>
         </Col>
 

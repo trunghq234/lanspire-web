@@ -104,7 +104,7 @@ const AddClass = () => {
             description: isEdit ? 'Update success.' : 'Add success',
           });
           setTimeout(() => {
-            isEdit ? history.push('/class/') : '';
+            isEdit ? history.push('/class') : '';
           }, 500);
           form.resetFields();
         } else {

@@ -29,12 +29,12 @@ const employeeRoutes = [
     page: () => <Dashboard />,
   },
   {
-    path: '/lecturer/',
+    path: '/lecturer',
     exact: true,
     page: () => <Lecturer />,
   },
   {
-    path: '/student/list',
+    path: '/student',
     exact: true,
     page: () => <Student />,
   },
@@ -49,7 +49,7 @@ const employeeRoutes = [
     page: () => <ArrangeClass />,
   },
   {
-    path: '/course/',
+    path: '/course',
     exact: true,
     page: () => <Course />,
   },
@@ -59,7 +59,7 @@ const employeeRoutes = [
     page: () => <CourseDetails />,
   },
   {
-    path: '/class/',
+    path: '/class',
     exact: true,
     page: () => <Class />,
   },
@@ -69,7 +69,7 @@ const employeeRoutes = [
     page: () => <ClassDetails />,
   },
   {
-    path: '/profile/',
+    path: '/profile',
     exact: true,
     page: () => <Profile />,
   },
@@ -97,25 +97,25 @@ const employeeMenuItems = {
     {
       name: 'Courses',
       icon: <CourseIcon />,
-      path: '/course/',
+      path: '/course',
       component: <Course />,
     },
     {
-      name: 'Classses',
+      name: 'Classes',
       icon: <ClassIcon />,
-      path: '/class/',
+      path: '/class',
       component: <Class />,
     },
     {
       name: 'Students',
       icon: <StudentIcon />,
-      path: '/student/list',
+      path: '/student',
       component: <Student />,
     },
     {
       name: 'Lecturers',
       icon: <UserGroupIcon />,
-      path: '/lecturer/',
+      path: '/lecturer',
       component: <Lecturer />,
     },
     {
@@ -127,7 +127,7 @@ const employeeMenuItems = {
     {
       name: 'Profile',
       icon: <UserCircleIcon />,
-      path: '/profile/',
+      path: '/profile',
       component: <Profile />,
     },
   ],

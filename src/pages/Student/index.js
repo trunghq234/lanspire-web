@@ -106,7 +106,7 @@ const Student = () => {
       render: idStudent => {
         return (
           <div className={role !== 'employee' && 'flex'}>
-            <Tooltip title="Student details">
+            <Tooltip title="View details">
               <Link to={`/student/details/${idStudent}`}>
                 <Button icon={<EyeOutlined />} />
               </Link>
@@ -120,7 +120,7 @@ const Student = () => {
             )}
             {role !== 'employee' && (
               <Tooltip title="Delete">
-                <Button danger icon={<DeleteOutlined />} onClick={() => handleDelete(idCourse)} />
+                <Button danger icon={<DeleteOutlined />} onClick={() => handleDelete(idStudent)} />
               </Tooltip>
             )}
           </div>
@@ -213,6 +213,7 @@ const Student = () => {
   return (
     <div>
       <Modal
+        centered
         title="Warning"
         visible={visibleModal}
         onOk={handleDeleteStudent}
@@ -239,14 +240,14 @@ const Student = () => {
             />
           </Col>
           <Col flex="auto" />
-          <Col xs={12} sm={12} md={3} lg={3} xl={2}>
+          <Col span={4}>
             {role === 'admin' && (
               <Button type="primary" size="large" block>
                 <Link to="/student/add">Add student</Link>
               </Button>
             )}
           </Col>
-          <Col xs={12} sm={12} md={3} lg={3} xl={2}>
+          <Col span={4}>
             <Button type="primary" size="large" block>
               <ExportCSV data={students.data} headers={studentHeadersExcel} type="student" />
             </Button>

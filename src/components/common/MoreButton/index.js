@@ -1,6 +1,6 @@
+import { DeleteOutlined, EyeOutlined, MoreOutlined } from '@ant-design/icons';
+import { Dropdown, Menu, message } from 'antd';
 import React from 'react';
-import { Menu, Dropdown, Button, message, Space, Tooltip } from 'antd';
-import { EyeOutlined, MoreOutlined, UserOutlined, DeleteOutlined } from '@ant-design/icons';
 import './index.less';
 
 const MoreButton = () => {
@@ -15,7 +15,7 @@ const MoreButton = () => {
   const menu = (
     <Menu onClick={handleMenuClick}>
       <Menu.Item key="1" icon={<EyeOutlined />}>
-        View Details
+        View details
       </Menu.Item>
       <Menu.Item key="2" icon={<DeleteOutlined />}>
         Delete

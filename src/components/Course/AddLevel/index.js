@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, InputNumber, message, Row } from 'antd';
+import { Button, Col, Form, Input, InputNumber, notification, Row } from 'antd';
 import LanguageSelect from 'components/common/LanguageSelect';
 import { validateMessages } from 'constant/validationMessage';
 import React, { useEffect, useState } from 'react';
@@ -49,13 +49,13 @@ const AddLevel = props => {
       );
     }
     if (isSuccess) {
-      message.success({
-        content: isEdit ? 'Updated successfully' : 'Add level successfully',
+      notification.success({
+        message: isEdit ? 'Updated successfully' : 'Add level successfully',
       });
-      isEdit ? history.push('/level/') : '';
+      isEdit ? history.push('/level') : '';
     } else {
-      message.error({
-        content: 'Error',
+      notification.error({
+        message: 'Error',
       });
     }
     form.resetFields();
@@ -64,7 +64,7 @@ const AddLevel = props => {
   const handleReset = () => {
     form.resetFields();
     if (isEdit) {
-      history.push('/level/');
+      history.push('/level');
     }
   };
 
@@ -74,7 +74,7 @@ const AddLevel = props => {
       const res = levelList.find(level => level.levelName === levelName && level.point === point);
       if (res) {
         callback('');
-        message.error('Level must be unique');
+        notification.error({ message: 'Level must be unique' });
       } else {
         callback();
       }

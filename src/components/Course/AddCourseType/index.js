@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, message, Row } from 'antd';
+import { Button, Col, Form, Input, notification, Row } from 'antd';
 import { validateMessages } from 'constant/validationMessage';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -49,13 +49,13 @@ const AddCourseType = ({ trigger }) => {
         );
       }
       if (isSuccess) {
-        message.success({
-          content: isEdit ? 'Updated successfully' : 'Add course type successfully',
+        notification.success({
+          message: isEdit ? 'Updated successfully' : 'Add course type successfully',
         });
-        isEdit ? history.push('/coursetype/') : '';
+        isEdit ? history.push('/coursetype') : '';
       } else {
-        message.error({
-          content: 'Error',
+        notification.error({
+          message: 'Error',
         });
       }
       form.resetFields();
@@ -65,7 +65,7 @@ const AddCourseType = ({ trigger }) => {
   const handleReset = () => {
     form.resetFields();
     if (isEdit) {
-      history.push('/coursetype/');
+      history.push('/coursetype');
     }
   };
 
@@ -75,7 +75,7 @@ const AddCourseType = ({ trigger }) => {
       const res = courseTypes.find(type => type.typeName === typeName);
       if (res && typeName !== oldType) {
         callback('');
-        message.error('Course type must be unique');
+        notification.error({ message: 'Course type must be unique' });
       } else {
         callback();
       }

@@ -1,15 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
-import { Breadcrumb, Button, Card, Input, Table, Row, Col, Tooltip, message, Modal } from 'antd';
 import {
-  EditOutlined,
   DeleteOutlined,
+  EditOutlined,
   ExclamationCircleOutlined,
   EyeOutlined,
 } from '@ant-design/icons';
-import { courseState$ } from 'redux/selectors';
+import {
+  Breadcrumb,
+  Button,
+  Card,
+  Col,
+  Input,
+  Modal,
+  notification,
+  Row,
+  Table,
+  Tooltip,
+} from 'antd';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link, NavLink } from 'react-router-dom';
 import { deleteCourse, getCourses } from 'redux/actions/courses';
+import { courseState$ } from 'redux/selectors';
 import ExportCSV from 'components/common/ExportCSV';
 import { courseHeadersExcel } from 'constant/headersExcel';
 
@@ -112,11 +123,11 @@ const Course = () => {
         dispatch(deleteCourse.deleteCourseRequest(idCourse));
 
         isSuccess
-          ? message.success({
-              content: 'Deleted successfully',
+          ? notification.success({
+              message: 'Deleted successfully',
             })
-          : message.error({
-              content: 'Error',
+          : notification.error({
+              message: 'Error',
             });
       },
       onCancel() {},
@@ -155,14 +166,14 @@ const Course = () => {
             />
           </Col>
           <Col flex="auto" />
-          <Col xs={12} sm={12} md={3} lg={3} xl={2}>
+          <Col span={4}>
             {role === 'admin' && (
               <Button size="large" type="primary" block>
                 <Link to="/course/add">Add course</Link>
               </Button>
             )}
           </Col>
-          <Col xs={12} sm={12} md={3} lg={3} xl={2}>
+          <Col span={4}>
             <Button size="large" type="primary" block>
               <ExportCSV data={data} headers={courseHeadersExcel} type="course" />
             </Button>

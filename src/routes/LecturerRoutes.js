@@ -1,8 +1,9 @@
 import ClassDetails from 'pages/Class/ClassDetails';
 import LecturerClass from 'pages/LecturerClass';
 import Profile from 'pages/Setting/Profile';
+import LecturerTimetable from 'pages/TabTimetable';
 import React from 'react';
-import { HomeIcon, UserCircleIcon } from 'utils/icon';
+import { CalendarIcon, HomeIcon, UserCircleIcon } from 'utils/icon';
 
 const lecturerRoutes = [
   {
@@ -16,9 +17,14 @@ const lecturerRoutes = [
     page: () => <ClassDetails />,
   },
   {
-    path: '/profile/',
+    path: '/profile',
     exact: true,
     page: () => <Profile />,
+  },
+  {
+    path: '/schedule',
+    exact: true,
+    page: () => <LecturerTimetable />,
   },
 ];
 
@@ -32,9 +38,15 @@ const lecturerMenuItems = {
       component: <LecturerClass />,
     },
     {
+      path: '/schedule',
+      name: 'Schedule',
+      icon: <CalendarIcon />,
+      component: <LecturerTimetable />,
+    },
+    {
       name: 'Profile',
       icon: <UserCircleIcon />,
-      path: '/profile/',
+      path: '/profile',
       component: <Profile />,
     },
   ],

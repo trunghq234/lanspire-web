@@ -31,6 +31,7 @@ import {
   DashboardIcon,
   ExpandIcon,
   StudentIcon,
+  UserCircleIcon,
   UserGroupIcon,
   UsersIcon,
 } from 'utils/icon';
@@ -42,7 +43,7 @@ const adminRoutes = [
     page: () => <Dashboard />,
   },
   {
-    path: '/lecturer/',
+    path: '/lecturer',
     exact: true,
     page: () => <Lecturer />,
   },
@@ -52,7 +53,7 @@ const adminRoutes = [
     page: () => <AddLecturer />,
   },
   {
-    path: '/student/list',
+    path: '/student',
     exact: true,
     page: () => <Student />,
   },
@@ -77,7 +78,7 @@ const adminRoutes = [
     page: () => <ArrangeClass />,
   },
   {
-    path: '/course/',
+    path: '/course',
     exact: true,
     page: () => <Course />,
   },
@@ -97,7 +98,7 @@ const adminRoutes = [
     page: () => <CourseDetails />,
   },
   {
-    path: '/coursetype/',
+    path: '/coursetype',
     exact: true,
     page: () => <CourseType />,
   },
@@ -107,7 +108,7 @@ const adminRoutes = [
     page: () => <CourseType />,
   },
   {
-    path: '/level/',
+    path: '/level',
     exact: true,
     page: () => <Level />,
   },
@@ -132,7 +133,7 @@ const adminRoutes = [
     page: () => <ColumnTranscript />,
   },
   {
-    path: '/employee/',
+    path: '/employee',
     exact: true,
     page: () => <Employee />,
   },
@@ -147,7 +148,7 @@ const adminRoutes = [
     page: () => <TimeFrame />,
   },
   {
-    path: '/class/',
+    path: '/class',
     exact: true,
     page: () => <Class />,
   },
@@ -172,12 +173,12 @@ const adminRoutes = [
     page: () => <AddEmployee />,
   },
   {
-    path: '/setting/',
+    path: '/setting',
     exact: true,
     page: () => <Setting />,
   },
   {
-    path: '/profile/',
+    path: '/profile',
     exact: true,
     page: () => <Profile />,
   },
@@ -190,11 +191,6 @@ const adminRoutes = [
     path: '/invoice/:idBill',
     exact: true,
     page: () => <InvoiceDetails />,
-  },
-  {
-    path: '/lecturer/timetable/:idLecturer',
-    exact: true,
-    page: () => <LecturerTimetable />,
   },
 ];
 
@@ -210,31 +206,31 @@ const adminMenuItems = {
     {
       name: 'Courses',
       icon: <CourseIcon />,
-      path: '/course/',
+      path: '/course',
       component: <Course />,
     },
     {
-      name: 'Classses',
+      name: 'Classes',
       icon: <ClassIcon />,
-      path: '/class/',
+      path: '/class',
       component: <Class />,
     },
     {
       name: 'Students',
       icon: <StudentIcon />,
-      path: '/student/list',
+      path: '/student',
       component: <Student />,
     },
     {
       name: 'Lecturers',
       icon: <UserGroupIcon />,
-      path: '/lecturer/',
+      path: '/lecturer',
       component: <Lecturer />,
     },
     {
       name: 'Employees',
       icon: <UsersIcon />,
-      path: '/employee/',
+      path: '/employee',
       component: <Employee />,
     },
     {
@@ -242,12 +238,12 @@ const adminMenuItems = {
       icon: <ExpandIcon />,
       routes: [
         {
-          path: '/coursetype/',
+          path: '/coursetype',
           name: 'Course type',
           component: <CourseType />,
         },
         {
-          path: '/level/',
+          path: '/level',
           name: 'Level',
           component: <Level />,
         },
@@ -270,26 +266,16 @@ const adminMenuItems = {
       component: <Invoice />,
     },
     {
-      name: 'Setting',
-      icon: <CogIcon />,
-      routes: [
-        {
-          path: '/profile/',
-          name: 'Profile',
-          component: <Profile />,
-        },
-        {
-          path: '/setting/',
-          name: 'Setting',
-          component: <Setting />,
-        },
-      ],
+      path: '/profile',
+      name: 'Profile',
+      icon: <UserCircleIcon />,
+      component: <Profile />,
     },
     {
-      path: '/lecturer/timetable/acd36b97-b305-4579-9332-bfdc624e7b40',
-      name: 'timetable',
-      icon: <CashIcon />,
-      component: <LecturerTimetable />,
+      name: 'Setting',
+      icon: <CogIcon />,
+      path: '/setting',
+      component: <Setting />,
     },
   ],
 };

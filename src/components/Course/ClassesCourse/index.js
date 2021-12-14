@@ -40,7 +40,7 @@ const ClassesCourse = ({ idCourse }) => {
       render: idClass => {
         return (
           <div className={role === 'admin' && 'flex'}>
-            <Tooltip title="View class details">
+            <Tooltip title="View details">
               <Link to={`/class/details/${idClass}`}>
                 <Button icon={<EyeOutlined />} />
               </Link>

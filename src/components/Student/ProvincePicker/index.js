@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Form, Input, Row, Select } from 'antd';
 import LocationVN from './LocationVN.json';
+
 const ProvincePicker = props => {
   let cityOptions = [];
   const [districtInSelectedCity, setDistrictInSelectedCity] = useState([]);
@@ -54,7 +55,7 @@ const ProvincePicker = props => {
     <Row gutter={20} justify="center">
       <Col span={15}>
         <Form.Item label="Address" name="detailsAddress" rules={[{ required: true }]}>
-          <Input placeholder="Details address" />
+          <Input placeholder="Address details" />
         </Form.Item>
       </Col>
       <Col span={15}>

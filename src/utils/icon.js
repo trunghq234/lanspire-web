@@ -10,6 +10,7 @@ import {
   usersSvg,
   userCircleSvg,
   homeSvg,
+  calendarSvg,
 } from 'utils/iconsvg';
 import Icon from '@ant-design/icons';
 
@@ -24,6 +25,7 @@ const CashIcon = props => <Icon component={cashSvg} {...props} />;
 const ExpandIcon = props => <Icon component={expandSvg} {...props} />;
 const CogIcon = props => <Icon component={cogSvg} {...props} />;
 const UserCircleIcon = props => <Icon component={userCircleSvg} {...props} />;
+const CalendarIcon = props => <Icon component={calendarSvg} {...props} />;
 
 export {
   HomeIcon,
@@ -37,4 +39,5 @@ export {
   ExpandIcon,
   CogIcon,
   UserCircleIcon,
+  CalendarIcon,
 };

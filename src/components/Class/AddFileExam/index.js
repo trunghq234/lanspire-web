@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { DeleteOutlined, UploadOutlined } from '@ant-design/icons';
 import {
   Button,
   Col,
   DatePicker,
   Form,
   Input,
-  message,
   Modal,
   notification,
   Progress,
@@ -14,19 +13,18 @@ import {
   TimePicker,
   Upload,
 } from 'antd';
-import { DeleteOutlined, UploadOutlined } from '@ant-design/icons';
-import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-import { storage } from 'utils/firebase';
-import { validateMessages } from 'constant/validationMessage';
-import moment from 'moment';
-import { v4 as uuidv4 } from 'uuid';
-import { useParams } from 'react-router';
-import { useDispatch, useSelector } from 'react-redux';
-import testTypeApi from 'api/testTypeApi';
-import { createExam, updateExam } from 'redux/actions/exams';
 import courseApi from 'api/courseApi';
+import testTypeApi from 'api/testTypeApi';
+import { validateMessages } from 'constant/validationMessage';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router';
+import { createExam, updateExam } from 'redux/actions/exams';
 import { examState$ } from 'redux/selectors';
-
+import { storage } from 'utils/firebase';
+import { v4 as uuidv4 } from 'uuid';
 import styles from './index.module.less';
 
 const { Option } = Select;
@@ -43,7 +41,9 @@ const AddFileExam = ({ isVisible, setIsVisible, existedColumn, classData, select
     if (file) {
       const isLt2M = file.size / 1024 / 1024 < 2;
       if (!isLt2M) {
-        message.error('File(s) must be smaller than 2MB!');
+        notification.error({
+          message: 'File(s) must be smaller than 2MB!',
+        });
       }
       return isLt2M ? true : Upload.LIST_IGNORE;
     }
@@ -181,8 +181,10 @@ const AddFileExam = ({ isVisible, setIsVisible, existedColumn, classData, select
   useEffect(() => {
     if (isCompleted && !isLoading) {
       isSuccess
-        ? message.success(`${isEdit ? 'Edited' : 'Added'} exam successfully`)
-        : message.error('There is an error');
+        ? notification.success({
+            message: `${isEdit ? 'Edited' : 'Added'} exam successfully`,
+          })
+        : notification.error({ message: 'There is an error' });
     }
     setIsCompleted(false);
     setIsVisible(false);
@@ -192,11 +194,11 @@ const AddFileExam = ({ isVisible, setIsVisible, existedColumn, classData, select
   const [columnOption, setColumnOption] = useState();
   const [typeOption, setTypeOption] = useState();
   useEffect(() => {
-    if (!existedColumn && !classData) {
+    if (!existedColumn && !classData && classData.idCourse) {
       return;
     }
     form.resetFields();
-    courseApi.getById(classData.idCourse).then(res => {
+    courseApi.getById(classData?.idCourse).then(res => {
       const tmp = res.data.Columns;
       const result = [];
       tmp.map(col => {

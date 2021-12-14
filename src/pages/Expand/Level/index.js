@@ -1,12 +1,22 @@
+import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import {
+  Breadcrumb,
+  Button,
+  Card,
+  Col,
+  Input,
+  Modal,
+  notification,
+  Row,
+  Table,
+  Tooltip,
+} from 'antd';
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Breadcrumb, Button, Tooltip, Card, Input, Row, Col, Table, message } from 'antd';
-import { Modal } from 'antd';
-import { EditOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
-import AddLevel from '../../../components/Course/AddLevel';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { deleteLevel, getLevels } from 'redux/actions/levels';
 import { levelState$ } from 'redux/selectors';
-import { getLevels, deleteLevel } from 'redux/actions/levels';
+import AddLevel from '../../../components/Course/AddLevel';
 
 const { confirm } = Modal;
 const { Search } = Input;
@@ -36,7 +46,7 @@ const Level = () => {
       render: idLevel => {
         return (
           <div className="flex">
-            <Tooltip title="Edit level">
+            <Tooltip title="Edit information">
               <Link to={`/level/${idLevel}`}>
                 <Button type="primary" ghost icon={<EditOutlined />} />
               </Link>
@@ -66,11 +76,11 @@ const Level = () => {
         dispatch(deleteLevel.deleteLevelRequest(id));
 
         isSuccess
-          ? message.success({
-              content: 'Deleted successfully',
+          ? notification.success({
+              message: 'Deleted successfully',
             })
-          : message.error({
-              content: 'Error',
+          : notification.error({
+              message: 'Error',
             });
       },
     });
@@ -90,7 +100,7 @@ const Level = () => {
     <>
       <Breadcrumb>
         <Breadcrumb.Item>
-          <a href="/">Dashboard</a>
+          <Link to="/">Dashboard</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item>Level</Breadcrumb.Item>
       </Breadcrumb>

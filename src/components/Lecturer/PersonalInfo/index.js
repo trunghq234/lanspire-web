@@ -1,4 +1,4 @@
-import { Button, Card, Col, DatePicker, Form, Input, message, Row, Select } from 'antd';
+import { Button, Card, Col, DatePicker, Form, Input, notification, Row, Select } from 'antd';
 import ProvincePicker from 'components/common/ProvincePicker';
 import moment from 'moment';
 import React, { useState } from 'react';
@@ -56,7 +56,7 @@ const PersonalInfo = props => {
 
     const currentDate = moment();
     if (currentDate < dob) {
-      message.error('Date of birth is not greater than current date');
+      notification.error({ message: 'Date of birth is not greater than current date' });
     } else {
       // require all input not empty
       if (
@@ -76,7 +76,7 @@ const PersonalInfo = props => {
           if (!checkUsernameIsExist(users, username)) {
             if (confirmPassword !== password) {
               setIsSubmit(true);
-              message.error('Confirm password does not match!');
+              notification.error({ message: 'Confirm password does not match!' });
             } else {
               const createdLecturer = converToUser(data, idRoleLecturer);
               dispatch(lecturerActions.createLecturer.createLecturerRequest(createdLecturer));
@@ -85,7 +85,7 @@ const PersonalInfo = props => {
             }
           } else {
             setIsSubmit(true);
-            isSubmit === true ? message.error('Username is exist!') : '';
+            isSubmit === true ? notification.error({ message: 'Username is exist!' }) : '';
           }
         }
       }
@@ -121,10 +121,10 @@ const PersonalInfo = props => {
   React.useEffect(() => {
     if (lecturers.isSuccess && isSubmit) {
       if (id) {
-        message.success('Update lecturer success!');
+        notification.success({ message: 'Update lecturer success!' });
         history.push('/lecturer');
       } else {
-        message.success('Create lecturer success!');
+        notification.success({ message: 'Create lecturer success!' });
       }
       form.resetFields();
       props.setImgUrl(null);
@@ -174,8 +174,8 @@ const PersonalInfo = props => {
                 }}
                 label="Phone number"
                 name="phoneNumber"
-                rules={[{ required: true }, { min: 10 }]}>
-                <Input type="text" placeholder="Phone number" maxLength="10" />
+                rules={[{ required: true }]}>
+                <Input type="text" placeholder="Phone number" minLength={10} maxLength={10} />
               </Form.Item>
             </Col>
             <Col xs={12} md={12} lg={12} xl={8}>

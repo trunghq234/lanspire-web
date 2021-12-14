@@ -19,16 +19,18 @@ const LecturerTimetableToPrint = React.forwardRef((props, ref) => {
   const dispatch = useDispatch();
 
   //get lecturer by id
-  useEffect(async () => {
-    try {
-      const res = await lecturerApi.getLecturerById(idLecturer);
-      setLecturer(res);
-    } catch (err) {
-      notification.error({
-        message: `${err}`,
-      });
+  useEffect(() => {
+    if (idLecturer) {
+      lecturerApi
+        .getLecturerById(idLecturer)
+        .then(res => setLecturer(res.data))
+        .catch(err =>
+          notification.error({
+            message: `${err}`,
+          })
+        );
     }
-  }, []);
+  }, [idLecturer]);
 
   // get class
   useEffect(() => {
@@ -87,22 +89,20 @@ const LecturerTimetableToPrint = React.forwardRef((props, ref) => {
     <div className={styles.container} ref={ref}>
       <h1>Timetable</h1>
       <Row>
-        {timetable.map(element => {
-          return (
-            <Col span={12}>
-              <Col span={24}>
-                <strong className={styles.className}>{element.className}</strong>
-              </Col>
-              <Col span={24}>
-                <Icon className={styles['icon-date']} component={dateSvg} />
-                {element.startDate} - {element.endDate}
-              </Col>
-              {element.Timetables.map(item => (
-                <TimetableItem day={item.day} start={item.start} end={item.end} />
-              ))}
+        {timetable.map(element => (
+          <Col key={element.className} span={12}>
+            <Col span={24}>
+              <strong className={styles.className}>{element.className}</strong>
             </Col>
-          );
-        })}
+            <Col span={24}>
+              <Icon className={styles['icon-date']} component={dateSvg} />
+              {element.startDate} - {element.endDate}
+            </Col>
+            {element.Timetables.map(item => (
+              <TimetableItem day={item.day} start={item.start} end={item.end} />
+            ))}
+          </Col>
+        ))}
       </Row>
     </div>
   );

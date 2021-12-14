@@ -37,7 +37,7 @@ const RevenueChart = ({ data, isLoading }) => {
     yAxis: {
       top: true,
       title: {
-        text: 'Revenue (đồng)',
+        text: 'Revenue (VND)',
         position: 'center',
       },
       label: {

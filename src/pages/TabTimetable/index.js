@@ -14,29 +14,33 @@ import { currentDate } from 'utils/dateTime';
 import LecturerTimetableToPrint from './LecturerTimetableToPrint';
 
 const LecturerTimetable = props => {
-  const { idLecturer } = useParams();
+  const [idLecturer, setIdLecturer] = useState();
   const [lecturer, setLecturer] = useState();
   const [dataSource, setDataSource] = useState([[], [], [], [], [], [], []]);
   const classes = useSelector(classState$);
   const timetableRef = React.createRef();
   const dispatch = useDispatch();
 
-  //get lecturer by id
-  useEffect(async () => {
-    try {
-      const res = await lecturerApi.getLecturerById(idLecturer);
-      setLecturer(res);
-    } catch (err) {
-      notification.error({
-        message: `${err}`,
-      });
-    }
-  }, []);
-
   // get class
   useEffect(() => {
+    const tmp = localStorage.getItem('idLecturer');
+    setIdLecturer(tmp);
     dispatch(getClasses.getClassesRequest());
   }, []);
+
+  //get lecturer by id
+  useEffect(() => {
+    if (idLecturer) {
+      lecturerApi
+        .getLecturerById(idLecturer)
+        .then(res => setLecturer(res.data))
+        .catch(err =>
+          notification.error({
+            message: `${err}`,
+          })
+        );
+    }
+  }, [idLecturer]);
 
   //load timetable
   useEffect(() => {

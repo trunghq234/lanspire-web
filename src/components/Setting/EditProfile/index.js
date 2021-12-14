@@ -1,17 +1,4 @@
-import { UserOutlined } from '@ant-design/icons';
-import {
-  Avatar,
-  Button,
-  Col,
-  DatePicker,
-  Form,
-  Input,
-  notification,
-  Row,
-  Select,
-  Skeleton,
-  Upload,
-} from 'antd';
+import { Button, Col, DatePicker, Form, Input, notification, Row, Select, Skeleton } from 'antd';
 import ImageUploader from 'components/common/ImageUploader';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
@@ -165,8 +152,8 @@ const EditProfile = () => {
                   }}
                   label="Phone number"
                   name="phoneNumber"
-                  rules={[{ required: true }, { min: 10 }]}>
-                  <Input type="text" placeholder="Phone number" maxLength="10" />
+                  rules={[{ required: true }]}>
+                  <Input type="text" placeholder="Phone number" minLength={10} maxLength={10} />
                 </Form.Item>
               </Col>
               <Col span={12}>

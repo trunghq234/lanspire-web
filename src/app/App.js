@@ -15,7 +15,7 @@ function App() {
   const renderRoutes = () => {
     const token = localStorage.getItem('accessToken');
     const role = localStorage.getItem('role');
-    console.log(process.env.REACT_APP_API_URL);
+
     if (token) {
       switch (role) {
         case 'lecturer':

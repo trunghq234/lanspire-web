@@ -1,6 +1,5 @@
 import React, { createRef, useEffect, useState } from 'react';
 import { Button, Row, Col, Form, notification, Breadcrumb, Card } from 'antd';
-import styles from './index.module.less';
 import { createStudents, getStudents, updateStudents } from 'redux/actions/students';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory, useParams } from 'react-router-dom';
@@ -133,34 +132,23 @@ const AddStudent = () => {
         </Breadcrumb.Item>
         <Breadcrumb.Item>{contentControl.breadcrumb}</Breadcrumb.Item>
       </Breadcrumb>
+      <h3 className="heading">{contentControl.heading}</h3>
       <Card>
-        <div className={styles.container}>
+        <div>
           <Form
-            className={styles.form}
-            // layout="vertical"
             labelCol={{ span: 8 }}
             labelAlign="left"
             validateMessages={validateMessages}
             ref={formRef}
             form={form}
             onFinish={handleSubmit}>
-            <Col span={7} style={{ margin: ' 0 auto 30px' }}>
-              <h1 className={styles.heading}>{contentControl.heading}</h1>
-            </Col>
             <UserInfo city={city} form={form} />
             <Form.Item>
-              <Row gutter={20} className={styles.actions} justify="center">
-                <Col span={8}>
-                  <Button className={styles['btn-discard']} size="large" onClick={onReset}>
-                    Discard
-                  </Button>
-                </Col>
-                <Col span={7}>
-                  <Button className={styles['btn-add']} htmlType="submit" size="large">
-                    {contentControl.btnSave}
-                  </Button>
-                </Col>
-              </Row>
+              <Col span={7}>
+                <Button htmlType="submit" size="large" type="primary" block>
+                  {contentControl.btnSave}
+                </Button>
+              </Col>
             </Form.Item>
           </Form>
         </div>

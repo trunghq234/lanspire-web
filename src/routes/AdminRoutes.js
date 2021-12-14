@@ -31,6 +31,7 @@ import {
   DashboardIcon,
   ExpandIcon,
   StudentIcon,
+  UserCircleIcon,
   UserGroupIcon,
   UsersIcon,
 } from 'utils/icon';
@@ -191,11 +192,6 @@ const adminRoutes = [
     exact: true,
     page: () => <InvoiceDetails />,
   },
-  {
-    path: '/lecturer/timetable/:idLecturer',
-    exact: true,
-    page: () => <LecturerTimetable />,
-  },
 ];
 
 const adminMenuItems = {
@@ -270,26 +266,16 @@ const adminMenuItems = {
       component: <Invoice />,
     },
     {
-      name: 'Setting',
-      icon: <CogIcon />,
-      routes: [
-        {
-          path: '/profile',
-          name: 'Profile',
-          component: <Profile />,
-        },
-        {
-          path: '/setting',
-          name: 'Setting',
-          component: <Setting />,
-        },
-      ],
+      path: '/profile',
+      name: 'Profile',
+      icon: <UserCircleIcon />,
+      component: <Profile />,
     },
     {
-      path: '/lecturer/timetable/acd36b97-b305-4579-9332-bfdc624e7b40',
-      name: 'timetable',
-      icon: <CashIcon />,
-      component: <LecturerTimetable />,
+      name: 'Setting',
+      icon: <CogIcon />,
+      path: '/setting',
+      component: <Setting />,
     },
   ],
 };

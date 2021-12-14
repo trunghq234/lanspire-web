@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { Tabs, Radio, Space, Breadcrumb, Card } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { Link, NavLink } from 'react-router-dom';
-import EditProfile from 'components/Setting/EditProfile';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { Breadcrumb, Card, Tabs } from 'antd';
 import ChangePassword from 'components/Setting/ChangePassword';
+import EditProfile from 'components/Setting/EditProfile';
+import React, { useEffect, useState } from 'react';
+import { NavLink } from 'react-router-dom';
 
 const { TabPane } = Tabs;
 const Profile = props => {
@@ -19,7 +19,7 @@ const Profile = props => {
         <Breadcrumb.Item>
           <NavLink to="/">Dashboard</NavLink>
         </Breadcrumb.Item>
-        <Breadcrumb.Item>Setting</Breadcrumb.Item>
+        <Breadcrumb.Item>Profile</Breadcrumb.Item>
       </Breadcrumb>
       <h3 className="heading">Profile</h3>
       <Card>
@@ -32,7 +32,7 @@ const Profile = props => {
               </span>
             }
             key="1">
-            <EditProfile></EditProfile>
+            <EditProfile />
           </TabPane>
           <TabPane
             tab={
@@ -42,7 +42,7 @@ const Profile = props => {
               </span>
             }
             key="2">
-            <ChangePassword></ChangePassword>
+            <ChangePassword />
           </TabPane>
         </Tabs>
       </Card>

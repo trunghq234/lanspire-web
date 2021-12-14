@@ -214,15 +214,15 @@ const PersonalInfo = props => {
 
           <Col xs={12} md={12} lg={12} xl={8}>
             <Form.Item
-              label="Phone number"
-              name="phoneNumber"
               onKeyPress={event => {
                 if (!/[0-9]/.test(event.key)) {
                   event.preventDefault();
                 }
               }}
-              rules={[{ required: true }, { min: 10 }]}>
-              <Input type="text" placeholder="Phone number" maxLength="10" />
+              label="Phone number"
+              name="phoneNumber"
+              rules={[{ required: true }]}>
+              <Input type="text" placeholder="Phone number" minLength={10} maxLength={10} />
             </Form.Item>
           </Col>
 

@@ -6,9 +6,8 @@ const lecturerApi = {
     return res.data;
   },
 
-  getLecturerById: async id => {
-    const res = await axiosClient.get(`/lecturers/${id}`);
-    return res.data;
+  getLecturerById: id => {
+    return axiosClient.get(`/lecturers/${id}`);
   },
 
   createLecturer: async lecturer => {

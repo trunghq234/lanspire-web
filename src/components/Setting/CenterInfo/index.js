@@ -1,7 +1,8 @@
 import { Button, Col, Form, Input, notification, Row, Select } from 'antd';
 import parameterApi from 'api/parameterApi';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { getParameters } from 'redux/actions/parameters';
 import { parameterState$ } from 'redux/selectors';
 import LocationVN from '../../common/ProvincePicker/LocationVN.json';
 
@@ -13,7 +14,11 @@ const CenterInfo = props => {
   const [selectedCity, setSelectedCity] = useState();
   const [selectedDistrict, setSelectedDistrict] = useState();
   const { data: parameters } = useSelector(parameterState$);
+  const dispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch(getParameters.getParametersRequest());
+  }, []);
   for (let city of Object.values(LocationVN)) {
     cityOptions.push(city);
   }
@@ -122,15 +127,15 @@ const CenterInfo = props => {
           </Col>
           <Col span={8}>
             <Form.Item
-              label="Phone number"
-              name="phoneNumber"
               onKeyPress={event => {
                 if (!/[0-9]/.test(event.key)) {
                   event.preventDefault();
                 }
               }}
-              rules={[{ required: true }, { min: 10 }]}>
-              <Input placeholder="Phone number" />
+              label="Phone number"
+              name="phoneNumber"
+              rules={[{ required: true }]}>
+              <Input type="text" placeholder="Phone number" minLength={10} maxLength={10} />
             </Form.Item>
           </Col>
           <Col span={8} />

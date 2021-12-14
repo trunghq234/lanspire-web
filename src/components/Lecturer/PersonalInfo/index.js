@@ -175,8 +175,8 @@ const PersonalInfo = props => {
                 }}
                 label="Phone number"
                 name="phoneNumber"
-                rules={[{ required: true }, { min: 10 }]}>
-                <Input type="text" placeholder="Phone number" maxLength="10" />
+                rules={[{ required: true }]}>
+                <Input type="text" placeholder="Phone number" minLength={10} maxLength={10} />
               </Form.Item>
             </Col>
             <Col xs={12} md={12} lg={12} xl={8}>

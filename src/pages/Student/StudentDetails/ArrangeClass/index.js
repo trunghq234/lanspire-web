@@ -4,7 +4,7 @@ import {
   Col,
   Divider,
   Input,
-  Modal,
+  message,
   notification,
   Popconfirm,
   Row,
@@ -245,7 +245,7 @@ const ArrangeClass = () => {
         dispatch(updateStudents.updateStudentsRequest(studentUpdate));
       }
     } else {
-      notification.warning({ message: 'Please, select class for student!' });
+      message.warning('Please, select class for student!');
     }
   };
   //component receipt details
@@ -346,31 +346,6 @@ const ArrangeClass = () => {
           </Popconfirm>
         </Card>
       </Col>
-      <Modal
-        visible={visibleModal}
-        width="1000px"
-        okText="Print"
-        closable={false}
-        centered
-        onCancel={() => {
-          setVisibleModal(false);
-          history.push(`/student/details/${idStudent}`);
-        }}
-        onOk={printInvoice}
-        okButtonProps={{
-          icon: <PrinterOutlined />,
-          style: { width: '150px', marginRight: '20px' },
-        }}>
-        <Invoice
-          ref={invoiceRef}
-          dataSource={selectedClasses}
-          totalFee={total}
-          fullName={fullName}
-          phoneNumber={phoneNumber}
-          address={address}
-          creator={user.displayName}
-        />
-      </Modal>
     </Row>
   );
 };

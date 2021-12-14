@@ -101,7 +101,7 @@ const employeeMenuItems = {
       component: <Course />,
     },
     {
-      name: 'Classses',
+      name: 'Classes',
       icon: <ClassIcon />,
       path: '/class',
       component: <Class />,

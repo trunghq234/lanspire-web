@@ -70,7 +70,7 @@ const AntCalendar = ({ classData }) => {
   const setListDay = (dayOfWeek, startClass, endClass) => {
     var start = moment(startClass),
       end = moment(endClass),
-      day = dayOfWeek + 1;
+      day = dayOfWeek != 6 ? dayOfWeek + 1 : 0;
 
     listDay = [];
     var current = start.clone();

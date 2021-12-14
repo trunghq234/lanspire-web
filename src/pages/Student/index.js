@@ -240,14 +240,14 @@ const Student = () => {
             />
           </Col>
           <Col flex="auto" />
-          <Col xs={12} sm={12} md={3} lg={3} xl={2}>
+          <Col span={4}>
             {role === 'admin' && (
               <Button type="primary" size="large" block>
                 <Link to="/student/add">Add student</Link>
               </Button>
             )}
           </Col>
-          <Col xs={12} sm={12} md={3} lg={3} xl={2}>
+          <Col span={4}>
             <Button type="primary" size="large" block>
               <ExportCSV data={students.data} headers={studentHeadersExcel} type="student" />
             </Button>

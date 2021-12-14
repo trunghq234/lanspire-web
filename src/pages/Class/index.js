@@ -311,14 +311,14 @@ const Class = () => {
             />
           </Col>
           <Col xs={0} md={8} lg={10} xl={12} flex="auto" />
-          <Col xs={12} sm={12} md={3} lg={3} xl={2}>
+          <Col span={4}>
             {role === 'admin' && (
               <Button className={styles.btn} size="large" type="primary">
                 <Link to="/class/add">Add Class</Link>
               </Button>
             )}
           </Col>
-          <Col xs={12} sm={12} md={3} lg={3} xl={2}>
+          <Col span={4}>
             <Button className={styles.btn} size="large" type="primary">
               <ExportCSV data={data} headers={classHeadersExcel} type="class" />
             </Button>

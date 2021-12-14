@@ -8,13 +8,12 @@ import { getUsers } from 'redux/actions/users';
 import { employeeState$, usersState$ } from 'redux/selectors';
 import { converToUser } from 'utils';
 import { checkUsernameIsExist, loadFieldsValue } from 'utils/loadFieldsValueForUser';
-import { camelToString } from 'utils/stringHelper';
-import ProvincePicker from '../../common/ProvincePicker';
-import styles from './index.module.less';
 import { dateValidator } from 'utils/validator';
+import ProvincePicker from '../../common/ProvincePicker';
+import { idRoleEmployee } from 'constant/roles';
+import styles from './index.module.less';
 
 const { Option } = Select;
-const idRoleEmployee = '0a15d8a4-e1a1-4fc1-ba7a-157b34959289';
 
 const PersonalInfo = props => {
   const [isSubmit, setIsSubmit] = useState(false);

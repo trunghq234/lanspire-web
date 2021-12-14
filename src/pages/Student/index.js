@@ -22,6 +22,8 @@ import { deleteStudents, getStudents } from 'redux/actions/students';
 import { formatName } from 'utils/stringHelper';
 import { currentDate } from 'utils/dateTime';
 import moment from 'moment';
+import ExportCSV from 'components/common/ExportCSV';
+import { studentHeadersExcel } from 'constant/headersExcel';
 const { Search } = Input;
 
 const Student = () => {
@@ -235,13 +237,8 @@ const Student = () => {
       </Breadcrumb>
       <h2 className={styles.title}>Student list</h2>
       <Card>
-        <Row
-          gutter={[
-            { xs: 0, sm: 0, md: 10, lg: 10 },
-            { xs: 5, sm: 5, md: 0, lg: 0 },
-          ]}
-          className={styles['actions-for-list']}>
-          <Col xs={24} sm={24} md={8} lg={10} xl={8}>
+        <div className={styles.wrapper}>
+          <div>
             <Search
               className={styles['search-name']}
               placeholder="Enter name ..."
@@ -249,21 +246,21 @@ const Student = () => {
               size="large"
               onSearch={handleSearch}
             />
-          </Col>
-          <Col
-            xs={24}
-            sm={24}
-            md={{ span: 5, offset: 11 }}
-            lg={{ span: 4, offset: 10 }}
-            xl={{ span: 3, offset: 13 }}>
+          </div>
+          <div>
             <Button
               className={styles['add-student']}
               size="large"
+              type="primary"
+              style={{ marginRight: '20px' }}
               onClick={handleClickAddNewStudent}>
               Add student
             </Button>
-          </Col>
-        </Row>
+            <Button className={styles['add-student']} type="primary" size="large">
+              <ExportCSV data={students.data} headers={studentHeadersExcel} type="student" />
+            </Button>
+          </div>
+        </div>
         <Table
           columns={columns}
           rowKey={dataSearch.id}

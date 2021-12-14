@@ -19,6 +19,8 @@ import {
   Table,
   Tooltip,
 } from 'antd';
+import ExportCSV from 'components/common/ExportCSV';
+import { classHeadersExcel } from 'constant/headersExcel';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import Highlighter from 'react-highlight-words';
@@ -255,9 +257,18 @@ const Class = () => {
           <Col xs={24} sm={16} md={10} lg={8} xl={8}></Col>
           <Col xs={0} md={8} lg={10} xl={12} flex="auto" />
           <Col xs={24} sm={24} md={6} lg={6} xl={4}>
-            <Button className={styles.btn} size="large" type="primary">
-              <NavLink to="/class/add">Add Class</NavLink>
-            </Button>
+            <div style={{ display: 'flex' }}>
+              <Button
+                style={{ marginRight: '20px' }}
+                className={styles.btn}
+                size="large"
+                type="primary">
+                <NavLink to="/class/add">Add Class</NavLink>
+              </Button>
+              <Button className={styles.btn} size="large" type="primary">
+                <ExportCSV data={data} headers={classHeadersExcel} type="class" />
+              </Button>
+            </div>
           </Col>
           <Col span={24}>
             <Table

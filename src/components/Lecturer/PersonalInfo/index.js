@@ -10,11 +10,10 @@ import { lecturerState$, usersState$ } from 'redux/selectors';
 import { converToUser } from 'utils';
 import { checkUsernameIsExist, loadFieldsValue } from 'utils/loadFieldsValueForUser';
 import { dateValidator } from 'utils/validator';
+import { idRoleLecturer } from 'constant/roles';
 import styles from './index.module.less';
 
 const { Option } = Select;
-
-const idRoleLecturer = '386af797-fdf6-42dc-8bab-d5b42561b5fb';
 
 const PersonalInfo = props => {
   const dispatch = useDispatch();

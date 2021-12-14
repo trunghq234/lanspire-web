@@ -11,6 +11,8 @@ import { courseState$ } from 'redux/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteCourse, getCourses } from 'redux/actions/courses';
 import styles from './index.module.less';
+import ExportCSV from 'components/common/ExportCSV';
+import { courseHeadersExcel } from 'constant/headersExcel';
 
 const { Search } = Input;
 const { confirm } = Modal;
@@ -148,9 +150,18 @@ const Course = () => {
           </Col>
           <Col flex="auto" />
           <Col xs={24} sm={24} md={6} lg={6} xl={4}>
-            <Button className={styles.btn} size="large" type="primary">
-              <NavLink to="/course/add">Add course</NavLink>
-            </Button>
+            <div style={{ display: 'flex' }}>
+              <Button
+                style={{ marginRight: '20px' }}
+                className={styles.btn}
+                size="large"
+                type="primary">
+                <NavLink to="/course/add">Add course</NavLink>
+              </Button>
+              <Button className={styles.btn} size="large" type="primary">
+                <ExportCSV data={data} headers={courseHeadersExcel} type="course" />
+              </Button>
+            </div>
           </Col>
           <Col span={24}>
             <Table

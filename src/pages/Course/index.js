@@ -21,6 +21,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom';
 import { deleteCourse, getCourses } from 'redux/actions/courses';
 import { courseState$ } from 'redux/selectors';
+import ExportCSV from 'components/common/ExportCSV';
+import { courseHeadersExcel } from 'constant/headersExcel';
 
 const { Search } = Input;
 const { confirm } = Modal;
@@ -164,12 +166,17 @@ const Course = () => {
             />
           </Col>
           <Col flex="auto" />
-          <Col xs={24} sm={24} md={6} lg={6} xl={4}>
+          <Col xs={12} sm={12} md={3} lg={3} xl={2}>
             {role === 'admin' && (
               <Button size="large" type="primary" block>
                 <Link to="/course/add">Add course</Link>
               </Button>
             )}
+          </Col>
+          <Col xs={12} sm={12} md={3} lg={3} xl={2}>
+            <Button size="large" type="primary" block>
+              <ExportCSV data={data} headers={courseHeadersExcel} type="course" />
+            </Button>
           </Col>
           <Col span={24}>
             <Table

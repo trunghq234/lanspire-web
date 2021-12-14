@@ -21,6 +21,8 @@ import { deleteStudents, getStudents } from 'redux/actions/students';
 import { studentState$ } from 'redux/selectors/index';
 import { currentDate } from 'utils/dateTime';
 import { formatName } from 'utils/stringHelper';
+import ExportCSV from 'components/common/ExportCSV';
+import { studentHeadersExcel } from 'constant/headersExcel';
 
 const { Search } = Input;
 
@@ -238,12 +240,17 @@ const Student = () => {
             />
           </Col>
           <Col flex="auto" />
-          <Col xs={24} sm={24} md={6} lg={6} xl={4}>
+          <Col xs={12} sm={12} md={3} lg={3} xl={2}>
             {role === 'admin' && (
               <Button type="primary" size="large" block>
                 <Link to="/student/add">Add student</Link>
               </Button>
             )}
+          </Col>
+          <Col xs={12} sm={12} md={3} lg={3} xl={2}>
+            <Button type="primary" size="large" block>
+              <ExportCSV data={students.data} headers={studentHeadersExcel} type="student" />
+            </Button>
           </Col>
           <Col span={24}>
             <Table

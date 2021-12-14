@@ -29,6 +29,8 @@ import { deleteClass, getClasses } from 'redux/actions/classes';
 import { getCourses } from 'redux/actions/courses';
 import { classState$, courseState$ } from 'redux/selectors';
 import styles from './index.module.less';
+import ExportCSV from 'components/common/ExportCSV';
+import { classHeadersExcel } from 'constant/headersExcel';
 
 const { confirm } = Modal;
 const { Search } = Input;
@@ -309,12 +311,17 @@ const Class = () => {
             />
           </Col>
           <Col xs={0} md={8} lg={10} xl={12} flex="auto" />
-          <Col xs={24} sm={24} md={6} lg={6} xl={4}>
+          <Col xs={12} sm={12} md={3} lg={3} xl={2}>
             {role === 'admin' && (
               <Button className={styles.btn} size="large" type="primary">
                 <Link to="/class/add">Add Class</Link>
               </Button>
             )}
+          </Col>
+          <Col xs={12} sm={12} md={3} lg={3} xl={2}>
+            <Button className={styles.btn} size="large" type="primary">
+              <ExportCSV data={data} headers={classHeadersExcel} type="class" />
+            </Button>
           </Col>
           <Col span={24}>
             <Table

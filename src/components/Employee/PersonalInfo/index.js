@@ -11,9 +11,9 @@ import { checkUsernameIsExist, loadFieldsValue } from 'utils/loadFieldsValueForU
 import { dateValidator } from 'utils/validator';
 import ProvincePicker from '../../common/ProvincePicker';
 import styles from './index.module.less';
+import { idRoleEmployee } from 'constant/roles';
 
 const { Option } = Select;
-const idRoleEmployee = '0a15d8a4-e1a1-4fc1-ba7a-157b34959289';
 
 const PersonalInfo = props => {
   const [isSubmit, setIsSubmit] = useState(false);

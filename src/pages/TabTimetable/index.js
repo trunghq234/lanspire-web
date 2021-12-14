@@ -1,28 +1,31 @@
-import { Col, notification, Row } from 'antd';
-import studentApi from 'api/studentApi';
+import { PrinterOutlined } from '@ant-design/icons';
+import { Card, notification, Row, Col, Tooltip, Button, Breadcrumb } from 'antd';
+import lecturerApi from 'api/lecturerApi';
+import Timetable from 'components/common/Timetable';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
+import { Link } from 'react-router-dom';
+import { useReactToPrint } from 'react-to-print';
 import { getClasses } from 'redux/actions/classes';
 import { classState$ } from 'redux/selectors';
 import { currentDate } from 'utils/dateTime';
-import Day from './Day';
-import styles from './index.module.less';
-import Timeline from './Timeline';
+import LecturerTimetableToPrint from './LecturerTimetableToPrint';
 
-const Timetable = React.forwardRef((props, ref) => {
-  const { idStudent } = useParams();
-  const [student, setStudent] = useState();
+const LecturerTimetable = props => {
+  const { idLecturer } = useParams();
+  const [lecturer, setLecturer] = useState();
   const [dataSource, setDataSource] = useState([[], [], [], [], [], [], []]);
   const classes = useSelector(classState$);
+  const timetableRef = React.createRef();
   const dispatch = useDispatch();
 
-  //get student by id
+  //get lecturer by id
   useEffect(async () => {
     try {
-      const res = await studentApi.getById(idStudent);
-      setStudent(res.data);
+      const res = await lecturerApi.getLecturerById(idLecturer);
+      setLecturer(res);
     } catch (err) {
       notification.error({
         message: `${err}`,
@@ -37,15 +40,15 @@ const Timetable = React.forwardRef((props, ref) => {
 
   //load timetable
   useEffect(() => {
-    if (student && classes.data.length > 0) {
-      const keyClassesStudying = student.Classes.reduce((pre, curr) => {
+    if (lecturer && classes.data.length > 0) {
+      const keyClassesTeaching = lecturer.Classes.reduce((pre, curr) => {
         if (moment(curr.endDate) >= currentDate()) {
           pre.push(curr.idClass);
         }
         return pre;
       }, []);
       const timetable = classes.data.reduce((pre, curr) => {
-        if (keyClassesStudying.includes(curr.idClass)) {
+        if (keyClassesTeaching.includes(curr.idClass)) {
           pre.push(
             ...curr.ClassTimes.map(element => {
               return {
@@ -79,24 +82,44 @@ const Timetable = React.forwardRef((props, ref) => {
       }
       setDataSource(tmp);
     }
-  }, [student, classes.data]);
+  }, [lecturer, classes.data]);
+
+  const handlePrintTimetable = useReactToPrint({
+    content: () => timetableRef.current,
+  });
 
   return (
-    <div ref={ref}>
-      <Row gutter={5} style={{ backgroundColor: 'white' }}>
-        <Col span={3}>
-          <Timeline />
-        </Col>
-        {dataSource.map((day, i) => {
-          return (
-            <Col key={`day-${i}`} span={3} className={styles.dayOfWeek}>
-              <Day events={day} dayOfWeek={i} />
-            </Col>
-          );
-        })}
-      </Row>
-    </div>
+    <>
+      <Breadcrumb>
+        <Breadcrumb.Item>
+          <Link to="/">Home</Link>
+        </Breadcrumb.Item>
+        <Breadcrumb.Item>Timetable</Breadcrumb.Item>
+      </Breadcrumb>
+      <Col span={5}>
+        <h3 className="heading">Timetable</h3>
+      </Col>
+      <Card>
+        <Row gutter={[20, 20]}>
+          <Col flex="auto" />
+          <Col span={4}>
+            <Tooltip title="Print timetable">
+              <Button size="large" block type="primary" onClick={handlePrintTimetable}>
+                <PrinterOutlined />
+                Print
+              </Button>
+            </Tooltip>
+          </Col>
+          <Col span={24}>
+            <Timetable dataSource={dataSource} />
+          </Col>
+        </Row>
+      </Card>
+      <div style={{ display: 'none' }}>
+        <LecturerTimetableToPrint idLecturer={idLecturer} ref={timetableRef} />
+      </div>
+    </>
   );
-});
+};
 
-export default Timetable;
+export default LecturerTimetable;

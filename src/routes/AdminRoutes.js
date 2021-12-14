@@ -1,3 +1,4 @@
+import LecturerTimetable from 'pages/TabTimetable';
 import Class from 'pages/Class';
 import AddClass from 'pages/Class/AddClass';
 import ClassDetails from 'pages/Class/ClassDetails';
@@ -190,6 +191,11 @@ const adminRoutes = [
     exact: true,
     page: () => <InvoiceDetails />,
   },
+  {
+    path: '/lecturer/timetable/:idLecturer',
+    exact: true,
+    page: () => <LecturerTimetable />,
+  },
 ];
 
 const adminMenuItems = {
@@ -278,6 +284,12 @@ const adminMenuItems = {
           component: <Setting />,
         },
       ],
+    },
+    {
+      path: '/lecturer/timetable/acd36b97-b305-4579-9332-bfdc624e7b40',
+      name: 'timetable',
+      icon: <CashIcon />,
+      component: <LecturerTimetable />,
     },
   ],
 };

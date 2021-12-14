@@ -1,13 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Redirect, Route, Switch, NavLink } from 'react-router-dom';
 import styles from './main.module.less';
 import ProLayout from '@ant-design/pro-layout';
 import logo from 'assets/images/logo.png';
 import AppFooter from 'components/layout/Footer';
 import RightContent from 'components/layout/RightContent';
+import NotFound from 'pages/NotFound';
 
 const MainLayout = props => {
   const [pathname, setPathname] = useState(window.location.pathname);
+
+  useEffect(() => {
+    const path = window.location.pathname;
+    setPathname(path);
+  });
 
   const showRoutes = routes => {
     var result = null;
@@ -16,6 +22,8 @@ const MainLayout = props => {
         return <Route key={index} path={route.path} exact={route.exact} component={route.page} />;
       });
     }
+    result.push(<Route key={routes.length} path="*" component={NotFound} />);
+
     return result;
   };
 
@@ -32,12 +40,15 @@ const MainLayout = props => {
       location={{
         pathname,
       }}
-      onPageChange={param => {
-        setPathname(param.pathname || '/');
-        console.log(pathname);
-      }}
-      onTopMixMenuHeaderClick={e => console.log(e)}
-      onMenuHeaderClick={e => console.log(e)}
+      // onPageChange={param => {
+      //   setPathname(param.pathname || '/');
+      // }}
+      headerTitleRender={(logo, title) => (
+        <NavLink to="/" onClick={() => setPathname('/')}>
+          {logo}
+          {title}
+        </NavLink>
+      )}
       menuItemRender={(item, dom) => (
         <NavLink to={item.path} onClick={() => setPathname(item.path || '/')}>
           {dom}

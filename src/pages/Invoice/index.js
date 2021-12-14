@@ -114,7 +114,9 @@ const Invoice = () => {
         return billData.filter(bill => moment(bill.createdDate, 'DD-MM-YYYY').month() == cur);
       }
       case 'date':
-        return billData.filter(bill => moment(bill.createdDate, 'DD-MM-YYYY') == date);
+        return billData.filter(bill =>
+          moment(bill.createdDate, 'DD-MM-YYYY').isSame(moment(date), 'date')
+        );
       default:
         return billData;
     }

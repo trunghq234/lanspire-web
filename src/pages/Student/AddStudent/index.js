@@ -123,7 +123,7 @@ const AddStudent = () => {
   };
   return (
     <>
-      <Breadcrumb style={{ marginBottom: '10px' }}>
+      <Breadcrumb>
         <Breadcrumb.Item>
           <Link to="/">Dashboard</Link>
         </Breadcrumb.Item>

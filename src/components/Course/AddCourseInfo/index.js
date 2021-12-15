@@ -5,6 +5,7 @@ import { courseTypeState$, levelState$, parameterState$ } from 'redux/selectors'
 import { getCourseTypes } from 'redux/actions/courseTypes';
 import { getLevels } from 'redux/actions/levels';
 import { numberValidator } from 'utils/validator';
+import { getParameters } from 'redux/actions/parameters';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -23,9 +24,13 @@ const AddCourseInfo = ({ form, goNext, handleSubmitCourse, editCourse, isBack })
   useEffect(() => {
     dispatch(getCourseTypes.getCourseTypesRequest());
     dispatch(getLevels.getLevelsRequest());
+    dispatch(getParameters.getParametersRequest());
+  }, []);
+
+  useEffect(() => {
     const para = parameters.find(e => (e.name = 'maxStudent'));
     setMaxStudent(para?.value);
-  }, []);
+  }, [parameters]);
 
   useEffect(() => {
     if (levels) {

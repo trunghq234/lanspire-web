@@ -74,6 +74,7 @@ const EditProfile = () => {
         record['address'] = user.address[0];
         record['district'] = user.address[1];
         record['city'] = user.address[2];
+        setSelectedCity(user.address[2]);
       }
       setImgUrl(user.imageUrl);
       form.setFieldsValue(record);
@@ -171,8 +172,9 @@ const EditProfile = () => {
                   <Select
                     value={selectedCity}
                     placeholder="City"
+                    showSearch
                     onChange={val => {
-                      setSelectedDistrict(null);
+                      form.setFieldsValue({ ...form.getFieldsValue, district: '' });
                       setSelectedCity(val);
                     }}>
                     {optionCityRendered}
@@ -182,6 +184,7 @@ const EditProfile = () => {
               <Col span={12}>
                 <Form.Item label="District" name="district" rules={[{ required: true }]}>
                   <Select
+                    showSearch
                     value={selectedDistrict}
                     placeholder="District"
                     onChange={val => {

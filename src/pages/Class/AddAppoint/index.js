@@ -195,7 +195,8 @@ const AddAppoint = () => {
           key: lecturer.idLecturer,
           idLecturer: lecturer.idLecturer,
           lecturerName: lecturer.User.displayName,
-          gender: lecturer.gender == 1 ? 'Male' : 'Female',
+          gender:
+            lecturer.User.gender === 0 ? 'Male' : lecturer.User.gender === 1 ? 'Female' : 'Others',
           phoneNumber: lecturer.User.phoneNumber,
           dob: lecturer.User.dob,
         });

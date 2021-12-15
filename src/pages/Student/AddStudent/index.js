@@ -134,24 +134,25 @@ const AddStudent = () => {
       </Breadcrumb>
       <h3 className="heading">{contentControl.heading}</h3>
       <Card>
-        <div>
+        <Row justify="center">
           <Form
             labelCol={{ span: 8 }}
             labelAlign="left"
+            layout="vertical"
             validateMessages={validateMessages}
             ref={formRef}
             form={form}
             onFinish={handleSubmit}>
             <UserInfo city={city} form={form} />
-            <Form.Item>
-              <Col span={7}>
+            <Col span={24}>
+              <Form.Item>
                 <Button htmlType="submit" size="large" type="primary" block>
                   {contentControl.btnSave}
                 </Button>
-              </Col>
-            </Form.Item>
+              </Form.Item>
+            </Col>
           </Form>
-        </div>
+        </Row>
       </Card>
     </>
   );

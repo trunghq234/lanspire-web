@@ -53,12 +53,12 @@ const ProvincePicker = props => {
   const optionDistrictRendered = renderOptions(districtInSelectedCity);
   return (
     <Row gutter={20} justify="center">
-      <Col span={15}>
+      <Col span={8}>
         <Form.Item label="Address" name="detailsAddress" rules={[{ required: true }]}>
           <Input placeholder="Address details" />
         </Form.Item>
       </Col>
-      <Col span={15}>
+      <Col span={8}>
         <Form.Item label="City" name="city" rules={[{ required: true }]}>
           <Select
             showSearch
@@ -71,7 +71,7 @@ const ProvincePicker = props => {
           </Select>
         </Form.Item>
       </Col>
-      <Col span={15}>
+      <Col span={8}>
         <Form.Item label="District" name="district" rules={[{ required: true }]}>
           <Select
             showSearch

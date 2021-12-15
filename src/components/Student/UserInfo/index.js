@@ -32,13 +32,13 @@ const UserInfo = props => {
   return (
     <div>
       <Row gutter={20} justify="center">
-        <Col span={15}>
+        <Col span={12}>
           <Form.Item label="Full name" name="fullName" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
         </Col>
 
-        <Col span={15}>
+        <Col span={6}>
           <Form.Item label="Gender" name="gender" rules={[{ required: true }]}>
             <Select>
               <Option value="male">Male</Option>
@@ -48,7 +48,7 @@ const UserInfo = props => {
           </Form.Item>
         </Col>
 
-        <Col span={15}>
+        <Col span={6}>
           <Form.Item
             label="DOB"
             name="dob"
@@ -56,7 +56,7 @@ const UserInfo = props => {
             <DatePicker format={dateFormat} style={{ width: '100%' }} />
           </Form.Item>
         </Col>
-        <Col span={15}>
+        <Col span={12}>
           <Form.Item
             onKeyPress={event => {
               if (!/[0-9]/.test(event.key)) {
@@ -70,7 +70,7 @@ const UserInfo = props => {
           </Form.Item>
         </Col>
 
-        <Col span={15}>
+        <Col span={12}>
           <Form.Item label="Email" name="email" rules={[{ required: true, type: 'email' }]}>
             <Input />
           </Form.Item>

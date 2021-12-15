@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getParameters } from 'redux/actions/parameters';
 import { parameterState$ } from 'redux/selectors';
+import { phoneNumberValidator } from 'utils/validator';
 import LocationVN from '../../common/ProvincePicker/LocationVN.json';
 
 const CenterInfo = props => {
@@ -134,7 +135,7 @@ const CenterInfo = props => {
               }}
               label="Phone number"
               name="phoneNumber"
-              rules={[{ required: true }]}>
+              rules={[{ required: true }, { validator: phoneNumberValidator }]}>
               <Input type="text" placeholder="Phone number" minLength={10} maxLength={10} />
             </Form.Item>
           </Col>

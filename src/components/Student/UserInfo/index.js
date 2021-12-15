@@ -1,5 +1,6 @@
 import { Col, DatePicker, Form, Input, Row, Select } from 'antd';
 import React from 'react';
+import { phoneNumberValidator } from 'utils/validator';
 import ProvincePicker from '../ProvincePicker';
 
 const UserInfo = props => {
@@ -65,7 +66,7 @@ const UserInfo = props => {
             }}
             label="Phone number"
             name="phoneNumber"
-            rules={[{ required: true }]}>
+            rules={[{ required: true }, { validator: phoneNumberValidator }]}>
             <Input type="text" placeholder="Phone number" minLength={10} maxLength={10} />
           </Form.Item>
         </Col>

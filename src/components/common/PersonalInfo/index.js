@@ -8,6 +8,7 @@ import * as employeeActions from 'redux/actions/employees';
 import styles from './index.module.less';
 import { getUsers } from 'redux/actions/users';
 import moment from 'moment';
+import { phoneNumberValidator } from 'utils/validator';
 
 const { Option } = Select;
 const idRoleEmployee = '386af797-fdf6-42dc-8bab-d5b42561b5fb';
@@ -221,7 +222,7 @@ const PersonalInfo = props => {
               }}
               label="Phone number"
               name="phoneNumber"
-              rules={[{ required: true }]}>
+              rules={[{ required: true }, { validator: phoneNumberValidator }]}>
               <Input type="text" placeholder="Phone number" minLength={10} maxLength={10} />
             </Form.Item>
           </Col>

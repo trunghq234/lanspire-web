@@ -9,7 +9,7 @@ import { getUsers } from 'redux/actions/users';
 import { lecturerState$, usersState$ } from 'redux/selectors';
 import { converToUser } from 'utils';
 import { checkUsernameIsExist, loadFieldsValue } from 'utils/loadFieldsValueForUser';
-import { dateValidator } from 'utils/validator';
+import { dateValidator, phoneNumberValidator } from 'utils/validator';
 import styles from './index.module.less';
 import { idRoleLecturer } from 'constant/roles';
 
@@ -174,7 +174,7 @@ const PersonalInfo = props => {
                 }}
                 label="Phone number"
                 name="phoneNumber"
-                rules={[{ required: true }]}>
+                rules={[{ required: true }, { validator: phoneNumberValidator }]}>
                 <Input type="text" placeholder="Phone number" minLength={10} maxLength={10} />
               </Form.Item>
             </Col>

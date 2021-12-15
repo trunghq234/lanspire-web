@@ -12,7 +12,7 @@ import { dateValidator } from 'utils/validator';
 import ProvincePicker from '../../common/ProvincePicker';
 import styles from './index.module.less';
 import { idRoleEmployee } from 'constant/roles';
-
+import { phoneNumberValidator } from 'utils/validator';
 const { Option } = Select;
 
 const PersonalInfo = props => {
@@ -184,7 +184,7 @@ const PersonalInfo = props => {
                   event.preventDefault();
                 }
               }}
-              rules={[{ required: true }]}>
+              rules={[{ required: true }, { validator: phoneNumberValidator }]}>
               <Input type="text" placeholder="Phone number" minLength={10} maxLength={10} />
             </Form.Item>
           </Col>

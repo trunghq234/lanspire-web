@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from 'redux/actions/users';
 import { userState$ } from 'redux/selectors';
+import { phoneNumberValidator } from 'utils/validator';
 import userApi from '../../../api/userApi';
 import LocationVN from '../../common/ProvincePicker/LocationVN.json';
 const { Option } = Select;
@@ -153,7 +154,7 @@ const EditProfile = () => {
                   }}
                   label="Phone number"
                   name="phoneNumber"
-                  rules={[{ required: true }]}>
+                  rules={[{ required: true }, { validator: phoneNumberValidator }]}>
                   <Input type="text" placeholder="Phone number" minLength={10} maxLength={10} />
                 </Form.Item>
               </Col>

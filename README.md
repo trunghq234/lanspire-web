@@ -6,7 +6,7 @@
   <img src="https://github.com/akaijs/Lanspire/raw/main/src/assets/images/banner.png" alt="banner" 
   style="max-width: 600px;"/>
   <br>
-  Lanspire = **Language** + **inspire**.
+  Lanspire = <b>language</b> + <b>inspire</b>
 </p>
   
 

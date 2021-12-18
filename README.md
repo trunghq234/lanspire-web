@@ -1,12 +1,14 @@
 # Lanspire
 
-> Lanspire = **Language** + **inspire**.
+
 
 <p align="center">
-  <img src="https://github.com/akaijs/Lanspire/blob/main/src/assets/images/banner.png" alt="banner" />
-  A language center management app
+  <img src="https://github.com/akaijs/Lanspire/raw/main/src/assets/images/banner.png" alt="banner" 
+  style="max-width: 600px;"/>
 </p>
-
+  
+Lanspire = **Language** + **inspire**.
+Server repo: https://github.com/baodv1001/LanspireServer 
 
 ## Main features
 - Course management
@@ -33,7 +35,7 @@
 |Employee|emp|121212
 
 or
-- Clone the [client-side]() and [server-side]()
+- Clone the [client-side](https://github.com/akaijs/Lanspire) and [server-side](https://github.com/baodv1001/LanspireServer)
 - Set up PostgreSQL
 - Go to both project directories and run this command:
 ``` shel
